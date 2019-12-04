@@ -14,8 +14,8 @@ function Ubicaciones() {
     const {ubicacions, add, del} = useUbicacions([])
     const { isShowing, toggle } = useModal();
 
-    function addUbicacion(producto) {
-        add(producto)
+    function addUbicacion(ubicacion) {
+        add(ubicacion)
         toggle()
     }
 

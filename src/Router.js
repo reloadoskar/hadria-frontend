@@ -10,6 +10,7 @@ import Inventario from './components/Inventario';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/Header';
 import PosContainer from './components/pos/PosContainer';
+import ConceptosTabs from './components/conceptos/ConceptosTabs';
 // import Error from './components/Error'
 
 import useStyles from './components/hooks/useStyles'
@@ -29,6 +30,7 @@ export default function Router(){
                             <Route exact path='/provedores' component={Provedores}></Route>
                             <Route exact path='/ubicaciones' component={Ubicaciones}></Route>
                             <Route exact path='/compras' component={Compras}></Route>
+                            <Route exact path='/conceptos' component={ConceptosTabs}></Route>
                             <Route exact path='/inventario' component={Inventario}></Route>
                             <Route exact path='/pos' component={PosContainer}></Route>
                         </Switch>

@@ -275,3 +275,81 @@ export const getBalance = () => {
         return res.data.balance
     })
 }
+
+// UNIDADES
+
+export const getUnidades = () => {
+    return axios
+        .get(url + 'unidads')
+        .then( res => {
+            return res.data
+        })
+}
+
+export const addUnidad = (unidad) => {
+    return axios
+        .post( url + 'unidad/save', unidad)
+        .then( res => {
+            return res.data
+        })
+}
+
+export const delUnidad = (id) => {
+    return axios
+        .delete(url + `unidad/${id}`)
+        .then(res => {
+            return res.data
+        })
+}
+
+// EMPAQUES
+
+export const getEmpaques = () => {
+    return axios
+        .get( url + 'empaques')
+        .then( res => {
+            return res.data
+        })
+}
+
+export const addEmpaque = (empaque) => {
+    return axios
+        .post( url + 'empaque/save', empaque)
+        .then( res => {
+            return res.data
+        })
+}
+
+export const delEmpaque = (id) => {
+    return axios
+        .delete(url + `empaque/${id}`)
+        .then(res => {
+            return res.data
+        })
+}
+
+// CONCEPTOS
+
+export const getConceptos = () => {
+    return axios
+        .get( url + 'conceptos')
+        .then( res => {
+            return res.data
+        })
+}
+
+export const addConcepto = (concepto) => {
+    return axios
+        .post( url + 'concepto/save', concepto)
+        .then( res => {
+            return res.data
+        })
+}
+
+export const delConcepto = (id) => {
+    return axios
+        .delete(url + `concepto/${id}`)
+        .then(res => {
+            return res.data
+        })
+}

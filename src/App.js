@@ -13,14 +13,14 @@ function App() {
 	return (
 		<div className={classes.root}>
 
-            {/* <Router /> */}
-            <BrowserRouter>
+            <Router />
+            {/* <BrowserRouter>
                 <Switch>
-                    <Route exact path="/" component={Landing} />
-                    <ProtectedRoute exact path="/app" component={Router} />
+                    <Route exact path="/" component={Landing} /> 
+                    <Route exact path="/" component={Router} />
                     <Route path="*" component={() => "404 NOT FOUND"} />
                 </Switch>
-            </BrowserRouter>
+            </BrowserRouter> */}
 
 		</div>
 			
