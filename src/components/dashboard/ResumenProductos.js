@@ -72,18 +72,18 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                         </TableCell>
                                         <TableCell
                                             children={
-                                            item.producto.unidad === item.producto.empaque ?
-                                                <Typography align="right" children={item.cantidad + " " + item.producto.unidad} />
+                                            item.producto.unidad.unidad === item.producto.empaque.empaque ?
+                                                <Typography align="right" children={item.cantidad + " " + item.producto.unidad.unidad} />
                                                 :
-                                                <Typography align="right" children={item.empaques + " " + item.producto.empaque + " / " + item.cantidad + " " + item.producto.unidad} />
+                                                <Typography align="right" children={item.empaques + " " + item.producto.empaque.empaque + " / " + item.cantidad + " " + item.producto.unidad.unidad} />
                                             }
                                         />
                                         <TableCell
                                             children={ 
-                                                item.producto.unidad === item.producto.empaque ?
-                                                    <Typography align="right" children={ cantVendido + " " + item.producto.unidad } />
+                                                item.producto.unidad.unidad === item.producto.empaque.empaque ?
+                                                    <Typography align="right" children={ cantVendido + " " + item.producto.unidad.unidad } />
                                                     :
-                                                    <Typography align="right" children={ cantVendido + " " + item.producto.unidad + " / " + empVendido + " " + item.producto.empaque } />
+                                                    <Typography align="right" children={ cantVendido + " " + item.producto.unidad.unidad + " / " + empVendido + " " + item.producto.empaque.empaque } />
                                                 }
                                         />
                                         <TableCell>
@@ -96,10 +96,10 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                             <Typography 
                                                 align="right" 
                                                 children={
-                                                    item.producto.unidad === item.producto.empaque ?
-                                                            item.stock + " " + item.producto.unidad
+                                                    item.producto.unidad.unidad === item.producto.empaque.empaque ?
+                                                            item.stock + " " + item.producto.unidad.unidad
                                                         :
-                                                            item.empaquesStock + " " + item.producto.empaque + " / " + item.stock + " " + item.producto.unidad
+                                                            item.empaquesStock + " " + item.producto.empaque.empaque + " / " + item.stock + " " + item.producto.unidad.unidad
                                                     }
                                                 />
                                         </TableCell>
@@ -144,10 +144,10 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                     <TableCell
                                         align="right"
                                         children={
-                                            item.producto.unidad === item.producto.empaque ?
-                                                <Typography align="right" children={item.cantidad + " " + item.producto.unidad} />
+                                            item.producto.unidad.unidad === item.producto.empaque.empaque ?
+                                                <Typography align="right" children={item.cantidad + " " + item.producto.unidad.unidad} />
                                                 :
-                                                <Typography align="right" children={item.empaques + " " + item.producto.empaque + " / " + item.cantidad + " " + item.producto.unidad} />
+                                                <Typography align="right" children={item.empaques + " " + item.producto.empaque.empaque + " / " + item.cantidad + " " + item.producto.unidad.unidad} />
                                         } 
                                     />
                                     <TableCell>
@@ -157,7 +157,7 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                         <Typography align="right" color="secondary" children={"$" + formatNumber(item.importe)} />
                                     </TableCell>
                                     <TableCell>
-                                        <Typography align="right" children={formatNumber(cantVendido) + " " + item.producto.unidad} />
+                                        <Typography align="right" children={formatNumber(cantVendido) + " " + item.producto.unidad.unidad} />
                                     </TableCell>
                                     <TableCell>
                                         <Typography align="right" children={"$" + formatNumber(precioProm,2)} />
@@ -168,10 +168,10 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                     <TableCell>
                                         <Typography variant="body2" align="right" 
                                             children={
-                                                item.producto.unidad === item.producto.empaque ?
-                                                    item.stock + " " + item.producto.unidad
+                                                item.producto.unidad.unidad === item.producto.empaque.empaque ?
+                                                    item.stock + " " + item.producto.unidad.unidad
                                                     :
-                                                    item.empaquesStock + " " + item.producto.empaque + " / " + item.stock + " " + item.producto.unidad
+                                                    item.empaquesStock + " " + item.producto.empaque.empaque + " / " + item.stock + " " + item.producto.unidad.unidad
                                             }
                                         />
                                     </TableCell>

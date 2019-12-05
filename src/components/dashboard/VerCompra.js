@@ -116,7 +116,7 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Typography variant="h6" align="center">
-                                        {data.compra.status.nombre}
+                                        {data.compra.status}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4}></Grid>
@@ -169,7 +169,7 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
                                         formatNumber={formatNumber} />                                    
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Box displayPrint="none" >
+                                    <Box >
                                         <DetallePagos 
                                             pagos={data.compra.pagos}
                                             formatNumber={formatNumber}

@@ -3,6 +3,7 @@ import {saveEgreso} from '../api'
 import { Dialog, DialogContent, DialogTitle, Typography, Grid, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
 
 import useCompras from '../hooks/useCompras'
+import useConceptos from '../hooks/useConceptos'
 export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessage, subFromSaldo, saldoDisponible}) {
     const initialData ={
         tipo: 'GASTO DE CAJA',
@@ -14,7 +15,7 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
     }
     const {compras} = useCompras() 
     const [values, setValues] = useState(initialData)
-    const conceptos = ["SUELDOS", "SERVICIOS", "FLETE", "TRASPALEOS"] 
+    const {conceptos} = useConceptos()
     const tipos = ["GASTO DE CAJA", "GASTO A COMPRA"] 
     
     function hasNull(target) {
@@ -127,8 +128,8 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
                                     onChange={(e) => handleChange('concepto', e.target.value)}
                                 >
                                     {conceptos.map((option, index) =>(
-                                        <MenuItem key={index} value={option}>
-                                            {option}
+                                        <MenuItem key={index} value={option.concepto}>
+                                            {option.concepto}
                                         </MenuItem>
                                     ))}
                                 </TextField>

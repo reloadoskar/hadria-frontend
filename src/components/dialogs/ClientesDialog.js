@@ -13,6 +13,7 @@ import reducer from '../reducers/ClientesReducer';
 const useStyles = makeStyles(theme => ({
 	appBar: {
 		position: 'relative',
+		backgroundColor: '#BD4F6C'
 	},
 	title: {
 		marginLeft: theme.spacing(2),

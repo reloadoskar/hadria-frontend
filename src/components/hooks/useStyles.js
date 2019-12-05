@@ -42,6 +42,10 @@ const useStyles = makeStyles(theme => ({
         position: 'relative',
         backgroundColor: '#660F50'
     },
+    clientesBar: {
+        position: 'relative',
+        backgroundColor: '#FF715B'
+    },
     appBarShift: {
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,

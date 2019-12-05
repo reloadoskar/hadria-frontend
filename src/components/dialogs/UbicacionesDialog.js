@@ -13,6 +13,7 @@ import reducer from '../reducers/UbicacionesReducer';
 const useStyles = makeStyles(theme => ({
 	appBar: {
 		position: 'relative',
+		backgroundColor: '#28666E'
 	},
 	title: {
 		marginLeft: theme.spacing(2),
@@ -50,7 +51,7 @@ export default function UbicacionesDialog({ addUbicacion, isShowing, toggle }) {
                             <CloseIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            Nueva Ubicacion
+                            Nueva <b>Ubicación</b>
             			</Typography>
                         <Button color="inherit" onClick={toggle}>
                             Salir

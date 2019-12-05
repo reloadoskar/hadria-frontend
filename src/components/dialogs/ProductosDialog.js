@@ -6,6 +6,8 @@ import { Container, TextField, Grid, Button, Dialog, AppBar, Toolbar, IconButton
 import CloseIcon from '@material-ui/icons/Close';
 
 //HOOKS
+import useUnidades from '../hooks/useUnidades'
+import useEmpaques from '../hooks/useEmpaques'
 
 //REDUCER
 import reducer from '../reducers/ProductosReducer';
@@ -37,6 +39,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function ProductosDialog({ addProducto, isShowing, toggle }) {
+	const {unidades} = useUnidades()
+	const {empaques} = useEmpaques()
     const classes = useStyles();
 	const [values, dispatch] = useReducer(reducer, initialState)
 
@@ -107,8 +111,9 @@ export default function ProductosDialog({ addProducto, isShowing, toggle }) {
 									value={values.unidad}
 									onChange={(e) => dispatch({type: 'unidad', value: e.target.value})}
 									>
-									<MenuItem value="Cajas">Cajas</MenuItem>
-									<MenuItem value='Kilos'>Kilos</MenuItem>
+									{unidades.map((el, index) => (
+										<MenuItem value={el._id}>{el.unidad + "(" + el.abr + ")"}</MenuItem>
+									))}
 								</TextField>
 							</Grid>
 							<Grid item xs={6} md={4}>
@@ -124,10 +129,9 @@ export default function ProductosDialog({ addProducto, isShowing, toggle }) {
 									value={values.empaque}
 									onChange={(e) => dispatch({type: 'empaque', value: e.target.value})}
 									>
-									<MenuItem value="Cajas">Caja</MenuItem>
-									<MenuItem value='Arp'>Arpilla</MenuItem>
-									<MenuItem value='Pieza'>Pieza</MenuItem>
-									<MenuItem value='Paquete'>Paquete</MenuItem>
+									{empaques.map((el, index) => (
+										<MenuItem value={el._id}>{el.empaque}</MenuItem>
+									))}
 								</TextField>
 							</Grid>
 							<Grid item xs={6} md={3}>

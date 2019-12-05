@@ -39,7 +39,7 @@ export default function ComprasDash(){
                                     <Typography children={compra.ubicacion.nombre} />
                                 </Grid>
                                 <Grid item xs>
-                                    <Typography children={compra.status.nombre} />
+                                    <Typography children={compra.status} />
                                 </Grid>
                                 
                             </Grid>
