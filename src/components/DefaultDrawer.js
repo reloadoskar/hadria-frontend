@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { NavLink } from 'react-router-dom';
 
 import clsx from 'clsx';
 
@@ -21,8 +22,6 @@ import ForumIcon from '@material-ui/icons/Forum';
 import StoreIcon from '@material-ui/icons/Store';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import StorefrontIcon from '@material-ui/icons/Storefront';
-
-import {NavLink} from 'react-router-dom';
 
 const drawerWidth = 240;
 const StyledTooltip = withStyles( theme => ({
@@ -74,7 +73,7 @@ const useStyles = makeStyles(theme => ({
 
 }))
 
-export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded}) {
+export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded, url}) {
     const classes = useStyles()
 
     return (
@@ -101,7 +100,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
             <Divider />
 
             <List component="nav" aria-label="menú principal">
-                <NavLink to="/dashboard"  className={classes.link}>
+                <NavLink to="/app"  className={classes.link}>
                     { toggled 
                         ?  
                         <ListItem button>
@@ -146,7 +145,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
                 }
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <NavLink to="/productos" className={classes.link}>
+                        <NavLink to={`${url}/productos`} className={classes.link}>
                             {toggled 
                                 ?
                                 <ListItem button className={classes.nested}>
@@ -167,7 +166,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
 
                             }
                         </NavLink>
-                        <NavLink to="/clientes" className={classes.link}>
+                        <NavLink to={`${url}/clientes`} className={classes.link}>
                             {toggled
                                 ?
                                 <ListItem button className={classes.nested}>
@@ -187,7 +186,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
                                 </StyledTooltip>
                             }
                         </NavLink>
-                        <NavLink to="/provedores" className={classes.link}>
+                        <NavLink to={`${url}/provedores`} className={classes.link}>
                             {toggled
                                 ?
                                 <ListItem button className={classes.nested}>
@@ -208,7 +207,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
 
                             }
                         </NavLink>
-                        <NavLink to="/ubicaciones" className={classes.link}>
+                        <NavLink to={`${url}/ubicaciones`} className={classes.link}>
                             {toggled
                                 ?
                                 <ListItem button className={classes.nested}>
@@ -228,7 +227,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
                                 </StyledTooltip>
                             }
                         </NavLink>
-                        <NavLink to="/conceptos" className={classes.link}>
+                        <NavLink to={`${url}/conceptos`} className={classes.link}>
                             {toggled    
                                 ?
                                 <ListItem button className={classes.nested}>
@@ -252,7 +251,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
                     </List>
                 </Collapse>
 
-                <NavLink to="/compras" className={classes.link}>
+                <NavLink to={`${url}/compras`} className={classes.link}>
                     { toggled 
                         ?
                         <ListItem button>
@@ -273,7 +272,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
 
                     }
                 </NavLink>
-                <NavLink to="/inventario" className={classes.link}>
+                <NavLink to={`${url}/inventario`} className={classes.link}>
                     { toggled 
                         ?
                         <ListItem button>
@@ -297,7 +296,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
             </List>
             <Divider />
             <List component="nav">
-                <NavLink to="/pos" className={classes.link}>
+                <NavLink to={`${url}/pos`} className={classes.link}>
                     { toggled
                         ?
                         <ListItem button >

@@ -6,7 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import reducer from './reducers/AppReducer'
 
-export default function Header(){
+export default function Header({url, auth}){
 
     
     const [values, dispatch] = useReducer(reducer, {
@@ -25,9 +25,9 @@ export default function Header(){
             
                 <CssBaseline />
 
-                <TopBar toggle={toggle} open={values.toggled}/>
+                <TopBar toggle={toggle} open={values.toggled} auth={auth}/>
                 
-                <DefaultDrawer toggle={toggle} toggled={values.toggled} handleCollapse={handleCollapse} expanded={values.expanded}/>
+                <DefaultDrawer url={url} toggle={toggle} toggled={values.toggled} handleCollapse={handleCollapse} expanded={values.expanded}/>
             
             </React.Fragment>
         )

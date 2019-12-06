@@ -5,24 +5,27 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { SnackbarProvider } from 'notistack';
 import Router from './Router';
 import Landing from './components/Landing'
-import {ProtectedRoute} from './protectedRoute'
-import useStyles from './components/hooks/useStyles'
+import {PrivateRoute} from './privateRoute'
+
+import auth from './auth'
+
 
 function App() {
-	const classes = useStyles();
+
 	return (
-		<div className={classes.root}>
+		<BrowserRouter>
 
-            <Router />
-            {/* <BrowserRouter>
-                <Switch>
-                    <Route exact path="/" component={Landing} /> 
-                    <Route exact path="/" component={Router} />
-                    <Route path="*" component={() => "404 NOT FOUND"} />
-                </Switch>
-            </BrowserRouter> */}
-
-		</div>
+            <Switch>
+                <Route exact path="/">
+                    <Landing auth={auth}/>
+                </Route>
+                <PrivateRoute path="/app" auth={auth} >
+                    <Router auth={auth}/>
+                </PrivateRoute>
+                <Route path="*" component={() => "404 NOT FOUND"} />
+            </Switch>
+            
+		</BrowserRouter>
 			
 	)
 }

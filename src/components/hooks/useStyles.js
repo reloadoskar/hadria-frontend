@@ -2,12 +2,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 const drawerWidth = 240;
 
-const backgroundImage = '../assets/images/bg1.jpg'
-
 const useStyles = makeStyles(theme => ({
     backgroundCustom: {
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundColor: '#E2856E', // Average color of the background image.
+
+        background: 'linear-gradient(214deg, #1aa27f, #4381e0)',
         backgroundPosition: 'center',
         position: 'absolute',
         left: 0,

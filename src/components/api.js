@@ -3,6 +3,29 @@ import Global from './Global';
 
 const url = Global.url;
 
+// USUARIOS
+
+export const register = (newClient) => {
+    return axios
+        .post(url + 'client/register', newClient)
+        .then( res => {
+            return res.data
+        })
+}
+
+export const login = user => {
+    return axios
+        .post(url + 'user/login' , user)
+        .then( res => {
+            localStorage.setItem('usertoken', res.data.token)
+            return res.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+
 // API PRODUCTOS
 
 export const getProducts = () => {

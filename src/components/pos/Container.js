@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack';
 import moment from 'moment'
 import {getDataFrom, getCuentasPorCobrar, getCuentasPorPagar, existCorte} from '../api'
 
-import PosAcceso from './PosAcceso'
+import Acceso from './Acceso'
 import PosDialog from './PosDialog'
 import PosCobrarDialog from './PosCobrarDialog'
 
@@ -174,7 +174,7 @@ function PosContainer() {
     return (
         <Container maxWidth="sm">
 
-            <PosAcceso 
+            <Acceso 
                 values={values} 
                 checkCorte={checkCorte} 
                 handleChange={handleChange}/>
