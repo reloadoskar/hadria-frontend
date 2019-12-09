@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import { SnackbarProvider } from 'notistack';
 import { useSnackbar } from 'notistack';
-import { IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Card, Grid, CardHeader, CardContent, } from '@material-ui/core';
+import { IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Card, Grid, CardHeader, CardContent, LinearProgress, } from '@material-ui/core';
 
 import useModal from './hooks/useModal';
 import useCompras from './hooks/useCompras';
@@ -35,12 +35,13 @@ function Compras() {
                         />
                 }/>
             <CardContent>
-
-                <Grid container>
-
-                    {compras.length === 0 ?
-                        <Typography variant="h6" align="center" gutterBottom>No hay Compras registradas.</Typography>
+                    {
+                    compras === null ?
+                        <LinearProgress variant="query" />
                     :
+                    compras.length === 0 ?
+                        <Typography variant="h6" align="center" gutterBottom>No hay Compras registradas.</Typography>
+                    :                    
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
@@ -79,7 +80,7 @@ function Compras() {
                             </TableBody>
                         </Table>
                     }
-                </Grid>
+
             </CardContent>
         </Card>
     )

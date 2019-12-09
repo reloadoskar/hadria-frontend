@@ -31,6 +31,7 @@ export default function PosListaDeVenta({items, openDialog, removeItem, total}) 
         removeItem(index, item)
     }
     return (
+        <div>
         <List>
 
             <ListItem>
@@ -135,19 +136,25 @@ export default function PosListaDeVenta({items, openDialog, removeItem, total}) 
             <Divider />
             
             <ListItem>
-                <ListItemSecondaryAction>
-                    <Button
-                        disabled={items.length === 0 ? true : false }
-                        variant="contained"
-                        color="primary"
-                        endIcon={<ReceiptIcon />}
-                        onClick={() => openDialog('cobrarDialog')}
-                    >
-                        Cobrar
-                    </Button>
-                </ListItemSecondaryAction>
+                
+                
             </ListItem>
 
         </List>
+                    <Grid container alignItems="flex-end">
+                        <Grid item xs>
+                            <Button
+                                disabled={items.length === 0 ? true : false }
+                                variant="contained"
+                                color="primary"
+                                endIcon={<ReceiptIcon />}
+                                onClick={() => openDialog('cobrarDialog')}
+                            >
+                                Cobrar
+                            </Button>
+                        </Grid>
+                    </Grid>
+
+        </div>
     )
 }

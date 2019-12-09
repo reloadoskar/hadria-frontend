@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getCompras, } from '../api'
 const useCompras = () => {
-	const [compras, setCompras] = useState([])
+	const [compras, setCompras] = useState(null)
 	useEffect(() => {
 		async function loadCompras() {
 			const res = await getCompras()

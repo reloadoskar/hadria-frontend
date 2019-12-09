@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Card, CardHeader, CardContent, Typography, Grid, ListItem } from '@material-ui/core';
+import { Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgress } from '@material-ui/core';
 
 import useCompras from '../hooks/useCompras';
 
@@ -22,8 +22,13 @@ export default function ComprasDash(){
     return (
         <Card>
             <CardHeader title="Compras" />
-            <CardContent>
-                {compras.length === 0 ?
+            <CardContent>                
+                {
+                    compras === null ?
+                        <LinearProgress variant="query" />
+                    :
+
+                    compras.length === 0 ?
                         <Typography variant="h6" align="center" gutterBottom>No hay Compras registradas.</Typography>
                     : 
                         compras.map( (compra, index) => (
