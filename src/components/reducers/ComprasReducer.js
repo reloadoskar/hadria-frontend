@@ -25,7 +25,7 @@ function reducer (state, action){
             return {...state, items: []}
 
         case 'reset':
-                return {...state,
+                return {
                     provedor: '',
                     tipoCompra: '',
                     remision: '',

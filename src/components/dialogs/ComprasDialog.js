@@ -75,6 +75,9 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
     const [locale] = useState("es")
 
     const handleClose = (dialog) => {
+        if(dialog === "comprasDialog"){
+            dispatch({type: 'clearList'})
+        }
         dispatch({type: dialog, value: false})
     }
 
@@ -112,8 +115,8 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                     showMessage(res.message, res.status)
                 }else{
                     showMessage(res.message, res.status)
-                    handleClose('comprasDialog')
-                    dispatch({type: 'reset'})
+                    handleClose('comprasDialog')   
+                    dispatch({type: 'reset'})                 
                     addCompra(res.compra)
                 }
             })
