@@ -25,6 +25,14 @@ export const login = user => {
         })
 }
 
+export const getProfile  = () => {
+    return axios
+        .get(url + 'profile')
+        .then( res => {
+            return res.data
+        })
+}
+
 
 // API PRODUCTOS
 

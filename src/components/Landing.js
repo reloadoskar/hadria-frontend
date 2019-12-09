@@ -14,7 +14,13 @@ const Landing = (props) => {
     
     const [data, setData] = useState({email: '', password: ''})
     
-    const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
+    const showMessage = (text, type) => { enqueueSnackbar(text, {
+        variant: type,
+        anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'center',
+        },
+    } ) }
     
     const handleChange = (field, value) => {
         setData({...data, [field]: value})

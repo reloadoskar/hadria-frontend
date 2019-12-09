@@ -138,8 +138,15 @@ function PosContainer() {
         // e.preventDefault()
         loadBalance()
         if(values.inventarioFiltrado.length <= 0){
-            showMessage(values.ubicacion.nombre+" no tiene productos que mostrar.", 'warning' )
+            enqueueSnackbar(" No se encontró inventario en "+values.ubicacion.nombre, {
+                variant: 'info',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                },
+            } ) 
             openDialog('posDialog')
+            
         }else{
             openDialog('posDialog')
         }

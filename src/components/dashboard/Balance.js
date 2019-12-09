@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import {getBalance} from '../api'
 import { formatNumber, sumImporte, sumSaldo, calcCostoInventario } from '../Tools'
-import { Typography, Grid, Card, CardHeader, CardContent, CardActions, Tooltip, } from '@material-ui/core';
+import { Typography, Grid, Card, CardHeader, CardContent, CardActions, Tooltip, LinearProgress } from '@material-ui/core';
 export default function Balance() {
     
-    const [values, setValues] = useState({
-        total: 0,
-        disponible: 0,
-        dispPorUbic: null,
-        inventario: 0,
-        porCobrar: 0,
-        porPagar: 0,
-    })
+    const [values, setValues] = useState(null)
 
     useEffect(() => {
         getBalance().then(balance => {
@@ -42,6 +35,14 @@ export default function Balance() {
     }, [])
     return (
         <Grid container direction="row" alignItems="center" justify="space-around" spacing={2}>
+
+            {
+                !values ?
+                    <Grid item xs={12}>
+                        <LinearProgress variant="query" /> 
+                    </Grid>
+                :
+            <React.Fragment>
 
             <Grid item xs={12} md>
                 <Card>
@@ -129,7 +130,8 @@ export default function Balance() {
                     </CardActions>
                 </Card>
             </Grid>
-
+            </React.Fragment>
+            }
         </Grid>
     )
 }

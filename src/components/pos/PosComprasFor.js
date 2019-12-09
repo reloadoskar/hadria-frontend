@@ -41,7 +41,11 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 
 	return (
 		<div className={classes.root}>
-			{inventario.map( (option, index) => (
+			{
+				inventario.length === 0 ?
+					<Typography variant="h6" children="No se encontraron productos." align="center" />
+				:
+				inventario.map( (option, index) => (
 
 				<ExpansionPanel key={option._id} index={index} expanded={expanded === option.clave} onChange={handleChange(option.clave)}>
 					<ExpansionPanelSummary

@@ -64,7 +64,7 @@ function Compras() {
                                         <TableCell >{compra.provedor.nombre}</TableCell>
                                         <TableCell >{compra.ubicacion.nombre}</TableCell>
                                         <TableCell >{compra.tipoCompra.tipo}</TableCell>
-                                        <TableCell >{compra.status.nombre}</TableCell>
+                                        <TableCell >{compra.status}</TableCell>
                                         <TableCell align="right">
                                             <IconButton aria-label="delete"
                                                 onClick={() => removeCompra(compra._id)}
