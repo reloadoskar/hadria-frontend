@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import { SnackbarProvider } from 'notistack';
 import { useSnackbar } from 'notistack';
-import { IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Card, Grid, CardHeader, CardContent, LinearProgress, } from '@material-ui/core';
+import { IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Card, CardHeader, CardContent, LinearProgress, } from '@material-ui/core';
 
 import useModal from './hooks/useModal';
 import useCompras from './hooks/useCompras';

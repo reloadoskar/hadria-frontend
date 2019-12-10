@@ -112,7 +112,7 @@ export default function ProductosDialog({ addProducto, isShowing, toggle }) {
 									onChange={(e) => dispatch({type: 'unidad', value: e.target.value})}
 									>
 									{unidades.map((el, index) => (
-										<MenuItem value={el._id}>{el.unidad + "(" + el.abr + ")"}</MenuItem>
+										<MenuItem key={index} value={el._id}>{el.unidad + "(" + el.abr + ")"}</MenuItem>
 									))}
 								</TextField>
 							</Grid>
@@ -130,7 +130,7 @@ export default function ProductosDialog({ addProducto, isShowing, toggle }) {
 									onChange={(e) => dispatch({type: 'empaque', value: e.target.value})}
 									>
 									{empaques.map((el, index) => (
-										<MenuItem value={el._id}>{el.empaque}</MenuItem>
+										<MenuItem key={index} value={el._id}>{el.empaque}</MenuItem>
 									))}
 								</TextField>
 							</Grid>

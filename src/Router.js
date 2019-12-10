@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Productos from './components/Productos';
 import Clientes from './components/Clientes';

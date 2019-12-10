@@ -1,5 +1,5 @@
 var Global = {
-    url: 'http://localhost:8080/api/'
+    url: 'http://hadria-backend.appspot.com/api/'
 }
 
 export default Global;

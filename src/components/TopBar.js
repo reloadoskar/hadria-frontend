@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
-import { AppBar, Toolbar, IconButton, Typography, Button, Menu, MenuItem, Divider } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Divider } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 

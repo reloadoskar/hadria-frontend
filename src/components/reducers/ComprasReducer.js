@@ -21,7 +21,6 @@ function reducer (state, action){
             return {...state, total: newTotal}
 
         case 'clearList':
-            console.log('borrando items')
             return {...state, items: []}
 
         case 'reset':

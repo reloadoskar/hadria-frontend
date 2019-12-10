@@ -1,14 +1,15 @@
-import {getProfile} from './components/api'
+// import {getProfile} from './components/api'
 class Auth {
     constructor(){
-        getProfile().then( res => {
-            if(res.message === "success"){
-                this.authenticated = true
-                this.user = res.user
-            }else{
-                this.authenticated = false
-            }
-        })
+        // getProfile().then( res => {
+        //     if(res.message === "success"){
+        //         this.authenticated = true
+        //         this.user = res.user
+        //     }else{
+        //         this.authenticated = false
+        //     }
+        // })
+        this.authenticated = true
     }
 
     login(cb){
