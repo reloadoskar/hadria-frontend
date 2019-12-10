@@ -25,7 +25,7 @@ import useUbicacions from '../hooks/useUbicacions';
 import reducer from '../reducers/ComprasReducer';
 
 import {objectIsNull} from '../Tools'
-import { saveCompra, } from '../api'
+import { saveCompra, ticketPrint } from '../api'
 import moment from 'moment'
 import MomentUtils from '@date-io/moment';
 
@@ -105,6 +105,11 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
             total: values.total,
         }
 
+        const ticket = {
+            tipo: "COMPRA",
+            compra: compra,           
+        }
+
         // console.log(compra)
         if(objectIsNull(compra)){
             showMessage("Faltan datos por llenar.", 'error')
@@ -118,6 +123,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                     handleClose('comprasDialog')   
                     dispatch({type: 'reset'})                 
                     addCompra(res.compra)
+                    ticketPrint(ticket)
                 }
             })
 

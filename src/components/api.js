@@ -384,3 +384,13 @@ export const delConcepto = (id) => {
             return res.data
         })
 }
+
+// TICKET
+
+export const ticketPrint = (data) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/', data)
+        .then(res => {
+            return res.data
+        })
+}
