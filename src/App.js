@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { SnackbarProvider } from 'notistack';
 import Router from './Router';
 import Landing from './components/Landing'
+import Register from './components/Register'
 import {PrivateRoute} from './privateRoute'
 
 import auth from './auth'
@@ -18,6 +19,9 @@ function App() {
             <Switch>
                 <Route exact path="/">
                     <Landing auth={auth}/>
+                </Route>
+                <Route exact path="/register">
+                    <Register auth={auth}/>
                 </Route>
                 <PrivateRoute path="/app" auth={auth} >
                     <Router auth={auth}/>

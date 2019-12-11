@@ -4,16 +4,15 @@ import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { Grid, Container, Card, CardHeader, CardContent, TextField, CardActions, Button } from '@material-ui/core';
 import useStyles from './hooks/useStyles'
-import {login} from './api'
+import {register} from './api'
 
 
 const Landing = (props) => {
-    const {auth} = props
     let history = useHistory();
     const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
     
-    const [data, setData] = useState({email: '', password: ''})
+    const [data, setData] = useState({nombre: '', apellido: '', email: '', password: '', passwordCheck: '', error: true})
     
     const showMessage = (text, type) => { enqueueSnackbar(text, {
         variant: type,
@@ -24,17 +23,25 @@ const Landing = (props) => {
     } ) }
     
     const handleChange = (field, value) => {
-        setData({...data, [field]: value})
+        switch(field){
+            case 'passwordCheck':
+                if(value === data.password){
+                    return setData({...data, [field]: value, error: false})
+                }else{
+                    return setData({...data, [field]: value, error: true})        
+                }
+            default:
+                return setData({...data, [field]: value})
+        }
+        
     }
     
     const handleSubmit = (e) => { 
         e.preventDefault()
-        login(data).then(res => {
+        register(data).then(res => {
             if(res.status === 'success'){
                 showMessage(res.message, res.status)
-                auth.login(() => {
-                    history.push("/app");
-                })
+                history.push("/");
             }else{
                 showMessage(res.message, res.status)
             }
@@ -46,15 +53,37 @@ const Landing = (props) => {
             <LandingBar />
             <div className={classes.backgroundCustom}>
                 <Container className={classes.container}>
-                    <Card className={classes.posCard}>
-                        <CardHeader title="Login:"></CardHeader>
+                    <Card className={classes.registerCard}>
+                        <CardHeader title="Registro:"></CardHeader>
                         <form onSubmit={handleSubmit}>
                         <CardContent>
                             <Grid container spacing={2} direction="row" justify="center" alignItems="center">
                                 <Grid item xs={12}>
                                     <TextField
+                                        id="nombre"
+                                        label="Nombre(s)"
+                                        variant="outlined"
+                                        fullWidth
+                                        required
+                                        value={data.nombre}
+                                        onChange={(e)=>handleChange('nombre', e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="apellido"
+                                        label="Apellidos"
+                                        variant="outlined"
+                                        fullWidth
+                                        required
+                                        value={data.apellido}
+                                        onChange={(e)=>handleChange('apellido', e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
                                         id="email"
-                                        label="Usuario"
+                                        label="e-mail"
                                         variant="outlined"
                                         fullWidth
                                         type="email"
@@ -67,12 +96,25 @@ const Landing = (props) => {
                                     <TextField
                                         id="password"
                                         required
-                                        label="Password"
+                                        label="password"
                                         variant="outlined"
                                         fullWidth
                                         type="password"
                                         value={data.password}
                                         onChange={(e)=>handleChange('password', e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        error={data.error}
+                                        id="passwordCheck"
+                                        required
+                                        label="confirmación de password"
+                                        variant="outlined"
+                                        fullWidth
+                                        type="password"
+                                        value={data.passwordCheck}
+                                        onChange={(e)=>handleChange('passwordCheck', e.target.value)}
                                     />
                                 </Grid>
                             </Grid>
@@ -82,8 +124,8 @@ const Landing = (props) => {
                                 <Button 
                                     variant="contained" 
                                     color="secondary" 
-                                    disabled={!data.email || !data.password ? true : false}
-                                    type="submit">Entrar</Button>
+                                    disabled={!data.email || !data.password || !data.nombre || !data.apellido || !data.passwordCheck || data.error ? true : false}
+                                    type="submit">Registrar</Button>
                             </Grid>
                         </CardActions>
                         </form>

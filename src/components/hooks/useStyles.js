@@ -102,6 +102,9 @@ const useStyles = makeStyles(theme => ({
     posCard: {
         maxWidth: 400,
     },
+    registerCard: {
+        maxWidth: 500,
+    },
     avatar: {
         backgroundColor: "#8A0751",
     },
