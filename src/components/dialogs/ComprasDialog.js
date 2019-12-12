@@ -105,11 +105,6 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
             total: values.total,
         }
 
-        const ticket = {
-            tipo: "COMPRA",
-            compra: compra,           
-        }
-
         // console.log(compra)
         if(objectIsNull(compra)){
             showMessage("Faltan datos por llenar.", 'error')
@@ -123,7 +118,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                     handleClose('comprasDialog')   
                     dispatch({type: 'reset'})                 
                     addCompra(res.compra)
-                    ticketPrint(ticket)
+                    ticketPrint(res.compra)
                 }
             })
 

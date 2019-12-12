@@ -1,5 +1,5 @@
 var Global = {
-    url: 'http://hadria-backend.appspot.com/api/'
+    url: 'https://hadria-backend.appspot.com/api/'
     // url: 'http://localhost:8080/api/'
 }
 
