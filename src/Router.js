@@ -11,7 +11,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/Header';
 import Container from './components/pos/Container';
 import ConceptosTabs from './components/conceptos/ConceptosTabs';
-import {PrivateRoute} from './privateRoute'
+// import {PrivateRoute} from './privateRoute'
 // import Error from './components/Error'
 
 import useStyles from './components/hooks/useStyles'

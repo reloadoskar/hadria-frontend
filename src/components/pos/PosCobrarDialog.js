@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {saveVenta} from '../api'
+import {saveVenta, ticketVenta} from '../api'
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -106,6 +106,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                 showMessage(res.message, res.status)
                 clearFields()
                 resetVenta()
+                ticketVenta(res.venta)
                 close('cobrarDialog')
             })
     }

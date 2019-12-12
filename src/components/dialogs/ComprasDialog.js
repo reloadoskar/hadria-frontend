@@ -25,7 +25,7 @@ import useUbicacions from '../hooks/useUbicacions';
 import reducer from '../reducers/ComprasReducer';
 
 import {objectIsNull} from '../Tools'
-import { saveCompra, ticketPrint } from '../api'
+import { saveCompra, ticketCompra } from '../api'
 import moment from 'moment'
 import MomentUtils from '@date-io/moment';
 
@@ -118,7 +118,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                     handleClose('comprasDialog')   
                     dispatch({type: 'reset'})                 
                     addCompra(res.compra)
-                    ticketPrint(res.compra)
+                    ticketCompra(res.compra)
                 }
             })
 

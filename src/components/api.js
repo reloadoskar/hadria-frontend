@@ -387,7 +387,12 @@ export const delConcepto = (id) => {
 
 // TICKET
 
-export const ticketPrint = (data) => {
+export const ticketCompra = (data) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/', data)
+}
+
+export const ticketVenta = (data) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/venta.php', data)
 }
