@@ -76,7 +76,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
 
     const handleClose = (dialog) => {
         if(dialog === "comprasDialog"){
-            dispatch({type: 'clearList'})
+            dispatch({type: 'reset'})
         }
         dispatch({type: dialog, value: false})
     }
@@ -271,7 +271,16 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                                         {
                                             values.items.map((item, index) => (
                                                 <TableRow key={index}>
-                                                    <TableCell>{item.producto.descripcion}</TableCell>
+                                                    <TableCell>
+                                                        {
+                                                            values.provedor.clave !== item.provedor.clave 
+                                                            ?
+                                                                item.producto.descripcion  + " (" + item.provedor.clave + ")" 
+                                                            :
+                                                             
+                                                                item.producto.descripcion
+                                                        }
+                                                    </TableCell>
                                                     <TableCell align="right">{item.cantidad}</TableCell>
                                                     <TableCell align="right">{item.empaques}</TableCell>
                                                     <TableCell align="right">{item.costo}</TableCell>
@@ -326,6 +335,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                 openDialog={openDialog}
                 showMessage={showMessage}
                 addItemToList={addItemToList}
+                tipoCompra={values.tipoCompra}
             />
         </div>
     );

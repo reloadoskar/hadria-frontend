@@ -94,7 +94,7 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 									</Grid>
 									<Grid item xs={4} >
 										<Typography>
-											{item.producto.descripcion}
+											{item.producto.descripcion + " (" + item.provedor.clave + ")"}
 										</Typography>
 									</Grid>
 									<Grid item xs={2}>

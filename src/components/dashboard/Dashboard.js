@@ -2,6 +2,7 @@ import React from 'react'
 
 import Balance from './Balance'
 import CuentasPorCobrar from './CuentasPorCobrar'
+
 import CuentasPorPagar from './CuentasPorPagar'
 import ComprasDash from './ComprasDash'
 
@@ -24,6 +25,7 @@ export default function Dashboard(){
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <CuentasPorCobrar />
+                        
                     </Grid>
                     <Grid item xs={12}>
                         <CuentasPorPagar />

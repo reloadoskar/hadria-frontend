@@ -1,23 +1,26 @@
 import React, { useState } from 'react'
-import { Dialog, DialogTitle, Button, DialogContent, DialogActions, Grid, TextField, MenuItem } from '@material-ui/core';
+import { FormControlLabel, Switch, Dialog, DialogTitle, Button, DialogContent, DialogActions, Grid, TextField, MenuItem, Box } from '@material-ui/core';
 // import SaveIcon from '@material-ui/icons/Save';
 
-import useProducts from '../hooks/useProducts';
-
+import useProducts from '../hooks/useProducts'
+import useProvedors from '../hooks/useProvedors'
 import {objectIsNull} from '../Tools'
 
-export default function CompraAddItemsDialog({ isOpen, handleClose, openDialog, addItemToList, showMessage }) {
-    const {products} = useProducts();
+export default function CompraAddItemsDialog({ isOpen, handleClose, openDialog, addItemToList, showMessage, tipoCompra }) {
+    const {products} = useProducts()
+    const {provedors} = useProvedors()
     const [values, setValues] = useState({
         producto: '',
+        provedor: '',
         cantidad: '',
         empaques: '',
         costo: '',
         importe: '',
+        checked: false
     })
 
     const clearFields = () => {
-        setValues({producto: '', cantidad: '', empaques: '', costo: '', importe: ''})
+        setValues({producto: '', provedor: '', cantidad: '', empaques: '', costo: '', importe: '', checked: false})
     }
 
     const handleChange = (field, value) => {
@@ -40,6 +43,7 @@ export default function CompraAddItemsDialog({ isOpen, handleClose, openDialog, 
         e.preventDefault()
         let item = {
             producto: values.producto,
+            provedor: values.provedor,
             cantidad: values.cantidad,
             stock: values.cantidad,
             empaques: values.empaques,
@@ -71,6 +75,16 @@ export default function CompraAddItemsDialog({ isOpen, handleClose, openDialog, 
                 </DialogTitle>
                 <form onSubmit={handleSubmit}>
                 <DialogContent>
+                    <Grid container >
+                        <Grid item>
+                        <FormControlLabel
+                            control={
+                            <Switch checked={values.checked} onChange={(e) => handleChange('checked', e.target.checked)} value="checked" />
+                            }
+                            label="Agregar Productor"
+                        />
+                        </Grid>
+                    </Grid>
                     <Grid container spacing={2}>
                         {/* Select: Producto return Object producto*/}
                         <Grid item xs={4}>
@@ -94,6 +108,27 @@ export default function CompraAddItemsDialog({ isOpen, handleClose, openDialog, 
                                     ))
                                 }
                             </TextField>
+                            <Box display={ !values.checked ? 'none' : 'block' }>
+                                <TextField
+                                        autoFocus
+                                        id="provedor"
+                                        select
+                                        required
+                                        fullWidth
+                                        label="Selecciona un Proveedor"
+                                        helperText="Por favor selecciona un Proveedor."
+                                        margin="normal"
+                                        value={values.provedor}
+                                        onChange={(e) => handleChange('provedor',  e.target.value)}
+                                        variant="outlined"
+                                        >
+                                            {provedors.map((option, index) => (
+                                                <MenuItem key={index} value={option}>
+                                                    {option.clave} - {option.nombre}
+                                                </MenuItem>
+                                            ))}
+                                    </TextField>
+                            </Box>
                         </Grid>
                         {/* Input: Cantidad */}
                         <Grid item xs={2}>

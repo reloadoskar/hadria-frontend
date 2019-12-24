@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Card, CardHeader, CardContent, Grid, Typography, Divider } from '@material-ui/core';
 import { formatNumber, sumSaldo } from '../Tools'
 import {getCuentasPorCobrar} from '../api'
+import CrearCxcDialog from '../dialogs/CrearCxcDialog'
 import moment from 'moment'
 export default function CuentasPorCobrar( { data } ){
     const [cuentas, setCuentas] = useState([])
@@ -31,6 +32,9 @@ export default function CuentasPorCobrar( { data } ){
         <Card>
             <CardHeader 
                 title="Créditos"
+                action= {
+                    <CrearCxcDialog />
+                }
             />
             <CardContent>
                 {

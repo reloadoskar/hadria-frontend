@@ -238,6 +238,14 @@ export const savePagoACuentaPorPagar = (pago) =>{
 
 // CUENTAS POR COBRAR
 
+export const createCuentaPorCobrar = (cuenta) => {
+    return axios
+        .post( url + 'cuentasporcobrar/save', cuenta)
+        .then( res => {
+            return res.data
+        })
+}
+
 export const getCuentasPorCobrar = () => {
     return axios
     .get(url + 'cuentasporcobrar')
