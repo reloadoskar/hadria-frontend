@@ -1,15 +1,7 @@
-// import {getProfile} from './components/api'
+import {getProfile} from './components/api'
 class Auth {
-    constructor(){
-        // getProfile().then( res => {
-        //     if(res.message === "success"){
-        //         this.authenticated = true
-        //         this.user = res.user
-        //     }else{
-        //         this.authenticated = false
-        //     }
-        // })
-        this.authenticated = true
+    constructor(){        
+        this.authenticated = false
     }
 
     login(cb){
@@ -27,7 +19,15 @@ class Auth {
     }
 
     userData(){
-        return this.user
+        getProfile().then( res => {
+            if(res.message === "success"){
+                //this.authenticated = true
+                this.user = res.user
+                return this.user
+            }else{
+                this.authenticated = false
+            }
+        })
     }
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Productos from './components/Productos';
@@ -11,14 +11,23 @@ import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/Header';
 import Container from './components/pos/Container';
 import ConceptosTabs from './components/conceptos/ConceptosTabs';
-// import {PrivateRoute} from './privateRoute'
+import { useHistory } from 'react-router-dom';
+// import {PrivateRoute} from './privateRoute' 
 // import Error from './components/Error'
 
 import useStyles from './components/hooks/useStyles'
 
 export default function Router({auth}){
     let { path, url } = useRouteMatch();
+    let history = useHistory();
     const classes = useStyles()
+    useEffect(()=> {
+        if (!auth.isAuthenticated()){
+            auth.logout(() => {
+                history.push("/")
+            })
+        }
+    }, [auth])
         return (
             <div className={classes.root}>
 
@@ -26,7 +35,12 @@ export default function Router({auth}){
                     <main className={classes.content}>
                         <div className={classes.toolbar} />
                         <Switch>
-                            <Route exact path={path} component={Dashboard}></Route>
+                            {/* <Route exact path={path} component={Dashboard}></Route> */}
+                            <Route exact path={path} render={
+                                (props) => ( 
+                                        <Dashboard auth={auth} /> 
+                                    )
+                                }></Route>
                             <Route exact path={`${path}/productos`} component={Productos}></Route>
                             <Route exact path={`${path}/clientes`} component={Clientes}></Route>
                             <Route exact path={`${path}/provedores`} component={Provedores}></Route>

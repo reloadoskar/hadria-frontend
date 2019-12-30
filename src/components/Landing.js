@@ -15,11 +15,13 @@ const Landing = (props) => {
     
     const [data, setData] = useState({email: '', password: ''})
     
-    const showMessage = (text, type) => { enqueueSnackbar(text, {
-        variant: type,
-        anchorOrigin: {
-            vertical: 'top',
-            horizontal: 'center',
+    const showMessage = (text, type) => { enqueueSnackbar(
+        text, 
+        {
+            variant: type,
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'center',
         },
     } ) }
     
