@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-
+import clsx from 'clsx';
 import Productos from './components/Productos';
 import Clientes from './components/Clientes';
 import Provedores from './components/Provedores';
@@ -22,6 +22,7 @@ export default function Router({auth}){
     let { path, url } = useRouteMatch();
     let history = useHistory();
     const classes = useStyles()
+    const [open, setOpen] = useState(false)
     useEffect(()=> {
         if (!auth.isAuthenticated()){
             auth.logout(() => {
@@ -29,11 +30,17 @@ export default function Router({auth}){
             })
         }
     }, [auth, history])
+
+    const toggle = () => {
+        setOpen(!open)
+    };
         return (
             <div className={classes.root}>
 
-                    <Header url={url} auth={auth} />
-                    <main className={classes.content}>
+                    <Header url={url} auth={auth} open={open} toggle={toggle} />
+                    <main className={clsx(classes.content, {
+                        [classes.contentShift]: open,
+                    })}>
                         <div className={classes.toolbar} />
                         <Switch>
                             {/* <Route exact path={path} component={Dashboard}></Route> */}

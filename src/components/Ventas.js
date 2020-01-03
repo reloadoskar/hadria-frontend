@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import { Grid, Container, Card, CardHeader, CardContent, TextField, Button, Typography, IconButton, Table, TableHead, TableRow, TableCell, TableBody, Box, } from '@material-ui/core';
+import { Grid, Container, Card, CardContent, TextField, Button, Typography, IconButton, Table, TableHead, TableRow, TableCell, TableBody, Box, } from '@material-ui/core';
 import BlockIcon from '@material-ui/icons/Block';
 import EditIcon from '@material-ui/icons/Edit';
 import useStyles from './hooks/useStyles'
@@ -144,7 +144,6 @@ const Ventas = (props) => {
     const { enqueueSnackbar } = useSnackbar()
     // const classes = useStyles()
     const [loadingSomething, setLoadingSomething] = useState(false)
-    const [value, setValue] = React.useState(0);
 
     const [data, setData] = useState({ folio: '', venta: false })
 

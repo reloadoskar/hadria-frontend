@@ -1,8 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-
-import clsx from 'clsx';
 
 import { IconButton, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Collapse, Tooltip } from '@material-ui/core';
 
@@ -36,7 +34,9 @@ const useStyles = makeStyles(theme => ({
     drawer: {
         width: drawerWidth,
         flexShrink: 0,
-        whiteSpace: 'nowrap',
+    },
+    drawerPaper: {
+        width: drawerWidth,
     },
     drawerOpen: {
         width: drawerWidth,
@@ -74,37 +74,36 @@ const useStyles = makeStyles(theme => ({
 
 }))
 
-export default function DefaultDrawer({ toggle, toggled, handleCollapse, expanded, url }) {
+export default function DefaultDrawer({ toggle, open, url }) {
     const classes = useStyles()
+    const [expanded, setExpanded] = useState(false)
+    const handleCollapse = () => {
+        setExpanded(!expanded)
+    };
 
     return (
         <Drawer
-            variant="permanent"
-            className={clsx(classes.drawer, {
-                [classes.drawerOpen]: toggled,
-                [classes.drawerClose]: !toggled,
-            })}
+            variant="persistent"
+            anchor="left"
+            className={classes.drawer}
             classes={{
-                paper: clsx({
-                    [classes.drawerOpen]: toggled,
-                    [classes.drawerClose]: !toggled,
-                }),
+                paper: classes.drawerPaper,
             }}
-            open={toggled}>
+            open={open}>
 
 
             <div className={classes.toolbar}>
                 <IconButton onClick={toggle}>
-                    {toggled ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                    {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
             </div>
             <Divider />
 
             <List component="nav" aria-label="menú principal">
                 <NavLink to="/app" className={classes.link}>
-                    {toggled
+                    {open
                         ?
-                        <ListItem button>
+                        <ListItem button onClick={toggle}>
                             <ListItemIcon>
                                 <DashboardIcon />
                             </ListItemIcon>
@@ -122,7 +121,7 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                     }
                 </NavLink>
 
-                {toggled
+                {open
                     ?
                     <ListItem button onClick={handleCollapse}>
                         <ListItemIcon>
@@ -147,9 +146,9 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         <NavLink to={`${url}/productos`} className={classes.link}>
-                            {toggled
+                            {open
                                 ?
-                                <ListItem button className={classes.nested}>
+                                <ListItem button onClick={toggle} className={classes.nested}>
                                     <ListItemIcon>
                                         <TocIcon />
                                     </ListItemIcon>
@@ -157,7 +156,7 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                                 </ListItem>
                                 :
                                 <StyledTooltip title="Productos" placement="right">
-                                    <ListItem button className={classes.nested}>
+                                    <ListItem button onClick={toggle} className={classes.nested}>
                                         <ListItemIcon>
                                             <TocIcon />
                                         </ListItemIcon>
@@ -168,9 +167,9 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                             }
                         </NavLink>
                         <NavLink to={`${url}/clientes`} className={classes.link}>
-                            {toggled
+                            {open
                                 ?
-                                <ListItem button className={classes.nested}>
+                                <ListItem button onClick={toggle} className={classes.nested}>
                                     <ListItemIcon>
                                         <AssignmentIndIcon />
                                     </ListItemIcon>
@@ -188,9 +187,9 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                             }
                         </NavLink>
                         <NavLink to={`${url}/provedores`} className={classes.link}>
-                            {toggled
+                            {open
                                 ?
-                                <ListItem button className={classes.nested}>
+                                <ListItem button onClick={toggle} className={classes.nested}>
                                     <ListItemIcon>
                                         <GroupIcon />
                                     </ListItemIcon>
@@ -209,9 +208,9 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                             }
                         </NavLink>
                         <NavLink to={`${url}/ubicaciones`} className={classes.link}>
-                            {toggled
+                            {open
                                 ?
-                                <ListItem button className={classes.nested}>
+                                <ListItem button onClick={toggle} className={classes.nested}>
                                     <ListItemIcon>
                                         <HomeWorkIcon />
                                     </ListItemIcon>
@@ -229,9 +228,9 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                             }
                         </NavLink>
                         <NavLink to={`${url}/conceptos`} className={classes.link}>
-                            {toggled
+                            {open
                                 ?
-                                <ListItem button className={classes.nested}>
+                                <ListItem button onClick={toggle} className={classes.nested}>
                                     <ListItemIcon>
                                         <ForumIcon />
                                     </ListItemIcon>
@@ -239,7 +238,7 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                                 </ListItem>
                                 :
                                 <StyledTooltip title="Conceptos" placement="right">
-                                    <ListItem button className={classes.nested}>
+                                    <ListItem button onClick={toggle} className={classes.nested}>
                                         <ListItemIcon>
                                             <ForumIcon />
                                         </ListItemIcon>
@@ -253,9 +252,9 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                 </Collapse>
 
                 <NavLink to={`${url}/compras`} className={classes.link}>
-                    {toggled
+                    {open
                         ?
-                        <ListItem button>
+                        <ListItem button onClick={toggle}>
                             <ListItemIcon>
                                 <StoreIcon />
                             </ListItemIcon>
@@ -263,7 +262,7 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                         </ListItem>
                         :
                         <StyledTooltip title="Compras" placement="right">
-                            <ListItem button>
+                            <ListItem button onClick={toggle}>
                                 <ListItemIcon>
                                     <StoreIcon />
                                 </ListItemIcon>
@@ -274,9 +273,9 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                     }
                 </NavLink>
                 <NavLink to={`${url}/inventario`} className={classes.link}>
-                    {toggled
+                    {open
                         ?
-                        <ListItem button>
+                        <ListItem button onClick={toggle}>
                             <ListItemIcon>
                                 <AssignmentIcon />
                             </ListItemIcon>
@@ -284,7 +283,7 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                         </ListItem>
                         :
                         <StyledTooltip title="Inventario" placement="right">
-                            <ListItem button>
+                            <ListItem button onClick={toggle}>
                                 <ListItemIcon>
                                     <AssignmentIcon />
                                 </ListItemIcon>
@@ -297,9 +296,9 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                 <Divider />
 
                 <NavLink to={`${url}/pos`} className={classes.link}>
-                    {toggled
+                    {open
                         ?
-                        <ListItem button >
+                        <ListItem button onClick={toggle}>
                             <ListItemIcon>
                                 <StorefrontIcon />
                             </ListItemIcon>
@@ -307,7 +306,7 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                         </ListItem>
                         :
                         <StyledTooltip title="POS" placement="right">
-                            <ListItem button >
+                            <ListItem button onClick={toggle}>
                                 <ListItemIcon>
                                     <StorefrontIcon />
                                 </ListItemIcon>
@@ -320,9 +319,9 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                 </NavLink>
 
                 <NavLink to={`${url}/ventas`} className={classes.link} >
-                    {toggled
+                    {open
                         ?
-                        <ListItem button >
+                        <ListItem button onClick={toggle}>
                             <ListItemIcon>
                                 <ReceiptIcon />
                             </ListItemIcon>
@@ -330,7 +329,7 @@ export default function DefaultDrawer({ toggle, toggled, handleCollapse, expande
                         </ListItem>
                         :
                         <StyledTooltip title="Ventas" placement="right">
-                            <ListItem button >
+                            <ListItem button onClick={toggle}>
                                 <ListItemIcon>
                                     <ReceiptIcon />
                                 </ListItemIcon>
