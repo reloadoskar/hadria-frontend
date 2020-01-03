@@ -22,9 +22,10 @@ import ForumIcon from '@material-ui/icons/Forum';
 import StoreIcon from '@material-ui/icons/Store';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import StorefrontIcon from '@material-ui/icons/Storefront';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 
 const drawerWidth = 240;
-const StyledTooltip = withStyles( theme => ({
+const StyledTooltip = withStyles(theme => ({
     tooltip: {
         background: 'linear-gradient(45deg, #23395B , #6F7A73 )',
         fontSize: theme.typography.pxToRem(12),
@@ -64,7 +65,7 @@ const useStyles = makeStyles(theme => ({
     },
     nested: {
         paddingLeft: theme.spacing(4),
-      },
+    },
 
     link: {
         color: '#3d3d3d',
@@ -73,7 +74,7 @@ const useStyles = makeStyles(theme => ({
 
 }))
 
-export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded, url}) {
+export default function DefaultDrawer({ toggle, toggled, handleCollapse, expanded, url }) {
     const classes = useStyles()
 
     return (
@@ -100,34 +101,34 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
             <Divider />
 
             <List component="nav" aria-label="menú principal">
-                <NavLink to="/app"  className={classes.link}>
-                    { toggled 
-                        ?  
+                <NavLink to="/app" className={classes.link}>
+                    {toggled
+                        ?
                         <ListItem button>
                             <ListItemIcon>
                                 <DashboardIcon />
                             </ListItemIcon>
-                                <ListItemText primary="Dashboard" />
+                            <ListItemText primary="Dashboard" />
                         </ListItem>
-                        : 
+                        :
                         <StyledTooltip title="Dashboard" placement="right">
                             <ListItem button>
                                 <ListItemIcon>
                                     <DashboardIcon />
                                 </ListItemIcon>
-                                    <ListItemText primary="Dashboard" />
+                                <ListItemText primary="Dashboard" />
                             </ListItem>
                         </StyledTooltip>
                     }
                 </NavLink>
-                
-                { toggled 
+
+                {toggled
                     ?
                     <ListItem button onClick={handleCollapse}>
                         <ListItemIcon>
                             <FolderIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Catálogos" className={classes.link}/>
+                        <ListItemText primary="Catálogos" className={classes.link} />
                         {expanded ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
                     :
@@ -136,7 +137,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
                             <ListItemIcon>
                                 <FolderIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Catálogos" className={classes.link}/>
+                            <ListItemText primary="Catálogos" className={classes.link} />
                             {expanded ? <ExpandLess /> : <ExpandMore />}
                         </ListItem>
                     </StyledTooltip>
@@ -146,7 +147,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         <NavLink to={`${url}/productos`} className={classes.link}>
-                            {toggled 
+                            {toggled
                                 ?
                                 <ListItem button className={classes.nested}>
                                     <ListItemIcon>
@@ -228,7 +229,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
                             }
                         </NavLink>
                         <NavLink to={`${url}/conceptos`} className={classes.link}>
-                            {toggled    
+                            {toggled
                                 ?
                                 <ListItem button className={classes.nested}>
                                     <ListItemIcon>
@@ -252,7 +253,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
                 </Collapse>
 
                 <NavLink to={`${url}/compras`} className={classes.link}>
-                    { toggled 
+                    {toggled
                         ?
                         <ListItem button>
                             <ListItemIcon>
@@ -273,7 +274,7 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
                     }
                 </NavLink>
                 <NavLink to={`${url}/inventario`} className={classes.link}>
-                    { toggled 
+                    {toggled
                         ?
                         <ListItem button>
                             <ListItemIcon>
@@ -293,32 +294,53 @@ export default function DefaultDrawer({toggle, toggled, handleCollapse, expanded
 
                     }
                 </NavLink>
-            </List>
-            <Divider />
-            <List component="nav">
+                <Divider />
+
                 <NavLink to={`${url}/pos`} className={classes.link}>
-                    { toggled
+                    {toggled
                         ?
                         <ListItem button >
                             <ListItemIcon>
                                 <StorefrontIcon />
                             </ListItemIcon>
-                                <ListItemText primary="Ventas" />
+                            <ListItemText primary="POS" />
                         </ListItem>
                         :
-                        <StyledTooltip title="Ventas" placement="right">
+                        <StyledTooltip title="POS" placement="right">
                             <ListItem button >
                                 <ListItemIcon>
                                     <StorefrontIcon />
                                 </ListItemIcon>
-                                    <ListItemText primary="Ventas" />
+                                <ListItemText primary="POS" />
                             </ListItem>
                         </StyledTooltip>
 
 
                     }
                 </NavLink>
+
+                <NavLink to={`${url}/ventas`} className={classes.link} >
+                    {toggled
+                        ?
+                        <ListItem button >
+                            <ListItemIcon>
+                                <ReceiptIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Ventas" />
+                        </ListItem>
+                        :
+                        <StyledTooltip title="Ventas" placement="right">
+                            <ListItem button >
+                                <ListItemIcon>
+                                    <ReceiptIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Ventas" />
+                            </ListItem>
+                        </StyledTooltip>
+                    }
+                </NavLink>
             </List>
+
         </Drawer>
     )
 }

@@ -211,10 +211,31 @@ export const getInventarioBy = (ubicacion) => {
 }
 
 // VENTAS
+export const getVenta = (id) => {
+    return axios
+        .post(url + 'venta', id)
+        .then( res => {
+            return res.data
+        })
+}
+export const getVentas = () => {
+    return axios
+        .get(url + 'ventas')
+        .then( res => {
+            return res.data
+        })
+}
 export const saveVenta = (venta) => {
     return axios
         .post(url + 'venta/save', venta)
         .then(res => {
+            return res.data
+        })
+}
+export const cancelVenta = (id) => {
+    return axios
+        .delete(url + `venta/${id}`)
+        .then( res => {
             return res.data
         })
 }

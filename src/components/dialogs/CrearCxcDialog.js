@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import moment from 'moment'
+// import moment from 'moment'
 import {createCuentaPorCobrar} from '../api'
 import AddIcon from '@material-ui/icons/Add';
 import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem, IconButton } from '@material-ui/core';

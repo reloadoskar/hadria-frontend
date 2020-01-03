@@ -120,6 +120,9 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
         
     },
+    table: {
+        minWidth: 420,
+    }
     
 
 }));

@@ -11,6 +11,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/Header';
 import Container from './components/pos/Container';
 import ConceptosTabs from './components/conceptos/ConceptosTabs';
+import Ventas from './components/Ventas';
 import { useHistory } from 'react-router-dom';
 // import {PrivateRoute} from './privateRoute' 
 // import Error from './components/Error'
@@ -27,7 +28,7 @@ export default function Router({auth}){
                 history.push("/")
             })
         }
-    }, [auth])
+    }, [auth, history])
         return (
             <div className={classes.root}>
 
@@ -49,6 +50,7 @@ export default function Router({auth}){
                             <Route exact path={`${path}/conceptos`} component={ConceptosTabs}></Route>
                             <Route exact path={`${path}/inventario`} component={Inventario}></Route>
                             <Route exact path={`${path}/pos`} component={Container}></Route>
+                            <Route exact path={`${path}/ventas`} component={Ventas}></Route>
                         </Switch>
                     </main>
 
