@@ -66,13 +66,13 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 										
 									</Grid>
 									<Grid item xs={2}>
-										<Typography variant="body2" children="Empaques" />
+										<Typography variant="body2" children="Emp" />
 									</Grid>
 									<Grid item xs={4}>
 										<Typography variant="body2" children="Descripción" />
 									</Grid>
 									<Grid item xs={2}>
-										<Typography variant="body2" children="Cantidad" />
+										<Typography variant="body2" children="Cant" />
 									</Grid>
 									<Grid item xs={2}>
 										<Typography variant="body2" children="Precio" />

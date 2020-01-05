@@ -169,7 +169,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                                 ))} 
                             </TextField>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 id="tipoPago"
                                 select
@@ -191,7 +191,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                         {values.tipoPago === 'CONTADO' ?
                         <React.Fragment>
 
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <TextField 
                                     id="efectivo"
                                     variant="outlined"
@@ -203,7 +203,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                                     onChange={(e) => handleChange('efectivo', e.target.value)}
                                     />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <TextField 
                                     id="cambio"
                                     variant="outlined"
@@ -222,7 +222,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                         :
                         <React.Fragment>
                             
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <TextField 
                                     id="acuenta"
                                     variant="outlined"
@@ -234,7 +234,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                                     onChange={(e) => handleChange('acuenta', e.target.value)}
                                     />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                             <TextField 
                                     id="saldo"
                                     variant="outlined"

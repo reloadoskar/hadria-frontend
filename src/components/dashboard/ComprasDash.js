@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgress } from '@material-ui/core';
 
 import useCompras from '../hooks/useCompras';
-
+import {sumStock, sumEmpStock} from '../Tools'
 import VerCompra from './VerCompra'
 export default function ComprasDash(){
     const {compras} = useCompras();
@@ -34,17 +34,20 @@ export default function ComprasDash(){
                         compras.map( (compra, index) => (
                             <ListItem button key={index} onClick={()=> handleMenu('ver', compra._id)}>
                             <Grid key={index} container >
-                                <Grid item xs>
-                                    <Typography children={compra.clave} />
+                                <Grid item xs={12} md={6}>
+                                    <Typography variant="h5">{compra.clave}</Typography>
+                                    <Typography variant="body2">{compra.ubicacion.nombre} | {compra.tipoCompra.tipo}</Typography>
                                 </Grid>
-                                <Grid item xs>
-                                    <Typography children={compra.tipoCompra.tipo} />
-                                </Grid>
-                                <Grid item xs>
-                                    <Typography children={compra.ubicacion.nombre} />
-                                </Grid>
-                                <Grid item xs>
+                                <Grid item xs={12} md>
                                     <Typography children={compra.status} />
+                                </Grid>
+                                <Grid item xs={6} md>
+                                    <Typography variant="body2" align="right" children="Unidades:" />
+                                    <Typography variant="h5" align="right" children={sumStock(compra.items) + " | "} />
+                                </Grid>
+                                <Grid item xs={6} md>
+                                    <Typography variant="body2" children="Empaques: " />
+                                    <Typography variant="h5" align="left" children={sumEmpStock(compra.items) } />
                                 </Grid>
                                 
                             </Grid>

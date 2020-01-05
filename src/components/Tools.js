@@ -52,6 +52,15 @@ export const sumSaldo = (list) => {
 
     return suma
 }
+export const sumSaldoList = (list) => {
+    let suma = 0
+
+    list.forEach(function(item){
+        suma += parseFloat(item.saldo)
+    })
+
+    return suma
+}
 
 export const sumAcuenta = (list) => {
     let suma = 0

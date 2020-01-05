@@ -93,18 +93,15 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <Typography variant="h6" >{item.item.producto.descripcion}</Typography>
+                        <Typography variant="subtitle2" >Disponible: {item.item.stock}</Typography>
                     </Grid>
-                    <Grid item xs={6}>
-                        <Grid container justify="flex-end">
-                            <Typography variant="h6" >Disponible: {item.item.stock}</Typography>
-                        </Grid>
-                    </Grid>
+
                 </Grid>
             </DialogTitle>
                 <form onSubmit={handleSubmit}>
                     <DialogContent>
                         <Grid container spacing={2}>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} md={3}>
                                 <TextField 
                                     id="cantidad"
                                     label="Cantidad"
@@ -116,7 +113,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                                     onChange={(e) => handleChange('cantidad', e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} md={3}>
                                 <TextField 
                                     id="empaques"
                                     label="Empaques"
@@ -127,7 +124,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                                     onChange={(e) => handleChange('empaques', e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} md={3}>
                                 <TextField 
                                     id="precio"
                                     label="Precio"
@@ -138,7 +135,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                                     onChange={(e) => handleChange('precio', e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} md={3}>
                                 <TextField 
                                     id="importe"
                                     label="Importe"

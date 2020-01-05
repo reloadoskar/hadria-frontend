@@ -1,14 +1,16 @@
 import React, {useState, useEffect} from 'react'
 import { Card, CardHeader, CardContent, Grid, Typography, Divider } from '@material-ui/core';
-import { formatNumber, sumSaldo } from '../Tools'
+import { formatNumber, sumSaldoList } from '../Tools'
 import {getCuentasPorCobrar} from '../api'
 import CrearCxcDialog from '../dialogs/CrearCxcDialog'
 import moment from 'moment'
-export default function CuentasPorCobrar( { data } ){
+export default function CuentasPorCobrar( ){
     const [cuentas, setCuentas] = useState([])
+    const [saldo, setSaldo] = useState(0)
     useEffect(() => {
         getCuentasPorCobrar().then(res => {
             setCuentas(res.cuentas)
+            setSaldo(sumSaldoList(res.cuentas))
         })
     }, [])
     const diasParaCobrar = (fecha, dias) =>{
@@ -59,7 +61,7 @@ export default function CuentasPorCobrar( { data } ){
                         })
                 }
                 <Divider />
-                <Typography variant="body1" children={sumSaldo(cuentas)} align="right" />
+                <Typography variant="body1" children={formatNumber(saldo)} align="right" />
             </CardContent>
         </Card>
     )

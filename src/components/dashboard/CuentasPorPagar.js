@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react'
-import { Card, CardHeader, CardContent, Grid, Typography } from '@material-ui/core';
-import { formatNumber,  } from '../Tools'
+import { Card, CardHeader, CardContent, Grid, Typography, Divider } from '@material-ui/core';
+import { formatNumber, sumSaldoList } from '../Tools'
 import {getCuentasPorPagar} from '../api'
 import moment from 'moment'
 export default function CuentasPorPagar( ){
     const [cuentas, setCuentas] = useState([])
+    const [saldo, setSaldo] = useState(0)
     useEffect(() => {
         getCuentasPorPagar().then(res => {
             setCuentas(res.cuentas)
+            setSaldo(sumSaldoList(res.cuentas))
         })
     }, [])
     const diasParaPagar = (fecha, dias) => {
@@ -57,6 +59,8 @@ export default function CuentasPorPagar( ){
                             );
                         })
                 }
+                <Divider />
+                <Typography variant="body1" children={formatNumber(saldo)} align="right" />
             </CardContent>
         </Card>
     )

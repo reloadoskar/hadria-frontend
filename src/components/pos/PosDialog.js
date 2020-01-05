@@ -48,10 +48,7 @@ export default function PosDialog({
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        Punto de venta.
-                    </Typography>
-                    <Typography>
-                        Estas en: {values.ubicacion.nombre} el: {moment(values.fecha).format("dddd, DD MMMM [de] YYYY")}
+                        POS| {values.ubicacion.nombre} | {moment(values.fecha).format("DD MMMM [de] YYYY")}
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -59,14 +56,14 @@ export default function PosDialog({
             <PosMenu anchorEl={anchorEl} openDialog={openDialog} showCorte={showCorte} isOpen={menuDialog} closeDialog={closeDialog}/>
             
             <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={12} md>
                     <PosComprasFor
                         inventario={values.inventarioFiltrado}
                         wantThisItem={wantThisItem}
                         showMessage={showMessage} />
 
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} md>
                     <PosListaDeVenta
                         items={values.itemsToSave}
                         openDialog={openDialog}
