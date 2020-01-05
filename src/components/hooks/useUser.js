@@ -6,7 +6,7 @@ const useUser = () => {
         nombre: '',
         apellido: '',
         email: '',
-        level: ''
+        level: 2
     })
 	useEffect(() => {
         const token = localStorage.usertoken

@@ -13,12 +13,11 @@ import { Grid, Box } from '@material-ui/core';
 
 export default function Dashboard(){
     const {user} = useUser()
-    
     return(
         
         <Grid container spacing={2}>
             <Grid  item xs={12}>
-                <Box display={user.level <= 1 ? 'inline' : 'none'}>
+                <Box display={user.level > 1 ? 'none' : 'inline'}>
                     <Balance />
                 </Box>
             </Grid>
