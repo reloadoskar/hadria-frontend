@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import {savePagoACuentaPorCobrar} from '../api'
+import {savePagoACuentaPorCobrar, ticketCobranza} from '../api'
 
 import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
 
@@ -15,6 +15,7 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
     
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const [values, setValues] = useState(initialData)
+    const [reprint] = useState(true)
     
     const clearFields = () => {
         setValues(initialData)
@@ -54,6 +55,10 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
             //updateSaldoCuenta() FALTA
             addToSaldo(pago.importe)
             clearFields()
+            ticketCobranza(pago)
+            if(reprint){
+                ticketCobranza(pago)
+            }
         })
     }
 

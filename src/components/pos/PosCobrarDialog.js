@@ -9,8 +9,48 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
 import useClientes from '../hooks/useClientes'
 
+function ReprintDialog(props) {
+    const { open, cancel, } = props
+
+    const handleCancel = () => {
+        cancel()
+    }
+
+    const handleOk = () => {
+
+    }
+    return (
+        <Dialog
+            disableBackdropClick
+            disableEscapeKeyDown
+            maxWidth="xs"
+            open={open}>
+        
+            <DialogTitle>Ticket</DialogTitle>
+            <DialogContent>
+                <Typography align="center"> ¿Desea imprimir copia del ticket? </Typography>
+            </DialogContent>
+            <DialogActions>
+                <Button autoFocus onClick={handleCancel} color="primary">
+                    Cancel
+                </Button>
+                <Button onClick={handleOk} color="primary">
+                    Ok
+                </Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
+
 export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessage, addToSaldo, resetVenta }) {
     const {clientes} = useClientes()
+
+    const [reprintDialog, setReprintDialog] = useState(false)
+    const [reprint] = useState(true)
+
+    const cancelReprint = () => {
+        setReprintDialog(false)
+    }
 
     const initialData = {
         cliente: '',
@@ -106,12 +146,25 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                 showMessage(res.message, res.status)
                 clearFields()
                 resetVenta()
-                ticketVenta(res.venta)
+                printTicket(res.venta)
+                if(reprint){
+                    printTicket(res.venta)
+                }
+                // rePrintTicket()
                 close('cobrarDialog')
             })
     }
 
+    // const rePrintTicket = () =>{
+    //     setReprintDialog(true)
+    // }
+
+    const printTicket = (venta) => {
+        ticketVenta(venta)
+    }
+
     return (
+        <React.Fragment>
         <Dialog open={isOpen} onClose={() => handleClose('cobrarDialog')} aria-labelledby="form-dialog-title">
 
         {valuesToSave.total > 0 && 
@@ -268,6 +321,8 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
             </React.Fragment>    
         }         
         </Dialog>
+        <ReprintDialog open={reprintDialog} cancel={cancelReprint} ok={printTicket} />
+        </React.Fragment>
         
     );
 }

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {saveEgreso} from '../api'
+import {saveEgreso, ticketEgreso} from '../api'
 import { Dialog, DialogContent, DialogTitle, Typography, Grid, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
 
 import useCompras from '../hooks/useCompras'
@@ -69,6 +69,7 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
                 subFromSaldo(egreso.importe)
                 clearFields()
                 close('egresoDialog')
+                ticketEgreso(egreso)
             })
         }
     }

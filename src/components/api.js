@@ -425,3 +425,13 @@ export const ticketVenta = (data) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/venta.php', data)
 }
+
+export const ticketCobranza = (data) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/cobranza.php', data)
+}
+
+export const ticketEgreso = (data) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/egreso.php', data)
+}
