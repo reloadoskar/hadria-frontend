@@ -155,7 +155,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                         <Button onClick={() => handleClose('addItemDialog')} color="primary">
                             Cancel
                         </Button>
-                        <Button type="submit" variant="contained" color="primary" disabled={values.importe > 0 ? false : true }>
+                        <Button type="submit" variant="contained" color="primary" disabled={values.cantidad > 0 ? false : true }>
                             Registrar
                         </Button>
                     </DialogActions>

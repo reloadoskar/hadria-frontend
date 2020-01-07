@@ -18,7 +18,7 @@ const Venta = (props) => {
                 return showMessage('No disponoble por el momento', 'error')
             case 'delete':
                 existCorte(venta.ubicacion._id, venta.fecha).then(res => {
-                    if (res.status === "success") {
+                    if (res.corte.length > 0) {
                         showMessage('No se puede eliminar la venta, el corte de caja esta CERRADO', 'error')
                     }
                     else {

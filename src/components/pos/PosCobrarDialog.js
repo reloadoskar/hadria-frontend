@@ -167,7 +167,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
         <React.Fragment>
         <Dialog open={isOpen} onClose={() => handleClose('cobrarDialog')} aria-labelledby="form-dialog-title">
 
-        {valuesToSave.total > 0 && 
+        {valuesToSave.itemsToSave.length > 0 && 
             <React.Fragment>
             <form onSubmit={handleSubmit}>
                 <DialogTitle id="form-dialog-title">

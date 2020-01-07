@@ -53,7 +53,7 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 						aria-controls="panel1bh-content"
 						id="panel1bh-header"
 						>
-						<Typography className={classes.heading} variant="h2">{option.clave}</Typography>
+						<Typography className={classes.heading} variant="h2">{option.folio + ":" + option.clave}</Typography>
 						<Typography className={classes.secondaryHeading}>{option.items.length} productos en: {option.clave}</Typography>
 					</ExpansionPanelSummary>
 

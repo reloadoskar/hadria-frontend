@@ -35,7 +35,7 @@ export default function ComprasDash(){
                             <ListItem button key={index} onClick={()=> handleMenu('ver', compra._id)}>
                             <Grid key={index} container >
                                 <Grid item xs={12} md={6}>
-                                    <Typography variant="h5">{compra.clave}</Typography>
+                                    <Typography variant="h5">{compra.folio + ":" +compra.clave}</Typography>
                                     <Typography variant="body2">{compra.ubicacion.nombre} | {compra.tipoCompra.tipo}</Typography>
                                 </Grid>
                                 <Grid item xs={12} md>

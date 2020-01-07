@@ -47,7 +47,7 @@ function Compras() {
                                 <TableRow>
                                     <TableCell>Folio</TableCell>
                                     <TableCell>Clave</TableCell>
-                                    <TableCell></TableCell>
+                                    <TableCell>Remisión</TableCell>
                                     <TableCell>Proveedor</TableCell>
                                     <TableCell>Ubicación</TableCell>
                                     <TableCell>Tipo</TableCell>
@@ -61,7 +61,8 @@ function Compras() {
                                     <TableRow key={compra._id}>
                                         <TableCell >{compra.folio}</TableCell>
                                         <TableCell >{compra.clave}</TableCell>
-                                        <TableCell >Agregado {moment(compra.createdAt).fromNow()}</TableCell>
+                                        <TableCell >{compra.remision}</TableCell>
+                                        {/* <TableCell >Agregado {moment(compra.createdAt).fromNow()}</TableCell> */}
                                         <TableCell >{compra.provedor.nombre}</TableCell>
                                         <TableCell >{compra.ubicacion.nombre}</TableCell>
                                         <TableCell >{compra.tipoCompra.tipo}</TableCell>
