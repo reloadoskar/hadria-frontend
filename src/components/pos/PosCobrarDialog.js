@@ -47,6 +47,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
 
     const [reprintDialog, setReprintDialog] = useState(false)
     const [reprint] = useState(true)
+    const [loading, setLoading] = useState(false)
 
     const cancelReprint = () => {
         setReprintDialog(false)
@@ -122,6 +123,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
     
     const handleSubmit = (e) => {
         e.preventDefault()
+        setLoading(true)
         const venta = {
             ubicacion: valuesToSave.ubicacion,
             fecha: valuesToSave.fecha,
@@ -152,6 +154,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                 }
                 // rePrintTicket()
                 close('cobrarDialog')
+                setLoading(false)
             })
     }
 
@@ -313,7 +316,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                     <Button onClick={() => handleClose('cobrarDialog')} color="primary">
                         Cancel
                     </Button>
-                    <Button type="submit" variant="contained" color="primary">
+                    <Button type="submit" variant="contained" color="primary" disabled={loading}>
                         Registrar
                     </Button>
                 </DialogActions>

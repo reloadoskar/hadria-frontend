@@ -7,6 +7,7 @@ import { Dialog, Slide, DialogTitle, DialogContent, Grid, Typography, Divider, L
 import {sumImporte, sumAcuenta, calcTotal} from '../Tools'
 
 import ContenedorTabla from './ContenedorTabla'
+import TablaVentas from './TablaVentas'
 
 const ShowTable = ({show, table, data}) => (
     
@@ -168,6 +169,7 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
                     </Grid>
 
                     <Divider />
+                    <TablaVentas table="Ventas" data={corteData.ventas }/>
                     <ShowTable show={values.show} table={values.table} data={values.data} />
                 </div>
                 :
