@@ -5,6 +5,7 @@ import CuentasPorCobrar from './CuentasPorCobrar'
 
 import CuentasPorPagar from './CuentasPorPagar'
 import ComprasDash from './ComprasDash'
+import ProduccionsDash from './ProduccionsDash'
 
 import useUser from '../hooks/useUser'
 
@@ -22,7 +23,15 @@ export default function Dashboard(){
                 </Box>
             </Grid>
             <Grid item xs={12} md={7}>
-                <ComprasDash />
+                <Grid container spacing={2}>
+                    <Grid item xs = {12}>
+                        <ComprasDash />
+                    </Grid>
+                    <Grid item xs = {12}>
+                        <ProduccionsDash />
+                    </Grid>
+                </Grid>
+
             </Grid>
 
             <Grid item xs={12} md={5}>

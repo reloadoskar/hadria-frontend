@@ -435,3 +435,29 @@ export const ticketEgreso = (data) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/egreso.php', data)
 }
+
+// PRODUCCIONES
+
+export const getProduccions = () => {
+    return axios
+        .get( url + 'produccions')
+        .then( res => {
+            return res.data
+        })
+}
+
+export const createProduccion = () => {
+    return axios
+        .get( url + 'produccion/save')
+        .then( res => {
+            return res.data
+        })
+}
+
+export const delProduccion = (id) => {
+    return axios
+        .delete(url + `produccion/${id}`)
+        .then(res => {
+            return res.data
+        })
+}

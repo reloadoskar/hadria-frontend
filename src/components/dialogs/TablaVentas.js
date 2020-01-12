@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Paper';
-import { Typography, CardHeader, CardContent, Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Divider } from '@material-ui/core';
+import { Typography, CardHeader, CardContent, Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Divider, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import {sumImporte, capitalize, formatNumber } from '../Tools'
 
 const useStyles = makeStyles(theme => ({
@@ -77,31 +77,31 @@ export default function TablaVentas({ table, data }) {
 										{!row.items ? '' 
 											:
 											<ExpansionPanelDetails>
-												<Grid container >
-													{row.items.map((item, index) => (
-														<React.Fragment key={index}>
-															<Grid item md>
-																<Typography children={item.compra.clave} />
-															</Grid>
-															<Grid item md>
-																<Typography align="right" children={item.empaques+"-" } />
-															</Grid>
-															<Grid item md>
-																<Typography children={item.producto.descripcion} />
-															</Grid>
-															<Grid item md>
-																<Typography align="right" children={item.cantidad} />
-															</Grid>
-															<Grid item md>
-																<Typography align="right" children={"x"+item.precio} />
-															</Grid>
-															<Grid item md>
-																<Typography align="right" children={"="+item.importe} />
-															</Grid>
-															<Divider />
-														</React.Fragment>
-													))}
-												</Grid>
+                                                <Table>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell>Clave</TableCell>
+                                                            <TableCell>Descripción</TableCell>
+                                                            <TableCell>Cantidad</TableCell>
+                                                            <TableCell>Empaques</TableCell>
+                                                            <TableCell>Precio</TableCell>
+                                                            <TableCell>Importe</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {row.items.map((item, index) => (
+                                                            <TableRow key={index}>
+                                                                <TableCell><Typography children={item.compra.folio} /></TableCell>
+                                                                <TableCell><Typography children={item.producto.descripcion} /></TableCell>
+                                                                <TableCell><Typography children={item.cantidad} /></TableCell>
+                                                                <TableCell><Typography children={item.empaques} /></TableCell>
+                                                                <TableCell><Typography children={item.precio} /></TableCell>
+                                                                <TableCell><Typography children={item.importe} /></TableCell>
+                                                            </TableRow>
+                                                        ))}
+                                                    </TableBody>    
+
+                                                </Table>					
 											</ExpansionPanelDetails>
 										}
 									</ExpansionPanel>							

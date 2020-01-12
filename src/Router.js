@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
+import Produccions from './components/Produccions'
 import Productos from './components/Productos';
 import Clientes from './components/Clientes';
 import Provedores from './components/Provedores';
@@ -12,7 +14,6 @@ import Header from './components/Header';
 import Container from './components/pos/Container';
 import ConceptosTabs from './components/conceptos/ConceptosTabs';
 import Ventas from './components/Ventas';
-import { useHistory } from 'react-router-dom';
 // import {PrivateRoute} from './privateRoute' 
 // import Error from './components/Error'
 
@@ -50,6 +51,7 @@ export default function Router({auth}){
                                     )
                                 }></Route>
                             <Route exact path={`${path}/productos`} component={Productos}></Route>
+                            <Route exact path={`${path}/produccions`} component={Produccions}></Route>
                             <Route exact path={`${path}/clientes`} component={Clientes}></Route>
                             <Route exact path={`${path}/provedores`} component={Provedores}></Route>
                             <Route exact path={`${path}/ubicaciones`} component={Ubicaciones}></Route>

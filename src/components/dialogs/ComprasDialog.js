@@ -19,6 +19,7 @@ import {
 import useProvedors from '../hooks/useProvedors';
 import useTipoCompras from '../hooks/useTipoCompras';
 import useUbicacions from '../hooks/useUbicacions';
+import useProduccions from '../hooks/useProduccions';
 
 
 //REDUCER
@@ -50,6 +51,7 @@ const useStyles = makeStyles(theme => ({
 
 const initialState ={
     provedor: '',
+    produccion: '',
     tipoCompra: '',
     remision: '',
     fecha: moment().format('YYYY-MM-DD'),
@@ -69,6 +71,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
     const classes = useStyles();
 
     const {provedors} = useProvedors();
+    const {produccions} = useProduccions();
     const {tipoCompras} = useTipoCompras();
     const {ubicacions} = useUbicacions();
     const [values, dispatch] = useReducer(reducer, initialState)
@@ -97,6 +100,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
         event.preventDefault()
         const compra = {
             provedor: values.provedor,
+            produccion: values.produccion,
             tipoCompra: values.tipoCompra,
             remision: values.remision,
             fecha: values.fecha,
@@ -193,6 +197,28 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                                             </MenuItem>
                                         ))}
                                 </TextField>
+                                {
+                                    values.tipoCompra.tipo === 'PRODUCCION'
+                                    ?
+                                        <TextField
+                                        id="produccion"
+                                        select
+                                        fullWidth
+                                        label="Selecciona una Producción"
+                                        value={values.produccion}
+                                        onChange={(e) => dispatch({type: 'produccion', value: e.target.value})}
+                                        margin="normal"
+                                        variant="outlined"
+                                        >   
+                                            {produccions.map((option, index) => (
+                                                <MenuItem key={index} value={option}>
+                                                    {option.folio+"-"+option.clave}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    :
+                                        null
+                                }
                             </Grid>
                             {/* Input: Remision */}
                             <Grid item xs={4}>

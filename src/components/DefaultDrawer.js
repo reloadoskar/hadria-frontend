@@ -6,7 +6,7 @@ import { IconButton, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
+import BallotIcon from '@material-ui/icons/Ballot';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import FolderIcon from '@material-ui/icons/Folder';
 import TocIcon from '@material-ui/icons/Toc';
@@ -272,6 +272,20 @@ export default function DefaultDrawer({ toggle, open, url }) {
 
                     }
                 </NavLink>
+
+                <NavLink to={`${url}/produccions`} className={classes.link}>
+
+                    <StyledTooltip title="Producción" placement="right">
+                        <ListItem button onClick={toggle}>
+                            <ListItemIcon>
+                                <BallotIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Producción" />
+                        </ListItem>
+                    </StyledTooltip>
+
+                </NavLink>
+
                 <NavLink to={`${url}/inventario`} className={classes.link}>
                     {open
                         ?
