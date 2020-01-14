@@ -8,7 +8,7 @@ import {login} from './api'
 
 
 const Landing = (props) => {
-    const {auth} = props
+    const {auth, isLoading, openLoading, closeLoading} = props
     let history = useHistory();
     const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
@@ -31,7 +31,9 @@ const Landing = (props) => {
     
     const handleSubmit = (e) => { 
         e.preventDefault()
+        openLoading()
         login(data).then(res => {
+            closeLoading()
             if(res.status === 'success'){
                 showMessage(res.message, res.status)
                 auth.login(() => {
@@ -40,6 +42,7 @@ const Landing = (props) => {
             }else{
                 showMessage(res.message, res.status)
             }
+            
         })
     }
 
@@ -84,7 +87,7 @@ const Landing = (props) => {
                                 <Button 
                                     variant="contained" 
                                     color="secondary" 
-                                    disabled={!data.email || !data.password ? true : false}
+                                    disabled={!data.email || !data.password || isLoading ? true : false}
                                     type="submit">Entrar</Button>
                             </Grid>
                         </CardActions>

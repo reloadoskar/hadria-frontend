@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { getProduccions, createProduccion, delProduccion } from '../api'
 const useProduccions = () => {
-	const [produccions, setProduccions] = useState([])
+	const [produccions, setProduccions] = useState(null)
 	const { enqueueSnackbar } = useSnackbar()
 	useEffect(() => {
 		async function loadProvedors() {

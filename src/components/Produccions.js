@@ -33,11 +33,12 @@ export default function Produccions() {
 
                 <Grid container>
 
-                    { produccions.length === 0  ? 
+                    { produccions === null || produccions.length === 0  ? 
                         <Grid item xs={12}>
                             <Typography variant="h6" align="center" gutterBottom>No hay Producciones registradas.</Typography>
                         </Grid>
                     :
+
                         <Table size="small">
                             <TableHead>
                                 <TableRow>

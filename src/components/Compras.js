@@ -1,6 +1,5 @@
 import React from 'react';
 import ComprasDialog from './dialogs/ComprasDialog';
-import moment from 'moment'
 
 import { SnackbarProvider } from 'notistack';
 import { useSnackbar } from 'notistack';

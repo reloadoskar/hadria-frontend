@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import { Card, CardHeader, CardContent, Grid, Typography, Divider } from '@material-ui/core';
+import { Card, CardHeader, CardContent, Grid, Typography, Divider, LinearProgress } from '@material-ui/core';
 import { formatNumber, sumSaldoList } from '../Tools'
 import {getCuentasPorPagar} from '../api'
 import moment from 'moment'
 export default function CuentasPorPagar( ){
-    const [cuentas, setCuentas] = useState([])
+    const [cuentas, setCuentas] = useState(false)
     const [saldo, setSaldo] = useState(0)
     useEffect(() => {
         getCuentasPorPagar().then(res => {
@@ -36,6 +36,12 @@ export default function CuentasPorPagar( ){
             />
             <CardContent>
                 {
+                    
+                    !cuentas ?
+                        <Grid item xs={12}>
+                            <LinearProgress variant="query" /> 
+                        </Grid>
+                    :
                 cuentas.length === 0
                     ?
                         <Typography variant="body1" children="No se encontraron datos." />

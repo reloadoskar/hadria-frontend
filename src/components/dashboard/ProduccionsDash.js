@@ -6,7 +6,7 @@ import {sumStock, sumEmpStock} from '../Tools'
 import VerProduccion from './VerProduccion'
 
 export default function ProduccionsDash(){
-    const {produccions} = useProduccions([])
+    const {produccions} = useProduccions()
     const [produccionSelected, setProduccionSelected] = useState(null)
     const [verProduccion, setVerProduccion] = React.useState(false);
 

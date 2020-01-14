@@ -152,8 +152,16 @@ const useStyles = makeStyles(theme => ({
     },
     table: {
         minWidth: 420,
+    },
+
+    isLoading: {
+        margin: 'auto',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
     }
-    
 
 }));
 

@@ -8,6 +8,7 @@ import {register} from './api'
 
 
 const Landing = (props) => {
+    const {isLoading, openLoading, closeLoading} = props
     let history = useHistory();
     const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
@@ -38,7 +39,9 @@ const Landing = (props) => {
     
     const handleSubmit = (e) => { 
         e.preventDefault()
+        openLoading()
         register(data).then(res => {
+            closeLoading()
             if(res.status === 'success'){
                 showMessage(res.message, res.status)
                 history.push("/");
@@ -124,7 +127,7 @@ const Landing = (props) => {
                                 <Button 
                                     variant="contained" 
                                     color="secondary" 
-                                    disabled={!data.email || !data.password || !data.nombre || !data.apellido || !data.passwordCheck || data.error ? true : false}
+                                    disabled={!data.email || !data.password || !data.nombre || !data.apellido || !data.passwordCheck || data.error || isLoading ? true : false}
                                     type="submit">Registrar</Button>
                             </Grid>
                         </CardActions>

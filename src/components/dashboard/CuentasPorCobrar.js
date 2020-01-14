@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import { Card, CardHeader, CardContent, Grid, Typography, Divider } from '@material-ui/core';
+import { Card, CardHeader, CardContent, Grid, Typography, Divider, LinearProgress } from '@material-ui/core';
 import { formatNumber, sumSaldoList } from '../Tools'
 import {getCuentasPorCobrar} from '../api'
 import CrearCxcDialog from '../dialogs/CrearCxcDialog'
 import moment from 'moment'
 export default function CuentasPorCobrar( ){
-    const [cuentas, setCuentas] = useState([])
+    const [cuentas, setCuentas] = useState(null)
     const [saldo, setSaldo] = useState(0)
     useEffect(() => {
         getCuentasPorCobrar().then(res => {
@@ -37,9 +37,15 @@ export default function CuentasPorCobrar( ){
                 action= {
                     <CrearCxcDialog />
                 }
-            />
+                />
             <CardContent>
                 {
+                    !cuentas ?
+                        <Grid item xs={12}>
+                            <LinearProgress variant="query" /> 
+                        </Grid>
+                    :
+                
                 cuentas.length === 0
                     ?
                         <Typography variant="body1" children="No se encontraron datos." />
