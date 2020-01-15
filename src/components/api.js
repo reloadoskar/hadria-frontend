@@ -2,6 +2,7 @@ import axios from 'axios';
 import Global from './Global';
 
 const url = Global.url;
+const url_client = url
 
 // USUARIOS
 
@@ -38,7 +39,7 @@ export const getProfile  = () => {
 
 export const getProducts = () => {
     return axios
-        .get(url + 'productos')
+        .get(url_client + 'productos')
         .then(res => {
             return res.data
         })
@@ -46,7 +47,7 @@ export const getProducts = () => {
 
 export const saveProduct = (producto) => {
     return axios
-        .post(url + 'producto/save', producto)
+        .post(url_client + 'producto/save', producto)
         .then(res => {
             return res.data
         })
@@ -54,7 +55,7 @@ export const saveProduct = (producto) => {
 
 export const deleteProduct = (id) => {
     return axios
-        .delete(url + `producto/${id}`)
+        .delete(url_client + `producto/${id}`)
         .then(res => {
             return res.data
         })
@@ -64,14 +65,14 @@ export const deleteProduct = (id) => {
 
 export const getClientes = () => {
     return axios
-        .get(url + 'clientes')
+        .get(url_client + 'clientes')
         .then(res => {
             return res.data
         })
 }
 export const saveCliente = (cliente) => {
     return axios
-        .post(url + 'cliente/save', cliente)
+        .post(url_client + 'cliente/save', cliente)
         .then(res => {
             return res.data
         })
@@ -79,7 +80,7 @@ export const saveCliente = (cliente) => {
 
 export const deleteCliente = (id) => {
     return axios
-        .delete(url + `cliente/${id}`)
+        .delete(url_client + `cliente/${id}`)
         .then(res => {
             return res.data
         })
@@ -88,14 +89,14 @@ export const deleteCliente = (id) => {
 
 export const getProvedors = () => {
     return axios
-        .get(url + 'provedors')
+        .get(url_client + 'provedors')
         .then(res => {
             return res.data
         })
 }
 export const saveProvedor = (provedor) => {
     return axios
-        .post(url + 'provedor/save', provedor)
+        .post(url_client + 'provedor/save', provedor)
         .then(res => {
             return res.data
         })
@@ -103,7 +104,7 @@ export const saveProvedor = (provedor) => {
 
 export const deleteProvedor = (id) => {
     return axios
-        .delete(url + `provedor/${id}`)
+        .delete(url_client + `provedor/${id}`)
         .then(res => {
             return res.data
         })
@@ -113,14 +114,14 @@ export const deleteProvedor = (id) => {
 
 export const getUbicacions = () => {
     return axios
-        .get(url + 'ubicacions')
+        .get(url_client + 'ubicacions')
         .then(res => {
             return res.data
         })
 }
 export const saveUbicacion = (ubicacion) => {
     return axios
-        .post(url + 'ubicacion/save', ubicacion)
+        .post(url_client + 'ubicacion/save', ubicacion)
         .then(res => {
             return res.data
         })
@@ -128,7 +129,7 @@ export const saveUbicacion = (ubicacion) => {
 
 export const deleteUbicacion = (id) => {
     return axios
-        .delete(url + `ubicacion/${id}`)
+        .delete(url_client + `ubicacion/${id}`)
         .then(res => {
             return res.data
         })
@@ -138,7 +139,7 @@ export const deleteUbicacion = (id) => {
 
 export const getComprasDash = () => {
     return axios
-        .get(url + 'compras/dash')
+        .get(url_client + 'compras/dash')
         .then( res => {
             return res.data
         })
@@ -146,21 +147,21 @@ export const getComprasDash = () => {
 
 export const getCompras = () => {
     return axios
-        .get(url + 'compras')
+        .get(url_client + 'compras')
         .then(res => {
             return res.data
         })
 }
 export const getCompra = (id) => {
     return axios
-        .get(url + `compra/${id}`)
+        .get(url_client + `compra/${id}`)
         .then( res => {
             return res.data
         })
 }
 export const saveCompra = (compra) => {
     return axios
-        .post(url + 'compra/save', compra)
+        .post(url_client + 'compra/save', compra)
         .then(res => {
             return res.data
         })
@@ -168,7 +169,7 @@ export const saveCompra = (compra) => {
 
 export const deleteCompra = (id) => {
     return axios
-        .delete(url + `compra/${id}`)
+        .delete(url_client + `compra/${id}`)
         .then(res => {
             return res.data
         })
@@ -176,7 +177,7 @@ export const deleteCompra = (id) => {
 
 export const closeCompra = (id) => {
     return axios
-        .put(url + `compra/${id}`)
+        .put(url_client + `compra/${id}`)
         .then( res => {
             return res.data
         })
@@ -186,7 +187,7 @@ export const closeCompra = (id) => {
 
 export const getTipoCompras = () => {
     return axios
-        .get(url + 'tipocompras')
+        .get(url_client + 'tipocompras')
         .then(res => {
             return res.data
         })
@@ -196,7 +197,7 @@ export const getTipoCompras = () => {
 
 export const getInventario = () => {
     return axios
-        .get(url + 'inventario')
+        .get(url_client + 'inventario')
         .then(res => {
             return res.data
         })
@@ -204,7 +205,7 @@ export const getInventario = () => {
 
 export const getInventarioBy = (ubicacion) => {
     return axios
-        .get(url + `inventario/${ubicacion}`)
+        .get(url_client + `inventario/${ubicacion}`)
         .then(res => {
             return res.data
         })
@@ -213,28 +214,28 @@ export const getInventarioBy = (ubicacion) => {
 // VENTAS
 export const getVenta = (id) => {
     return axios
-        .post(url + 'venta', id)
+        .post(url_client + 'venta', id)
         .then( res => {
             return res.data
         })
 }
 export const getVentas = () => {
     return axios
-        .get(url + 'ventas')
+        .get(url_client + 'ventas')
         .then( res => {
             return res.data
         })
 }
 export const saveVenta = (venta) => {
     return axios
-        .post(url + 'venta/save', venta)
+        .post(url_client + 'venta/save', venta)
         .then(res => {
             return res.data
         })
 }
 export const cancelVenta = (id) => {
     return axios
-        .delete(url + `venta/${id}`)
+        .delete(url_client + `venta/${id}`)
         .then( res => {
             return res.data
         })
@@ -243,7 +244,7 @@ export const cancelVenta = (id) => {
 // CUENTAS POR PAGAR
 
 export const getCuentasPorPagar = () => {
-    return axios.get(url + 'cuentasporpagar')
+    return axios.get(url_client + 'cuentasporpagar')
         .then(res => {
             return res.data
         })
@@ -251,7 +252,7 @@ export const getCuentasPorPagar = () => {
 
 export const savePagoACuentaPorPagar = (pago) =>{
     return axios
-        .post(url + 'cuentasporpagar/pago/save', pago)
+        .post(url_client + 'cuentasporpagar/pago/save', pago)
         .then(res => {
             return res.data
         })
@@ -261,7 +262,7 @@ export const savePagoACuentaPorPagar = (pago) =>{
 
 export const createCuentaPorCobrar = (cuenta) => {
     return axios
-        .post( url + 'cuentasporcobrar/save', cuenta)
+        .post( url_client + 'cuentasporcobrar/save', cuenta)
         .then( res => {
             return res.data
         })
@@ -269,7 +270,7 @@ export const createCuentaPorCobrar = (cuenta) => {
 
 export const getCuentasPorCobrar = () => {
     return axios
-    .get(url + 'cuentasporcobrar')
+    .get(url_client + 'cuentasporcobrar')
     .then( res => {
         return res.data
     })
@@ -277,7 +278,7 @@ export const getCuentasPorCobrar = () => {
 
 export const savePagoACuentaPorCobrar = (pago) =>{
     return axios
-        .post(url + 'cuentasporcobrar/pago/save', pago)
+        .post(url_client + 'cuentasporcobrar/pago/save', pago)
         .then(res => {
             return res.data
         })
@@ -286,7 +287,7 @@ export const savePagoACuentaPorCobrar = (pago) =>{
 
 export const saveIngreso = (ingreso) => {
     return axios
-        .post(url + 'ingreso/save', ingreso)
+        .post(url_client + 'ingreso/save', ingreso)
         .then( res => {
             return res.data
         })
@@ -296,7 +297,7 @@ export const saveIngreso = (ingreso) => {
 
 export const saveEgreso = (egreso) => {
     return axios
-        .post(url + 'egreso/save', egreso)
+        .post(url_client + 'egreso/save', egreso)
         .then(res => {
             return res.data
         })
@@ -306,7 +307,7 @@ export const saveEgreso = (egreso) => {
 
 export const getDataFrom = (ubicacion, fecha) => {
     return axios
-        .get(url + `corte/${ubicacion}/${fecha}`)
+        .get(url_client + `corte/${ubicacion}/${fecha}`)
         .then( res => {
             return res.data
         })
@@ -314,7 +315,7 @@ export const getDataFrom = (ubicacion, fecha) => {
 
 export const saveCorte = (corte) => {
     return axios
-        .post(url + 'corte/save', corte)
+        .post(url_client + 'corte/save', corte)
         .then( res => {
             return res.data
         })
@@ -322,7 +323,7 @@ export const saveCorte = (corte) => {
 
 export const existCorte = (ubicacion, fecha) => {
     return axios
-        .get(url + `corte/exist/${ubicacion}/${fecha}`)
+        .get(url_client + `corte/exist/${ubicacion}/${fecha}`)
         .then( res => {
             return res.data
         })
@@ -330,7 +331,7 @@ export const existCorte = (ubicacion, fecha) => {
 
 export const getBalance = () => {
     return axios
-    .get(url + 'balance')
+    .get(url_client + 'balance')
     .then( res => {
         return res.data.balance
     })
@@ -340,7 +341,7 @@ export const getBalance = () => {
 
 export const getUnidades = () => {
     return axios
-        .get(url + 'unidads')
+        .get(url_client + 'unidads')
         .then( res => {
             return res.data
         })
@@ -348,7 +349,7 @@ export const getUnidades = () => {
 
 export const addUnidad = (unidad) => {
     return axios
-        .post( url + 'unidad/save', unidad)
+        .post( url_client + 'unidad/save', unidad)
         .then( res => {
             return res.data
         })
@@ -356,7 +357,7 @@ export const addUnidad = (unidad) => {
 
 export const delUnidad = (id) => {
     return axios
-        .delete(url + `unidad/${id}`)
+        .delete(url_client + `unidad/${id}`)
         .then(res => {
             return res.data
         })
@@ -366,7 +367,7 @@ export const delUnidad = (id) => {
 
 export const getEmpaques = () => {
     return axios
-        .get( url + 'empaques')
+        .get( url_client + 'empaques')
         .then( res => {
             return res.data
         })
@@ -374,7 +375,7 @@ export const getEmpaques = () => {
 
 export const addEmpaque = (empaque) => {
     return axios
-        .post( url + 'empaque/save', empaque)
+        .post( url_client + 'empaque/save', empaque)
         .then( res => {
             return res.data
         })
@@ -382,7 +383,7 @@ export const addEmpaque = (empaque) => {
 
 export const delEmpaque = (id) => {
     return axios
-        .delete(url + `empaque/${id}`)
+        .delete(url_client + `empaque/${id}`)
         .then(res => {
             return res.data
         })
@@ -392,7 +393,7 @@ export const delEmpaque = (id) => {
 
 export const getConceptos = () => {
     return axios
-        .get( url + 'conceptos')
+        .get( url_client + 'conceptos')
         .then( res => {
             return res.data
         })
@@ -400,7 +401,7 @@ export const getConceptos = () => {
 
 export const addConcepto = (concepto) => {
     return axios
-        .post( url + 'concepto/save', concepto)
+        .post( url_client + 'concepto/save', concepto)
         .then( res => {
             return res.data
         })
@@ -408,7 +409,7 @@ export const addConcepto = (concepto) => {
 
 export const delConcepto = (id) => {
     return axios
-        .delete(url + `concepto/${id}`)
+        .delete(url_client + `concepto/${id}`)
         .then(res => {
             return res.data
         })
@@ -419,6 +420,9 @@ export const delConcepto = (id) => {
 export const ticketCompra = (data) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/', data)
+        .then(res =>{
+            return res
+        })
 }
 
 export const ticketVenta = (data) => {
@@ -440,7 +444,7 @@ export const ticketEgreso = (data) => {
 
 export const getProduccions = () => {
     return axios
-        .get( url + 'produccions')
+        .get( url_client + 'produccions')
         .then( res => {
             return res.data
         })
@@ -448,7 +452,7 @@ export const getProduccions = () => {
 
 export const createProduccion = () => {
     return axios
-        .get( url + 'produccion/save')
+        .get( url_client + 'produccion/save')
         .then( res => {
             return res.data
         })
@@ -456,7 +460,7 @@ export const createProduccion = () => {
 
 export const delProduccion = (id) => {
     return axios
-        .delete(url + `produccion/${id}`)
+        .delete(url_client + `produccion/${id}`)
         .then(res => {
             return res.data
         })
