@@ -183,6 +183,30 @@ export const closeCompra = (id) => {
         })
 }
 
+export const updateCompra = (compra) => {
+    return axios
+        .put(url + 'update/compra/' + compra._id, compra)
+        .then( res => {
+            return res.data
+        })
+}
+
+export const addCompraItem = (item) => {
+    return axios
+        .post(url + 'compra/additem/', item)
+        .then( res => {
+            return res.data
+        })
+}
+
+export const updateCompraItem = (item) => {
+    return axios
+        .put(url + 'compra/item/' +item.item_id, item)
+        .then( res => {
+            return res.data
+        })
+}
+
 // API TIPO_COMPRAS
 
 export const getTipoCompras = () => {

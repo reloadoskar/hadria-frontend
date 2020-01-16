@@ -6,7 +6,7 @@ import useProducts from '../hooks/useProducts'
 import useProvedors from '../hooks/useProvedors'
 import {objectIsNull} from '../Tools'
 
-export default function CompraAddItemsDialog({ isOpen, handleClose, openDialog, addItemToList, showMessage, tipoCompra }) {
+export default function CompraAddItemsDialog({ isOpen, handleClose, addItemToList, showMessage }) {
     const {products} = useProducts()
     const {provedors} = useProvedors()
     const [values, setValues] = useState({

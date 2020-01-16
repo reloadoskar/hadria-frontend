@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgress } from '@material-ui/core';
 
 import useProduccions from '../hooks/useProduccions'
-import {sumStock, sumEmpStock} from '../Tools'
+// import {sumStock, sumEmpStock} from '../Tools'
 import VerProduccion from './VerProduccion'
 
 export default function ProduccionsDash(){
