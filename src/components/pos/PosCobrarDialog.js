@@ -10,14 +10,15 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import useClientes from '../hooks/useClientes'
 
 function ReprintDialog(props) {
-    const { open, cancel, } = props
+    const { open, cancel, ok } = props
 
     const handleCancel = () => {
         cancel()
     }
 
     const handleOk = () => {
-
+        ok()
+        handleCancel()
     }
     return (
         <Dialog
@@ -46,7 +47,6 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
     const {clientes} = useClientes()
 
     const [reprintDialog, setReprintDialog] = useState(false)
-    const [reprint] = useState(true)
     const [loading, setLoading] = useState(false)
 
     const cancelReprint = () => {
@@ -148,10 +148,13 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                 showMessage(res.message, res.status)
                 clearFields()
                 resetVenta()
-                printTicket(res.venta)
-                if(reprint){
-                    printTicket(res.venta)
-                }
+                ticketVenta(res.venta).then(res=> {
+                    if(res.status === 'error'){
+                        showMessage(res.message, res.status)
+                    }else{
+                        setReprintDialog(true)
+                    }
+                })
                 // rePrintTicket()
                 close('cobrarDialog')
                 setLoading(false)

@@ -3,9 +3,10 @@ import { useSnackbar } from 'notistack';
 import { Dialog, AppBar, Toolbar, IconButton, Typography, Card, CardHeader, Zoom, CardContent, Avatar, Grid, LinearProgress, Menu, MenuItem, Box, Divider } from '@material-ui/core';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
+import ResumenVentas from './ResumenVentas'
+import DetalleGastos from './DetalleGastos'
 import useStyles from '../hooks/useStyles'
-import { getCompra, closeCompra } from '../api'
+import { getProduccion, closeProduccion } from '../api'
 import { 
     sumCantidad, 
     sumEmpaques, 
@@ -17,51 +18,54 @@ import {
     calcVentasItem, 
     calcTotalPorCobrar, 
     calcComision } from '../Tools'
-import moment from 'moment'
 
-import ResumenProductos from './ResumenProductos'
-import ResumenBig from './ResumenBig'
-import ResumenVentas from './ResumenVentas'
-import DetalleVentas from './DetalleVentas'
-import DetalleGastos from './DetalleGastos'
-import DetallePagos from './DetallePagos'
+import moment from 'moment'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Zoom in ref={ref} {...props} />;
 });
 
-export default function VerCompra({ compraId, isOpen, handleClose }) {
+export default function VerProduccion(props) {
+    const {produccion, isOpen, handleClose} = props
+    const [data, setData] = useState({
+        produccion: null,
+        insumos: null,
+        inventario: null,
+        ventas: null,
+        egresos: null,
+    })
+
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
-    const [data, setData] = useState({ compra: null, ventas: null })
+    
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+
     useEffect(() => {
-        if (compraId) {
-            getCompra(compraId).then(res => {
+        if (produccion) {
+            getProduccion(produccion).then(res => {
                 // console.log(res)
                 setData({
-                    compra: res.data.compra,
-                    ventas: res.data.ventas,
-                    ventasGroup: res.data.ventasGroup,
-                    egresos: res.data.egresos,
-                    cantComprado: sumCantidad(res.data.compra.items),
-                    empComprado: sumEmpaques(res.data.compra.items),
-                    cantVendido: sumCantidad(res.data.ventas),
-                    empVendido: sumEmpaques(res.data.ventas),
-                    totalVenta: sumImporte(res.data.ventas),
-                    totalEgresos: sumImporte(res.data.egresos),
-                    totalPagos: sumImporte(res.data.compra.pagos),
-                    comision: calcComision(res.data.compra, res.data.ventas),
-                    costoInventario: calcCostoInventario(res.data.compra.items),
-                    porCobrar: calcTotalPorCobrar(res.data.ventas)
+                    produccion: res.produccion,
+                    insumos: res.insumos,
+                    inventario: res.inventario,
+                    ventas: res.ventas                                                   ,
+                    egresos: res.egresos,
+                    cantProduccido: sumCantidad(res.produccion.items),
+                    empProduccido: sumEmpaques(res.produccion.items),
+                    cantVendido: sumCantidad(res.ventas),
+                    empVendido: sumEmpaques(res.ventas),
+                    totalVenta: sumImporte(res.ventas),
+                    totalEgresos: sumImporte(res.egresos),
+                    costoInventario: calcCostoInventario(res.inventario),
+                    porCobrar: calcTotalPorCobrar(res.ventas)
                 })
             })
         }
-    }, [compraId])
+    }, [produccion])
 
     const closeDialog = () => {
-        setData({compra: null, ventas: null})
+        setData({produccion: null, ventas: null})
         handleClose()
     }
 
@@ -73,10 +77,10 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
         setAnchorEl(null);
     }
 
-    const handleClick = (action, compra) => {
+    const handleClick = (action, produccion) => {
         switch(action){
             case "cerrar":
-                closeCompra(compra).then( res => {
+                closeProduccion(produccion).then( res => {
                     if(res.status === 'success'){
                         enqueueSnackbar(res.message, {variant: res.status})
                     }else{
@@ -97,13 +101,13 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
             TransitionComponent={Transition}
             onClose={closeDialog}>
 
-            {!data.compra || !data.ventas ?
+            {!data.produccion && !data.ventas ?
                 <LinearProgress variant="query"
                 />
                 :
                 <React.Fragment>
                     <Box>
-                    <AppBar className={classes.compraBar}>
+                    <AppBar className={classes.produccionBar}>
                         <Toolbar >
                             <IconButton edge="start" onClick={handleClose}>
                                 <CloseOutlinedIcon />
@@ -111,12 +115,12 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
                             <Grid container spacing={2}>
                                 <Grid item xs={4}>
                                     <Typography variant="h6">
-                                        {data.compra.tipoCompra.tipo}: {data.compra.clave}
+                                        {data.produccion.tipoProduccion.tipo}: {data.produccion.clave}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Typography variant="h6" align="center">
-                                        {data.compra.status}
+                                        {data.produccion.status}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4}></Grid>
@@ -128,11 +132,11 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
                         <CardHeader
                             avatar={
                                 <Avatar aria-label="recipe" className={classes.avatar}>
-                                    {data.compra.provedor.nombre.charAt(0)}
+                                    {data.produccion.provedor.nombre.charAt(0)}
                                 </Avatar>
                             }
-                            title={data.compra.provedor.nombre}
-                            subheader={"Llegó " + moment(data.compra.fecha).fromNow()}
+                            title={data.produccion.provedor.nombre}
+                            subheader={"Llegó " + moment(data.produccion.fecha).fromNow()}
                             action={
                                 <div>
                                     <IconButton aria-label="Opciones" onClick={showMenu}>
@@ -144,7 +148,7 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
                                         open={open}
                                         onClose={closeMenu}
                                     >
-                                        <MenuItem onClick={()=>handleClick('cerrar', data.compra._id)}>Cerrar</MenuItem>
+                                        <MenuItem onClick={()=>handleClick('cerrar', data.produccion._id)}>Cerrar</MenuItem>
                                         <MenuItem onClick={handleClick}>Guardar</MenuItem>
                                         <Divider />
                                         <MenuItem onClick={handleClick}>Simular</MenuItem>
@@ -155,27 +159,13 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
                         <CardContent>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    <ResumenBig tipoCompra={data.compra.tipoCompra.tipo} data={data} formatNumber={formatNumber} />
+                                    
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ResumenProductos 
-                                        tipoCompra={data.compra.tipoCompra.tipo} 
-                                        data={data} 
-                                        calcVentasItem={calcVentasItem} 
-                                        sumCantidad={sumCantidad} 
-                                        sumEmpaques={sumEmpaques} 
-                                        sumStock={sumStock} 
-                                        sumEmpStock={sumEmpStock} 
-                                        formatNumber={formatNumber} />                                    
+                                                                       
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Box >
-                                        <DetallePagos 
-                                            pagos={data.compra.pagos}
-                                            formatNumber={formatNumber}
-                                            sumImporte={sumImporte}
-                                        />
-                                    </Box>
+                                    
                                 </Grid>
                                 <Grid item xs={12}>
                                     <ResumenVentas 
@@ -185,16 +175,7 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
                                         sumCantidad={sumCantidad}
                                         formatNumber={formatNumber}
                                     />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <DetalleVentas 
-                                        ventas = {data.ventas} 
-                                        sumImporte={sumImporte}
-                                        sumEmpaques={sumEmpaques}
-                                        sumCantidad={sumCantidad}
-                                        formatNumber={formatNumber}
-                                    />
-                                </Grid>
+                                </Grid>            
                                 <Grid item xs={12}>
                                     <DetalleGastos 
                                         gastos={data.egresos} 

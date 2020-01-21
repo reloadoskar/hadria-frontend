@@ -122,7 +122,11 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                     handleClose('comprasDialog')   
                     dispatch({type: 'reset'})                 
                     addCompra(res.compra)
-                    ticketCompra(res.compra)
+                    ticketCompra(res.compra).then(res =>{
+                        if(res.status === 'error'){
+                            showMessage(res.message, res.status)
+                        }
+                    })
                 }
             })
 

@@ -148,14 +148,20 @@ export default function DetalleCompra(props) {
 
     const calculaNuevoImporte = () => {
         const nuevoImporte = sumImporte(compra.items)
+        var diff = nuevoImporte - compra.importe
         compra.importe = nuevoImporte
+        compra.saldo += diff
     }
 
     const updateLocalItem = (newItem) => {
+        let cantDiff = newItem.cantidad - compra.items[edit.index].cantidad
+        let empDiff = newItem.empaques - compra.items[edit.index].empaques
         compra.items[edit.index].cantidad = newItem.cantidad
         compra.items[edit.index].empaques = newItem.empaques
         compra.items[edit.index].costo = newItem.costo
         compra.items[edit.index].importe = newItem.importe
+        compra.items[edit.index].stock += cantDiff
+        compra.items[edit.index].empaquesStock += empDiff
         cancelEdit()
     }
 
@@ -290,8 +296,8 @@ export default function DetalleCompra(props) {
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell>Descripción</TableCell>
-                                                        <TableCell align="right">Cantidad</TableCell>
-                                                        <TableCell align="right">Empaques</TableCell>
+                                                        <TableCell align="right">Cantidad | Disponible</TableCell>
+                                                        <TableCell align="right">Empaques | Disponible</TableCell>
                                                         <TableCell align="right">Costo</TableCell>
                                                         <TableCell align="right">Importe</TableCell>
                                                         {
@@ -344,8 +350,8 @@ export default function DetalleCompra(props) {
                                                                         :
                                                                         <React.Fragment>
                                                                             <TableCell>{item.producto.descripcion}</TableCell>
-                                                                            <TableCell align="right">{item.cantidad}</TableCell>
-                                                                            <TableCell align="right">{item.empaques}</TableCell>
+                                                                            <TableCell align="right">{item.cantidad + '|' + item.stock}</TableCell>
+                                                                            <TableCell align="right">{item.empaques + '|' + item.empaquesStock}</TableCell>
                                                                             <TableCell align="right">{item.costo}</TableCell>
                                                                             <TableCell align="right">{item.importe}</TableCell>
                                                                             {

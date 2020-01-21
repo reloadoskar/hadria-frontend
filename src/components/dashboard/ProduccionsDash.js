@@ -47,7 +47,7 @@ export default function ProduccionsDash(){
                         ))
                 }
             </CardContent>
-            <VerProduccion produccionId={produccionSelected} isOpen={verProduccion} handleClose={handleClose}/>
+            <VerProduccion produccion={produccionSelected} isOpen={verProduccion} handleClose={handleClose}/>
         </Card>
     )
 }

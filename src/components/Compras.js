@@ -1,8 +1,28 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import ComprasDialog from './dialogs/ComprasDialog';
 
 import { useSnackbar } from 'notistack';
-import { IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Card, CardHeader, CardContent, LinearProgress,  } from '@material-ui/core';
+import {
+    IconButton,
+    Typography,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    TextField,
+    Card,
+    CardHeader,
+    CardContent,
+    LinearProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Button,
+    Container,
+    Grid
+} from '@material-ui/core';
 
 import useModal from './hooks/useModal';
 import useCompras from './hooks/useCompras';
@@ -10,22 +30,82 @@ import DetalleCompra from './compras/DetalleCompra'
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import SearchIcon from '@material-ui/icons/Search';
 
+function ConfirmDialog(props) {
+    const { open, cancel, ok, data } = props
 
+    const handleCancel = () => {
+        cancel()
+    }
+
+    const handleOk = () => {
+        ok(data)
+    }
+    return (
+        <Dialog
+            disableBackdropClick
+            disableEscapeKeyDown
+            maxWidth="sm"
+            fullWidth
+            open={open}
+        >
+            <DialogTitle>CANCELAR</DialogTitle>
+            {
+                data === null ?
+                    null
+                    :
+                    <DialogContent dividers>
+                        <Typography variant="h6" align="center" color="secondary" children="Se va a CANCELAR la compra:" />
+                        <Typography variant="h4" align="center" children={data.folio + '-' + data.clave} />
+                    </DialogContent>
+
+            }
+            <DialogActions>
+                <Button autoFocus onClick={handleCancel} color="primary">
+                    No, espera.
+        </Button>
+                <Button variant="contained" onClick={handleOk} color="primary">
+                    Ok
+        </Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
+
+const Buscador = () => {
+    const [searchText, setSearchText] = useState('')
+
+    const handleChange = (value) => {
+        setSearchText(value)
+    }
+    return (
+        <TextField
+            id="search-field"
+            label="Buscar"
+            InputProps={{
+                endAdornment: (
+                    <SearchIcon />
+                ),
+            }}
+            variant="outlined"
+            value={searchText}
+            onChange={(e) => handleChange(e.target.value)}
+        />
+    )
+}
 
 function Compras() {
     const { enqueueSnackbar } = useSnackbar()
-    const {compras, addCompra, del} = useCompras();
+    const { compras, addCompra, del, } = useCompras();
     const { isShowing, toggle } = useModal();
     const [detCompra, setDetCompra] = useState(false)
     const [compra, setCompra] = useState(null)
+    const [confirm, setConfirm] = useState(false)
 
-    const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
-    
-    function removeCompra(index, id) {
-        del(id)
-    }
-    const editCompra = (compra) =>{
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+
+    const editCompra = (compra) => {
         setDetCompra(true)
         setCompra(compra)
     }
@@ -35,74 +115,105 @@ function Compras() {
         setCompra(null)
     }
 
+    const openConfirm = (compra) => {
+        setCompra(compra)
+        setConfirm(true)
+    }
+
+    const cancelConfirm = () => {
+        setConfirm(false)
+        setCompra(null)
+    }
+
+    const okConfirm = (data) => {
+
+        del(data._id).then(res => {
+            if (res.status === 'error') {
+            } else {
+                showMessage(res.message, res.status)
+            }
+            cancelConfirm()
+        })
+    }
+
     return (
-        <Card>
-            <CardHeader 
-                title="Compras"
-                action={
-                    <ComprasDialog 
-                        toggle={toggle} 
-                        isShowing={isShowing} 
-                        showMessage={showMessage}
-                        addCompra={addCompra}
+        <Container maxWidth="xl">
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Buscador />
+                </Grid>
+            </Grid>
+            <Card>
+                <CardHeader
+                    title="Compras"
+                    action={
+                        <ComprasDialog
+                            toggle={toggle}
+                            isShowing={isShowing}
+                            showMessage={showMessage}
+                            addCompra={addCompra}
                         />
-                }/>
-            <CardContent>
+                    } />
+                <CardContent>
                     {
-                    compras === null ?
-                        <LinearProgress variant="query" />
-                    :
-                    compras.length === 0 ?
-                        <Typography variant="h6" align="center" gutterBottom>No hay Compras registradas.</Typography>
-                    :                    
-                        <Table size="small">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Folio</TableCell>
-                                    <TableCell>Clave</TableCell>
-                                    <TableCell>Remisión</TableCell>
-                                    <TableCell>Proveedor</TableCell>
-                                    <TableCell>Ubicación</TableCell>
-                                    <TableCell>Tipo</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell>Acciones</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                            {                                
-                                compras.map((compra) => (
-                                    <TableRow key={compra._id}>
-                                        <TableCell >{compra.folio}</TableCell>
-                                        <TableCell >{compra.clave}</TableCell>
-                                        <TableCell >{compra.remision}</TableCell>
-                                        {/* <TableCell >Agregado {moment(compra.createdAt).fromNow()}</TableCell> */}
-                                        <TableCell >{compra.provedor.nombre}</TableCell>
-                                        <TableCell >{compra.ubicacion.nombre}</TableCell>
-                                        <TableCell >{compra.tipoCompra.tipo}</TableCell>
-                                        <TableCell >{compra.status}</TableCell>
-                                        <TableCell align="right">
-                                            <IconButton 
-                                                onClick={() => editCompra(compra)}
-                                            >
-                                                <VisibilityIcon />
-                                            </IconButton>
-                                            <IconButton aria-label="delete"
-                                                onClick={() => removeCompra(compra._id)}
-                                                >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                                
-                            }
-                            </TableBody>
-                        </Table>
+                        compras === null ?
+                            <LinearProgress variant="query" />
+                            :
+                            compras.length === 0 ?
+                                <Typography variant="h6" align="center" gutterBottom>No hay Compras registradas.</Typography>
+                                :
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Folio</TableCell>
+                                            <TableCell>Clave</TableCell>
+                                            <TableCell>Remisión</TableCell>
+                                            <TableCell>Proveedor</TableCell>
+                                            <TableCell>Ubicación</TableCell>
+                                            <TableCell>Tipo</TableCell>
+                                            <TableCell>Status</TableCell>
+                                            <TableCell>Acciones</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            compras.map((compra) => (
+                                                <TableRow key={compra._id}>
+                                                    <TableCell >{compra.folio}</TableCell>
+                                                    <TableCell >{compra.clave}</TableCell>
+                                                    <TableCell >{compra.remision}</TableCell>
+                                                    {/* <TableCell >Agregado {moment(compra.createdAt).fromNow()}</TableCell> */}
+                                                    <TableCell >{compra.provedor.nombre}</TableCell>
+                                                    <TableCell >{compra.ubicacion.nombre}</TableCell>
+                                                    <TableCell >{compra.tipoCompra.tipo}</TableCell>
+                                                    <TableCell >{compra.status}</TableCell>
+                                                    <TableCell align="right">
+                                                        <IconButton
+                                                            onClick={() => editCompra(compra)}
+                                                        >
+                                                            <VisibilityIcon />
+                                                        </IconButton>
+                                                        <IconButton
+                                                            disabled={compra.status === "CANCELADO" ? true : false}
+                                                            aria-label="delete"
+                                                            onClick={() => openConfirm(compra)}
+                                                        >
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+
+                                        }
+                                    </TableBody>
+                                </Table>
                     }
 
-            </CardContent>
-            <DetalleCompra compra={compra} open={detCompra} close={closeCompra} showMessage={showMessage}/>
-        </Card>
+                </CardContent>
+                <DetalleCompra compra={compra} open={detCompra} close={closeCompra} showMessage={showMessage} />
+                <ConfirmDialog open={confirm} cancel={cancelConfirm} ok={okConfirm} data={compra} />
+            </Card>
+        </Container>
     )
 }
 

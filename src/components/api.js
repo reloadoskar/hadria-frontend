@@ -183,6 +183,14 @@ export const closeCompra = (id) => {
         })
 }
 
+export const cancelCompra = (id) => {
+    return axios
+        .put(url + 'compra/cancel/'+ id)
+        .then( res => {
+            return res.data
+        })
+}
+
 export const updateCompra = (compra) => {
     return axios
         .put(url + 'update/compra/' + compra._id, compra)
@@ -447,21 +455,74 @@ export const ticketCompra = (data) => {
         .then(res =>{
             return res
         })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'error',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
 }
 
 export const ticketVenta = (data) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/venta.php', data)
+        .then(res =>{
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'error',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
 }
 
 export const ticketCobranza = (data) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/cobranza.php', data)
+        .then(res =>{
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'error',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
 }
 
 export const ticketEgreso = (data) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/egreso.php', data)
+        .then(res =>{
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'error',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
 }
 
 // PRODUCCIONES
@@ -469,6 +530,14 @@ export const ticketEgreso = (data) => {
 export const getProduccions = () => {
     return axios
         .get( url_client + 'produccions')
+        .then( res => {
+            return res.data
+        })
+}
+
+export const getProduccion = (id) => {
+    return axios
+        .get( url + 'produccion/'+ id)
         .then( res => {
             return res.data
         })
@@ -488,4 +557,8 @@ export const delProduccion = (id) => {
         .then(res => {
             return res.data
         })
+}
+
+export const closeProduccion = (id) => {
+    
 }

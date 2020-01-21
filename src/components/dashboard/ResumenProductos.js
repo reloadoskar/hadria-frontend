@@ -69,11 +69,15 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                     <TableRow key={index}>
                                         <TableCell>
                                             <Typography children={
+                                                item.provedor 
+                                                ?
                                                     data.compra.provedor.clave !== item.provedor.clave 
                                                     ?
-                                                        item.producto.descripcion + " (" + item.provedor.clave + ")"
+                                                        item.producto.descripcion + " (" + item.provedor.clave + ")"                                                        
                                                     :
                                                         item.producto.descripcion
+                                                :                                                        
+                                                    item.producto.descripcion
                                                 } 
                                                 paragraph 
                                             />
