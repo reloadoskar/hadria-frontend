@@ -47,18 +47,18 @@ export default function VerProduccion(props) {
                 // console.log(res)
                 setData({
                     produccion: res.produccion,
-                    insumos: res.insumos,
-                    inventario: res.inventario,
-                    ventas: res.ventas                                                   ,
-                    egresos: res.egresos,
+                    insumos: res.produccion.insumos,
+                    inventario: res.produccion.items,
+                    ventas: res.produccion.ventas,
+                    egresos: res.produccion.egresos,
                     cantProduccido: sumCantidad(res.produccion.items),
                     empProduccido: sumEmpaques(res.produccion.items),
-                    cantVendido: sumCantidad(res.ventas),
-                    empVendido: sumEmpaques(res.ventas),
-                    totalVenta: sumImporte(res.ventas),
-                    totalEgresos: sumImporte(res.egresos),
-                    costoInventario: calcCostoInventario(res.inventario),
-                    porCobrar: calcTotalPorCobrar(res.ventas)
+                    cantVendido: sumCantidad(res.produccion.ventas),
+                    empVendido: sumEmpaques(res.produccion.ventas),
+                    totalVenta: sumImporte(res.produccion.ventas),
+                    totalEgresos: sumImporte(res.produccion.egresos),
+                    costoInventario: calcCostoInventario(res.produccion.items),
+                    porCobrar: calcTotalPorCobrar(res.produccion.ventas)
                 })
             })
         }
@@ -115,7 +115,7 @@ export default function VerProduccion(props) {
                             <Grid container spacing={2}>
                                 <Grid item xs={4}>
                                     <Typography variant="h6">
-                                        {data.produccion.tipoProduccion.tipo}: {data.produccion.clave}
+                                        {data.produccion.folio}: {data.produccion.clave}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4}>
@@ -132,10 +132,10 @@ export default function VerProduccion(props) {
                         <CardHeader
                             avatar={
                                 <Avatar aria-label="recipe" className={classes.avatar}>
-                                    {data.produccion.provedor.nombre.charAt(0)}
+                                    {data.produccion.clave.charAt(0)}
                                 </Avatar>
                             }
-                            title={data.produccion.provedor.nombre}
+                            title={data.produccion.clave}
                             subheader={"Llegó " + moment(data.produccion.fecha).fromNow()}
                             action={
                                 <div>
@@ -169,18 +169,14 @@ export default function VerProduccion(props) {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <ResumenVentas 
-                                        data={data.ventasGroup}
-                                        sumImporte={sumImporte}
-                                        sumEmpaques={sumEmpaques}
-                                        sumCantidad={sumCantidad}
-                                        formatNumber={formatNumber}
+                                        data={data.ventas}
+
                                     />
                                 </Grid>            
                                 <Grid item xs={12}>
                                     <DetalleGastos 
                                         gastos={data.egresos} 
-                                        sumImporte={sumImporte}
-                                        formatNumber={formatNumber}
+
                                     />                                     
                                 </Grid>
                             </Grid>

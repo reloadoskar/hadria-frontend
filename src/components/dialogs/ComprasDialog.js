@@ -4,12 +4,10 @@ import React, { useState, useReducer } from 'react';
 import CompraAddItemsDialog from './CompraAddItemsDialog'
 
 //MATERIAL UI
-import { makeStyles } from '@material-ui/core/styles';
 import { TextField, MenuItem, Button, Dialog, AppBar, Toolbar, IconButton, Typography, Slide, Table, TableHead, TableRow, TableCell, TableBody, Container, Grid, } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import SaveIcon from '@material-ui/icons/Save';
-import AddIcon from '@material-ui/icons/Add';
 import {
     MuiPickersUtilsProvider,
     DatePicker
@@ -20,6 +18,7 @@ import useProvedors from '../hooks/useProvedors';
 import useTipoCompras from '../hooks/useTipoCompras';
 import useUbicacions from '../hooks/useUbicacions';
 import useProduccions from '../hooks/useProduccions';
+import useStyles from '../hooks/useStyles'
 
 
 //REDUCER
@@ -29,25 +28,6 @@ import {objectIsNull} from '../Tools'
 import { saveCompra, ticketCompra } from '../api'
 import moment from 'moment'
 import MomentUtils from '@date-io/moment';
-
-const useStyles = makeStyles(theme => ({
-    appBar: {
-        position: 'relative',
-    },
-    title: {
-        flex: 1,
-    },
-    textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-    },
-    dense: {
-        marginTop: theme.spacing(2),
-    },
-    menu: {
-        width: 200,
-    },
-}));
 
 const initialState ={
     provedor: '',
@@ -67,7 +47,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-export default function ComprasDialog({ toggle, addCompra, showMessage }) {
+export default function ComprasDialog({ open, close, addCompra, showMessage }) {
     const classes = useStyles();
 
     const {provedors} = useProvedors();
@@ -78,10 +58,8 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
     const [locale] = useState("es")
 
     const handleClose = (dialog) => {
-        if(dialog === "comprasDialog"){
-            dispatch({type: 'reset'})
-        }
-        dispatch({type: dialog, value: false})
+        dispatch({type: 'reset'})
+        close()
     }
 
     const openDialog = (dialog) => {
@@ -135,23 +113,24 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
 
     return (
         <div>
-            <Button size="medium" variant="contained" color="secondary" onClick={() => openDialog('comprasDialog')}>
-                <AddIcon /> Agregar una Compra
-      		</Button>
-            <Dialog fullScreen open={values.comprasDialog} onClose={() => handleClose('comprasDialog')} TransitionComponent={Transition}>
-                <AppBar className={classes.appBar}>
+            {/* <Button size="large" variant="contained" color="secondary" onClick={() => openDialog('comprasDialog')}>
+                <AddIcon /> Crear Compra
+      		</Button> */}
+            <Dialog fullScreen open={open} onClose={() => handleClose()} TransitionComponent={Transition}>
+                <AppBar className={classes.comprasBar}>
                     <Toolbar>
-                        <IconButton edge="start" color="inherit" onClick={() => handleClose('comprasDialog')} aria-label="close">
+                        <IconButton edge="start" color="inherit" onClick={() => handleClose()} aria-label="close">
                             <CloseIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
                             Nueva Compra
                         </Typography>
-                        <Button color="inherit" onClick={() => handleClose('comprasDialog')}>
+                        <Button color="inherit" onClick={() => handleClose()}>
                             Salir
                         </Button>
                     </Toolbar>
                 </AppBar>
+
                 <Container>
 
                     <form onSubmit={handleSubmit}>
@@ -160,7 +139,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                         </Typography>
                         <Grid container spacing={2}>
                             {/* Select: Provedor return Object Provedor */}
-                            <Grid item xs={6}>
+                            <Grid item xs={12} md={6}>
                                 <TextField
                                     autoFocus
                                     id="provedor"
@@ -168,7 +147,6 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                                     required
                                     fullWidth
                                     label="Selecciona un Proveedor"
-                                    helperText="Por favor selecciona un Proveedor."
                                     margin="normal"
                                     value={values.provedor}
                                     onChange={(e) => dispatch({type: 'provedor', value: e.target.value})}
@@ -182,7 +160,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                                 </TextField>
                             </Grid>
                             {/* Select: TipoCompra return Object TipoCompra  */}
-                            <Grid item xs={6}>
+                            <Grid item xs={12} md={6}>
                                 <TextField
                                     id="tipoCompra"
                                     select
@@ -192,7 +170,6 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                                     value={values.tipoCompra}
                                     onChange={(e) => dispatch({type: 'tipoCompra', value: e.target.value})}
                                     margin="normal"
-                                    helperText="Por favor selecciona un Tipo de Compra."
                                     variant="outlined"
                                     >   
                                         {tipoCompras.map((option, index) => (
@@ -225,7 +202,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                                 }
                             </Grid>
                             {/* Input: Remision */}
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <TextField
                                     id="remision"
                                     label="Número de remisión"
@@ -238,7 +215,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                                     />
                             </Grid>
                             {/* Input: Fecha return Moment Object */}
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <MuiPickersUtilsProvider utils={MomentUtils} locale={locale}>
                                     <DatePicker
                                         id="fecha"
@@ -252,7 +229,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                                 </MuiPickersUtilsProvider>
                             </Grid>
                             {/* Select: Ubicacion return _id Ubicacion */}
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <TextField
                                     id="ubicacion"
                                     select
@@ -276,7 +253,7 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                             </Grid>
                         </Grid>
                         <Grid container justify="center">
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <Button fullWidth variant="contained" color="secondary" onClick={() => openDialog('addItemDialog')}>
                                     + Agregar productos
                                 </Button>
@@ -333,9 +310,10 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                                 <Typography variant="h6" align="center" gutterBottom>Aún no hay productos agregados.</Typography>
                                 }
                             </Grid>
-                            <Grid container spacing={2} justify="flex-end">
-                                <Grid item xs={2}>
+                            <Grid container spacing={2} justify="flex-end" alignContent="flex-end">
+                                <Grid item xs={6} md={2}>
                                     <Button 
+                                        fullWidth
                                         variant="contained" 
                                         color="secondary" 
                                         startIcon={<ClearAllIcon />}
@@ -343,8 +321,9 @@ export default function ComprasDialog({ toggle, addCompra, showMessage }) {
                                             Borrar Lista
                                     </Button>
                                 </Grid>
-                                <Grid item xs={2}>
+                                <Grid item xs={6} md={2}>
                                     <Button 
+                                    fullWidth
                                         type="submit" 
                                         variant="contained" 
                                         color="primary"  

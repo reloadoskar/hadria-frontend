@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Card, Table, TableHead, TableRow, TableCell, TableBody, CardHeader, CardContent } from '@material-ui/core';
-
-const ResumenVentas = ({data, sumImporte, sumEmpaques, sumCantidad, formatNumber}) => {
+import { 
+    sumCantidad, 
+    sumEmpaques, 
+    sumImporte,
+    formatNumber,
+} from '../Tools'
+const ResumenVentas = ({data}) => {
 	const [total, setTotal] = useState(0)
 	const [tempaques, setTempaques] = useState(0)
 	const [tcantidad, setTcantidad] = useState(0)
@@ -17,7 +22,7 @@ const ResumenVentas = ({data, sumImporte, sumEmpaques, sumCantidad, formatNumber
 			let pp = ttl / tcant
 			setPrecioProm(formatNumber(pp,2))
         }
-    }, [data, formatNumber, sumCantidad, sumEmpaques, sumImporte])
+    }, [data])
 	return(
 		<Card>
 			<CardHeader title="Resúmen de Ventas"></CardHeader>

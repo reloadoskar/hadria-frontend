@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Global from './Global';
+import Global from '../Global';
 
 const url = Global.url;
 const url_client = url

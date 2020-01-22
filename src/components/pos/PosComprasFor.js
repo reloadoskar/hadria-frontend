@@ -98,7 +98,8 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 												!item.provedor ?
 													item.producto.descripcion
 												:
-													item.producto.descripcion+ " (" + item.provedor.clave + ")"}
+													item.producto.descripcion+ " (" + item.provedor.clave + ")"
+											}
 										</Typography>
 									</Grid>
 									<Grid item xs={2}>

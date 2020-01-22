@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { Card, CardHeader, CardContent, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
-
-const DetalleGastos = ({gastos, sumImporte, formatNumber}) => {
+import { 
+    sumCantidad, 
+    sumEmpaques, 
+    sumImporte,
+    formatNumber,
+} from '../Tools'
+const DetalleGastos = ({gastos}) => {
     const [total, setTotal] = useState(0)
     useEffect(() => {
         if(gastos){
             let ttl= sumImporte(gastos)
             setTotal(formatNumber(ttl))
         }
-    }, [gastos, sumImporte, formatNumber])
+    }, [gastos])
     return(
         <Card>
             <CardHeader title="Detalle de Gastos"></CardHeader>

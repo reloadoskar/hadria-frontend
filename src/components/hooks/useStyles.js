@@ -40,6 +40,14 @@ const useStyles = makeStyles(theme => ({
         position: 'relative',
         backgroundColor: '#660F50'
     },
+    comprasBar: {
+        position: 'relative',
+        backgroundColor: '#0E34A0'
+    },
+    produccionBar: {
+        position: 'relative',
+        backgroundColor: '#212020'
+    },
     clientesBar: {
         position: 'relative',
         backgroundColor: '#FF715B'

@@ -7,7 +7,7 @@ import Productos from './components/Productos';
 import Clientes from './components/Clientes';
 import Provedores from './components/Provedores';
 import Ubicaciones from './components/Ubicaciones';
-import Compras from './components/Compras';
+import Compras from './components/compras/Compras';
 import Inventario from './components/Inventario';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/Header';
