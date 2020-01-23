@@ -4,7 +4,7 @@ import {
     sumImporte,
     formatNumber,
 } from '../Tools'
-const DetalleGastos = ({gastos}) => {
+const DetalleGastos = ({gastos=[]}) => {
     const [total, setTotal] = useState(0)
     useEffect(() => {
         if(gastos){

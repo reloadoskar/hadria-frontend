@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Card, TableHead, TableCell, TableRow, TableBody, CardHeader, CardContent } from '@material-ui/core';
+import { Table, Card, TableHead, TableCell, TableRow, TableBody, CardHeader, CardContent, Typography } from '@material-ui/core';
 import { 
     sumCantidad, 
     sumEmpaques, 
@@ -29,37 +29,43 @@ const DetalleVentas = ({ventas}) => {
         <Card>
             <CardHeader title="Detalle de Ventas"></CardHeader>
             <CardContent>
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>folio</TableCell>
-                            <TableCell>Producto</TableCell>
-                            <TableCell align="right">Cantidad</TableCell>
-                            <TableCell align="right">Empaques</TableCell>
-                            <TableCell align="right">Precio</TableCell>
-                            <TableCell align="right">Importe</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {ventas.map( venta => (
-                        <TableRow key={venta._id}>
-                            <TableCell>{venta.ventaFolio}</TableCell>
-                            <TableCell>{venta.producto.descripcion}</TableCell>
-                            <TableCell align="right">{venta.cantidad}</TableCell>
-                            <TableCell align="right">{venta.empaques}</TableCell>
-                            <TableCell align="right">{venta.precio}</TableCell>
-                            <TableCell align="right">{venta.importe}</TableCell>
-                        </TableRow> 
-                        ))}
-                        <TableRow selected>
-                            <TableCell colSpan="2" align="right">Total</TableCell>
-                            <TableCell align="right">{tcantidad}</TableCell>
-                            <TableCell align="right">{tempaques}</TableCell>
-                            <TableCell align="right">{precioProm}</TableCell>
-                            <TableCell align="right">{timporte}</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
+                {
+                    ventas.length === 0 ?
+                        <Typography variant ="h6" align="center" children="No se encontraron Ventas." />
+                    :
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>folio</TableCell>
+                                <TableCell>Producto</TableCell>
+                                <TableCell align="right">Cantidad</TableCell>
+                                <TableCell align="right">Empaques</TableCell>
+                                <TableCell align="right">Precio</TableCell>
+                                <TableCell align="right">Importe</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {ventas.map( venta => (
+                            <TableRow key={venta._id}>
+                                <TableCell>{venta.ventaFolio}</TableCell>
+                                <TableCell>{venta.producto.descripcion}</TableCell>
+                                <TableCell align="right">{venta.cantidad}</TableCell>
+                                <TableCell align="right">{venta.empaques}</TableCell>
+                                <TableCell align="right">{venta.precio}</TableCell>
+                                <TableCell align="right">{venta.importe}</TableCell>
+                            </TableRow> 
+                            ))}
+                            <TableRow selected>
+                                <TableCell colSpan="2" align="right">Total</TableCell>
+                                <TableCell align="right">{tcantidad}</TableCell>
+                                <TableCell align="right">{tempaques}</TableCell>
+                                <TableCell align="right">{precioProm}</TableCell>
+                                <TableCell align="right">{timporte}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+
+                }
             </CardContent>
         </Card>
     )

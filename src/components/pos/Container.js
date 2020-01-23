@@ -1,4 +1,4 @@
-import React, {useReducer, } from 'react';
+import React, {useReducer, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import moment from 'moment'
 import {getDataFrom, getCuentasPorCobrar, getCuentasPorPagar, existCorte} from '../api'
@@ -13,9 +13,10 @@ import IngresoDialog from '../dialogs/IngresoDialog'
 import AddItemDialog from '../dialogs/AddItemDialog'
 import CobroDialog from '../dialogs/CobroDialog'
 import CorteDialog from '../dialogs/CorteDialog'
+import Loading from '../Loading'
 
 // import { SnackbarProvider } from 'notistack';
-import { Container, } from '@material-ui/core';
+import { Container, LinearProgress, } from '@material-ui/core';
 
 import reducer from './PosReducer'
 
@@ -59,6 +60,7 @@ const initialState = {
 }
 
 function PosContainer() {
+    const [loading, setLoading] = useState(true)
     const { enqueueSnackbar } = useSnackbar()
     const {inventario} = useInventario();
     const [values, dispatch] = useReducer(reducer, initialState)
@@ -182,10 +184,17 @@ function PosContainer() {
     return (
         <Container maxWidth="sm">
 
-            <Acceso 
-                values={values} 
-                checkCorte={checkCorte} 
-                handleChange={handleChange}/>
+            {
+                inventario === null ?
+                    // <LinearProgress variant="query" />
+                    <Loading loading={loading}/>
+                :
+                    <Acceso 
+                        values={values} 
+                        checkCorte={checkCorte} 
+                        handleChange={handleChange}/>
+            }
+
 
             <PosDialog 
                 values={values}
@@ -270,14 +279,3 @@ function PosContainer() {
 }
 
 export default PosContainer
-
-// export default function IntegrationNotistack() {
-//     return (
-//         <SnackbarProvider maxSnack={3} anchorOrigin={{
-//             vertical: 'top',
-//             horizontal: 'right',
-//         }}>
-//             <PosContainer />
-//         </SnackbarProvider>
-//     );
-// }

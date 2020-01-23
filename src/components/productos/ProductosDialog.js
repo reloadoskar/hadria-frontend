@@ -10,7 +10,7 @@ import useUnidades from '../hooks/useUnidades'
 import useEmpaques from '../hooks/useEmpaques'
 
 //REDUCER
-import reducer from '../reducers/ProductosReducer';
+import reducer from './ProductosReducer';
 
 const useStyles = makeStyles(theme => ({
 	appBar: {
@@ -38,7 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ProductosDialog({ addProducto, isShowing, toggle }) {
+export default function ProductosDialog({ addProducto, isShowing, close }) {
 	const {unidades} = useUnidades()
 	const {empaques} = useEmpaques()
     const classes = useStyles();
@@ -48,21 +48,26 @@ export default function ProductosDialog({ addProducto, isShowing, toggle }) {
         event.preventDefault()
 		addProducto(values)
 		dispatch({type: 'reset'})
-    }
+	}
+	
+	const handleClose = () => {
+		dispatch({type: 'reset'})
+		close()
+	}
 
     return (
         <div>
             
-            <Dialog fullScreen open={isShowing} onClose={toggle} TransitionComponent={Transition}>
+            <Dialog fullScreen open={isShowing} onClose={handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
                     <Toolbar>
-                        <IconButton edge="start" color="inherit" onClick={toggle} aria-label="close">
+                        <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
                             <CloseIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
                             Nuevo Producto
             			</Typography>
-                        <Button color="inherit" onClick={toggle}>
+                        <Button color="inherit" onClick={handleClose}>
                             Salir
             			</Button>
                     </Toolbar>

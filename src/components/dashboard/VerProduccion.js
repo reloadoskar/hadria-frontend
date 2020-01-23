@@ -5,6 +5,7 @@ import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ResumenVentas from './ResumenVentas'
 import DetalleGastos from './DetalleGastos'
+import DetalleInsumos from './DetalleInsumos'
 import useStyles from '../hooks/useStyles'
 import { getProduccion, closeProduccion } from '../api'
 import { 
@@ -159,7 +160,7 @@ export default function VerProduccion(props) {
                         <CardContent>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    
+                                    <DetalleInsumos />
                                 </Grid>
                                 <Grid item xs={12}>
                                                                        

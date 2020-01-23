@@ -54,6 +54,7 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
     const {produccions} = useProduccions();
     const {tipoCompras} = useTipoCompras();
     const {ubicacions} = useUbicacions();
+    const[addItemDialog, setAddItemDialog] = useState(false)
     const [values, dispatch] = useReducer(reducer, initialState)
     const [locale] = useState("es")
 
@@ -62,8 +63,12 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
         close()
     }
 
-    const openDialog = (dialog) => {
-        dispatch({type: dialog, value: true})
+    const openDialog = () => {
+        setAddItemDialog(true)
+    }
+
+    const closeDialog = () => {
+        setAddItemDialog(false)
     }
 
     const addItemToList = (item) => {
@@ -113,9 +118,6 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
 
     return (
         <div>
-            {/* <Button size="large" variant="contained" color="secondary" onClick={() => openDialog('comprasDialog')}>
-                <AddIcon /> Crear Compra
-      		</Button> */}
             <Dialog fullScreen open={open} onClose={() => handleClose()} TransitionComponent={Transition}>
                 <AppBar className={classes.comprasBar}>
                     <Toolbar>
@@ -205,6 +207,7 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                             <Grid item xs={12} md={4}>
                                 <TextField
                                     id="remision"
+                                    type="number"
                                     label="Número de remisión"
                                     helperText="Ingresa el Número de Remisión de la compra"
                                     margin="normal"
@@ -254,7 +257,7 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                         </Grid>
                         <Grid container justify="center">
                             <Grid item xs={12} md={4}>
-                                <Button fullWidth variant="contained" color="secondary" onClick={() => openDialog('addItemDialog')}>
+                                <Button fullWidth variant="contained" color="secondary" onClick={() => openDialog()}>
                                     + Agregar productos
                                 </Button>
                         
@@ -339,8 +342,8 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
             </Dialog>
 
             <CompraAddItemsDialog 
-                isOpen={values.addItemDialog}
-                handleClose={handleClose}
+                open={addItemDialog}
+                handleClose={closeDialog}
                 openDialog={openDialog}
                 showMessage={showMessage}
                 addItemToList={addItemToList}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getInventario } from '../api'
 const useInventario = () => {
-	const [inventario, setInventario] = useState([])
+	const [inventario, setInventario] = useState(null)
 	useEffect(() => {
 		async function loadInventario() {
 			const res = await getInventario()

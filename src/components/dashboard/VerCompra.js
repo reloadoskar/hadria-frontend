@@ -54,7 +54,7 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
                     totalPagos: sumImporte(res.data.compra.pagos),
                     comision: calcComision(res.data.compra, res.data.ventas),
                     costoInventario: calcCostoInventario(res.data.compra.items),
-                    porCobrar: calcTotalPorCobrar(res.data.ventas)
+                    porCobrar:  calcTotalPorCobrar(res.data.ventas)
                 })
             })
         }
@@ -111,7 +111,7 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
                             <Grid container spacing={2}>
                                 <Grid item xs={4}>
                                     <Typography variant="h6">
-                                        {data.compra.tipoCompra.tipo}: {data.compra.clave}
+                                        {data.compra.tipoCompra.tipo}:{data.compra.folio}:{data.compra.clave}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4}>

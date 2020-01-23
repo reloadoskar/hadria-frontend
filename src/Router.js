@@ -3,7 +3,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import Produccions from './components/Produccions'
-import Productos from './components/Productos';
+import Productos from './components/productos/Productos';
 import Clientes from './components/Clientes';
 import Provedores from './components/Provedores';
 import Ubicaciones from './components/Ubicaciones';
@@ -13,7 +13,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/Header';
 import Container from './components/pos/Container';
 import ConceptosTabs from './components/conceptos/ConceptosTabs';
-import Ventas from './components/Ventas';
+import Ventas from './components/ventas/Ventas';
 // import {PrivateRoute} from './privateRoute' 
 // import Error from './components/Error'
 
