@@ -7,7 +7,7 @@ import useProvedors from '../hooks/useProvedors'
 import {objectIsNull} from '../Tools'
 
 export default function CompraAddItemsDialog({ open, handleClose, addItemToList, showMessage }) {
-    const {products} = useProducts()
+    const {products} = useProducts([])
     const {provedors} = useProvedors()
     const [values, setValues] = useState({
         producto: '',
@@ -101,6 +101,9 @@ export default function CompraAddItemsDialog({ open, handleClose, addItemToList,
                                 variant="outlined"
                             >
                                 {
+                                    products === null ?
+                                        null
+                                    :
                                     products.map((option, index) => (
                                         <MenuItem key={index} value={option}>
                                             {option.clave} - {option.descripcion}
