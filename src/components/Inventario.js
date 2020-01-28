@@ -7,7 +7,7 @@ import useInventario from './hooks/useInventario';
 
 
 function Inventario() {
-    const {inventario} = useInventario();
+    const {inventario} = useInventario([]);
     // const { isShowing, toggle } = useModal();
 
     return (
@@ -16,7 +16,12 @@ function Inventario() {
                 <Typography variant="h4" children="Inventario" paragraph/>
                 <Grid container spacing={3}>
 
-                    {inventario.length === 0 ?
+                    {
+                        inventario === null ?
+                            null
+                        :
+                    
+                        inventario.length === 0 ?
                         <Typography variant="h6" align="center" gutterBottom>No se encontró información.</Typography>
                     :
                         inventario.map( (compra, index) => (
@@ -34,25 +39,31 @@ function Inventario() {
                                         <Grid item xs={2}>
                                         <Typography variant="body2" children="Cantidad" />
                                         </Grid>
-                                    {compra.items.map( (item, i) => (
-                                        <React.Fragment key={i}>
-                                            <Grid item md={8}>
-                                                <Typography
-                                                    children={item.producto.descripcion}
-                                                    />
-                                            </Grid>
-                                            <Grid item  xs={2}>
-                                                <Typography
-                                                    children={item.empaquesStock}
-                                                    />
-                                            </Grid>
-                                            <Grid item xs={2}>
-                                                <Typography
-                                                    children={item.stock}
-                                                    />
-                                            </Grid>
-                                        </React.Fragment>
-                                        ) )}
+                                    {compra.items.map( (item, i) => {
+                                        if(item.stock !== 0){
+                                            return (
+                                            <React.Fragment key={i}>
+                                                <Grid item md={8}>
+                                                    <Typography
+                                                        children={item.producto.descripcion}
+                                                        />
+                                                </Grid>
+                                                <Grid item  xs={2}>
+                                                    <Typography
+                                                        children={item.empaquesStock}
+                                                        />
+                                                </Grid>
+                                                <Grid item xs={2}>
+                                                    <Typography
+                                                        children={item.stock}
+                                                        />
+                                                </Grid>
+                                            </React.Fragment>
+                                            )
+
+                                        }
+                                        
+                                    } )}
                                     </Grid>
                                 </CardContent>
                                 </Card>
