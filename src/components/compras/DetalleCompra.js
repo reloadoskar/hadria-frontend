@@ -9,7 +9,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 import useUbicacions from '../hooks/useUbicacions';
-import CompraAddItemsDialog from '../dialogs/CompraAddItemsDialog'
+import CompraAddItemsDialog from './CompraAddItemsDialog'
 
 import { formatNumber, sumImporte } from '../Tools'
 
@@ -403,7 +403,7 @@ export default function DetalleCompra(props) {
             </DialogActions>
         </Dialog>
         <CompraAddItemsDialog 
-            isOpen={addItem}
+            open={addItem}
             handleClose={closeAddItem}
             showMessage={showMessage}
             addItemToList={saveNewItem}

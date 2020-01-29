@@ -3,16 +3,19 @@ import {
     TextField,
     MenuItem,
     Grid,
-    Button,
-    Paper,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 export default function Buscador() {
     const [searchText, setSearchText] = useState('')
     const [searchField, setSearchField] = useState('Clave')
     const fields = ['Clave', 'Folio', 'Proveedor', 'Remision', 'Ubicacion']
-    const handleChange = (value) => {
-        setSearchText(value)
+    const handleChange = (field, value) => {
+        switch(field){
+            case 'field':
+                return setSearchField(value)
+            case 'text':
+                return setSearchText(value)
+        }
     }
     return (
         <Grid container>
@@ -25,6 +28,7 @@ export default function Buscador() {
                     select
                     value={searchField}
                     margin="none"
+                    onChange={(e) => handleChange('field', e.target.value)}
                 >
                     {fields.map((option, index) => (
                         <MenuItem key={index} value={option}>
@@ -46,7 +50,7 @@ export default function Buscador() {
                     }}
                     value={searchText}
                     margin="none"
-                    onChange={(e) => handleChange(e.target.value)}
+                    onChange={(e) => handleChange('text', e.target.value)}
                 />
             </Grid>
 

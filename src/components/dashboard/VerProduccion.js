@@ -12,13 +12,14 @@ import {
     sumCantidad, 
     sumEmpaques, 
     sumImporte,
-    sumStock,
-    sumEmpStock,
-    formatNumber, 
+    // sumStock,
+    // sumEmpStock,
+    // formatNumber, 
     calcCostoInventario, 
-    calcVentasItem, 
+    // calcVentasItem, 
     calcTotalPorCobrar, 
-    calcComision } from '../Tools'
+    // calcComision 
+} from '../Tools'
 
 import moment from 'moment'
 

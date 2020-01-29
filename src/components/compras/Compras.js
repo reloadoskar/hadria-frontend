@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ComprasDialog from '../dialogs/ComprasDialog';
+import ComprasDialog from './ComprasDialog';
 
 import { useSnackbar } from 'notistack';
 import {

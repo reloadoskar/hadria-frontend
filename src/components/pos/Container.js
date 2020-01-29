@@ -16,7 +16,7 @@ import CorteDialog from '../dialogs/CorteDialog'
 import Loading from '../Loading'
 
 // import { SnackbarProvider } from 'notistack';
-import { Container, LinearProgress, } from '@material-ui/core';
+import { Container, } from '@material-ui/core';
 
 import reducer from './PosReducer'
 
@@ -60,7 +60,7 @@ const initialState = {
 }
 
 function PosContainer() {
-    const [loading, setLoading] = useState(true)
+    const [loading] = useState(true)
     const { enqueueSnackbar } = useSnackbar()
     const {inventario} = useInventario();
     const [values, dispatch] = useReducer(reducer, initialState)
