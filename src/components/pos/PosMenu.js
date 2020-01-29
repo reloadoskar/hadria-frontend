@@ -59,7 +59,15 @@ export default function PosMenu ({openDialog, closeDialog, showCorte, isOpen, an
                         Hacer un Cobro
                     </Typography>
                 </MenuItem>
-                {/* <ListItem button onClick={() => openDialog('corteDialog')}> */}
+                <MenuItem onClick={() => handleClick('retiroDialog')}>
+                    <ListItemIcon>
+                        <AttachMoneyIcon />
+                    </ListItemIcon>
+                    <Typography>
+                        Hacer un Retiro
+                    </Typography>
+                </MenuItem>
+
                 <MenuItem onClick={() => showCorte()}>
                     <ListItemIcon>
                         <VisibilityIcon />

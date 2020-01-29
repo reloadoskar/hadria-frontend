@@ -5,7 +5,7 @@ import PosMenu from './PosMenu'
 import PosComprasFor from './PosComprasFor'
 import PosListaDeVenta from './PosListaDeVenta'
 
-import { Typography, IconButton, Dialog, Slide, AppBar, Toolbar, Grid, } from '@material-ui/core';
+import { Typography, IconButton, Dialog, Slide, AppBar, Toolbar, Grid, Container, } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import useStyles from '../hooks/useStyles'
@@ -42,7 +42,7 @@ export default function PosDialog({
             onClose={() => closeDialog('posDialog')} 
             TransitionComponent={Transition}>
             
-            <AppBar className={classes.posBar}>
+            <AppBar className={classes.posBar} position="fixed">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" onClick={ (e) => handleClick('menuDialog', e) } aria-label="close">
                         <MenuIcon />
@@ -64,11 +64,13 @@ export default function PosDialog({
 
                 </Grid>
                 <Grid item xs={12} md>
+                    <Container fixed>
                     <PosListaDeVenta
                         items={values.itemsToSave}
                         openDialog={openDialog}
                         total={values.total}
                         removeItem={removeItem} />
+                    </Container>
                 </Grid>
             </Grid>
 

@@ -25,14 +25,15 @@ export default function TablaVentas({ table, data }) {
 		<div className={classes.root}>
 			<Card className={classes.paper}>
 				<CardHeader 
-					title={"$"+ sumImporte(data)} 
+					title={data.length + " "+ table}
 					titleTypographyProps={{
 						align: "right",
-						variant: "h4"
+						
 					}} 
-					subheader={data.length + " "+ table} 
+					subheader={"$"+ sumImporte(data)} 
 					subheaderTypographyProps={{
-						align: "right"
+						align: "right",
+						variant: "h4"
 					}}/>
 				<CardContent>
 					<Grid container spacing={2} >
