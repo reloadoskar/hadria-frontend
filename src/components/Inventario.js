@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { SnackbarProvider } from 'notistack';
-import { Typography, Container, Grid, Card, CardHeader, CardContent, } from '@material-ui/core';
+import { Typography, Container, Grid, Card, CardHeader, CardContent, LinearProgress } from '@material-ui/core';
 
 import useInventario from './hooks/useInventario';
 
@@ -18,7 +17,7 @@ function Inventario() {
 
                     {
                         inventario === null ?
-                            null
+                            <LinearProgress variant="query" />
                         :
                     
                         inventario.length === 0 ?
