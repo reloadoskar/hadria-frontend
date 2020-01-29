@@ -77,13 +77,4 @@ function Inventario() {
     )
 }
 
-export default function IntegrationNotistack() {
-    return (
-        <SnackbarProvider maxSnack={3} anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-            }}>
-            <Inventario />
-        </SnackbarProvider>
-    );
-}
+export default Inventario
