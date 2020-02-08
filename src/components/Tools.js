@@ -117,14 +117,14 @@ export const sumTotal = (list) => {
     return suma
 }
 
-export const calcTotal = (ventas, ingresos, egresos) => {
+export const calcTotal = (ventas, creditos, ingresos, egresos) => {
     let total = 0
+    //var tcreditos = sumImporte(creditos)
     var tventas = sumImporte(ventas)
-    var tsaldo = sumSaldo(ventas)
     var timp = sumImporte(ingresos)
     var tegr = sumImporte(egresos)
     
-    total = tventas + timp - tsaldo - tegr
+    total = tventas + timp - creditos - tegr
 
     return total
 }

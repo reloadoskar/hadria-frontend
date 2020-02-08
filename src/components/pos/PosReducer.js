@@ -40,7 +40,7 @@ function reducer (state, action){
 
         case 'setCorte':
             // console.log(action.value)
-            var saldo = calcTotal(action.value.ventas, action.value.ingresos, action.value.egresos)
+            var saldo = calcTotal(action.value.ventas, action.value.creditos, action.value.ingresos, action.value.egresos)
             return {...state, 
                 saldoEnUbicacion: saldo,
                 ventasCorte: action.value.ventas,
