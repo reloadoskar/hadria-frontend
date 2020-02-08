@@ -207,7 +207,7 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                             <Grid item xs={12} md={4}>
                                 <TextField
                                     id="remision"
-                                    type="number"
+                                    type="text"
                                     label="Número de remisión"
                                     helperText="Ingresa el Número de Remisión de la compra"
                                     margin="normal"

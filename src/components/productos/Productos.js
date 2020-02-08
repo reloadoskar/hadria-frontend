@@ -65,8 +65,8 @@ function Productos() {
                                 <Table size="small">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Producto</TableCell>
                                             <TableCell>Clave</TableCell>
+                                            <TableCell>Producto</TableCell>
                                             <TableCell align="right">Costo</TableCell>
                                             <TableCell align="right">Precio Público</TableCell>
                                             <TableCell align="right">Precio Mayoreo</TableCell>
@@ -78,8 +78,8 @@ function Productos() {
                                         {
                                             products.map((row, index) => (
                                                 <TableRow key={index} index={index}>
-                                                    <TableCell component="th" scope="row">{row.descripcion}</TableCell>
                                                     <TableCell >{row.clave}</TableCell>
+                                                    <TableCell component="th" scope="row">{row.descripcion}</TableCell>
                                                     <TableCell align="right">{row.costo}</TableCell>
                                                     <TableCell align="right">{row.precio1}</TableCell>
                                                     <TableCell align="right">{row.precio2}</TableCell>
