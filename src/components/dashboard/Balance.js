@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { formatNumber, sumImporte, sumSaldo, calcCostoInventario } from '../Tools'
+import React from 'react'
+import { formatNumber, sumImporte, } from '../Tools'
 import { Typography, Grid, Card, CardHeader, CardContent, CardActions, Tooltip, LinearProgress } from '@material-ui/core';
-import useBalance from '../hooks/useBalance'
-import { getBalance } from '../api'
 
 export default function Balance({balance}) {
 

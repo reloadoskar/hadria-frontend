@@ -3,9 +3,9 @@ import React from 'react'
 import BlockIcon from '@material-ui/icons/Block';
 import EditIcon from '@material-ui/icons/Edit';
 import useStyles from '../hooks/useStyles'
-import { Grid, Container, Card, CardContent, TextField, Button, Typography, IconButton, Table, TableHead, TableRow, TableCell, TableBody, Box, } from '@material-ui/core';
+import { Grid, Typography, IconButton, Table, TableHead, TableRow, TableCell, TableBody, Box, } from '@material-ui/core';
 
-import { getVenta, cancelVenta, existCorte } from '../api'
+import { cancelVenta, existCorte } from '../api'
 
 const Venta = (props) => {
     const venta = props.data[0]

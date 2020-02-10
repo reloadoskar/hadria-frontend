@@ -15,6 +15,8 @@ export default function Buscador() {
                 return setSearchField(value)
             case 'text':
                 return setSearchText(value)
+            default:
+                return null
         }
     }
     return (

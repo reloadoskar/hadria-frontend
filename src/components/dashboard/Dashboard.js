@@ -6,7 +6,7 @@ import CuentasPorCobrar from './CuentasPorCobrar'
 import CuentasPorPagar from './CuentasPorPagar'
 import ComprasDash from './ComprasDash'
 import ProduccionsDash from './ProduccionsDash'
-// import Pagar from './Pagar'
+import Pagar from './Pagar'
 import Cobrar from './Cobrar'
 
 import useUser from '../hooks/useUser'
@@ -18,11 +18,32 @@ import useBalance from '../hooks/useBalance'
 import PaymentIcon from '@material-ui/icons/Payment';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
+import { useSnackbar } from 'notistack';
+
 export default function Dashboard() {
+    const { enqueueSnackbar } = useSnackbar()
     const { user } = useUser()
     const balance = useBalance()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
+
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+
+    const showPagar = () => {
+        setPagar(true)
+    }
+
+    const closePagar = () => {
+        setPagar(false)
+    }
+
+    const showCobrar = () => {
+        setCobrar(true)
+    }
+
+    const closeCobrar = () => {
+        setCobrar(false)
+    }
     return (
 
         <Grid container spacing={2}>
@@ -34,10 +55,10 @@ export default function Dashboard() {
                         <Grid item xs={12}>
                             <Box display={user.level > 1 ? 'none' : 'inline'}>
                                 <Grid container justify="flex-end">
-                                    <IconButton>
+                                    <IconButton onClick={showCobrar}>
                                         <PaymentIcon />
                                     </IconButton>
-                                    <IconButton>
+                                    <IconButton onClick={showPagar}>
                                         <AttachMoneyIcon />
                                     </IconButton>
                                     <IconButton>
@@ -75,9 +96,8 @@ export default function Dashboard() {
                             </Grid>
                         </Grid>
 
-                        <Cobrar isOpen={cobrar} cuentas={balance.cuentasPc} />
-                        {/* <Pagar isOpen={pagar}/> */}
-
+                        <Cobrar isOpen={cobrar} cuentas={balance.cuentasPc} close={closeCobrar} showMessage={showMessage} />
+                        <Pagar isOpen={pagar} cuentas={balance.cuentasPp} close={closePagar} saldos={balance.dispPorUbic} showMessage={showMessage} />
                     </React.Fragment>
             }
         </Grid>

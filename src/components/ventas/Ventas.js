@@ -55,10 +55,10 @@ const Ventas = (props) => {
 
     }
 
-    const openConfirm = () => {
-        // setCompra(compra)
-        setConfirm(true)
-    }
+    // const openConfirm = () => {
+    //     // setCompra(compra)
+    //     setConfirm(true)
+    // }
 
     const cancelConfirm = () => {
         setConfirm(false)

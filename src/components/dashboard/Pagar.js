@@ -1,20 +1,20 @@
 import React, {useState} from 'react';
 
-import {savePagoACuentaPorPagar} from '../api'
-
+import {savePagoACuentaPorPagar, ticketPago} from '../api'
+import {sumImporte} from '../Tools'
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Typography, Grid, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
 
-
-export default function Pagar({cuentas, ubicacion, isOpen, close, showMessage, saldoDisponible, subFromSaldo, fecha}) {
+export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showMessage, saldoDisponible, subFromSaldo, fecha = Date()}) {
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const [values, setValues] = useState({
         cuentaPorPagar: '',
         tipoPago: 'EFECTIVO',
         importe: '',
         referencia: '',
+        ubicacion: '',
     })
 
     const handleChange = (type, value) => {
@@ -45,7 +45,7 @@ export default function Pagar({cuentas, ubicacion, isOpen, close, showMessage, s
     const handleSubmit = (e) => {
         e.preventDefault()
         var pago = {
-            ubicacion: ubicacion,
+            ubicacion: values.ubicacion,
             cuenta: values.cuentaPorPagar,
             tipoPago: values.tipoPago,
             importe: values.importe,
@@ -55,12 +55,14 @@ export default function Pagar({cuentas, ubicacion, isOpen, close, showMessage, s
         savePagoACuentaPorPagar(pago).then(res =>{
             showMessage(res.message, res.status)
             close('pagarDialog')
-            subFromSaldo(pago.importe)
+            //subFromSaldo(pago.importe)
             setValues({
                 cuentaPorPagar: '',
                 tipoPago: 'EFECTIVO',
                 importe: '',
+                ubicacion: ''
             })
+            ticketPago(pago)
         })
     }
 
@@ -78,18 +80,32 @@ export default function Pagar({cuentas, ubicacion, isOpen, close, showMessage, s
                 <DialogTitle id="form-dialog-title">
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <Typography variant="h6" >Nuevo Pago en:</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Grid container justify="flex-end">
-                            <Typography variant="h6" >{ubicacion.nombre}</Typography>
-                        </Grid>
+                        <Typography variant="h6" >Pagar</Typography>
                     </Grid>
                 </Grid>
                 </DialogTitle>
 
                 <DialogContent>
                     <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                id="ubicacion"
+                                select
+                                variant="outlined"
+                                autoFocus
+                                required
+                                fullWidth
+                                label="Selecciona una Ubicación"
+                                value={values.ubicacion}
+                                onChange={(e) => handleChange('ubicacion', e.target.value)}
+                            >
+                                {saldos.map((option, index) => (
+                                    <MenuItem key={index} value={option}>
+                                        {option.nombre} ${(sumImporte(option.ingresos) - sumImporte(option.egresos))}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 id="cuentaPorPagar"

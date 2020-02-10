@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {savePagoACuentaPorPagar} from '../api'
+import {savePagoACuentaPorPagar, ticketPago} from '../api'
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -61,6 +61,7 @@ export default function PagarDialog({cuentas, ubicacion, isOpen, close, showMess
                 tipoPago: 'EFECTIVO',
                 importe: '',
             })
+            ticketPago(pago)
         })
     }
 

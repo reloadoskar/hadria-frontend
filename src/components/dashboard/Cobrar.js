@@ -15,7 +15,7 @@ const initialData = {
 export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage, addToSaldo }) {
     
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
-    const ubicacions = useUbicacions()
+    const {ubicacions} = useUbicacions()
     const [values, setValues] = useState(initialData)
     const [reprint] = useState(true)
     
@@ -81,6 +81,25 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage, a
             <form onSubmit={handleSubmit}>
                 <DialogContent>
                     <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                id="ubicacion"
+                                select
+                                variant="outlined"
+                                autoFocus
+                                required
+                                fullWidth
+                                label="Selecciona una Ubicación"
+                                value={values.ubicacion}
+                                onChange={(e) => handleChange('ubicacion', e.target.value)}
+                            >
+                                {ubicacions.map((option, index) => (
+                                    <MenuItem key={index} value={option}>
+                                        {option.nombre}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 id="cuenta"
