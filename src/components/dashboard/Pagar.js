@@ -6,15 +6,23 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Typography, Grid, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
+import {
+    MuiPickersUtilsProvider,
+    DatePicker
+} from '@material-ui/pickers';
+import moment from 'moment'
+import MomentUtils from '@date-io/moment';
 
 export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showMessage, saldoDisponible, subFromSaldo, fecha = Date()}) {
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
+    const [locale] = useState("es")
     const [values, setValues] = useState({
         cuentaPorPagar: '',
         tipoPago: 'EFECTIVO',
         importe: '',
         referencia: '',
         ubicacion: '',
+        fecha: moment().format('YYYY-MM-DD'),
     })
 
     const handleChange = (type, value) => {
@@ -50,7 +58,7 @@ export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showM
             tipoPago: values.tipoPago,
             importe: values.importe,
             referencia: values.referencia,
-            fecha: fecha
+            fecha: values.fecha
         }
         savePagoACuentaPorPagar(pago).then(res =>{
             showMessage(res.message, res.status)
@@ -87,7 +95,7 @@ export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showM
 
                 <DialogContent>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                        <Grid item xs={6}>
                             <TextField
                                 id="ubicacion"
                                 select
@@ -105,6 +113,21 @@ export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showM
                                     </MenuItem>
                                 ))}
                             </TextField>
+                        </Grid>
+                        <Grid item xs={6}>
+                        <Grid item xs={12} md={4}>
+                                <MuiPickersUtilsProvider utils={MomentUtils} locale={locale}>
+                                    <DatePicker
+                                        id="fecha"
+                                        
+                                        value={values.fecha}
+                                        onChange={(e) => handleChange('fecha', e)}
+                                        margin="normal"
+                                        fullWidth
+                                        format="YYYY/MM/DD"
+                                        />
+                                </MuiPickersUtilsProvider>
+                            </Grid>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
