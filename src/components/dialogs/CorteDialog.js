@@ -53,7 +53,7 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
                 totalCreditos: sumImporte(data.creditosCorte),
                 totalAcuenta: sumAcuenta(data.creditosCorte),
                 totalEgresos: sumImporte(data.egresosCorte),
-                total: calcTotal(data.ventasCorte, sumImporte(data.creditosCorte), data.ingresosCorte, data.egresosCorte),
+                total: calcTotal( sumImporte(data.ventasCorte), sumImporte(data.creditosCorte), sumAcuenta(data.creditosCorte), sumImporte(data.ingresosCorte), sumImporte(data.egresosCorte) ),
             });
         }
     }, [data, isOpen]);
