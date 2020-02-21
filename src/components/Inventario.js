@@ -4,6 +4,8 @@ import { Typography, Container, Grid, Card, CardHeader, CardContent, LinearProgr
 
 import useInventario from './hooks/useInventario';
 
+import {sumStock, sumEmpStock} from "./Tools"
+
 
 function Inventario() {
     const { inventario } = useInventario();
@@ -24,7 +26,7 @@ function Inventario() {
                             inventario.map((compra, index) => (
                                 <Grid item xs={12} key={index}>
                                     <Card>
-                                        <CardHeader title={compra.clave} subheader={compra.ubicacion.nombre} />
+                                        <CardHeader title={compra.folio+ " | " +compra.clave} subheader={compra.ubicacion.nombre} />
                                         <CardContent>
                                             <Grid container spacing={3}>
                                                 <Grid item xs={8}>
@@ -55,6 +57,22 @@ function Inventario() {
                                                         </Grid>
                                                     </React.Fragment>
                                                 ))}
+                                                <Grid item md={8}>
+                                                    <Typography align="right"
+                                                        variant="h6"
+                                                        children="Total:"
+                                                        />
+                                                </Grid>
+                                                <Grid item md={2}>
+                                                    <Typography variant="h6"
+                                                        children={sumStock(compra.items)}
+                                                        />
+                                                </Grid>
+                                                <Grid item md={2}>
+                                                    <Typography variant="h6"
+                                                        children={sumEmpStock(compra.items)}
+                                                        />
+                                                </Grid>
                                             </Grid>
                                         </CardContent>
                                     </Card>

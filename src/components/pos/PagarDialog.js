@@ -111,11 +111,7 @@ export default function PagarDialog({cuentas, ubicacion, isOpen, close, showMess
                                     <MenuItem key={index} value={option}>
                                         <Grid container >
                                             <Grid item xs={6}>
-<<<<<<< HEAD:src/components/pos/PagarDialog.js
                                                 <Typography>{option.provedor.nombre} - {option.folio}:{option.clave}</Typography>                                                
-=======
-                                                <Typography>{option.provedor.nombre} {option.folio}:{option.clave}</Typography>                                                
->>>>>>> 75b4f068b788ce01af11bb43371687399ab95998:src/components/dialogs/PagarDialog.js
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <Grid container justify="flex-end">
