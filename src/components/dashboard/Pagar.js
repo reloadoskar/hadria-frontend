@@ -1,20 +1,28 @@
 import React, {useState} from 'react';
 
 import {savePagoACuentaPorPagar, ticketPago} from '../api'
-
+import {sumImporte} from '../Tools'
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Typography, Grid, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
+import {
+    MuiPickersUtilsProvider,
+    DatePicker
+} from '@material-ui/pickers';
+import moment from 'moment'
+import MomentUtils from '@date-io/moment';
 
-
-export default function PagarDialog({cuentas, ubicacion, isOpen, close, showMessage, saldoDisponible, subFromSaldo, fecha}) {
+export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showMessage, saldoDisponible, subFromSaldo, fecha = Date()}) {
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
+    const [locale] = useState("es")
     const [values, setValues] = useState({
         cuentaPorPagar: '',
         tipoPago: 'EFECTIVO',
         importe: '',
         referencia: '',
+        ubicacion: '',
+        fecha: moment().format('YYYY-MM-DD'),
     })
 
     const handleChange = (type, value) => {
@@ -45,27 +53,24 @@ export default function PagarDialog({cuentas, ubicacion, isOpen, close, showMess
     const handleSubmit = (e) => {
         e.preventDefault()
         var pago = {
-            ubicacion: ubicacion,
+            ubicacion: values.ubicacion,
             cuenta: values.cuentaPorPagar,
             tipoPago: values.tipoPago,
             importe: values.importe,
             referencia: values.referencia,
-            fecha: fecha
+            fecha: values.fecha
         }
         savePagoACuentaPorPagar(pago).then(res =>{
             showMessage(res.message, res.status)
             close('pagarDialog')
-            subFromSaldo(pago.importe)
+            //subFromSaldo(pago.importe)
             setValues({
                 cuentaPorPagar: '',
                 tipoPago: 'EFECTIVO',
                 importe: '',
+                ubicacion: ''
             })
-            ticketPago(pago).then(res => {
-                if(res.status === 'warning'){
-                    showMessage(res.message, res.status)
-                }
-            })
+            ticketPago(pago)
         })
     }
 
@@ -83,18 +88,47 @@ export default function PagarDialog({cuentas, ubicacion, isOpen, close, showMess
                 <DialogTitle id="form-dialog-title">
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <Typography variant="h6" >Nuevo Pago en:</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Grid container justify="flex-end">
-                            <Typography variant="h6" >{ubicacion.nombre}</Typography>
-                        </Grid>
+                        <Typography variant="h6" >Pagar</Typography>
                     </Grid>
                 </Grid>
                 </DialogTitle>
 
                 <DialogContent>
                     <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <TextField
+                                id="ubicacion"
+                                select
+                                variant="outlined"
+                                autoFocus
+                                required
+                                fullWidth
+                                label="Selecciona una Ubicación"
+                                value={values.ubicacion}
+                                onChange={(e) => handleChange('ubicacion', e.target.value)}
+                            >
+                                {saldos.map((option, index) => (
+                                    <MenuItem key={index} value={option}>
+                                        {option.nombre} ${(sumImporte(option.ingresos) - sumImporte(option.egresos))}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={6}>
+                        <Grid item xs={12} md={4}>
+                                <MuiPickersUtilsProvider utils={MomentUtils} locale={locale}>
+                                    <DatePicker
+                                        id="fecha"
+                                        
+                                        value={values.fecha}
+                                        onChange={(e) => handleChange('fecha', e)}
+                                        margin="normal"
+                                        fullWidth
+                                        format="YYYY/MM/DD"
+                                        />
+                                </MuiPickersUtilsProvider>
+                            </Grid>
+                        </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 id="cuentaPorPagar"
@@ -111,11 +145,7 @@ export default function PagarDialog({cuentas, ubicacion, isOpen, close, showMess
                                     <MenuItem key={index} value={option}>
                                         <Grid container >
                                             <Grid item xs={6}>
-<<<<<<< HEAD:src/components/pos/PagarDialog.js
-                                                <Typography>{option.provedor.nombre} - {option.folio}:{option.clave}</Typography>                                                
-=======
                                                 <Typography>{option.provedor.nombre} {option.folio}:{option.clave}</Typography>                                                
->>>>>>> 75b4f068b788ce01af11bb43371687399ab95998:src/components/dialogs/PagarDialog.js
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <Grid container justify="flex-end">

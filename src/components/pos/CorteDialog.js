@@ -49,12 +49,12 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
                 ingresos: data.ingresosCorte,
                 creditos: data.creditosCorte,
                 egresos: data.egresosCorte,
-                total: calcTotal(data.ventasCorte, data.ingresosCorte, data.egresosCorte),
                 totalVentas: sumImporte(data.ventasCorte),
                 totalIngresos: sumImporte(data.ingresosCorte),
                 totalCreditos: sumImporte(data.creditosCorte),
                 totalAcuenta: sumAcuenta(data.creditosCorte),
                 totalEgresos: sumImporte(data.egresosCorte),
+                total: calcTotal( sumImporte(data.ventasCorte), sumImporte(data.creditosCorte), sumAcuenta(data.creditosCorte), sumImporte(data.ingresosCorte), sumImporte(data.egresosCorte) ),
             });
         }
     }, [data, isOpen]);

@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ProductosDialog from './ProductosDialog';
 import Loading from '../Loading'
-import { SnackbarProvider, } from 'notistack';
+
 import { Container, Grid, IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Paper, Button, Divider } from '@material-ui/core';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 
 // HOOKS
 import useProducts from '../hooks/useProducts';
-import useModal from '../hooks/useModal';
 
 function Productos() {
     const { products, add, del } = useProducts()
     const [dialog, setDialog] = useState(false)
-    const [loading, setLoading] = useState(true)
+    const [loading] = useState(true)
 
     const showDialog = () => {
         setDialog(true)
@@ -65,8 +64,8 @@ function Productos() {
                                 <Table size="small">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Producto</TableCell>
                                             <TableCell>Clave</TableCell>
+                                            <TableCell>Producto</TableCell>
                                             <TableCell align="right">Costo</TableCell>
                                             <TableCell align="right">Precio Público</TableCell>
                                             <TableCell align="right">Precio Mayoreo</TableCell>
@@ -78,8 +77,8 @@ function Productos() {
                                         {
                                             products.map((row, index) => (
                                                 <TableRow key={index} index={index}>
-                                                    <TableCell component="th" scope="row">{row.descripcion}</TableCell>
                                                     <TableCell >{row.clave}</TableCell>
+                                                    <TableCell component="th" scope="row">{row.descripcion}</TableCell>
                                                     <TableCell align="right">{row.costo}</TableCell>
                                                     <TableCell align="right">{row.precio1}</TableCell>
                                                     <TableCell align="right">{row.precio2}</TableCell>

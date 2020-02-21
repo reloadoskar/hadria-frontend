@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Paper';
-import { Typography, CardHeader, CardContent, Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { Typography, CardHeader, CardContent, Grid, } from '@material-ui/core';
 import { sumImporte, formatNumber } from '../Tools'
 
 const useStyles = makeStyles(theme => ({

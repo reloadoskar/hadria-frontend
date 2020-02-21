@@ -148,7 +148,7 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
                                     >
                                         {compras.map((option, index) => (
                                             <MenuItem key={index} value={option}>
-                                                {option.clave}
+                                                {option.folio}:{option.clave}
                                             </MenuItem>
                                         ))}
                                     </TextField>

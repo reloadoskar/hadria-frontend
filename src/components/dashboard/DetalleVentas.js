@@ -37,6 +37,7 @@ const DetalleVentas = ({ventas}) => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>folio</TableCell>
+                                <TableCell>fecha</TableCell>
                                 <TableCell>Producto</TableCell>
                                 <TableCell align="right">Cantidad</TableCell>
                                 <TableCell align="right">Empaques</TableCell>
@@ -48,6 +49,7 @@ const DetalleVentas = ({ventas}) => {
                             {ventas.map( venta => (
                             <TableRow key={venta._id}>
                                 <TableCell>{venta.ventaFolio}</TableCell>
+                                <TableCell>{venta.venta.fecha}</TableCell>
                                 <TableCell>{venta.producto.descripcion}</TableCell>
                                 <TableCell align="right">{venta.cantidad}</TableCell>
                                 <TableCell align="right">{venta.empaques}</TableCell>
