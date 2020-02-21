@@ -38,25 +38,32 @@ function Inventario() {
                                                 <Grid item xs={2}>
                                                     <Typography variant="body2" children="Cantidad" />
                                                 </Grid>
-                                                {compra.items.map((item, i) => (
-                                                    <React.Fragment key={i}>
-                                                        <Grid item md={8}>
-                                                            <Typography
-                                                                children={item.producto.descripcion}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs={2}>
-                                                            <Typography
-                                                                children={item.empaquesStock}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs={2}>
-                                                            <Typography
-                                                                children={item.stock}
-                                                            />
-                                                        </Grid>
-                                                    </React.Fragment>
-                                                ))}
+                                                {compra.items.map((item, i) => {
+                                                    if(item.stock > 0){
+                                                        return(
+                                                        <React.Fragment key={i}>
+                                                            <Grid item md={8}>
+                                                                <Typography
+                                                                    children={item.producto.descripcion}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={2}>
+                                                                <Typography
+                                                                    children={item.empaquesStock}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={2}>
+                                                                <Typography
+                                                                    children={item.stock}
+                                                                />
+                                                            </Grid>
+                                                        </React.Fragment>
+                                                        )
+                                                    } 
+                                                    
+                                                }
+
+                                                )}
                                                 <Grid item md={8}>
                                                     <Typography align="right"
                                                         variant="h6"
