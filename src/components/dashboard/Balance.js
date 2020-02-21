@@ -8,7 +8,6 @@ export default function Balance() {
 
     useEffect(() => {
         getBalance().then(balance => {
-            // console.log(balance)
             var ingresos = sumImporte(balance.ingresos)
             var porCobrar = sumSaldo(balance.porCobrar)
             var egresos = sumImporte(balance.egresos)
@@ -17,7 +16,6 @@ export default function Balance() {
                 porPagar += compra.saldo
             })
             var inventario = calcCostoInventario(balance.inventario)
-            // var inventario = 0
             var disponible = ingresos - egresos
             var balanceT = 0
             balanceT = disponible + porCobrar + inventario - porPagar

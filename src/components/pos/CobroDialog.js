@@ -55,9 +55,14 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
             //updateSaldoCuenta() FALTA
             addToSaldo(pago.importe)
             clearFields()
-            ticketCobranza(pago)
+            ticketCobranza(pago).then(res=>{
+                if(res.status === 'warning'){
+                    showMessage(res.message, res.status)
+                }else{
+                    ticketCobranza(pago)
+                }
+            })
             if(reprint){
-                ticketCobranza(pago)
             }
         })
     }

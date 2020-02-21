@@ -41,7 +41,7 @@ const ConfirmDialog = (props) => {
                     No, espera.
         </Button>
                 <Button variant="contained" onClick={handleOk} color="primary">
-                    Ok
+                    Esta bien.
         </Button>
             </DialogActions>
         </Dialog>
