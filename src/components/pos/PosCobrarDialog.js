@@ -14,11 +14,13 @@ function ReprintDialog(props) {
 
     const handleCancel = () => {
         cancel()
+       // return false
     }
 
     const handleOk = () => {
         ok()
         handleCancel()
+        //return true
     }
     return (
         <Dialog
@@ -51,6 +53,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
 
     const cancelReprint = () => {
         setReprintDialog(false)
+        resetVenta()
     }
 
     const initialData = {
@@ -139,6 +142,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
         setVenta(venta)
         saveVenta(venta)
             .then(res => {
+                setVenta(res.venta)
                 if(venta.tipoPago === 'CRÉDITO'){
                     updateCLientCredit()
                     addToSaldo(venta.acuenta)
@@ -147,10 +151,10 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                 }
                 showMessage(res.message, res.status)
                 clearFields()
-                resetVenta()
                 ticketVenta(res.venta).then(res=> {
                     if(res.status === 'error'){
                         showMessage(res.message, res.status)
+                        resetVenta()
                     }else{
                         setReprintDialog(true)
                     }
@@ -167,6 +171,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
 
     const printTicket = () => {
         ticketVenta(venta)
+        resetVenta()
     }
 
     return (
