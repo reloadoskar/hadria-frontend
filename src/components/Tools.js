@@ -159,14 +159,19 @@ export const calcVentasItem =(ventas, item) => {
 export const calcTotalPorCobrar = (ventas) =>{
     let saldo = 0
     let idVenta = null
-    ventas.forEach(function (item){
-        if(idVenta !== item.venta._id){
-            if(item.venta.tipoPago === "CRÉDITO"){
-                saldo += item.venta.saldo
-                idVenta = item.venta._id
+    
+        
+        ventas.forEach(function (item){
+            if(item.venta !== null){
+                if(idVenta !== item.venta._id){
+                    if(item.venta.tipoPago === "CRÉDITO"){
+                        saldo += item.venta.saldo
+                        idVenta = item.venta._id
+                    }
+                }
             }
-        }
-    })
+        })
+    
 
     return saldo
 }

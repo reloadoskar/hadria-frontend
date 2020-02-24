@@ -325,6 +325,16 @@ export const saveIngreso = (ingreso) => {
         })
 }
 
+// RETIRO
+
+export const saveRetiro = (retiro) => {
+    return axios
+        .post(url + 'retiro/save', retiro)
+        .then( res => {
+            return res.data
+        })
+}
+
 // API EGRESOS
 
 export const saveEgreso = (egreso) => {
@@ -459,7 +469,7 @@ export const ticketCompra = (data) => {
             if (!error.response) {
 
                 return {
-                    status: 'error',
+                    status: 'warning',
                     message: 'No hay conectividad con la impresora de tickets'
                 }
             } else {
@@ -478,7 +488,7 @@ export const ticketVenta = (data) => {
             if (!error.response) {
 
                 return {
-                    status: 'error',
+                    status: 'warning',
                     message: 'No hay conectividad con la impresora de tickets'
                 }
             } else {
@@ -497,7 +507,7 @@ export const ticketCobranza = (data) => {
             if (!error.response) {
 
                 return {
-                    status: 'error',
+                    status: 'warning',
                     message: 'No hay conectividad con la impresora de tickets'
                 }
             } else {
@@ -516,7 +526,7 @@ export const ticketEgreso = (data) => {
             if (!error.response) {
 
                 return {
-                    status: 'error',
+                    status: 'warning',
                     message: 'No hay conectividad con la impresora de tickets'
                 }
             } else {
@@ -524,17 +534,18 @@ export const ticketEgreso = (data) => {
             }
         })
 }
+
 export const ticketPago = (data) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/pago.php', data)
-        .then( res => {
+        .then(res =>{
             return res
         })
         .catch( error => {
             if (!error.response) {
 
                 return {
-                    status: 'error',
+                    status: 'warning',
                     message: 'No hay conectividad con la impresora de tickets'
                 }
             } else {

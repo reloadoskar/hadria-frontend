@@ -9,6 +9,7 @@ import {sumImporte, sumAcuenta, calcTotal} from '../Tools'
 import ContenedorTabla from './ContenedorTabla'
 import TablaVentas from './TablaVentas'
 import TablaIngresos from './TablaIngresos'
+import TablaEgresos from './TablaEgresos'
 
 const ShowTable = ({show, table, data}) => (
     
@@ -172,6 +173,7 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
                     <Divider />
                     <TablaVentas table="Ventas" data={corteData.ventas }/>
                     <TablaIngresos table="Ingresos" data={corteData.ingresos} />
+                    <TablaEgresos table="Egresos" data={corteData.egresos} />
                     <ShowTable show={values.show} table={values.table} data={values.data} />
                 </div>
                 :

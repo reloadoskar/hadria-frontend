@@ -92,7 +92,7 @@ export default function TablaVentas({ table, data }) {
                                                     <TableBody>
                                                         {row.items.map((item, index) => (
                                                             <TableRow key={index}>
-                                                                <TableCell><Typography children={item.compra.folio} /></TableCell>
+                                                                <TableCell><Typography children={item.compra.folio+":"+item.compra.clave} /></TableCell>
                                                                 <TableCell><Typography children={item.producto.descripcion} /></TableCell>
                                                                 <TableCell><Typography children={item.cantidad} /></TableCell>
                                                                 <TableCell><Typography children={item.empaques} /></TableCell>

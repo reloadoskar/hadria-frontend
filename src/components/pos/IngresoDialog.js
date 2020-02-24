@@ -33,7 +33,6 @@ const handleSubmit = (e) => {
         descripcion: values.descripcion,
         importe: values.importe,
     }
-    console.log(ingreso)
 
     saveIngreso(ingreso).then(res => {
         showMessage(res.message, res.status)

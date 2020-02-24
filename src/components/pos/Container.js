@@ -7,15 +7,15 @@ import Acceso from './Acceso'
 import PosDialog from './PosDialog'
 import PosCobrarDialog from './PosCobrarDialog'
 
-import PagarDialog from '../dialogs/PagarDialog'
-import EgresoDialog from '../dialogs/EgresoDialog'
-import IngresoDialog from '../dialogs/IngresoDialog'
-import AddItemDialog from '../dialogs/AddItemDialog'
-import CobroDialog from '../dialogs/CobroDialog'
-import CorteDialog from '../dialogs/CorteDialog'
+import PagarDialog from './PagarDialog'
+import EgresoDialog from './EgresoDialog'
+import IngresoDialog from './IngresoDialog'
+import AddItemDialog from './AddItemDialog'
+import CobroDialog from './CobroDialog'
+import CorteDialog from './CorteDialog'
+import RetiroDialog from './RetiroDialog'
 import Loading from '../Loading'
 
-// import { SnackbarProvider } from 'notistack';
 import { Container, } from '@material-ui/core';
 
 import reducer from './PosReducer'
@@ -36,6 +36,8 @@ const initialState = {
     egresoDialog: false,
     // INGRESO DIALOG
     ingresoDialog: false,
+
+    retiroDialog: false,
     // COBRO DIALOG
     cobroDialog: false,
     menuDialog: false,
@@ -254,6 +256,15 @@ function PosContainer() {
                 close={closeDialog}
                 showMessage={showMessage}
                 addToSaldo={addToSaldo}
+            />
+
+            <RetiroDialog
+                fecha={values.fecha}
+                ubicacion={values.ubicacion}
+                isOpen={values.retiroDialog}
+                close={closeDialog}
+                showMessage={showMessage}
+                subFromSaldo={subFromSaldo}
             />
 
             <CobroDialog 

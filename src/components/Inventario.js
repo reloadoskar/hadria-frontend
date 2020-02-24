@@ -4,6 +4,8 @@ import { Typography, Container, Grid, Card, CardHeader, CardContent, LinearProgr
 
 import useInventario from './hooks/useInventario';
 
+import {sumStock, sumEmpStock} from "./Tools"
+
 
 function Inventario() {
     const { inventario } = useInventario();
@@ -24,7 +26,7 @@ function Inventario() {
                             inventario.map((compra, index) => (
                                 <Grid item xs={12} key={index}>
                                     <Card>
-                                        <CardHeader title={compra.clave} subheader={compra.ubicacion.nombre} />
+                                        <CardHeader title={compra.folio+ " | " +compra.clave} subheader={compra.ubicacion.nombre} />
                                         <CardContent>
                                             <Grid container spacing={3}>
                                                 <Grid item xs={8}>
@@ -36,25 +38,48 @@ function Inventario() {
                                                 <Grid item xs={2}>
                                                     <Typography variant="body2" children="Cantidad" />
                                                 </Grid>
-                                                {compra.items.map((item, i) => (
-                                                    <React.Fragment key={i}>
-                                                        <Grid item md={8}>
-                                                            <Typography
-                                                                children={item.producto.descripcion}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs={2}>
-                                                            <Typography
-                                                                children={item.empaquesStock}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs={2}>
-                                                            <Typography
-                                                                children={item.stock}
-                                                            />
-                                                        </Grid>
-                                                    </React.Fragment>
-                                                ))}
+                                                {compra.items.map((item, i) => {
+                                                    if(item.stock > 0){
+                                                        return(
+                                                        <React.Fragment key={i}>
+                                                            <Grid item md={8}>
+                                                                <Typography
+                                                                    children={item.producto.descripcion}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={2}>
+                                                                <Typography
+                                                                    children={item.empaquesStock}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={2}>
+                                                                <Typography
+                                                                    children={item.stock}
+                                                                />
+                                                            </Grid>
+                                                        </React.Fragment>
+                                                        )
+                                                    } 
+                                                    
+                                                }
+
+                                                )}
+                                                <Grid item md={8}>
+                                                    <Typography align="right"
+                                                        variant="h6"
+                                                        children="Total:"
+                                                        />
+                                                </Grid>
+                                                <Grid item md={2}>
+                                                    <Typography variant="h6"
+                                                        children={sumStock(compra.items)}
+                                                        />
+                                                </Grid>
+                                                <Grid item md={2}>
+                                                    <Typography variant="h6"
+                                                        children={sumEmpStock(compra.items)}
+                                                        />
+                                                </Grid>
                                             </Grid>
                                         </CardContent>
                                     </Card>

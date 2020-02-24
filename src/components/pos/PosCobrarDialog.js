@@ -152,7 +152,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                 showMessage(res.message, res.status)
                 clearFields()
                 ticketVenta(res.venta).then(res=> {
-                    if(res.status === 'error'){
+                    if(res.status === 'warning'){
                         showMessage(res.message, res.status)
                         resetVenta()
                     }else{

@@ -61,7 +61,11 @@ export default function PagarDialog({cuentas, ubicacion, isOpen, close, showMess
                 tipoPago: 'EFECTIVO',
                 importe: '',
             })
-            ticketPago(pago)
+            ticketPago(pago).then(res => {
+                if(res.status === 'warning'){
+                    showMessage(res.message, res.status)
+                }
+            })
         })
     }
 
@@ -107,7 +111,7 @@ export default function PagarDialog({cuentas, ubicacion, isOpen, close, showMess
                                     <MenuItem key={index} value={option}>
                                         <Grid container >
                                             <Grid item xs={6}>
-                                                <Typography>{option.provedor.nombre} {option.folio}:{option.clave}</Typography>                                                
+                                                <Typography>{option.provedor.nombre} - {option.folio}:{option.clave}</Typography>                                                
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <Grid container justify="flex-end">
