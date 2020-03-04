@@ -1,11 +1,11 @@
 import React from 'react'
-
 import BlockIcon from '@material-ui/icons/Block';
 import EditIcon from '@material-ui/icons/Edit';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 import useStyles from '../hooks/useStyles'
 import { Grid, Typography, IconButton, Table, TableHead, TableRow, TableCell, TableBody, Box, } from '@material-ui/core';
 
-import { cancelVenta, existCorte } from '../api'
+import { cancelVenta, existCorte, ticketVenta } from '../api'
 
 const Venta = (props) => {
     const venta = props.data[0]
@@ -28,6 +28,8 @@ const Venta = (props) => {
                     }
                 })
                 break
+            case 'reprint':
+                return ticketVenta(venta)
             default:
                 return null
 
@@ -56,6 +58,9 @@ const Venta = (props) => {
                                         </IconButton>
                                         <IconButton onClick={() => handleClick('delete', venta)}>
                                             <BlockIcon />
+                                        </IconButton>
+                                        <IconButton onClick={() => handleClick('reprint', venta)}>
+                                            <ReceiptIcon />
                                         </IconButton>
                                     </Grid>
 
@@ -124,6 +129,35 @@ const Venta = (props) => {
                                         </TableBody>
                                     </Table>
                                 </Grid>
+
+                                {
+                                    venta.pagos.length > 0 ?
+                                    <Grid container spacing={2}>
+                                        <Typography variant="h6" align="center" children="PAGOS" />
+                                        <Table size="small">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>Ubicación</TableCell>
+                                                    <TableCell>Fecha</TableCell>
+                                                    <TableCell align="right">Importe</TableCell>
+                                                </TableRow> 
+                                            </TableHead>
+                                            <TableBody>
+                                                {
+                                                    venta.pagos.map((item, index) => (
+                                                        <TableRow>
+                                                            <TableCell>{item.ubicacion.nombre}</TableCell>
+                                                            <TableCell>{item.fecha}</TableCell>
+                                                            <TableCell align="right">{item.importe}</TableCell>
+                                                        </TableRow>
+                                                    ))
+                                                }
+                                            </TableBody>
+                                        </Table>
+                                    </Grid>
+                                    :
+                                    null
+                                }
 
                             </Grid>
 
