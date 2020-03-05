@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {saveVenta, ticketVenta} from '../api'
+import {saveVenta, ticketVenta, ticketSalida} from '../api'
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -151,6 +151,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                 }
                 showMessage(res.message, res.status)
                 clearFields()
+                ticketSalida(res.venta)
                 ticketVenta(res.venta).then(res=> {
                     if(res.status === 'warning'){
                         showMessage(res.message, res.status)
