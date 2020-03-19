@@ -478,6 +478,25 @@ export const ticketCompra = (data) => {
         })
 }
 
+export const ticketNuevoItem = (data) => {
+    return axios
+    .post('http://localhost:8080/ticket-hadria/nuevoItem.php', data)
+    .then(res =>{
+        return res
+    })
+    .catch( error => {
+        if (!error.response) {
+
+            return {
+                status: 'warning',
+                message: 'No hay conectividad con la impresora de tickets'
+            }
+        } else {
+            return error
+        }
+    })
+}
+
 export const ticketVenta = (data) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/venta.php', data)

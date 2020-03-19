@@ -13,7 +13,7 @@ import CompraAddItemsDialog from './CompraAddItemsDialog'
 
 import { formatNumber, sumImporte } from '../Tools'
 
-import { updateCompra, updateCompraItem, addCompraItem } from '../api'
+import { updateCompra, updateCompraItem, addCompraItem, ticketNuevoItem } from '../api'
 
 export default function DetalleCompra(props) {
     const { ubicacions } = useUbicacions();
@@ -45,6 +45,7 @@ export default function DetalleCompra(props) {
                 addNewItemToList(res.item)
                 calculaNuevoImporte()
                 updateAndSaveCompra(compra)
+                ticketNuevoItem(item)
             }
         })
     }
