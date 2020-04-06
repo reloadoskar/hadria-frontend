@@ -49,8 +49,8 @@ export default function CuentasPorPagar( ){
                         cuentas.map((cta, index) => {
                             return (
                                 <Grid key={index} container spacing={2}>
-                                    <Grid item xs={2}>
-                                        <Typography variant="body2" children={cta.clave} />
+                                    <Grid item xs={3}>
+                                        <Typography variant="body2" children={cta.folio+":"+cta.clave} />
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" children={cta.provedor.nombre} />

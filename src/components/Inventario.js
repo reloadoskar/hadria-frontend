@@ -1,19 +1,31 @@
 import React from 'react';
 
-import { Typography, Container, Grid, Card, CardHeader, CardContent, LinearProgress } from '@material-ui/core';
+import { IconButton, Typography, Container, Grid, Card, CardHeader, CardContent, LinearProgress } from '@material-ui/core';
 
 import useInventario from './hooks/useInventario';
-
+import ReceiptIcon from '@material-ui/icons/Receipt';
 import {sumStock, sumEmpStock} from "./Tools"
 
 
 function Inventario() {
     const { inventario } = useInventario();
 
+    const handleClick = () =>{
+        
+    }
     return (
 
         <Container maxWidth="lg">
-            <Typography variant="h4" children="Inventario" paragraph />
+            <Grid container >
+                <Grid item xs={12} md={6}>
+                    <Typography variant="h4" children="Inventario" paragraph />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <IconButton onClick={() => handleClick(inventario)}>
+                        <ReceiptIcon />
+                    </IconButton>
+                </Grid>
+            </Grid>
             <Grid container spacing={3}>
 
                 {
