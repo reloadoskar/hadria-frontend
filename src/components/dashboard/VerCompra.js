@@ -5,7 +5,7 @@ import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import useStyles from '../hooks/useStyles'
-import { getCompra, closeCompra } from '../api'
+import { getCompra, } from '../api'
 import { 
     sumCantidad, 
     sumEmpaques, 
@@ -30,7 +30,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Zoom in ref={ref} {...props} />;
 });
 
-export default function VerCompra({ compraId, isOpen, handleClose }) {
+export default function VerCompra({ compraId, isOpen, handleClose, cerrar }) {
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
     const [data, setData] = useState({ compra: null, ventas: null })
@@ -76,9 +76,13 @@ export default function VerCompra({ compraId, isOpen, handleClose }) {
     const handleClick = (action, compra) => {
         switch(action){
             case "cerrar":
-                closeCompra(compra).then( res => {
+                // closeCompra(compra).then( res => {
+                    cerrar(compra).then(res => {
                     if(res.status === 'success'){
+                        setAnchorEl(false)
                         enqueueSnackbar(res.message, {variant: res.status})
+
+                        handleClose()
                     }else{
                         enqueueSnackbar(res.message, {variant: 'error'})
                     }

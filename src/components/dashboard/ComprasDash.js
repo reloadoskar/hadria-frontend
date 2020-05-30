@@ -5,12 +5,13 @@ import useCompras from '../hooks/useCompras';
 import {sumStock, sumEmpStock} from '../Tools'
 import VerCompra from './VerCompra'
 export default function ComprasDash(){
-    const {compras} = useCompras();
+    const {compras, cerrar, updating} = useCompras();
     const [compraSelected, setCompraSelected] = useState(null)
     const [verCompra, setVerCompra] = React.useState(false);
 
     const handleClose = () => {
         setVerCompra(false)
+        setCompraSelected(null)
     };
 
     const handleMenu = (action, compra) => {
@@ -32,6 +33,9 @@ export default function ComprasDash(){
                         <Typography variant="h6" align="center" gutterBottom>No hay Compras registradas.</Typography>
                     : 
                         compras.map( (compra, index) => (
+                            updating === true ?
+                                <LinearProgress key={index} variant="query" />
+                            :
                             <ListItem button key={index} onClick={()=> handleMenu('ver', compra._id)}>
                             <Grid key={index} container >
                                 <Grid item xs={12} md={6}>
@@ -55,7 +59,7 @@ export default function ComprasDash(){
                         ))
                 }
             </CardContent>
-            <VerCompra compraId={compraSelected} isOpen={verCompra} handleClose={handleClose}/>
+            <VerCompra compraId={compraSelected} isOpen={verCompra} handleClose={handleClose} cerrar={cerrar}/>
         </Card>
     )
 }
