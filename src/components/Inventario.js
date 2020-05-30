@@ -50,9 +50,13 @@ function Inventario() {
                                                 <Grid item xs={2}>
                                                     <Typography variant="body2" children="Cantidad" />
                                                 </Grid>
-                                                {compra.items.map((item, i) => {
-                                                    if(item.stock > 0){
-                                                        return(
+
+
+
+                                                {compra.items.map((item, i) => (//{
+                                                    // if(item.stock > 0){
+                                                    //     return(
+                                                    item.stock > 0 ? 
                                                         <React.Fragment key={i}>
                                                             <Grid item md={8}>
                                                                 <Typography
@@ -70,10 +74,12 @@ function Inventario() {
                                                                 />
                                                             </Grid>
                                                         </React.Fragment>
-                                                        )
-                                                    } 
+                                                    :
+                                                    null
+                                                        //)
+                                                    //} 
                                                     
-                                                }
+                                                )//}
 
                                                 )}
                                                 <Grid item md={8}>
