@@ -46,9 +46,11 @@ const DetalleVentas = ({ventas}) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {ventas.map( venta => {
-                                if(venta.venta !== null){
-                                    return(
+                            {ventas.map( venta => (//{
+                                // if(venta.venta !== null){
+                                //     return(
+
+                                venta.venta !== null ?
                                         <TableRow key={venta._id}>
                                             <TableCell>{venta.ventaFolio}</TableCell>
                                             <TableCell>{venta.venta.fecha}</TableCell>
@@ -58,10 +60,12 @@ const DetalleVentas = ({ventas}) => {
                                             <TableCell align="right">{venta.precio}</TableCell>
                                             <TableCell align="right">{venta.importe}</TableCell>
                                         </TableRow> 
-                                    )
-                                }
+                                :
+                                    null
+                                //     )
+                                // }
+                            ))//}
                             }
-                            )}
                             <TableRow selected>
                                 <TableCell colSpan="2" align="right">Total</TableCell>
                                 <TableCell align="right">{tcantidad}</TableCell>

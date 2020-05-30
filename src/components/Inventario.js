@@ -1,17 +1,25 @@
 import React from 'react';
-
+import { useSnackbar } from 'notistack';
 import { IconButton, Typography, Container, Grid, Card, CardHeader, CardContent, LinearProgress } from '@material-ui/core';
 
 import useInventario from './hooks/useInventario';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import {sumStock, sumEmpStock} from "./Tools"
 
-
+import {ticketInventario} from "./api"
 function Inventario() {
+    const { enqueueSnackbar } = useSnackbar()
     const { inventario } = useInventario();
-
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     const handleClick = () =>{
-        
+        ticketInventario(inventario).then(res =>{
+            if(res.status === 'error'){
+                showMessage(res.message, res.status)
+            }
+            else{
+                showMessage("Se imprimió el inventario", "success")
+            }
+        })
     }
     return (
 
@@ -21,6 +29,7 @@ function Inventario() {
                     <Typography variant="h4" children="Inventario" paragraph />
                 </Grid>
                 <Grid item xs={12} md={6}>
+                    Imprimir
                     <IconButton onClick={() => handleClick(inventario)}>
                         <ReceiptIcon />
                     </IconButton>

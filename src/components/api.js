@@ -592,6 +592,25 @@ export const ticketPago = (data) => {
         })
 }
 
+export const ticketInventario = (inventario) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/inventario.php', inventario)
+        .then( res => {
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'warning',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
+}
+
 // PRODUCCIONES
 
 export const getProduccions = () => {
