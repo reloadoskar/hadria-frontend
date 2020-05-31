@@ -53,6 +53,9 @@ export default function CuentasPorCobrar( ){
                         cuentas.map((cta, index) => {
                             return (
                                 <Grid key={index} container spacing={2}>
+                                    <Grid item xs={2}>
+                                    <Typography variant="body2" children={cta.folio} />
+                                    </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" children={cta.cliente.nombre} />
                                     </Grid>
