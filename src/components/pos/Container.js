@@ -1,6 +1,7 @@
 import React, {useReducer, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import moment from 'moment'
+import KeyHandler, { KEYPRESS, } from 'react-key-handler';
 import {getDataFrom, getCuentasPorCobrar, getCuentasPorPagar, existCorte} from '../api'
 
 import Acceso from './Acceso'
@@ -184,6 +185,12 @@ function PosContainer() {
 
 
     return (
+        <React.Fragment>
+        <KeyHandler
+          keyEventName={KEYPRESS}
+          keyValue="x"
+          onKeyHandle={(e) => (openDialog("cobrarDialog") )}
+        />
         <Container maxWidth="sm">
 
             {
@@ -285,7 +292,7 @@ function PosContainer() {
                 showMessage={showMessage}
             />
         </Container>
-
+            </React.Fragment>
     )
 }
 

@@ -15,6 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function PosDialog({ 
+        props,
         values, 
         isOpen,
         wantThisItem, 
@@ -24,7 +25,7 @@ export default function PosDialog({
         closeDialog,
         resetVenta,
         showCorte, 
-        openDialog }) {
+        openDialog, showMenu = false }) {
     
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,6 +36,8 @@ export default function PosDialog({
     };
 
     return (
+        <React.Fragment>
+        
         <Dialog 
             fullScreen 
             open={isOpen} 
@@ -73,7 +76,7 @@ export default function PosDialog({
                     </Container>
                 </Grid>
             </Grid>
-
         </Dialog>
+        </React.Fragment>
     )
 }

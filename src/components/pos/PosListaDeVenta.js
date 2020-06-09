@@ -150,7 +150,7 @@ export default function PosListaDeVenta({items, openDialog, removeItem, total}) 
                                 endIcon={<ReceiptIcon />}
                                 onClick={() => openDialog('cobrarDialog')}
                             >
-                                Cobrar
+                                Cobrar (x)
                             </Button>
                         </Grid>
                     </Grid>
