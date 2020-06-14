@@ -34,8 +34,16 @@ export default function PosDialog({
         openDialog(dialog)
     };
 
+    const handleKeyPress = (e) => {
+        if(e.key === "x" || e.key === "X"){
+            
+            openDialog('cobrarDialog')
+        }
+    }
+
     return (
         <Dialog 
+            onKeyPress={(e) => handleKeyPress(e)}
             fullScreen 
             open={isOpen} 
             onEnter={resetVenta}

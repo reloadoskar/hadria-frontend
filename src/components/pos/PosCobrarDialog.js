@@ -175,9 +175,18 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
         resetVenta()
     }
 
+    const handleKeyPress = (e) => {
+        if(e.key === "r" || e.key === "R"){
+            
+            handleSubmit(e)
+        }
+    }
+
     return (
         <React.Fragment>
-        <Dialog open={isOpen} onClose={() => handleClose('cobrarDialog')} aria-labelledby="form-dialog-title">
+        <Dialog 
+            onKeyPress={(e) => handleKeyPress(e)}
+            open={isOpen} onClose={() => handleClose('cobrarDialog')} aria-labelledby="form-dialog-title">
 
         {valuesToSave.itemsToSave.length > 0 && 
             <React.Fragment>
@@ -326,7 +335,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                         Cancel
                     </Button>
                     <Button type="submit" variant="contained" color="primary" disabled={loading}>
-                        Registrar
+                        Registrar (r)
                     </Button>
                 </DialogActions>
             </form>
