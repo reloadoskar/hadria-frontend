@@ -24,7 +24,7 @@ import useStyles from '../hooks/useStyles'
 //REDUCER
 import reducer from '../reducers/ComprasReducer';
 
-import {objectIsNull} from '../Tools'
+import {objectIsNull, sumCantidad, sumEmpaques, formatNumber} from '../Tools'
 import { saveCompra, ticketCompra } from '../api'
 import moment from 'moment'
 import MomentUtils from '@date-io/moment';
@@ -299,14 +299,13 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                                                 ))
                                         }
                                         <TableRow>
-                                            <TableCell rowSpan={4} />
-                                            <TableCell colSpan={3}>Items</TableCell>
-                                            <TableCell align="right">{values.items.length}</TableCell>
+                                            <TableCell align="right" >( {values.items.length} Items)Total</TableCell>
+                                            <TableCell align="right">{sumCantidad(values.items)}</TableCell>
+                                            <TableCell align="right">{sumEmpaques(values.items)}</TableCell>
+                                            <TableCell align="right">-</TableCell>
+                                            <TableCell align="right">{formatNumber(values.total)}</TableCell>
                                         </TableRow>
-                                        <TableRow>
-                                            <TableCell colSpan={3}>Total</TableCell>
-                                            <TableCell align="right">{values.total}</TableCell>
-                                        </TableRow>
+                                        
                                     </TableBody>
                                 </Table>
                                 :
