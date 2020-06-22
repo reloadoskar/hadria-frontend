@@ -1,9 +1,11 @@
 import React from 'react';
+import { useSnackbar } from 'notistack';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Paper';
-import { Typography, CardHeader, CardContent, Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { IconButton, Typography, CardHeader, CardContent, Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import {sumImporte, formatNumber } from '../Tools'
-
+import {ticketVentasCorte} from "../api"
+import ReceiptIcon from '@material-ui/icons/Receipt';
 const useStyles = makeStyles(theme => ({
 	root: {
 		width: '100%',
@@ -21,11 +23,26 @@ const useStyles = makeStyles(theme => ({
 
 export default function TablaVentas({ table, data }) {
 	const classes = useStyles();
+	const { enqueueSnackbar } = useSnackbar()
+	const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+	const handleClick = (data) => {
+		ticketVentasCorte(data).then(res =>{
+            if(res.status === 'error'){
+                showMessage(res.message, res.status)
+            }
+            else{
+                showMessage("Se imprimieron las ventas", "success")
+            }
+        })
+	}
 	return (
 		<div className={classes.root}>
 			<Card className={classes.paper}>
 				<CardHeader 
-					title={data.length + " "+ table}
+					title={
+						data.length + " "+ 
+						table 						
+						}
 					titleTypographyProps={{
 						align: "right",
 						
@@ -36,6 +53,13 @@ export default function TablaVentas({ table, data }) {
 						variant: "h4"
 					}}/>
 				<CardContent>
+					<Grid container >
+						<Grid Item>
+						<IconButton onClick={() => handleClick(data)}>
+							Imprimir <ReceiptIcon />
+						</IconButton>
+						</Grid>
+					</Grid>
 					<Grid container spacing={2} >
 						<Grid item xs>Folio</Grid>
 						<Grid item xs>Ubicación</Grid>

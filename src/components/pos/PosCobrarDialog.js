@@ -49,7 +49,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
     const {clientes} = useClientes()
     const [venta, setVenta] = useState(null)
     const [reprintDialog, setReprintDialog] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const cancelReprint = () => {
         setReprintDialog(false)
@@ -93,8 +93,12 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                 let saldo = calculaSaldo(value, valuesToSave.total)
                 return setValues({...values, [type]: value, saldo: saldo})
             case 'efectivo':
+                if(value >= valuesToSave.total){
+                    setLoading(false)
+                }
                 let cambio = calculaCambio(value, valuesToSave.total)
                 return setValues({...values, [type]: value, cambio: cambio})
+                
             default:
                 return setValues({...values, [type]: value })
         }
@@ -162,7 +166,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                 })
                 // rePrintTicket()
                 close('cobrarDialog')
-                setLoading(false)
+                setLoading(true)
             })
     }
 
