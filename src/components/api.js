@@ -258,6 +258,13 @@ export const getVentas = () => {
             return res.data
         })
 }
+export const getVentasxSem = (f1,f2) => {
+    return axios
+        .get(url_client + 'ventas/semana')
+        .then( res => {
+            return res.data
+        })
+}
 export const saveVenta = (venta) => {
     return axios
         .post(url_client + 'venta/save', venta)
@@ -595,6 +602,43 @@ export const ticketPago = (data) => {
 export const ticketInventario = (inventario) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/inventario.php', inventario)
+        .then( res => {
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'warning',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
+}
+export const ticketVentasCorte = (ventas) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/ventaCorte.php', ventas)
+        .then( res => {
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'warning',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
+}
+
+export const ticketCancelaVenta = (venta) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/cancelaVenta.php', venta)
         .then( res => {
             return res
         })
