@@ -49,7 +49,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
     const {clientes} = useClientes()
     const [venta, setVenta] = useState(null)
     const [reprintDialog, setReprintDialog] = useState(false)
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
 
     const cancelReprint = () => {
         setReprintDialog(false)
