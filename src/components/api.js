@@ -258,6 +258,13 @@ export const getVentas = () => {
             return res.data
         })
 }
+export const getVentasSemana =(f1, f2) => {
+    return axios
+        .get(url_client + 'ventas/semana', {params: {f1: f1, f2: f2} })
+        .then( res => {
+            return res.data
+        })
+}
 export const saveVenta = (venta) => {
     return axios
         .post(url_client + 'venta/save', venta)
