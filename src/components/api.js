@@ -617,6 +617,43 @@ export const ticketInventario = (inventario) => {
             }
         })
 }
+export const ticketVentasCorte = (ventas) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/ventaCorte.php', ventas)
+        .then( res => {
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'warning',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
+}
+
+export const ticketCancelaVenta = (venta) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/cancelaVenta.php', venta)
+        .then( res => {
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'warning',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
+}
 
 // PRODUCCIONES
 
