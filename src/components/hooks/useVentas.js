@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getVentas, delVenta } from '../api'
+import { getVentas, cancelVenta } from '../api'
+
 const useVentas = () => {
 	const [ventas, setVentas] = useState([])
 	useEffect(() => {
@@ -12,31 +13,22 @@ const useVentas = () => {
     
     const addItem = (item) => {
         const newItem = [item, ...ventas]
-        setUnidades(newItem)
+        //setUnidades(newItem)
     }
 
     const delItem = (index) => {
         const newSet = [...ventas];
         newSet.splice(index,1);
-        setUnidades(newSet);
+        //setUnidades(newSet);
     }
- 
-	const add = (venta) => {
-        return addVenta(venta).then(res => {
-            addItem(res.venta)
-            return res
-        })
-	}
-	
 
 	const del = (id, index) =>{
         delItem(index)
-		return delVenta(id)
+		return cancelVenta(id)
 	}
 
 	return {
 		ventas,
-		add,
 		del,
 	}
 };
