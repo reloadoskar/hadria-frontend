@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import { useHistory } from 'react-router-dom';
 
-import { VictoryBar, VictoryArea, VictoryLine, VictoryChart, VictoryLabel, VictoryAxis } from 'victory';
+import { VictoryBar, VictoryStack, VictoryChart, VictoryLabel, VictoryAxis, VictoryArea } from 'victory';
 import {
     MuiPickersUtilsProvider,
     DatePicker
@@ -173,25 +173,20 @@ const Ventas = () => {
                                                         }}
                                                     />
                                                     
-                                                    {/* <VictoryArea
+                                                                                                            
+                                                        <VictoryBar
+                                                            name="semana-1"
+                                                            data={ventasSemana} 
                                                         data={ventasSemana} 
-                                                        style={{
-                                                            data: {
-                                                                fill: "#A7C5BD",
-                                                                strokeWidth: 0,
-                                                            }
-                                                        }}
-                                                    /> */}
-                                                    <VictoryBar
-                                                        data={ventasSemana} 
-                                                                         
-                                                        // labels= { ({ datum }) => `$${formatNumber(datum.y)}` } 
-                                                        style={{
-                                                            data: {fill: "#CF4647"},
-                                                            labels: {fontSize: 7, fill: "#524656"},
-                                                            axis: {stroke: "#524656", strokeWidth: 6}
-                                                        }}
-                                                    />
+                                                            data={ventasSemana} 
+                                                                            
+                                                            //labels= { ({ datum }) => `$${formatNumber(datum.y)}` } 
+                                                            style={{
+                                                                data: {fill: "#CF4647"},
+                                                                labels: {fontSize: 7, fill: "#524656"},
+                                                                axis: {stroke: "#524656", strokeWidth: 6}
+                                                            }}
+                                                        />
                                                 </VictoryChart >
                                             </Grid>
                                         </Grid>
