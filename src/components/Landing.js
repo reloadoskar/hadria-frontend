@@ -13,7 +13,7 @@ const Landing = (props) => {
     const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
     
-    const [data, setData] = useState({email: '', password: ''})
+    const [data, setData] = useState({email: '', password: '', user_number: ''})
     
     const showMessage = (text, type) => { enqueueSnackbar(
         text, 
@@ -56,6 +56,7 @@ const Landing = (props) => {
                         <form onSubmit={handleSubmit}>
                         <CardContent>
                             <Grid container spacing={2} direction="row" justify="center" alignItems="center">
+                                
                                 <Grid item xs={12}>
                                     <TextField
                                         id="email"

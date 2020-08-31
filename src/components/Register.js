@@ -7,7 +7,7 @@ import useStyles from './hooks/useStyles'
 import {register} from './api'
 
 
-const Landing = (props) => {
+const Register = (props) => {
     const {isLoading, openLoading, closeLoading} = props
     let history = useHistory();
     const { enqueueSnackbar } = useSnackbar()
@@ -139,4 +139,4 @@ const Landing = (props) => {
     )
 }
 
-export default Landing
+export default Register

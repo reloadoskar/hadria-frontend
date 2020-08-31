@@ -1,6 +1,11 @@
 import axios from 'axios';
 import Global from '../Global';
 
+import jwt_decode from 'jwt-decode'
+
+const token = localStorage.usertoken
+const decoded = jwt_decode(token)
+
 const url = Global.url;
 const url_client = url
 
@@ -38,191 +43,341 @@ export const getProfile  = () => {
 // API PRODUCTOS
 
 export const getProducts = () => {
-    return axios
-        .get(url_client + 'productos')
-        .then(res => {
-            return res.data
-        })
+    try{
+        if (decoded){
+            return axios
+                .get(url_client + decoded.database + '/productos')
+                .then(res => {
+                    return res.data
+                })
+        }
+
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const saveProduct = (producto) => {
-    return axios
-        .post(url_client + 'producto/save', producto)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/producto/save', producto)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const deleteProduct = (id) => {
-    return axios
-        .delete(url_client + `producto/${id}`)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .delete(url_client + decoded.database + `/producto/${id}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 // API CLIENTES
 
 export const getClientes = () => {
-    return axios
-        .get(url_client + 'clientes')
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/clientes')
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 export const saveCliente = (cliente) => {
-    return axios
-        .post(url_client + 'cliente/save', cliente)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/cliente/save', cliente)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const deleteCliente = (id) => {
-    return axios
-        .delete(url_client + `cliente/${id}`)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .delete(url_client + decoded.database +  `/cliente/${id}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 // API PROVEEDORES
 
 export const getProvedors = () => {
-    return axios
-        .get(url_client + 'provedors')
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/provedors')
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 export const saveProvedor = (provedor) => {
-    return axios
-        .post(url_client + 'provedor/save', provedor)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/provedor/save', provedor)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const deleteProvedor = (id) => {
-    return axios
-        .delete(url_client + `provedor/${id}`)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .delete(url_client + decoded.database + `/provedor/${id}`)
+                .then(res => {
+                    return res.data
+                })
+
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 // API UBICACIONES
 
 export const getUbicacions = () => {
-    return axios
-        .get(url_client + 'ubicacions')
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/ubicacions')
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 export const saveUbicacion = (ubicacion) => {
-    return axios
-        .post(url_client + 'ubicacion/save', ubicacion)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/ubicacion/save', ubicacion)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const deleteUbicacion = (id) => {
-    return axios
-        .delete(url_client + `ubicacion/${id}`)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .delete(url_client + decoded.database + `/ubicacion/${id}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 // API COMPRAS
 
 export const getComprasDash = () => {
-    return axios
-        .get(url_client + 'compras/dash')
-        .then( res => {
-            return res.data
-        })
+
+    try{
+        if (decoded){
+            return axios
+                .get(url_client + decoded.database +'/compras/dash')
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err) {
+        console.log(err+ ' Desconectado?')
+    }
+
+    
 }
 
 export const getCompras = () => {
-    return axios
-        .get(url_client + 'compras')
-        .then(res => {
-            return res.data
-        })
+
+    try{
+        if (decoded){
+            return axios
+                .get(url_client + decoded.database + '/compras')
+                .then(res => {
+                    return res.data
+                })
+        }
+
+    }catch (err) {
+        console.log(err)
+    }
 }
 export const getCompra = (id) => {
-    return axios
-        .get(url_client + `compra/${id}`)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database +  `/compra/${id}`)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
+
 export const saveCompra = (compra) => {
-    return axios
-        .post(url_client + 'compra/save', compra)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/compra/save', compra)
+                .then(res => {
+                    return res.data
+                })
+
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const deleteCompra = (id) => {
-    return axios
-        .delete(url_client + `compra/${id}`)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .delete(url_client + decoded.database + `/compra/${id}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const closeCompra = (id) => {
-    return axios
-        .put(url_client + `compra/${id}`)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .put(url_client + decoded.database + `/compra/${id}`)
+                .then( res => {
+                    return res.data
+                })
+
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const cancelCompra = (id) => {
-    return axios
-        .put(url + 'compra/cancel/'+ id)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .put(url + decoded.database + '/compra/cancel/'+ id)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const updateCompra = (compra) => {
-    return axios
-        .put(url + 'update/compra/' + compra._id, compra)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .put(url + decoded.database + '/update/compra/' + compra._id, compra)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const addCompraItem = (item) => {
-    return axios
-        .post(url + 'compra/additem/', item)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url + decoded.database + '/compra/additem/', item)
+                .then( res => {
+                    return res.data
+                })
+
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const updateCompraItem = (item) => {
-    return axios
-        .put(url + 'compra/item/' +item.item_id, item)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .put(url + decoded.database + '/compra/item/' +item.item_id, item)
+                .then( res => {
+                    return res.data
+                })
+
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 // API TIPO_COMPRAS
 
 export const getTipoCompras = () => {
-    return axios
-        .get(url_client + 'tipocompras')
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/tipocompras')
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 // INVENTARIO
@@ -283,10 +438,17 @@ export const cancelVenta = (id) => {
 // CUENTAS POR PAGAR
 
 export const getCuentasPorPagar = () => {
-    return axios.get(url_client + 'cuentasporpagar')
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios.get(url_client + decoded.database +'/cuentasporpagar')
+                .then(res => {
+                    return res.data
+                })
+        }
+
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const savePagoACuentaPorPagar = (pago) =>{
@@ -308,11 +470,18 @@ export const createCuentaPorCobrar = (cuenta) => {
 }
 
 export const getCuentasPorCobrar = () => {
-    return axios
-    .get(url_client + 'cuentasporcobrar')
-    .then( res => {
-        return res.data
-    })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/cuentasporcobrar')
+                .then( res => {
+                    return res.data
+                })
+
+        }
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 export const savePagoACuentaPorCobrar = (pago) =>{
@@ -379,89 +548,150 @@ export const existCorte = (ubicacion, fecha) => {
 }
 
 export const getBalance = () => {
-    return axios
-    .get(url_client + 'balance')
-    .then( res => {
-        return res.data.balance
-    })
+    try{
+        if (decoded){
+            return axios
+                .get(url_client + 'balance/' + decoded.database)
+                .then( res => {
+                    return res.data.balance
+                })
+        }
+    }catch (err) {
+        console.log(err+ ' Desconectado?')
+    }
 }
 
 // UNIDADES
 
 export const getUnidades = () => {
-    return axios
-        .get(url_client + 'unidads')
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/unidads')
+                .then( res => {
+                    return res.data
+                })
+        }
+    } catch(err){
+        console.log(err)
+    }
 }
 
 export const addUnidad = (unidad) => {
-    return axios
-        .post( url_client + 'unidad/save', unidad)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/unidad/save', unidad)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const delUnidad = (id) => {
-    return axios
-        .delete(url_client + `unidad/${id}`)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .delete(url_client + decoded.database + `/unidad/${id}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 // EMPAQUES
 
 export const getEmpaques = () => {
-    return axios
-        .get( url_client + 'empaques')
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get( url_client + decoded.database + '/empaques')
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const addEmpaque = (empaque) => {
-    return axios
-        .post( url_client + 'empaque/save', empaque)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/empaque/save', empaque)
+                .then( res => {
+                    return res.data
+                })
+
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const delEmpaque = (id) => {
-    return axios
-        .delete(url_client + `empaque/${id}`)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .delete(url_client + decoded.database + `/empaque/${id}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 // CONCEPTOS
 
 export const getConceptos = () => {
-    return axios
-        .get( url_client + 'conceptos')
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get( url_client + decoded.database + '/conceptos')
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const addConcepto = (concepto) => {
-    return axios
-        .post( url_client + 'concepto/save', concepto)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/concepto/save', concepto)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const delConcepto = (id) => {
-    return axios
-        .delete(url_client + `concepto/${id}`)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .delete(url_client + decoded.database + `/concepto/${id}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 // TICKET
@@ -658,11 +888,19 @@ export const ticketCancelaVenta = (venta) => {
 // PRODUCCIONES
 
 export const getProduccions = () => {
-    return axios
-        .get( url_client + 'produccions')
-        .then( res => {
-            return res.data
-        })
+
+    try{
+        if (decoded){
+            return axios
+                .get( url_client + decoded.database + '/produccions')
+                .then( res => {
+                    return res.data
+                })
+        }
+
+    }catch(err){
+        console.log(err)
+    }
 }
 
 export const getProduccion = (id) => {

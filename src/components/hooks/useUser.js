@@ -17,6 +17,9 @@ const useUser = () => {
             email: decoded.email,
             level: decoded.level
         })
+        return () => {
+            setUser(null)
+        }
     }, [])
 
 	const addUser = (user) => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import { useHistory } from 'react-router-dom';
 
-import { VictoryBar, VictoryStack, VictoryChart, VictoryLabel, VictoryAxis, VictoryArea } from 'victory';
+import { VictoryBar, VictoryChart, VictoryLabel, VictoryAxis } from 'victory';
 import {
     MuiPickersUtilsProvider,
     DatePicker
@@ -16,8 +16,6 @@ import { getVenta, } from '../api'
 import ConfirmDialog from './ConfirmDialog'
 import Venta from './Venta'
 import useVentasSemana from '../hooks/useVentasSemana'
-
-import {formatNumber} from '../Tools'
 
 const Ventas = () => {
     const {ventasSemana, rango, setRango} = useVentasSemana()
@@ -176,8 +174,6 @@ const Ventas = () => {
                                                                                                             
                                                         <VictoryBar
                                                             name="semana-1"
-                                                            data={ventasSemana} 
-                                                        data={ventasSemana} 
                                                             data={ventasSemana} 
                                                                             
                                                             //labels= { ({ datum }) => `$${formatNumber(datum.y)}` } 
