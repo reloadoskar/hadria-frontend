@@ -10,6 +10,7 @@ const UserFunctions = (props) => {
         nombre: '',
         apellido: '',
         email: '',
+        database: '',
         level: ''
     })
     const [anchorEl, setAnchorEl] = useState(null);
@@ -23,16 +24,21 @@ const UserFunctions = (props) => {
             nombre: decoded.nombre,
             apellido: decoded.apellido,
             email: decoded.email,
+            database: decoded.database,
             level: decoded.level
         })
+        return () => {
+            setData([])
+        }
     }, [])
 
     const logout = () => {
+        setData([])
+        localStorage.clear()
         auth.logout(() => {
             history.push("/")
         })
     }
-
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget)

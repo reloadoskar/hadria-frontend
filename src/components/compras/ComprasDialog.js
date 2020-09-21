@@ -2,12 +2,14 @@ import React, { useState, useReducer } from 'react';
 
 //COMPONENTS
 import CompraAddItemsDialog from './CompraAddItemsDialog'
-
+import ProvedorLite from '../creators/ProvedorLite'
+import TipoCompra from '../creators/TipoCompra'
 //MATERIAL UI
 import { TextField, MenuItem, Button, Dialog, AppBar, Toolbar, IconButton, Typography, Slide, Table, TableHead, TableRow, TableCell, TableBody, Container, Grid, } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import SaveIcon from '@material-ui/icons/Save';
+import AddIcon from '@material-ui/icons/Add';
 import {
     MuiPickersUtilsProvider,
     DatePicker
@@ -50,11 +52,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function ComprasDialog({ open, close, addCompra, showMessage }) {
     const classes = useStyles();
 
-    const {provedors} = useProvedors();
+    const {provedors, add} = useProvedors();
     const {produccions} = useProduccions();
-    const {tipoCompras} = useTipoCompras();
+    const {tipoCompras, addTipoCompra} = useTipoCompras();
     const {ubicacions} = useUbicacions();
     const[addItemDialog, setAddItemDialog] = useState(false)
+    const [provedorFastDialog, setProvedroFastDialog] = useState(false)
+    const [tipoCompraDialog, setTipoCompraDialog] = useState(false)
     const [values, dispatch] = useReducer(reducer, initialState)
     const [locale] = useState("es")
 
@@ -67,8 +71,24 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
         setAddItemDialog(true)
     }
 
+    const openDialogProvedor = () => {
+        setProvedroFastDialog(true)
+    }
+
+    const openDialogTipoCompra = () => {
+        setTipoCompraDialog(true)
+    }
+
     const closeDialog = () => {
         setAddItemDialog(false)
+    }
+
+    const closeProvedorFastDialog = () => {
+        setProvedroFastDialog(false)
+    }
+
+    const closeTipoCOmpraDialog = () => {
+        setTipoCompraDialog(false)
     }
 
     const addItemToList = (item) => {
@@ -141,7 +161,7 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                         </Typography>
                         <Grid container spacing={2}>
                             {/* Select: Provedor return Object Provedor */}
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={11} md={5}>
                                 <TextField
                                     autoFocus
                                     id="provedor"
@@ -161,8 +181,13 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                                         ))}
                                 </TextField>
                             </Grid>
+                            <Grid item xs md >
+                                <IconButton onClick={(e) => openDialogProvedor()}>
+                                    <AddIcon />
+                                </IconButton>
+                            </Grid>
                             {/* Select: TipoCompra return Object TipoCompra  */}
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={11} md={5}>
                                 <TextField
                                     id="tipoCompra"
                                     select
@@ -202,6 +227,11 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                                     :
                                         null
                                 }
+                            </Grid>
+                            <Grid item xs md >
+                                <IconButton onClick={(e) => openDialogTipoCompra()}>
+                                    <AddIcon />
+                                </IconButton>
                             </Grid>
                             {/* Input: Remision */}
                             <Grid item xs={12} md={4}>
@@ -347,6 +377,19 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                 showMessage={showMessage}
                 addItemToList={addItemToList}
                 tipoCompra={values.tipoCompra}
+            />
+
+            <ProvedorLite 
+                open={provedorFastDialog}
+                close={closeProvedorFastDialog}
+                addProvedor={add}
+            />
+
+            <TipoCompra
+                open={tipoCompraDialog}
+                close={closeTipoCOmpraDialog}
+                creator={addTipoCompra}
+                report={showMessage}
             />
         </div>
     );

@@ -1,4 +1,4 @@
-import {getProfile} from './components/api'
+import {getProfile, logout} from './components/api'
 class Auth {
     constructor(){        
         this.authenticated = true
@@ -11,6 +11,7 @@ class Auth {
 
     logout(cb){
         this.authenticated = false
+        logout()
         cb()
     }
 

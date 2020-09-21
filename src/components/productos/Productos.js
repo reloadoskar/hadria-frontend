@@ -8,11 +8,14 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 // HOOKS
 import useProducts from '../hooks/useProducts';
+import { useSnackbar } from 'notistack';
 
 function Productos() {
     const { products, add, del } = useProducts()
     const [dialog, setDialog] = useState(false)
     const [loading] = useState(true)
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
     const showDialog = () => {
         setDialog(true)
@@ -23,12 +26,22 @@ function Productos() {
     }
 
     function addProducto(producto) {
-        add(producto)
+        showMessage("Agregando...", "info")
         closeDialog()
+        add(producto).then(res => {
+            if(res.status === "success"){
+                showMessage(res.message, res.status)
+            }
+        })
     }
 
     function removeProduct(index, id) {
-        del(index, id)
+        showMessage("Eliminando...", "info")
+        del(index, id).then(res => {
+            if(res.status === 'success'){
+                showMessage(res.message, res.status)
+            }
+        })
     }
 
     return (

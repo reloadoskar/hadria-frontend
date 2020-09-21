@@ -54,7 +54,7 @@ export default function TablaVentas({ table, data }) {
 					}}/>
 				<CardContent>
 					<Grid container >
-						<Grid Item>
+						<Grid item>
 						<IconButton onClick={() => handleClick(data)}>
 							Imprimir <ReceiptIcon />
 						</IconButton>

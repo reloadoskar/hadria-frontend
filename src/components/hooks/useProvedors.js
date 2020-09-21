@@ -10,6 +10,9 @@ const useProvedors = () => {
 			setProvedors(res.provedors);
 		}
 		loadProvedors()
+		return () => {
+            setProvedors([])
+        }
 	}, [])
 
 	function add(provedor) {

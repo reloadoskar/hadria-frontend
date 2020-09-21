@@ -105,7 +105,7 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
                 </Grid>
             </DialogTitle>
             <DialogContent>
-                {data.ventasCorte.length > 0 ?
+                {data.ventasCorte.length > 0 || data.egresosCorte.length > 0 || data.ingresosCorte.length > 0 ?
                     <div>
                     <Grid container>
                         <Grid item xs>

@@ -67,7 +67,7 @@ const DetalleVentas = ({ventas}) => {
                             ))//}
                             }
                             <TableRow selected>
-                                <TableCell colSpan="2" align="right">Total</TableCell>
+                                <TableCell colSpan="3" align="right">Total</TableCell>
                                 <TableCell align="right">{tcantidad}</TableCell>
                                 <TableCell align="right">{tempaques}</TableCell>
                                 <TableCell align="right">{precioProm}</TableCell>

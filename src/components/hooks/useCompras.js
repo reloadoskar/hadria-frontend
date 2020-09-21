@@ -9,12 +9,16 @@ const useCompras = () => {
 			setCompras(res.compras);
 		}
 		loadCompras()
+		return () => {
+            setCompras(null)
+        }
 	}, [updating])
 
 	const addCompra = (compra) => {
 		setUpdating(true)
 		const newCompra = [compra, ...compras]
 		setCompras(newCompra)	
+		return setUpdating(false)
 	}
 	
 

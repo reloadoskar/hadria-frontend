@@ -9,9 +9,9 @@ const useCortes = () => {
             return res
         })
     }
-
+    getData()
     return {
-        getData,
+        setCorte([])
     }
 }
 

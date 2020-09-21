@@ -16,7 +16,6 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 export default function TablaCompras( {compras, editCompra, openConfirm }){
-    console.log(compras)
     return (
         <TableContainer component={Paper}>
             { compras === null ?

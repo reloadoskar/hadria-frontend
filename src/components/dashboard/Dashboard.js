@@ -7,7 +7,7 @@ import CuentasPorPagar from './CuentasPorPagar'
 import ComprasDash from './ComprasDash'
 import ProduccionsDash from './ProduccionsDash'
 import Pagar from './Pagar'
-import Cobrar from './Cobrar'
+import Cobrar from '../creators/Cobro'
 
 import useUser from '../hooks/useUser'
 

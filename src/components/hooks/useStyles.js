@@ -52,6 +52,10 @@ const useStyles = makeStyles(theme => ({
         position: 'relative',
         backgroundColor: '#FF715B'
     },
+    liquidacionBar: {
+        position: 'relative',
+        backgroundColor: '##353640'
+    },
     appBarShift: {
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,

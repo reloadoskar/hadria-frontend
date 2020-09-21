@@ -1,14 +1,22 @@
 import React, {useState} from 'react'
-import { Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgress } from '@material-ui/core';
-
+import { Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgress, IconButton } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import useCompras from '../hooks/useCompras';
 import {sumStock, sumEmpStock} from '../Tools'
 import VerCompra from './VerCompra'
+import ComprasDialog from '../compras/ComprasDialog'
+import { useSnackbar } from 'notistack';
 export default function ComprasDash(){
-    const {compras, cerrar, updating} = useCompras();
+    const {compras, addCompra, cerrar, updating} = useCompras();
     const [compraSelected, setCompraSelected] = useState(null)
     const [verCompra, setVerCompra] = React.useState(false);
+    const [showDialog, setShowDialog] = useState(false)
+    const { enqueueSnackbar } = useSnackbar()
 
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+    const closeDialog = () => {
+        setShowDialog(false)
+    }
     const handleClose = () => {
         setVerCompra(false)
         setCompraSelected(null)
@@ -20,9 +28,17 @@ export default function ComprasDash(){
             setVerCompra(true)
         }
     }
+
+    const openDialog = () => {
+        setShowDialog(true)
+    }
     return (
         <Card>
-            <CardHeader title="Compras" />
+            <CardHeader title="Compras" action ={
+                <IconButton onClick={(e) => openDialog()}>
+                    <AddIcon />
+                </IconButton>
+            } />
             <CardContent>                
                 {
                     compras === null ?
@@ -60,6 +76,13 @@ export default function ComprasDash(){
                 }
             </CardContent>
             <VerCompra compraId={compraSelected} isOpen={verCompra} handleClose={handleClose} cerrar={cerrar}/>
+            <ComprasDialog
+                fullWidth
+                open={showDialog}
+                close={closeDialog}
+                showMessage={showMessage}
+                addCompra={addCompra}
+            />
         </Card>
     )
 }

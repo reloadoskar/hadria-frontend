@@ -1,10 +1,11 @@
 import axios from 'axios';
 import Global from '../Global';
-
 import jwt_decode from 'jwt-decode'
-
-const token = localStorage.usertoken
-const decoded = jwt_decode(token)
+var decoded = false
+if(localStorage.usertoken){
+    const token = localStorage.usertoken
+    decoded = jwt_decode(token)
+}
 
 const url = Global.url;
 const url_client = url
@@ -20,14 +21,30 @@ export const register = (newClient) => {
 }
 
 export const login = user => {
+    try{
+        return axios
+            .post(url + 'user/login' , user)
+            .then( res => {
+                localStorage.setItem('usertoken', res.data.token)
+                return res.data
+            })
+            .catch(err => {
+                err.message = "Error de red, no hay conexión con la base de datos";
+                err.status = 'error'
+                // console.log(err)
+                return err
+            })
+
+    }catch (err) {
+        console.log(err)
+    }
+}
+
+export const logout = () => {
     return axios
-        .post(url + 'user/login' , user)
-        .then( res => {
-            localStorage.setItem('usertoken', res.data.token)
+        .get(url + 'logout')
+        .then(res => {
             return res.data
-        })
-        .catch(err => {
-            console.log(err)
         })
 }
 
@@ -380,59 +397,115 @@ export const getTipoCompras = () => {
     }
 }
 
+export const createTipoCompra = (tipoCompra) => {
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/tipocompra/create', tipoCompra)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
 // INVENTARIO
 
 export const getInventario = () => {
-    return axios
-        .get(url_client + 'inventario')
-        .then(res => {
-            return res.data
-        })
+    try{
+        if (decoded) {
+            return axios
+                .get(url_client + decoded.database + '/inventario')
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const getInventarioBy = (ubicacion) => {
-    return axios
-        .get(url_client + `inventario/${ubicacion}`)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database +  `/inventario/${ubicacion}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 // VENTAS
 export const getVenta = (id) => {
-    return axios
-        .post(url_client + 'venta', id)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/venta', id)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 export const getVentas = () => {
-    return axios
-        .get(url_client + 'ventas')
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/ventas')
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 export const getVentasSemana =(f1, f2) => {
-    return axios
-        .get(url_client + 'ventas/semana', {params: {f1: f1, f2: f2} })
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/ventas/semana', {params: {f1: f1, f2: f2} })
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 export const saveVenta = (venta) => {
-    return axios
-        .post(url_client + 'venta/save', venta)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/venta/save', venta)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 export const cancelVenta = (id) => {
-    return axios
-        .delete(url_client + `venta/${id}`)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .delete(url_client + decoded.database + `/venta/${id}`)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 // CUENTAS POR PAGAR
@@ -452,21 +525,33 @@ export const getCuentasPorPagar = () => {
 }
 
 export const savePagoACuentaPorPagar = (pago) =>{
-    return axios
-        .post(url_client + 'cuentasporpagar/pago/save', pago)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/cuentasporpagar/pago/save', pago)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 // CUENTAS POR COBRAR
 
 export const createCuentaPorCobrar = (cuenta) => {
-    return axios
-        .post( url_client + 'cuentasporcobrar/save', cuenta)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database +  '/cuentasporcobrar/save', cuenta)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const getCuentasPorCobrar = () => {
@@ -485,73 +570,116 @@ export const getCuentasPorCobrar = () => {
 }
 
 export const savePagoACuentaPorCobrar = (pago) =>{
-    return axios
-        .post(url_client + 'cuentasporcobrar/pago/save', pago)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if (decoded){
+            return axios
+                .post(url_client + decoded.database +  '/cuentasporcobrar/pago/save', pago)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 // API INGRESOS
 
 export const saveIngreso = (ingreso) => {
-    return axios
-        .post(url_client + 'ingreso/save', ingreso)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database+  '/ingreso/save', ingreso)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 // RETIRO
 
 export const saveRetiro = (retiro) => {
-    return axios
-        .post(url + 'retiro/save', retiro)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url + decoded.database + '/retiro/save', retiro)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 // API EGRESOS
 
 export const saveEgreso = (egreso) => {
-    return axios
-        .post(url_client + 'egreso/save', egreso)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/egreso/save', egreso)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
 }
 
 // API CORTES
 
 export const getDataFrom = (ubicacion, fecha) => {
-    return axios
-        .get(url_client + `corte/${ubicacion}/${fecha}`)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + `/corte/${ubicacion}/${fecha}`)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const saveCorte = (corte) => {
-    return axios
-        .post(url_client + 'corte/save', corte)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database +  '/corte/save', corte)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const existCorte = (ubicacion, fecha) => {
-    return axios
-        .get(url_client + `corte/exist/${ubicacion}/${fecha}`)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + `/corte/exist/${ubicacion}/${fecha}`)
+                .then( res => {
+                    return res.data
+                })
+        
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const getBalance = () => {
     try{
         if (decoded){
             return axios
-                .get(url_client + 'balance/' + decoded.database)
+                .get(url_client + decoded.database + '/balance/')
                 .then( res => {
                     return res.data.balance
                 })
@@ -904,27 +1032,45 @@ export const getProduccions = () => {
 }
 
 export const getProduccion = (id) => {
-    return axios
-        .get( url + 'produccion/'+ id)
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get( url + decoded.database + '/produccion/'+ id)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const createProduccion = () => {
-    return axios
-        .get( url_client + 'produccion/save')
-        .then( res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .get( url_client + decoded.database + '/produccion/save')
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const delProduccion = (id) => {
-    return axios
-        .delete(url_client + `produccion/${id}`)
-        .then(res => {
-            return res.data
-        })
+    try{
+        if(decoded){
+            return axios
+                .delete(url_client + decoded.database + `/produccion/${id}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
 }
 
 export const closeProduccion = (id) => {

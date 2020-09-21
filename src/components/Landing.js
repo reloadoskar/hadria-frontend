@@ -32,18 +32,23 @@ const Landing = (props) => {
     const handleSubmit = (e) => { 
         e.preventDefault()
         openLoading()
-        login(data).then(res => {
-            closeLoading()
-            if(res.status === 'success'){
-                showMessage(res.message, res.status)
-                auth.login(() => {
-                    history.push("/app");
-                })
-            }else{
-                showMessage(res.message, res.status)
-            }
-            
-        })
+        try{
+            login(data).then(res => {
+                closeLoading()
+                if(res.status === 'success'){
+                    showMessage(res.message, res.status)
+                    auth.login(() => {
+                        history.push("/app");
+                    })
+                }else{
+                    showMessage(res.message, res.status)
+                }
+                
+            })
+
+        }catch (err) {
+            // console.log(err)
+        }
     }
 
     return(

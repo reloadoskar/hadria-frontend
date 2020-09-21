@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-
 import {savePagoACuentaPorCobrar, ticketCobranza} from '../api'
 
 import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
 import useUbicacions from '../hooks/useUbicacions'
+import useClientes from '../hooks/useClientes'
+
 const initialData = {
     cliente: '',
     ubicacion: '',
@@ -15,6 +16,7 @@ const initialData = {
 export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage, addToSaldo }) {
     
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
+    const {clientes} = useClientes()
     const {ubicacions} = useUbicacions()
     const [values, setValues] = useState(initialData)
     const [reprint] = useState(true)
@@ -94,11 +96,11 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage, a
                                 onChange={(e) => handleChange('cliente', e.target.value)}
                                 >
                                     {
-                                        cliente.map( (opt, index) => {
+                                        clientes.map( (opt, index) => (
                                             <MenuItem key={index} value={opt}>
                                                 {opt.nombre}
                                             </MenuItem>
-                                        })
+                                        ))
                                     }
                                 </TextField>
                         </Grid>

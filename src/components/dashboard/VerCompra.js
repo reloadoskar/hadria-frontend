@@ -136,7 +136,7 @@ export default function VerCompra({ compraId, isOpen, handleClose, cerrar }) {
                                 </Avatar>
                             }
                             title={data.compra.provedor.nombre}
-                            subheader={"Llegó " + moment(data.compra.fecha).fromNow()}
+                            subheader={"Llegó: " + moment(data.compra.fecha).format("dddd, D/MM/YYYY")}
                             action={
                                 <div>
                                     <IconButton aria-label="Opciones" onClick={showMenu}>
