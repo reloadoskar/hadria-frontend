@@ -55,7 +55,7 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage, a
             showMessage(res.message, res.status)
             close('cobroDialog')
             //updateSaldoCuenta() FALTA
-            addToSaldo(pago.importe)
+            //addToSaldo(pago.importe) falta
             clearFields()
             ticketCobranza(pago)
             if(reprint){
