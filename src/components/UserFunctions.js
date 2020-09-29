@@ -5,7 +5,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import moment from 'moment'
-import StatusDialog from './statusDialog';
+import StatusDialog from './StatusDialog';
 var now = moment();
 const UserFunctions = (props) => {
     const {auth} = props
