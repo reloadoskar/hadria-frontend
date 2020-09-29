@@ -6,6 +6,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ResumenVentas from './ResumenVentas'
 import DetalleGastos from './DetalleGastos'
 import DetalleInsumos from './DetalleInsumos'
+import Insumos from './Insumos'
+
 import useStyles from '../hooks/useStyles'
 import { getProduccion, closeProduccion } from '../api'
 import { 
@@ -79,6 +81,10 @@ export default function VerProduccion(props) {
         setAnchorEl(null);
     }
 
+    const enviarMensaje = (mensaje, tipo) =>{
+        enqueueSnackbar(mensaje, {variant: tipo})
+    }
+
     const handleClick = (action, produccion) => {
         switch(action){
             case "cerrar":
@@ -138,7 +144,7 @@ export default function VerProduccion(props) {
                                 </Avatar>
                             }
                             title={data.produccion.clave}
-                            subheader={"Llegó " + moment(data.produccion.fecha).fromNow()}
+                            subheader={"Creado el: " + moment(data.produccion.fecha).format("YYYY-MM-DD")}
                             action={
                                 <div>
                                     <IconButton aria-label="Opciones" onClick={showMenu}>
@@ -160,6 +166,12 @@ export default function VerProduccion(props) {
                         />
                         <CardContent>
                             <Grid container spacing={2}>
+
+                                <Grid item xs={6} >
+                                    <Insumos produccion={data.produccion} enviarMensaje={enviarMensaje}/>
+                                </Grid>
+
+
                                 <Grid item xs={12}>
                                     <DetalleInsumos />
                                 </Grid>

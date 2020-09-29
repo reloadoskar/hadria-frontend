@@ -24,15 +24,19 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage, a
     }
 
     const handleChange = (type, value) => {
-        if (type === 'importe') {
-            if (value > values.cuenta.saldo) {
-                showMessage("El importe es mayor al saldo de la cuenta.", "warning")
-                setValues({ ...values, importe: '' })
-                return false
-            }
-        }
+        switch(field){
+            case 'importe':     
+                if (value > values.cuenta.saldo) {
+                    showMessage("El importe es mayor al saldo de la cuenta.", "warning")
+                    setValues({ ...values, importe: '' })
+                    return false
+                }         
+            case 'cliente':
+                return setValues({ ...values, cliente: value})
+            default:
+                return setValues({ ...values, [type]: value })
 
-        setValues({ ...values, [type]: value })
+        }
     }
 
     const handleClose = (dialog) => {
@@ -66,8 +70,8 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage, a
 
     return (
         <Dialog
-            fullWidth={true}
-            maxWidth="sm"
+            fullWidth
+            maxWidth="lg"
             open={isOpen}
             onClose={() => handleClose('cobroDialog')} >
             <DialogTitle>

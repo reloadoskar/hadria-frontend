@@ -11,7 +11,6 @@ class Auth {
 
     logout(cb){
         this.authenticated = false
-        logout()
         cb()
     }
 

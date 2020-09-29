@@ -1076,3 +1076,89 @@ export const delProduccion = (id) => {
 export const closeProduccion = (id) => {
     
 }
+
+// INSUMOS
+
+export const getCompraItems = () => {
+    try{
+        if(decoded){
+            return axios
+                .get( url + decoded.database + '/items')
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const getInsumos = (produccion_id) => {
+    try{
+        if(decoded){
+            return axios
+                .get( url + decoded.database + '/insumos/'+ produccion_id)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const addInsumo = (insumo) => {
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/insumo/save', insumo)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const delInsumo = (insumo) => {
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/insumo/delete', insumo)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const subtractStock = (id, cantidad) => {
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/items/subtract', {id, cantidad})
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const addStock = (id, cantidad) => {
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/items/add', {id, cantidad})
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
