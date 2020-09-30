@@ -8,7 +8,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/pickers": "^3.2.10",
     "axios": "^0.19.2",
-    "bcrypt": "^3.0.8",
+    "bcrypt": ">=5.0.0",
     "bootstrap": "^4.5.0",
     "jwt-decode": "^2.2.0",
     "moment": "^2.26.0",
@@ -18,7 +18,6 @@
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-key-handler": "^1.2.0-beta.3",
-    "react-keyboard-event-handler": "^1.5.4",
     "react-moment": "^0.9.7",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1"

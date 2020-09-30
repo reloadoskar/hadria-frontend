@@ -1,11 +1,14 @@
 import React, {useState, useEffect} from 'react'
-import jwt_decode from 'jwt-decode'
 import { Grid, IconButton, Typography, Menu, MenuItem, Divider } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { useHistory } from 'react-router-dom';
+// import { useSnackbar } from 'notistack';
+import StatusDialog from './StatusDialog';
+import useUser from './hooks/useUser'
 
 const UserFunctions = (props) => {
     const {auth} = props
+    const {user} = useUser()
     const [data, setData] = useState({
         nombre: '',
         apellido: '',
@@ -14,25 +17,47 @@ const UserFunctions = (props) => {
     })
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl)
+    const [statusCheck, setStatusCheck] = useState(false)
+    const [status, setStatus] = useState({message:"", type: ""})
     let history = useHistory();
+    // const { enqueueSnackbar } = useSnackbar()
+    // const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
-    useEffect(() => {
-        const token = localStorage.usertoken
-        const decoded = jwt_decode(token)
-        setData({
-            nombre: decoded.nombre,
-            apellido: decoded.apellido,
-            email: decoded.email,
-            level: decoded.level
-        })
-    }, [])
+    useEffect(()=>{
+        if(user){
+            if(user.venceEnDias === 0){
+                setStatus({
+                    message: "Cuenta Suspendida, favor realizar su pago inmediatamente.",
+                    type: "danger"
+                })
+                return setStatusCheck(true)
+            }
+            if(user.venceEnDias <= 15){
+                setStatusCheck(true)
+                return setStatus({
+                    message: "Su licencia vence en "+user.venceEnDias+" días.", 
+                    type: "warning"}
+                    )
+            }
+            if(user.venceEnDias > 15 && user.venceEnDias < 30){
+                setStatusCheck(true)
+                return setStatus({
+                    message: "Su licencia vencerá pronto.", 
+                    type: "info"
+                    })
+            }
+        }else{
+            return false
+        }
+    },[user])
 
     const logout = () => {
+        setData([])
+        localStorage.clear()
         auth.logout(() => {
             history.push("/")
         })
     }
-
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget)
@@ -40,6 +65,10 @@ const UserFunctions = (props) => {
 
     const handleClose = () => {
         setAnchorEl(null);
+    }
+
+    const close = () => {
+        setStatusCheck(false)
     }
     return (
         <div>
@@ -75,6 +104,7 @@ const UserFunctions = (props) => {
                     </Menu>
 
                 </Grid>
+                <StatusDialog open = {statusCheck} status={status} logout={logout} close={close}/>
             </Grid>
         </div>
     )
