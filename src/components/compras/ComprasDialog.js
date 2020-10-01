@@ -8,10 +8,6 @@ import { TextField, MenuItem, Button, Dialog, AppBar, Toolbar, IconButton, Typog
 import CloseIcon from '@material-ui/icons/Close';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import SaveIcon from '@material-ui/icons/Save';
-import {
-    MuiPickersUtilsProvider,
-    DatePicker
-} from '@material-ui/pickers';
 
 //HOOKS
 import useProvedors from '../hooks/useProvedors';
@@ -27,7 +23,6 @@ import reducer from '../reducers/ComprasReducer';
 import {objectIsNull} from '../Tools'
 import { saveCompra, ticketCompra } from '../api'
 import moment from 'moment'
-import MomentUtils from '@date-io/moment';
 
 const initialState ={
     provedor: '',
@@ -56,7 +51,6 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
     const {ubicacions} = useUbicacions();
     const[addItemDialog, setAddItemDialog] = useState(false)
     const [values, dispatch] = useReducer(reducer, initialState)
-    const [locale] = useState("es")
 
     const handleClose = (dialog) => {
         dispatch({type: 'reset'})
@@ -219,17 +213,17 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                             </Grid>
                             {/* Input: Fecha return Moment Object */}
                             <Grid item xs={12} md={4}>
-                                <MuiPickersUtilsProvider utils={MomentUtils} locale={locale}>
-                                    <DatePicker
-                                        id="fecha"
-                                        label="Selecciona la fecha"
-                                        value={values.fecha}
-                                        onChange={(e) => dispatch({type: 'fecha', value: e})}
-                                        margin="normal"
-                                        fullWidth
-                                        format="YYYY/MM/DD"
-                                        />
-                                </MuiPickersUtilsProvider>
+                                
+                                <TextField 
+                                    id="fecha"
+                                    label="Selecciona la fecha"
+                                    type="date"
+                                    value={values.fecha}
+                                    onChange={(e) => dispatch({type: 'fecha', value: e.target.value})}
+                                    margin="normal"
+                                    fullWidth
+                                />
+                                
                             </Grid>
                             {/* Select: Ubicacion return _id Ubicacion */}
                             <Grid item xs={12} md={4}>

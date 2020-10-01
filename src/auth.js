@@ -1,7 +1,7 @@
 import {getProfile} from './components/api'
 class Auth {
     constructor(){        
-        this.authenticated = false
+        this.authenticated = true
     }
 
     login(cb){

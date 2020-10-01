@@ -9,12 +9,6 @@ import useUser from './hooks/useUser'
 const UserFunctions = (props) => {
     const {auth} = props
     const {user} = useUser()
-    const [data, setData] = useState({
-        nombre: '',
-        apellido: '',
-        email: '',
-        level: ''
-    })
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl)
     const [statusCheck, setStatusCheck] = useState(false)
@@ -52,7 +46,7 @@ const UserFunctions = (props) => {
     },[user])
 
     const logout = () => {
-        setData([])
+        
         localStorage.clear()
         auth.logout(() => {
             history.push("/")
@@ -74,7 +68,7 @@ const UserFunctions = (props) => {
         <div>
             <Grid container spacing={2} alignItems="center">
                 <Grid item xs >
-                    <Typography variant="h6" children={data.nombre} />
+                    <Typography variant="h6" children={user.nombre} />
                 </Grid>
                 <Grid item xs >
                     <IconButton

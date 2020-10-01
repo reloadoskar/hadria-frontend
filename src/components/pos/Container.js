@@ -46,7 +46,7 @@ const initialState = {
 
     inventarioFiltrado: [],
     ubicacion: '', 
-    fecha: moment().format('YYYY-MM-DD'), 
+    fecha: moment().format("YYYY-MM-DD"), 
     itemToAdd: null,
     itemsToSave: [],
     total: 0,
@@ -133,7 +133,7 @@ function PosContainer() {
             return
         }
         if(type === 'fecha'){
-            var f = moment(value).format('YYYY-MM-DD')
+            var f = moment(value, "YYYY-MM-DD").format('YYYY-MM-DD')
             return dispatch({type: type, value: f}) 
         }
         dispatch({type: type, value: value}) 

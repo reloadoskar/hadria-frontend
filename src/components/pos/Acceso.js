@@ -1,30 +1,22 @@
-import React, {useState} from 'react'
+import React  from 'react'
 import moment from 'moment'
 
 import useStyles from '../hooks/useStyles'
 
-import { MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, } from '@material-ui/core';
+import { MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, CardActions, } from '@material-ui/core';
 
 import useUbicacions from '../hooks/useUbicacions'
-
-import {
-    DatePicker,
-    MuiPickersUtilsProvider,
-    } from "@material-ui/pickers";
-
-import MomentUtils from '@date-io/moment';
-import "moment/locale/es";
 
 export default function PosAcceso({values, checkCorte, handleChange}){
     const classes = useStyles();
     const {ubicacions} = useUbicacions();
-    const [locale] = useState("es")
     const handleSubmit = (e) => {
         e.preventDefault()
         checkCorte()
     }
     return (
         <Card className={classes.posCard}>
+            <form onSubmit={(e) => handleSubmit(e)}>
                 <CardHeader 
                     title="Selección de Ubicación"
                     subheader={"fecha del sistema: " + (
@@ -32,7 +24,6 @@ export default function PosAcceso({values, checkCorte, handleChange}){
                         )}
                 />
                 <CardContent>
-                    <form onSubmit={(e) => handleSubmit(e)}>
 
                     <TextField
                         id="ubicacion"
@@ -54,17 +45,21 @@ export default function PosAcceso({values, checkCorte, handleChange}){
                         ))}
                     </TextField>
 
-                    <MuiPickersUtilsProvider utils={MomentUtils} locale={locale}>
-                        <DatePicker
-                            value={values.fecha}
-                            fullWidth
-                            margin="normal"
-                            variant="outlined" 
-                            format="DD/MM/YYYY"
-                            onChange={e => handleChange('fecha', e)}
-                        />
-                    </MuiPickersUtilsProvider>
-                    
+                    <TextField
+                        id="fecha"
+                        label="fecha"
+                        type="date"
+                        fullWidth
+                        value={values.fecha}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        onChange={e => handleChange('fecha', e.target.value)}
+
+                    />
+
+                </CardContent>
+                <CardActions>
                     <Grid container justify="flex-end">
                         <Button 
                             disabled={!values.ubicacion || !values.fecha ? true : false }
@@ -74,9 +69,8 @@ export default function PosAcceso({values, checkCorte, handleChange}){
                             size="large" 
                             onClick={(e) => handleSubmit(e)}>Acceder</Button>
                     </Grid>
-
-                    </form>
-                </CardContent>
-            </Card>
+                </CardActions>
+            </form>
+        </Card>
     )
 }

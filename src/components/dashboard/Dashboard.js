@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Balance from './Balance'
 import CuentasPorCobrar from './CuentasPorCobrar'
@@ -8,10 +8,9 @@ import ComprasDash from './ComprasDash'
 import ProduccionsDash from './ProduccionsDash'
 import Pagar from './Pagar'
 import Cobrar from './Cobrar'
-
 import useUser from '../hooks/useUser'
 
-import { Grid, Box, IconButton, LinearProgress, Typography } from '@material-ui/core';
+import { Grid, Box, IconButton, CircularProgress, Typography, Backdrop } from '@material-ui/core';
 // import useStyles from './hooks/useStyles'
 
 import useBalance from '../hooks/useBalance'
@@ -19,13 +18,23 @@ import PaymentIcon from '@material-ui/icons/Payment';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import { useSnackbar } from 'notistack';
-
+import useStyles from '../hooks/useStyles'
 export default function Dashboard() {
+    const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
     const { user } = useUser()
     const balance = useBalance()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
+    const[bckdrpOpen, setBdopen] = useState(false)
+
+    useEffect(() => {
+        if(balance === null){
+            setBdopen(true)
+        }else{
+            setBdopen(false)
+        }
+    }, [balance])
 
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
@@ -47,12 +56,15 @@ export default function Dashboard() {
     return (
 
         <Grid container spacing={2}>
+            <Backdrop className={classes.backdrop} open={bckdrpOpen} children={
+                    <div>
+                        <Typography align="center" variant="subtitle1" children="Espere..." />
+                        <CircularProgress color="inherit" />
+                    </div>
+            } />
             {
                 balance === null || user === null || cobrar === null || pagar === null ?
-                <Grid item>
-                    <Typography variant="h2" children="Espere..." />
-                    <LinearProgress variant="query" />
-                </Grid>
+                    null
                     :
                     <React.Fragment>
                         <Grid item xs={12}>
@@ -72,7 +84,7 @@ export default function Dashboard() {
                         </Grid>
                         <Grid item xs={12}>
                             <Box display={user.level > 1 ? 'none' : 'inline'}>
-                                <Balance balance={balance} />
+                                <Balance balance={balance} backdrop={bckdrpOpen}/>
                             </Box>
                         </Grid>
                         <Grid item xs={12} md={7}>

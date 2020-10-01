@@ -182,7 +182,14 @@ const useStyles = makeStyles(theme => ({
     },
     suspended: {
         backgroundColor: "#F28969"
-    }
+    },
+    colored: {
+        backgroundColor: 'linear-gradient(214deg, #1aa27f, #4381e0)',
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
+    },
 
 }));
 
