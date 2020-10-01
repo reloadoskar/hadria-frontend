@@ -169,6 +169,19 @@ const useStyles = makeStyles(theme => ({
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+
+    basic: {
+        backgroundColor: "#FFE873"
+    },
+    pro: {
+        backgroundColor: "#5CB9CC"
+    },
+    master: {
+        backgroundColor: "#EC4E20"
+    },
+    suspended: {
+        backgroundColor: "#F28969"
     }
 
 }));

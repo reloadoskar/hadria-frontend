@@ -11,7 +11,7 @@ import Cobrar from './Cobrar'
 
 import useUser from '../hooks/useUser'
 
-import { Grid, Box, IconButton, LinearProgress } from '@material-ui/core';
+import { Grid, Box, IconButton, LinearProgress, Typography } from '@material-ui/core';
 // import useStyles from './hooks/useStyles'
 
 import useBalance from '../hooks/useBalance'
@@ -48,8 +48,11 @@ export default function Dashboard() {
 
         <Grid container spacing={2}>
             {
-                balance === null ?
+                balance === null || user === null || cobrar === null || pagar === null ?
+                <Grid item>
+                    <Typography variant="h2" children="Espere..." />
                     <LinearProgress variant="query" />
+                </Grid>
                     :
                     <React.Fragment>
                         <Grid item xs={12}>

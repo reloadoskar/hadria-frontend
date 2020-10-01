@@ -1,18 +1,65 @@
 import React from 'react'
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography, Grid } from '@material-ui/core'
-import basicQR from '../img/basicQR.jpeg'
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography, Grid, Card, CardHeader, CardContent } from '@material-ui/core'
+// import basicQR from '../img/basicQR.jpeg'
 import useStyles from './hooks/useStyles'
 const PaymentDetails = () => {
+    const classes = useStyles();
     return (
-        <Grid container >
+        <Grid container spacing={2}>
             <Grid item xs={4}>
+                <Card>
+                    <CardHeader title="BASIC" classes={{ root: classes.basic, }} />
+                    <CardContent>
+                        <Grid container alignItems="flex-end">
+                            <Grid item xs={8}>
+                                <Typography align="right" variant="h3"  children="$399"/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Typography align="left"  children=" /al mes"/>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography align="center" children="Un pago anual de $4,788" />
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Card>
             </Grid>
             <Grid item xs={4}>
-                <img src={basicQR} alt="Servicio básico" width="300" />
-                <Typography variant="h6"  children="Paquete básico."/>
-                <Typography variant="h3"  children="$599.00"/>
+                <Card elevation={8}>
+                    <CardHeader title="PRO" subheader="Recomendado" classes={{ root: classes.pro, }} />
+                    <CardContent>
+                        <Grid container alignItems="flex-end">
+                            <Grid item xs={8}>
+                                <Typography align="right" variant="h3"  children="$599"/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Typography align="left" children=" /al mes"/>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography align="center" children="Un pago anual de $7,188" />
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Card>
             </Grid>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4}>
+                <Card>
+                    <CardHeader title="MASTER" classes={{ root: classes.master, }} />
+                    <CardContent>
+                        <Grid container alignItems="flex-end">
+                            <Grid item xs={8}>
+                                <Typography align="right" variant="h3"  children="$999"/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Typography align="left" variant="subtitle1"  children=" /al mes"/>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography align="center" children="Un pago anual de $11,988" />
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Card>
+            </Grid>
         </Grid>
     )
 }
@@ -22,27 +69,39 @@ const StatusDialog = (props) => {
     const handleClose = () =>{
         return close()
     }
-    const pagar = () =>{
-        return null
-    }
+    // const pagar = () =>{
+    //     return null
+    // }
     return (
         <Dialog
             open={open}
             maxWidth="md"
             fullWidth
-            classes={{ paper: classes.pagosCard, }}
+            classes={
+                status.type === "danger" ?
+                { paper: classes.suspended, }
+                :
+                { paper: classes.pagosCard, }
+
+            }
         >
             <DialogTitle>
                 {
                         status.type === "danger" ?
                             "Cuenta suspendida"
                         :
-                            "Status"
+                            status.message
                 }
             </DialogTitle>
             <DialogContent>
-                <Typography variant="h6" align="center" children={status.message} />
-                <PaymentDetails />
+                <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                        <Typography align="center" variant="h4" children="Aprovecha nuestras ofertas por tiempo limitado:"/>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <PaymentDetails />
+                    </Grid>
+                </Grid>
             </DialogContent>
             <DialogActions>
                 {
@@ -52,17 +111,14 @@ const StatusDialog = (props) => {
                         <Button onClick={logout} color="primary">
                             Salir
                         </Button>
-                        <Button onClick={handleClose} color="primary">
+                        {/* <Button onClick={handleClose} color="primary">
                             Pagar con CODI
-                        </Button>
+                        </Button> */}
                     </div>
                         :
                         <div>
-                            <Button onClick={close} color="primary">
+                            <Button onClick={handleClose} color="primary">
                                 Entendido
-                            </Button>
-                            <Button onClick={pagar} color="primary">
-                                Pagar
                             </Button>
                         </div>
 
