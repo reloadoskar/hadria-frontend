@@ -30,7 +30,7 @@ const UserFunctions = (props) => {
                     type: "warning"}
                     )
             }
-            if(user.venceEnDias > 15 && user.venceEnDias < 30){
+            if(user.venceEnDias > 15 && user.venceEnDias <= 20){
                 setStatusCheck(true)
                 return setStatus({
                     message: "Su licencia vencerá pronto.", 

@@ -5,14 +5,14 @@ import CuentasPorCobrar from './CuentasPorCobrar'
 
 import CuentasPorPagar from './CuentasPorPagar'
 import ComprasDash from './ComprasDash'
-import ProduccionsDash from './ProduccionsDash'
+import Produccions from '../produccions/Produccions'
 import Pagar from './Pagar'
 import Cobrar from '../creators/Cobro'
 
 import useUser from '../hooks/useUser'
+import useProduccions from '../produccions/useProduccions'
 
 import { Grid, Box, IconButton, Backdrop, Typography, CircularProgress } from '@material-ui/core';
-// import useStyles from './hooks/useStyles'
 
 import useBalance from '../hooks/useBalance'
 import useStyles from '../hooks/useStyles'
@@ -22,6 +22,7 @@ import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import { useSnackbar } from 'notistack';
 
 export default function Dashboard() {
+    const {produccions} = useProduccions()
     const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles();
     const { user } = useUser()
@@ -90,10 +91,10 @@ export default function Dashboard() {
                         <Grid item xs={12} md={7}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    <ComprasDash />
+                                    <Produccions produccions={produccions}/>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ProduccionsDash />
+                                    <ComprasDash />
                                 </Grid>
                             </Grid>
 

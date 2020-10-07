@@ -1,43 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSnackbar } from 'notistack';
 import { Dialog, AppBar, Toolbar, IconButton, Typography, Card, CardHeader, Zoom, CardContent, Avatar, Grid, LinearProgress, Menu, MenuItem, Box, Divider } from '@material-ui/core';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ResumenVentas from './ResumenVentas'
-import DetalleGastos from './DetalleGastos'
-import DetalleInsumos from './DetalleInsumos'
+// import ResumenVentas from './ResumenVentas'
+// import DetalleGastos from './DetalleGastos'
+// import DetalleInsumos from './DetalleInsumos'
 import Insumos from './Insumos'
 
 import useStyles from '../hooks/useStyles'
-import { getProduccion, closeProduccion } from '../api'
-import { 
-    sumCantidad, 
-    sumEmpaques, 
-    sumImporte,
-    // sumStock,
-    // sumEmpStock,
-    // formatNumber, 
-    calcCostoInventario, 
-    // calcVentasItem, 
-    calcTotalPorCobrar, 
-    // calcComision 
-} from '../Tools'
-
 import moment from 'moment'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Zoom in ref={ref} {...props} />;
 });
 
-export default function VerProduccion(props) {
+export default function Ver(props) {
     const {produccion, isOpen, handleClose} = props
-    const [data, setData] = useState({
-        produccion: null,
-        insumos: null,
-        inventario: null,
-        ventas: null,
-        egresos: null,
-    })
 
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
@@ -45,31 +24,7 @@ export default function VerProduccion(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
-    useEffect(() => {
-        if (produccion) {
-            getProduccion(produccion).then(res => {
-                // console.log(res)
-                setData({
-                    produccion: res.produccion,
-                    insumos: res.produccion.insumos,
-                    inventario: res.produccion.items,
-                    ventas: res.produccion.ventas,
-                    egresos: res.produccion.egresos,
-                    cantProduccido: sumCantidad(res.produccion.items),
-                    empProduccido: sumEmpaques(res.produccion.items),
-                    cantVendido: sumCantidad(res.produccion.ventas),
-                    empVendido: sumEmpaques(res.produccion.ventas),
-                    totalVenta: sumImporte(res.produccion.ventas),
-                    totalEgresos: sumImporte(res.produccion.egresos),
-                    costoInventario: calcCostoInventario(res.produccion.items),
-                    porCobrar: calcTotalPorCobrar(res.produccion.ventas)
-                })
-            })
-        }
-    }, [produccion])
-
     const closeDialog = () => {
-        setData({produccion: null, ventas: null})
         handleClose()
     }
 
@@ -88,13 +43,13 @@ export default function VerProduccion(props) {
     const handleClick = (action, produccion) => {
         switch(action){
             case "cerrar":
-                closeProduccion(produccion).then( res => {
-                    if(res.status === 'success'){
-                        enqueueSnackbar(res.message, {variant: res.status})
-                    }else{
-                        enqueueSnackbar(res.message, {variant: 'error'})
-                    }
-                })
+                // closeProduccion(produccion).then( res => {
+                //     if(res.status === 'success'){
+                //         enqueueSnackbar(res.message, {variant: res.status})
+                //     }else{
+                //         enqueueSnackbar(res.message, {variant: 'error'})
+                //     }
+                // })
             break
             default:
                 enqueueSnackbar('No disponible en esta versión', {variant: 'error'})
@@ -109,7 +64,7 @@ export default function VerProduccion(props) {
             TransitionComponent={Transition}
             onClose={closeDialog}>
 
-            {!data.produccion && !data.ventas ?
+            { produccion === null ?
                 <LinearProgress variant="query"
                 />
                 :
@@ -123,12 +78,12 @@ export default function VerProduccion(props) {
                             <Grid container spacing={2}>
                                 <Grid item xs={4}>
                                     <Typography variant="h6">
-                                        {data.produccion.folio}: {data.produccion.clave}
+                                        {produccion.folio}: {produccion.clave}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Typography variant="h6" align="center">
-                                        {data.produccion.status}
+                                        {produccion.status}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={4}></Grid>
@@ -140,11 +95,11 @@ export default function VerProduccion(props) {
                         <CardHeader
                             avatar={
                                 <Avatar aria-label="recipe" className={classes.avatar}>
-                                    {data.produccion.clave.charAt(0)}
+                                    {produccion.clave.charAt(0)}
                                 </Avatar>
                             }
-                            title={data.produccion.clave}
-                            subheader={"Creado el: " + moment(data.produccion.fecha).format("YYYY-MM-DD")}
+                            title={produccion.clave}
+                            subheader={"Creado el: " + moment(produccion.fecha).format("YYYY-MM-DD")}
                             action={
                                 <div>
                                     <IconButton aria-label="Opciones" onClick={showMenu}>
@@ -156,7 +111,7 @@ export default function VerProduccion(props) {
                                         open={open}
                                         onClose={closeMenu}
                                     >
-                                        <MenuItem onClick={()=>handleClick('cerrar', data.produccion._id)}>Cerrar</MenuItem>
+                                        <MenuItem onClick={()=>handleClick('cerrar', produccion._id)}>Cerrar</MenuItem>
                                         <MenuItem onClick={handleClick}>Guardar</MenuItem>
                                         <Divider />
                                         <MenuItem onClick={handleClick}>Simular</MenuItem>
@@ -168,13 +123,9 @@ export default function VerProduccion(props) {
                             <Grid container spacing={2}>
 
                                 <Grid item xs={6} >
-                                    <Insumos produccion={data.produccion} enviarMensaje={enviarMensaje}/>
+                                    <Insumos produccion={produccion} enviarMensaje={enviarMensaje}/>
                                 </Grid>
 
-
-                                <Grid item xs={12}>
-                                    <DetalleInsumos />
-                                </Grid>
                                 <Grid item xs={12}>
                                                                        
                                 </Grid>
@@ -182,16 +133,16 @@ export default function VerProduccion(props) {
                                     
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ResumenVentas 
+                                    {/* <ResumenVentas 
                                         data={data.ventas}
 
-                                    />
+                                    /> */}
                                 </Grid>            
                                 <Grid item xs={12}>
-                                    <DetalleGastos 
+                                    {/* <DetalleGastos 
                                         gastos={data.egresos} 
 
-                                    />                                     
+                                    />                                      */}
                                 </Grid>
                             </Grid>
 

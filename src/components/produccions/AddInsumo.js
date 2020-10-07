@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Dialog, DialogTitle, DialogContent, Typography, TextField, MenuItem, Grid, DialogActions, Button } from '@material-ui/core'
 
-export default function AgregarInsumo(props){
+export default function AddInsumo(props){
     const {open, close, agregar, enviarMensaje, items} = props
     const [cantidad, setCantidad] = useState(0)
     const [item, setItem] = useState("")
