@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Balance from './Balance'
 import CuentasPorCobrar from './CuentasPorCobrar'
@@ -11,10 +11,11 @@ import Cobrar from '../creators/Cobro'
 
 import useUser from '../hooks/useUser'
 
-import { Grid, Box, IconButton, LinearProgress } from '@material-ui/core';
+import { Grid, Box, IconButton, Backdrop, Typography, CircularProgress } from '@material-ui/core';
 // import useStyles from './hooks/useStyles'
 
 import useBalance from '../hooks/useBalance'
+import useStyles from '../hooks/useStyles'
 import PaymentIcon from '@material-ui/icons/Payment';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
@@ -22,11 +23,19 @@ import { useSnackbar } from 'notistack';
 
 export default function Dashboard() {
     const { enqueueSnackbar } = useSnackbar()
+    const classes = useStyles();
     const { user } = useUser()
     const balance = useBalance()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
-
+    const[bckdrpOpen, setBdopen] = useState(false)
+    useEffect(() => {
+        if(balance === null){
+            setBdopen(true)
+        }else{
+            setBdopen(false)
+        }
+    }, [balance])
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
     const showPagar = () => {
@@ -47,9 +56,15 @@ export default function Dashboard() {
     return (
 
         <Grid container spacing={2}>
+            <Backdrop className={classes.backdrop} open={bckdrpOpen} children={
+                    <div>
+                        <Typography align="center" variant="subtitle1" children="Espere..." />
+                        <CircularProgress color="inherit" />
+                    </div>
+            } />
             {
-                balance === null ?
-                    <LinearProgress variant="query" />
+                balance === null || user === null || cobrar === null || pagar === null ?
+                    null
                     :
                     <React.Fragment>
                         <Grid item xs={12}>

@@ -37,19 +37,25 @@ export default function Router({auth}){
     };
         return (
             <div className={classes.root}>
-
-                    <Header url={url} auth={auth} open={open} toggle={toggle} />
-                    <main className={clsx(classes.content, {
-                        [classes.contentShift]: open,
-                    })}>
+                <Header url={url} auth={auth} open={open} toggle={toggle} />
+                    <main 
+                        className={
+                            clsx(
+                                classes.content, 
+                                { [classes.contentShift]: open, }
+                            )
+                        } >
                         <div className={classes.toolbar} />
                         <Switch>
-                            {/* <Route exact path={path} component={Dashboard}></Route> */}
-                            <Route exact path={path} render={
-                                (props) => ( 
+                            <Route 
+                                exact 
+                                path={path} 
+                                render={
+                                    (props) => ( 
                                         <Dashboard auth={auth} /> 
                                     )
-                                }></Route>
+                                }
+                            />
                             <Route exact path={`${path}/productos`} component={Productos}></Route>
                             <Route exact path={`${path}/produccions`} component={Produccions}></Route>
                             <Route exact path={`${path}/clientes`} component={Clientes}></Route>

@@ -1,11 +1,19 @@
 
 import { makeStyles } from '@material-ui/core/styles';
 const drawerWidth = 240;
-
+const getRandomColor =() => {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 const useStyles = makeStyles(theme => ({
     backgroundCustom: {
 
-        background: 'linear-gradient(214deg, #1aa27f, #4381e0)',
+        // background: 'linear-gradient(45deg, #6a2c70, #de4463)',
+        background: 'linear-gradient(30deg,'+ getRandomColor()+','+getRandomColor()+')',
         backgroundPosition: 'center',
         position: 'absolute',
         left: 0,
@@ -51,10 +59,6 @@ const useStyles = makeStyles(theme => ({
     clientesBar: {
         position: 'relative',
         backgroundColor: '#FF715B'
-    },
-    liquidacionBar: {
-        position: 'relative',
-        backgroundColor: '##353640'
     },
     appBarShift: {
         marginLeft: drawerWidth,
@@ -173,7 +177,27 @@ const useStyles = makeStyles(theme => ({
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
+
+    basic: {
+        backgroundColor: "#FFE873"
+    },
+    pro: {
+        backgroundColor: "#5CB9CC"
+    },
+    master: {
+        backgroundColor: "#EC4E20"
+    },
+    suspended: {
+        backgroundColor: "#F28969"
+    },
+    colored: {
+        backgroundColor: 'linear-gradient(214deg, #1aa27f, #4381e0)',
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
+    },
 
 }));
 

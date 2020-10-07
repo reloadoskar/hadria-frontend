@@ -1,7 +1,7 @@
 import {getProfile, logout} from './components/api'
 class Auth {
     constructor(){        
-        this.authenticated = true
+        this.authenticated = false
     }
 
     login(cb){
@@ -10,7 +10,11 @@ class Auth {
     }
 
     logout(cb){
-        this.authenticated = false
+        logout().then(res=>{
+            this.authenticated = false
+            console.log(res.message)
+        })
+        // this.authenticated = false
         cb()
     }
 
