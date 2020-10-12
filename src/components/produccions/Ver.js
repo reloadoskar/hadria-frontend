@@ -7,7 +7,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 // import DetalleGastos from './DetalleGastos'
 // import DetalleInsumos from './DetalleInsumos'
 import Insumos from './Insumos'
-
+import Procesar from './Procesar'
 import useStyles from '../hooks/useStyles'
 import moment from 'moment'
 
@@ -42,7 +42,7 @@ export default function Ver(props) {
 
     const handleClick = (action, produccion) => {
         switch(action){
-            case "cerrar":
+            // case "cerrar":
                 // closeProduccion(produccion).then( res => {
                 //     if(res.status === 'success'){
                 //         enqueueSnackbar(res.message, {variant: res.status})
@@ -50,7 +50,7 @@ export default function Ver(props) {
                 //         enqueueSnackbar(res.message, {variant: 'error'})
                 //     }
                 // })
-            break
+            // break
             default:
                 enqueueSnackbar('No disponible en esta versión', {variant: 'error'})
             break
@@ -127,7 +127,10 @@ export default function Ver(props) {
                                 </Grid>
 
                                 <Grid item xs={12}>
-                                                                       
+                                    <Procesar 
+                                        produccion={produccion}
+                                        enviarMensaje={enviarMensaje} 
+                                        />
                                 </Grid>
                                 <Grid item xs={12}>
                                     
