@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import { Grid, IconButton, Typography, Menu, MenuItem, Divider } from '@material-ui/core';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import { useHistory } from 'react-router-dom';
-import StatusDialog from './StatusDialog';
+import { Grid, IconButton, Typography, Menu, MenuItem, Divider } from '@material-ui/core'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import { useHistory } from 'react-router-dom'
+import StatusDialog from './StatusDialog'
 import useUser from './hooks/useUser'
 
 const UserFunctions = (props) => {
