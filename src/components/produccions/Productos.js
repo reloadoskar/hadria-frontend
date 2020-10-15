@@ -3,10 +3,13 @@ import { Card, CardContent, CardHeader, IconButton, Table, TableBody, TableCell,
 import DeleteIcon from '@material-ui/icons/Delete'
 import { formatNumber, sumImporte } from '../Tools';
 export default function Productos(props){
-    const {productos, eliminar, produccion, showMessage} = props
-    const agregar = () => {
+    const {productos, eliminar, 
+        // produccion, 
+        // showMessage
+    } = props
+    // const agregar = () => {
 
-    }
+    // }
 
     const handleEliminar = (producto) => {
         eliminar(producto)
