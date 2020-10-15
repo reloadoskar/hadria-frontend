@@ -31,19 +31,21 @@ const useInsumos = (produccion_id) => {
 		})
 	}
 
-	const restaStock = (id, cantidad) => {
+	const restaInsumoStock = (id, cantidad) => {
 		setUpdating(true)
 		return subtractInsumoStock(id, cantidad)
-			.then (() => {
+			.then (res => {
 				setUpdating(false)
+				return res
 			})
 	}
 
-	const sumaStock = (id, cantidad) => {
+	const sumaInsumoStock = (id, cantidad) => {
 		setUpdating(true)
 		return addInsumoStock(id, cantidad)
-			.then(() => {
+			.then(res => {
 				setUpdating(false)
+				return res
 			})
 	}
 
@@ -60,7 +62,7 @@ const useInsumos = (produccion_id) => {
 	return {
 		insumos,
 		add,
-		del, restaStock, sumaStock
+		del, restaInsumoStock, sumaInsumoStock
 	}
 };
 

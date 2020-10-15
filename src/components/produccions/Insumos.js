@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react' 
-import { LinearProgress, Card, CardHeader, CardContent, Grid, Typography, Table, TableHead, TableRow, TableCell, TableBody, IconButton } from "@material-ui/core";
+import { LinearProgress, Card, CardHeader, CardContent, Grid, Typography, IconButton, Divider, List } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import {formatNumber, sumImporte} from '../Tools'
 export default function Insumos(props) {
@@ -10,24 +10,10 @@ export default function Insumos(props) {
             setSumaInsumos(sumImporte(insumos))
         }
     }, [insumos])
-
-    // const agregar = (insumo) => {
-    //     insumo.produccion = produccion._id
-    //     showMessage("Agregando...", "info")
-    //     add(insumo).then(res => {
-    //         showMessage(res.message, res.status)
-    //     })
-    //     restaStock(insumo.compraItem._id, insumo.cantidad)
-    // }
-    
-    // const eliminar = (insumo) => {
-    //     showMessage("Eliminando...", "info")
-    //     del(insumo).then(res=>{
-    //         showMessage(res.message, res.status)
-    //     })
-    //     sumaStock(insumo.compraItem._id, insumo.cantidad)
-        
-    // }
+    const getPorcentaje = (total, disponible) => {
+        var porcentaje = disponible * 100 / total
+        return porcentaje
+    }
     return (
         <Card>
             {
@@ -35,8 +21,9 @@ export default function Insumos(props) {
                     <LinearProgress variant="query"/>
                 :
                 <React.Fragment>
-                    <CardHeader title="Insumos" 
-    
+                    <CardHeader 
+                        title="Insumos" 
+                        subheader={"Total: $"+ formatNumber(sumaInsumos,2)}
                     />
                     <CardContent>
                         { 
@@ -45,38 +32,48 @@ export default function Insumos(props) {
                             :
                                 <Grid container >
                                     <Grid item xs={12}>
-                                        <Table size="small">
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>Descripción</TableCell>
-                                                    <TableCell align="right">Cantidad</TableCell>
-                                                    <TableCell align="right">Importe</TableCell>
-                                                    <TableCell></TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {
-                                                    insumos.map((insumo, index) => (
-                                                        <TableRow key={index}>
-                                                            <TableCell>{insumo.compraItem.producto.descripcion}</TableCell>
-                                                            <TableCell align="right">{insumo.cantidad}</TableCell>
-                                                            <TableCell align="right">${formatNumber(insumo.importe, 2)}</TableCell>
-                                                            <TableCell align="right">
-                                                                <IconButton onClick={() => eliminar(insumo)}>
-                                                                    <DeleteIcon color="secondary"/>
-                                                                </IconButton>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                }
-                                                <TableRow>
-                                                    <TableCell colSpan={2} align="right">Total</TableCell>
-                                                    <TableCell align="right">
-                                                        <Typography align="right">${ formatNumber(sumaInsumos, 2) }</Typography> 
-                                                    </TableCell>
-                                                </TableRow>
-                                            </TableBody>
-                                        </Table>
+                                        {
+                                            insumos.map((insumo, index) => {
+                                                var porcentaje = getPorcentaje(insumo.cantidad, insumo.disponible)
+                                                    if(porcentaje === 0){
+                                                        return null
+                                                    }else{
+                                                        return (
+                                                            <List key={index}>
+                                                                <Grid container spacing={2}>
+                                                                    <Grid item xs={5}>
+                                                                        <Typography>
+                                                                            {insumo.compraItem.producto.descripcion}
+                                                                        </Typography>
+                                                                    </Grid>
+                                                                    <Grid item xs>
+                                                                        <Typography variant="overline" align="center" children={insumo.disponible + "/" + insumo.cantidad} />
+                                                                        <LinearProgress variant="determinate" value={porcentaje} color={porcentaje < 50 ? "secondary" : "primary"} />
+                                                                        <Typography variant="subtitle2" align="right" children={"%" + porcentaje} />
+                                                                    </Grid>
+                                                                    {
+                                                                        porcentaje < 100 ? 
+                                                                            null
+                                                                        :
+                                                                        <Grid item xs={2}>
+                                                                            <Grid container direction="row-reverse" justify="flex-end">
+                                                                                <Grid item xs>                                                                                
+                                                                                    <IconButton onClick={() => eliminar(insumo)} align="right">
+                                                                                        <DeleteIcon color="secondary"/>
+                                                                                    </IconButton>
+                                                                                </Grid>
+                                                                            </Grid>
+                                                                        </Grid>
+    
+                                                                    }
+                                                                </Grid>
+                                                                <Divider />
+                                                            </List>
+                                                        )
+                                                    }
+                                                        
+                                            })
+                                        }
 
                                     </Grid>
                                 </Grid>

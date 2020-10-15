@@ -114,7 +114,6 @@ export default function CompraAddItemsDialog({ open, handleClose, addItemToList,
                                     </TextField>
                                     <Box display={ !values.checked ? 'none' : 'block' }>
                                         <TextField
-                                                autoFocus
                                                 id="provedor"
                                                 select
                                                 required

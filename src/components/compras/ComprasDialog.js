@@ -10,10 +10,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import SaveIcon from '@material-ui/icons/Save';
 import AddIcon from '@material-ui/icons/Add';
-import {
-    MuiPickersUtilsProvider,
-    DatePicker
-} from '@material-ui/pickers';
 
 //HOOKS
 import useProvedors from '../hooks/useProvedors';
@@ -29,7 +25,6 @@ import reducer from '../reducers/ComprasReducer';
 import {objectIsNull, sumCantidad, sumEmpaques, formatNumber} from '../Tools'
 import { saveCompra, ticketCompra } from '../api'
 import moment from 'moment'
-import MomentUtils from '@date-io/moment';
 
 const initialState ={
     provedor: '',
@@ -60,7 +55,6 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
     const [provedorFastDialog, setProvedroFastDialog] = useState(false)
     const [tipoCompraDialog, setTipoCompraDialog] = useState(false)
     const [values, dispatch] = useReducer(reducer, initialState)
-    const [locale] = useState("es")
 
     const handleClose = (dialog) => {
         dispatch({type: 'reset'})
@@ -249,17 +243,15 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                             </Grid>
                             {/* Input: Fecha return Moment Object */}
                             <Grid item xs={12} md={4}>
-                                <MuiPickersUtilsProvider utils={MomentUtils} locale={locale}>
-                                    <DatePicker
+                                <TextField
                                         id="fecha"
                                         label="Selecciona la fecha"
+                                        type="date"
+                                        fullWidth
+                                        margin="normal"
                                         value={values.fecha}
                                         onChange={(e) => dispatch({type: 'fecha', value: e})}
-                                        margin="normal"
-                                        fullWidth
-                                        format="YYYY/MM/DD"
                                         />
-                                </MuiPickersUtilsProvider>
                             </Grid>
                             {/* Select: Ubicacion return _id Ubicacion */}
                             <Grid item xs={12} md={4}>

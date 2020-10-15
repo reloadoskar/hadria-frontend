@@ -1077,6 +1077,66 @@ export const closeProduccion = (id) => {
     
 }
 
+export const getProduccionItems = (id) => {
+    try{
+        if(decoded){
+            return axios
+                .get( url + decoded.database + '/produccionitems/'+ id)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const delProduccionItem = (item) => {
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database + '/produccionitem/delete', item)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const subtractProduccionItemStock = (id, cantidad) => {
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/produccionitem/subtract', {id, cantidad} )
+                .then ( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const addProduccionItemStock = () => {
+
+}
+
+export const addProduccionItem = (item) => {
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/produccionitem/save', item)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
 // INSUMOS
 
 export const getCompraItems = () => {
@@ -1152,7 +1212,7 @@ export const addInsumoStock = (id, cantidad) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/insumo/add' )
+                .post( url_client + decoded.database + '/insumo/add', {id, cantidad} )
                 .then( res => {
                     return res.data
                 })

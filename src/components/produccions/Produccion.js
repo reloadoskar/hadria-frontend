@@ -12,6 +12,7 @@ import AddInsumo from './AddInsumo'
 import useInsumos from '../insumos/useInsumos'
 import useStyles from '../hooks/useStyles'
 import useCompraItems from '../hooks/useCompraItems'
+import useProduccionItems from './useProduccionItems'
 import moment from 'moment'
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Zoom in ref={ref} {...props} />;
@@ -19,7 +20,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function Produccion(props) {
     const {produccion, isOpen, handleClose, showMessage} = props
-    const {insumos, add, del} = useInsumos(produccion._id)
+    const {insumos, add, del, restaInsumoStock, sumaInsumoStock} = useInsumos(produccion._id)
+    const {produccionItems, addProduccionItem, delProduccionItem} = useProduccionItems(produccion._id)
     const {items, restaStock, sumaStock} = useCompraItems()
     const [showCrearproducto, setShowCrearProducto] = useState(false)
     const [showAddInsumo, setShowAddInsumo] = useState(false)
@@ -30,8 +32,30 @@ export default function Produccion(props) {
         handleClose()
     }
 
-    const crearProducto = () => {
+    const crearProducto = (item) => {
+        showMessage("Agregando Producto...", "info")
+        // console.log(item)
+        //restar stock
+        item.insumos.forEach(op => {
+            restaInsumoStock(op.insumo._id, op.cantidad).then(res=>{
+                // console.log(res)
+            })
+        });
+        addProduccionItem(item).then(res=> {
+            showMessage(res.message, res.status)
+        })
+    }
 
+    const eliminarProducto = (item) => {
+        showMessage("Eliminando Producto...", "info")
+        item.insumos.forEach(op => {
+            sumaInsumoStock(op.insumo._id, op.cantidad).then(res=>{
+                // console.log(res)
+            })
+        })
+        delProduccionItem(item).then(res=>{
+            showMessage(res.message, res.status)
+        })
     }
 
     const agregarInsumo = (insumo) => {
@@ -39,8 +63,8 @@ export default function Produccion(props) {
         showMessage("Agregando...", "info")
         add(insumo).then(res => {
             showMessage(res.message, res.status)
+            restaStock(insumo.compraItem._id, insumo.cantidad)
         })
-        restaStock(insumo.compraItem._id, insumo.cantidad)
     }
 
     const eliminarInsumo = (insumo) => {
@@ -153,6 +177,8 @@ export default function Produccion(props) {
 
                                 <Grid item xs={6}>
                                     <Productos 
+                                        eliminar={eliminarProducto}
+                                        productos={produccionItems}
                                         produccion={produccion}
                                         showMessage={showMessage} 
                                         />
