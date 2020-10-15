@@ -69,9 +69,7 @@ const StatusDialog = (props) => {
     const handleClose = () =>{
         return close()
     }
-    // const pagar = () =>{
-    //     return null
-    // }
+
     return (
         <Dialog
             open={open}
@@ -111,9 +109,6 @@ const StatusDialog = (props) => {
                         <Button onClick={logout} color="primary">
                             Salir
                         </Button>
-                        {/* <Button onClick={handleClose} color="primary">
-                            Pagar con CODI
-                        </Button> */}
                     </div>
                         :
                         <div>
