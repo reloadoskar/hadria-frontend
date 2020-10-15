@@ -1,9 +1,12 @@
 import React, {useState} from 'react'
-import { Card, CardHeader, CardContent, Typography, Grid, ListItem, CircularProgress } from '@material-ui/core';
-import Ver from './Ver'
-
+import { IconButton, Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgress } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import Produccion from './Produccion'
+import useProduccions from '../produccions/useProduccions'
+import moment from 'moment'
 export default function Produccions(props){
-    const {produccions} = props
+    const {showMessage} = props
+    const {produccions, crearProduccion, eliminarProduccion, agregarInsumo, eliminarInsumo } = useProduccions()
     const [produccionSelected, setProduccionSelected] = useState(null)
     const [ver, setVer] = useState(false);
 
@@ -17,13 +20,24 @@ export default function Produccions(props){
             setVer(true)
         }
     }
+
+    const handleCrearProduccion = () => {
+        showMessage("Creando producción...", "info")
+        crearProduccion().then(res=>{
+            showMessage(res.message, res.status)
+        })
+    }
     return (
         <Card>
-            <CardHeader title="Producciones" />
+            <CardHeader title="Producciones" action ={
+                <IconButton onClick={(e) => handleCrearProduccion()}>
+                    <AddIcon />
+                </IconButton>
+            } />
             <CardContent>                
                 {
                     produccions === null ?
-                        <CircularProgress variant="query" />
+                        <LinearProgress variant="query" />
                     :
 
                     produccions.length === 0 ?
@@ -31,23 +45,34 @@ export default function Produccions(props){
                     : 
                         produccions.map( (produccion, index) => (
                             <ListItem button key={index} onClick={()=> handleMenu('ver', produccion)}>
-                            <Grid key={index} container justify="space-between" alignItems="center">
-                                <Grid item xs={6} md={4}>
-                                    <Typography variant="h5">{produccion.folio}</Typography>
+                                <Grid key={index} container justify="space-between" alignItems="center">
+                                    <Grid item xs>
+                                        <Typography variant="h5">{produccion.folio}</Typography>
+                                    </Grid>
+                                    <Grid item xs>
+                                        <Typography align="right">{moment(produccion.fecha).format("YYYY-MM-DD")}</Typography>
+                                    </Grid>
+                                    <Grid item xs>
+                                        <Typography align="right" children={produccion.status} />
+                                    </Grid>                            
                                 </Grid>
-                                <Grid item xs={6} md={4}>
-                                    <Typography align="right">{produccion.fecha }</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={4}>
-                                    <Typography align="right" children={produccion.status} />
-                                </Grid>
-                                
-                            </Grid>
                             </ListItem>
                         ))
                 }
             </CardContent>
-            <Ver produccion={produccionSelected} isOpen={ver} handleClose={handleClose}/>
+            {
+                produccionSelected != null ?
+                    <Produccion 
+                        produccion={produccionSelected} 
+                        isOpen={ver}
+                        agregarInsumo={agregarInsumo}
+                        eliminarInsumo={eliminarInsumo}
+                        eliminarProduccion={eliminarProduccion}
+                        showMessage={showMessage}
+                        handleClose={handleClose}/>
+                    :
+                    null
+            }
         </Card>
     )
 }

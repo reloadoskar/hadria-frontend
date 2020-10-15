@@ -1,20 +1,26 @@
 import React, {useState} from 'react'
 import { Dialog, DialogTitle, DialogContent, Typography, TextField, MenuItem, Grid, DialogActions, Button } from '@material-ui/core'
 
-export default function AddInsumo(props){
-    const {open, close, agregar, enviarMensaje, items} = props
+const AddInsumo = ( (props, ref) => {
+    const {agregar, showMessage, items, open, close} = props
     const [cantidad, setCantidad] = useState(0)
     const [item, setItem] = useState("")
+
+    const hide = () => {
+        setCantidad(0)
+        setItem('')
+        close()
+    }
 
     const handleChange = (field, value) => {
         switch(field){
             case 'cantidad':     
                 if(value < 0){
-                    enviarMensaje("En serio?, números negativos?, :P", "error")
+                    showMessage("En serio?, números negativos?, :P", "error")
                     return setCantidad(0)
                 }
                 if(value > item.stock){
-                    enviarMensaje("Sólo hay "+item.stock+" Disponible.", "warning")
+                    showMessage("Sólo hay "+item.stock+" Disponible.", "warning")
                     return setCantidad(item.stock)
                 }
                 return setCantidad(value)           
@@ -25,12 +31,6 @@ export default function AddInsumo(props){
                 return null
         }
     } 
-
-    const handleClose = () => {
-        setCantidad(0)
-        setItem('')
-        close()
-    }
 
     const handleAgregar = () => {
         var newInsumo = {
@@ -44,14 +44,14 @@ export default function AddInsumo(props){
         // console.log(newInsumo)
         agregar(newInsumo)
 
-        handleClose()
+        hide()
     }
     return(
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+        <Dialog open={open} onClose={hide} fullWidth maxWidth="md">
             <DialogTitle>Agregar Insumo</DialogTitle>
             <DialogContent>
                 {
-                    items === null ?
+                    items === null  ?
                         <Typography align="center">No hay productos qué mostrar.</Typography>
                         :
                 <Grid container >
@@ -105,4 +105,6 @@ export default function AddInsumo(props){
             </DialogActions>
         </Dialog>
     )
-}
+})
+
+export default AddInsumo

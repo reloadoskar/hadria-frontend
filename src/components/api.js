@@ -1135,6 +1135,33 @@ export const delInsumo = (insumo) => {
     }
 }
 
+export const subtractInsumoStock = (id, cantidad) => {
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/insumo/subtract', {id, cantidad} )
+                .then ( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+export const addInsumoStock = (id, cantidad) => {
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/insumo/add' )
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
 export const subtractStock = (id, cantidad) => {
     try{
         if(decoded){

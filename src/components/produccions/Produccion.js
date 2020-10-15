@@ -1,61 +1,71 @@
-import React, { useState } from 'react'
-import { useSnackbar } from 'notistack';
-import { Dialog, AppBar, Toolbar, IconButton, Typography, Card, CardHeader, Zoom, CardContent, Avatar, Grid, LinearProgress, Menu, MenuItem, Box, Divider } from '@material-ui/core';
+import React, {useState} from 'react'
+import { Button, ButtonGroup, Dialog, AppBar, Toolbar, IconButton, Typography, Card, CardHeader, Zoom, CardContent, Avatar, Grid, LinearProgress, Box } from '@material-ui/core';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import PostAddIcon from '@material-ui/icons/PostAdd';
 // import ResumenVentas from './ResumenVentas'
 // import DetalleGastos from './DetalleGastos'
 // import DetalleInsumos from './DetalleInsumos'
 import Insumos from './Insumos'
+import Productos from './Productos'
 import Procesar from './Procesar'
+import AddInsumo from './AddInsumo'
+import useInsumos from '../insumos/useInsumos'
 import useStyles from '../hooks/useStyles'
+import useCompraItems from '../hooks/useCompraItems'
 import moment from 'moment'
-
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Zoom in ref={ref} {...props} />;
 });
 
-export default function Ver(props) {
-    const {produccion, isOpen, handleClose} = props
-
+export default function Produccion(props) {
+    const {produccion, isOpen, handleClose, showMessage} = props
+    const {insumos, add, del} = useInsumos(produccion._id)
+    const {items, restaStock, sumaStock} = useCompraItems()
+    const [showCrearproducto, setShowCrearProducto] = useState(false)
+    const [showAddInsumo, setShowAddInsumo] = useState(false)
     const classes = useStyles()
-    const { enqueueSnackbar } = useSnackbar()
+    // var {insumos} = useInsumos()
     
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-
     const closeDialog = () => {
         handleClose()
     }
 
-    const showMenu = event => {
-        setAnchorEl(event.currentTarget);
+    const crearProducto = () => {
+
     }
 
-    const closeMenu = () => {
-        setAnchorEl(null);
+    const agregarInsumo = (insumo) => {
+        insumo.produccion = produccion._id
+        showMessage("Agregando...", "info")
+        add(insumo).then(res => {
+            showMessage(res.message, res.status)
+        })
+        restaStock(insumo.compraItem._id, insumo.cantidad)
     }
 
-    const enviarMensaje = (mensaje, tipo) =>{
-        enqueueSnackbar(mensaje, {variant: tipo})
+    const eliminarInsumo = (insumo) => {
+        showMessage("Eliminando...", "info")
+        del(insumo).then(res=>{
+            showMessage(res.message, res.status)
+        })
+        sumaStock(insumo.compraItem._id, insumo.cantidad)
     }
 
-    const handleClick = (action, produccion) => {
-        switch(action){
-            // case "cerrar":
-                // closeProduccion(produccion).then( res => {
-                //     if(res.status === 'success'){
-                //         enqueueSnackbar(res.message, {variant: res.status})
-                //     }else{
-                //         enqueueSnackbar(res.message, {variant: 'error'})
-                //     }
-                // })
-            // break
-            default:
-                enqueueSnackbar('No disponible en esta versión', {variant: 'error'})
-            break
-        }
+    const openCrearProducto = () => {
+        setShowCrearProducto(true)
     }
+    const closeCrearProducto = () => {
+        setShowCrearProducto(false)
+    }
+
+    const openAddInsumo = () => {
+        setShowAddInsumo(true)
+    }
+
+    const closeAddInsumo = () => {
+        setShowAddInsumo(false)
+    }
+
     return (
         <Dialog
             fullScreen
@@ -101,35 +111,50 @@ export default function Ver(props) {
                             title={produccion.clave}
                             subheader={"Creado el: " + moment(produccion.fecha).format("YYYY-MM-DD")}
                             action={
-                                <div>
-                                    <IconButton aria-label="Opciones" onClick={showMenu}>
-                                        <MoreVertIcon />
-                                    </IconButton>
-                                    <Menu 
-                                        anchorEl={anchorEl}
-                                        keepMounted
-                                        open={open}
-                                        onClose={closeMenu}
-                                    >
-                                        <MenuItem onClick={()=>handleClick('cerrar', produccion._id)}>Cerrar</MenuItem>
-                                        <MenuItem onClick={handleClick}>Guardar</MenuItem>
-                                        <Divider />
-                                        <MenuItem onClick={handleClick}>Simular</MenuItem>
-                                    </Menu>
-                                </div>
+                                <ButtonGroup variant="contained" size="small">
+                                    <Button 
+                                        onClick={() => openAddInsumo()}
+                                        endIcon={<PostAddIcon/>}
+                                        children="Agregar insumo"
+                                    />
+                                    <AddInsumo 
+                                        open={showAddInsumo}
+                                        close={closeAddInsumo}
+                                        agregar={agregarInsumo}
+                                        items={items}
+                                        showMessage={showMessage} />
+                                    <Button
+                                        onClick={()=>openCrearProducto()}
+                                        endIcon={<PostAddIcon/>}>
+                                            Procesar
+                                    </Button>
+                                    <Procesar 
+                                            open={showCrearproducto}
+                                            close={closeCrearProducto}
+                                            crear={crearProducto}
+                                            insumos={insumos}
+                                            produccion={produccion}
+                                            showMessage={showMessage} />
+                                </ButtonGroup>
                             }
+                            
                         />
                         <CardContent>
                             <Grid container spacing={2}>
 
                                 <Grid item xs={6} >
-                                    <Insumos produccion={produccion} enviarMensaje={enviarMensaje}/>
+                                    <Insumos 
+                                        insumos={insumos}
+                                        eliminar={eliminarInsumo}
+                                        produccion={produccion}
+                                        showMessage={showMessage}/>
+                                    
                                 </Grid>
 
-                                <Grid item xs={12}>
-                                    <Procesar 
+                                <Grid item xs={6}>
+                                    <Productos 
                                         produccion={produccion}
-                                        enviarMensaje={enviarMensaje} 
+                                        showMessage={showMessage} 
                                         />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -151,6 +176,7 @@ export default function Ver(props) {
 
                         </CardContent>
                     </Card>
+
                 </React.Fragment>
             }
 

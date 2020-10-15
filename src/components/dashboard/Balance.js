@@ -22,7 +22,7 @@ export default function Balance({balance}) {
 
                         <React.Fragment>
 
-                            <Grid item xs={12} md>
+                            <Grid item xs>
                                 <Card>
                                     <CardHeader>
                                     </CardHeader>
@@ -40,7 +40,7 @@ export default function Balance({balance}) {
                                     </CardActions>
                                 </Card>
                             </Grid>
-                            <Grid item xs={12} md>
+                            <Grid item xs>
                                 <Card>
                                     <CardHeader>
                                     </CardHeader>
@@ -69,7 +69,7 @@ export default function Balance({balance}) {
                                     </CardActions>
                                 </Card>
                             </Grid>
-                            <Grid item xs={12} md>
+                            <Grid item xs>
                                 <Card>
                                     <CardHeader>
                                     </CardHeader>
@@ -82,7 +82,7 @@ export default function Balance({balance}) {
                                     </CardActions>
                                 </Card>
                             </Grid>
-                            <Grid item xs={12} md>
+                            <Grid item xs>
                                 <Card>
                                     <CardHeader>
                                     </CardHeader>
@@ -95,7 +95,7 @@ export default function Balance({balance}) {
                                     </CardActions>
                                 </Card>
                             </Grid>
-                            <Grid item xs={12} md>
+                            <Grid item xs>
                                 <Card>
                                     <CardHeader>
                                     </CardHeader>

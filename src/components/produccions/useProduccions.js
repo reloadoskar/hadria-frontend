@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getProduccions, createProduccion, delProduccion } from '../api'
+import { getProduccions, createProduccion, delProduccion, addInsumo, delInsumo } from '../api'
 const useProduccions = () => {
 	const [produccions, setProduccions] = useState(null)
     const [updating, setUpdating] = useState(false)
@@ -11,18 +11,17 @@ const useProduccions = () => {
 		loadProductions()
 	}, [updating])
 
-	function add() {
+	function crearProduccion() {
         setUpdating(true)
 		return createProduccion().then(res => {
 			if (res.status === 'success') {
-				const newProduccion = [...produccions, res.produccion];  
-				setProduccions(newProduccion)
-                setUpdating(false)
+				setUpdating(false)
+				return res
 			}
 		})
 	}
 
-	function del(index, produccionId) {
+	function eliminarProduccion(index, produccionId) {
         setUpdating(true)
 		return delProduccion(produccionId).then(res => {
 			if(res.status === 'success'){
@@ -34,10 +33,28 @@ const useProduccions = () => {
 		})
 	}
 
+	function agregarInsumo(insumo){
+		setUpdating(true)
+		return addInsumo(insumo).then(res => {
+			setUpdating(false)
+			return res
+		})
+	}
+
+	function eliminarInsumo(insumo){
+		setUpdating(true)
+		return delInsumo(insumo).then(res => {
+			setUpdating(false)
+			return res
+		})
+	}
+
 	return {
 		produccions,
-		add,
-		del
+		crearProduccion,
+		eliminarProduccion,
+		agregarInsumo,
+		eliminarInsumo
 	}
 };
 
