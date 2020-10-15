@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogTitle, DialogContent, Typography, Grid, TextField, MenuItem, Button, Table, TableHead, TableCell, TableBody, TableRow, DialogActions, Divider } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, Typography, Grid, TextField, MenuItem, Button, DialogActions, Divider } from '@material-ui/core'
 import useProducts from '../hooks/useProducts'
 import useStyles from '../hooks/useStyles'
 import {formatNumber, sumImporte} from '../Tools'
@@ -238,7 +238,7 @@ const Procesar = (props) => {
                                                         </React.Fragment>
                                                     ))
                                                 }
-                                                <Typography variant="h6" align="right" children={"Inversion Total: $" + formatNumber(sumaImporteInsumos,2)} />
+                                                
                                                 
                                             </div>
                                             :
@@ -251,25 +251,19 @@ const Procesar = (props) => {
                                                 null
                                             :
                                             <div>
-                                                <Typography variant="h5">Producido</Typography>
-                                                <Table size="small">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell>Producto</TableCell>
-                                                            <TableCell align="right">Cantidad.</TableCell>
-                                                            <TableCell align="right">Costo producción</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        
-                                                                <TableRow >
-                                                                    <TableCell>{productoProcesado.producto.descripcion}</TableCell>
-                                                                    <TableCell align="right">{productoProcesado.cantidad}</TableCell>
-                                                                    <TableCell align="right">{formatNumber(productoProcesado.costo,2)}</TableCell>
-                                                                </TableRow>
-                                                        
-                                                    </TableBody>
-                                                </Table>
+                                                <Typography align="center" variant="h5">Obtuviste:</Typography>
+                                                <Grid container >
+                                                    <Grid item xs={1}>
+                                                        <Typography children={productoProcesado.cantidad} />
+                                                    </Grid>
+                                                    <Grid item xs={8}>
+                                                        <Typography children={productoProcesado.producto.descripcion} />
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <Typography align="right" children={"Costo/u : $" + formatNumber(productoProcesado.costo,2)} />
+                                                    </Grid>
+                                                </Grid>                                            
+                                                <Typography variant="h6" align="right" children={"Inversion Total: $" + formatNumber(sumaImporteInsumos,2)} />
                                             </div>
 
                                         }
