@@ -1,6 +1,6 @@
 {
   "name": "hadria",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@date-io/moment": "^2.10.6",
