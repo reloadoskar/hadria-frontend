@@ -1,6 +1,9 @@
 {
   "name": "hadria",
   "version": "0.2.0",
+  "engines": {
+    "node": "12.19.0"
+  },
   "private": true,
   "dependencies": {
     "@date-io/moment": "^2.10.6",
@@ -21,13 +24,16 @@
     "react-moment": "^1.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "serve": "^11.3.2",
     "victory": "^35.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
