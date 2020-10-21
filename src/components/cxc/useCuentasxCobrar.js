@@ -6,7 +6,7 @@ export default function useCuentasxCobrar(){
     useEffect(() => {
 		async function loadCuentas() {
 			const res = await getCuentasPorCobrar()
-			setCuentasxCobrar(res.cuentas);
+			setCuentasxCobrar(res.ventas);
 		}
         loadCuentas()
         

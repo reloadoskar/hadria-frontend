@@ -1,7 +1,7 @@
 import React from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Avatar, Card, CardContent, CardHeader, Divider, Grid, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core'
 import PersonIcon from '@material-ui/icons/Person';
-import {formatNumber, sumSaldo} from '../Tools'
+import {formatNumber, sumSaldo, sumImporte} from '../Tools'
 export default function CuentasxCobrar(props) {
     const {cuentas} = props
     const handleClick = (cuenta) => {
@@ -51,12 +51,27 @@ export default function CuentasxCobrar(props) {
                                                             
                                                         </Grid>
                                                         <Grid item xs={12}>
-                                                            <Typography variant="subtitle2" children={venta.items.producto[0].descripcion} />
+                                                            <Typography variant="subtitle2" children={venta.items.producto.descripcion} />
                                                             <Typography variant="caption" children={venta.items.cantidad + " X $" + venta.items.precio} />
                                                         </Grid>
                                                         <Grid item xs={12}>
                                                             <Typography variant="caption" align="right" children="Importe" />
                                                             <Typography variant="subtitle2" align="right" children={"$"+formatNumber(venta.importe,2)} />
+                                                        </Grid>
+                                                        <Grid item xs={12}>
+                                                            {
+                                                                venta.pagos.length === 0 ?
+                                                                    <Typography variant="caption" children="No se encontraron pagos." />
+                                                                    :
+                                                                    <div>
+                                                                        <Typography variant="caption" children="Pagos:" />
+                                                                        {venta.pagos.map((pago,i)=>(
+                                                                            <Typography color="error" variant="subtitle2" align="right" key={i} children={pago.fecha + " -$" + formatNumber(pago.importe,2)} />
+                                                                        ))}
+                                                                        <Divider />
+                                                                        <Typography align="right" variant="subtitle2" children={"= $"+ formatNumber(sumImporte(venta.pagos),2)} />
+                                                                    </div>
+                                                            }
                                                         </Grid>
                                                         <Grid item xs={12}>
                                                             <Typography variant="caption" align="right" children="Saldo" />
@@ -67,32 +82,10 @@ export default function CuentasxCobrar(props) {
                                                     </div>                                         
                                                 ))
                                             }
-
-                                        </Grid>
-
-                                        <Grid item xs={12}>
-                                            {                                                                        
-                                                cuenta.pagos.map((pago,i) => {
-                                                    if(pago.length !== 0) {
-                                                        return (
-                                                            <div>
-                                                                <Typography children="Pagos:" />
-                                                                <Grid container key={i}>
-                                                                    <Grid item xs={12}>
-                                                                        <Typography variant="caption" align="right" children={pago[0].fecha} />
-                                                                        <Typography variant="subtitle2" align="right" children={"-$"+formatNumber(pago[0].importe,2)} />
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </div>
-                                                            )
-                                                    }else{
-                                                        return null
-                                                    }
-                                                })                                                                                            
-                                            }
+                                        
                                         </Grid>
                                     </Grid>
-                                </AccordionDetails>
+                                </AccordionDetails> 
                             </Accordion>
                         ))} 
                     </div>
