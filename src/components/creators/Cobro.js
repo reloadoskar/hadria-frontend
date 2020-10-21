@@ -4,16 +4,17 @@ import {savePagoACuentaPorCobrar, ticketCobranza} from '../api'
 import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
 import useUbicacions from '../hooks/useUbicacions'
 import useClientes from '../hooks/useClientes'
-
+import moment from 'moment'
 const initialData = {
     cliente: '',
     ubicacion: '',
     cuenta: '',
     importe: 0,
     referencia: '',
-    tipoPago: 'EFECTIVO'
+    tipoPago: 'EFECTIVO',
+    fecha: moment().format("YYYY-MM-DD")
 }
-export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage, addToSaldo }) {
+export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage }) {
     
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const {clientes} = useClientes()
@@ -44,20 +45,20 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage, a
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log("enviando...")
         var pago = {
             ubicacion: values.ubicacion,
             cuenta: values.cuenta,
             tipoPago: values.tipoPago,
             importe: values.importe,
             referencia: values.referencia,
+            fecha: values.fecha
            
         }
         savePagoACuentaPorCobrar(pago).then(res =>{
             showMessage(res.message, res.status)
             close('cobroDialog')
             //updateSaldoCuenta() FALTA
-            addToSaldo(pago.importe)
+            // addToSaldo(pago.importe)
             clearFields()
             ticketCobranza(pago)
             if(reprint){
@@ -199,6 +200,16 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage, a
                                 />
                             </Grid>
                         }
+                        <Grid item xs={12}>
+                            <TextField
+                                id="fecha"
+                                type="date"
+                                label="fecha"
+                                fullWidth
+                                value={values.fecha}
+                                onChange={(e) => handleChange('fecha', e.target.value)}
+                                />
+                        </Grid>
 
                     </Grid>
                 </DialogContent>
