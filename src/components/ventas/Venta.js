@@ -6,7 +6,7 @@ import useStyles from '../hooks/useStyles'
 import { Grid, Typography, IconButton, Table, TableHead, TableRow, TableCell, TableBody, Box, } from '@material-ui/core';
 
 import { cancelVenta, existCorte, ticketVenta } from '../api'
-
+import {formatNumber} from '../Tools'
 const Venta = (props) => {
     const venta = props.data[0]
     const showMessage = props.showMessage
@@ -40,137 +40,69 @@ const Venta = (props) => {
         return cancelVenta(id)
     }
     return (
-        <React.Fragment>
-
-            <Grid container spacing={2}>
-                {
-                    venta ?
-                        <React.Fragment>
-                            {/* <Box bgcolor={venta.tipoPago === "CANCELADO" ? "secondary.main" : null}> */}
-                            {
-                                venta.tipoPago === "CANCELADO"
-                                    ?
-                                    null
-                                    :
-                                    <Grid item xs={12}>
-                                        <IconButton onClick={() => handleClick('edit', venta._id)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                        <IconButton onClick={() => handleClick('delete', venta)}>
-                                            <BlockIcon />
-                                        </IconButton>
-                                        <IconButton onClick={() => handleClick('reprint', venta)}>
-                                            <ReceiptIcon />
-                                        </IconButton>
-                                    </Grid>
-
-                            }
-                            <Grid item xs={12}>
-                                <Box bgcolor={venta.tipoPago === "CANCELADO" ? "secondary.main" : null}>
-                                    <Typography align="center" variant="h6">{venta.tipoPago}</Typography>
-                                </Box>
-                            </Grid>
-                            {/* </Box> */}
-                            <Grid item xs={12} md={6}>
-                                <Typography align="center" variant="h5">{venta.folio} | {venta.cliente.nombre}</Typography>
-                            </Grid>
-                            <Grid item xs={12} md>
-                                {
-                                    !venta.ubicacion ?
-                                        null
-                                        :
-
-                                        <Typography align="center" variant="h5">{venta.ubicacion.nombre} | {venta.fecha}</Typography>
-                                }
-                            </Grid>
-                            <Grid item xs={12} md>
-                                <Typography align="right" variant="h5">${venta.importe}</Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-
-                                <Grid container spacing={2}>
-                                    <Table size="small" className={classes.table}>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>Clave de Compra</TableCell>
-                                                <TableCell>Descripción</TableCell>
-                                                <TableCell align="right">Cantidad</TableCell>
-                                                <TableCell align="right">Empaques</TableCell>
-                                                <TableCell align="right">Precio</TableCell>
-                                                <TableCell align="right">Importe</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {
-                                                venta.items.map((item, index) => (
-                                                    <TableRow key={index}>
-                                                        <TableCell>
-                                                            <Typography>{item.compra.folio}:{item.compra.clave}</Typography>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Typography>{item.producto.descripcion}</Typography>
-                                                        </TableCell>
-                                                        <TableCell align="right">
-                                                            <Typography>{item.cantidad}</Typography>
-                                                        </TableCell>
-                                                        <TableCell align="right">
-                                                            <Typography>{item.empaques}</Typography>
-                                                        </TableCell>
-                                                        <TableCell align="right">
-                                                            <Typography>{item.precio}</Typography>
-                                                        </TableCell>
-                                                        <TableCell align="right">
-                                                            <Typography>{item.importe}</Typography>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))
-                                            }
-
-                                        </TableBody>
-                                    </Table>
-                                </Grid>
-
-                                {
-                                    venta.pagos.length > 0 ?
-                                    <Grid container spacing={2}>
-                                        <Typography variant="h6" align="center" children="PAGOS" />
-                                        <Table size="small">
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>Ubicación</TableCell>
-                                                    <TableCell>Fecha</TableCell>
-                                                    <TableCell align="right">Importe</TableCell>
-                                                </TableRow> 
-                                            </TableHead>
-                                            <TableBody>
-                                                {
-                                                    venta.pagos.map((item, index) => (
-                                                        <TableRow>
-                                                            <TableCell>{item.ubicacion.nombre}</TableCell>
-                                                            <TableCell>{item.fecha}</TableCell>
-                                                            <TableCell align="right">{item.importe}</TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                }
-                                            </TableBody>
-                                        </Table>
-                                    </Grid>
-                                    :
-                                    null
-                                }
-
-                            </Grid>
-
-                        </React.Fragment>
-
+        <Grid container spacing={2}>
+            {
+                venta ?
+                    <Grid container>
+                        
+                        <Grid item xs={12}>
+                            <Typography variant="h6">{venta.folio} | {venta.cliente.nombre}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography align="right">{venta.tipoPago}</Typography>
+                            <Typography align="right">${formatNumber(venta.importe,2)}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography align="right">SALDO:</Typography>
+                            <Typography align="right">${formatNumber(venta.saldo,2)}</Typography>
+                        </Grid>
+                        
+                        {venta.items.length === 0 ?
+                            null
                         :
-                        null
+                            <div>
+                                <Typography variant="h6" >ITEMS:</Typography>
+                            {
+                                venta.items.map((item, index) => (
+                                    <Grid container key={index}>
+                                        <Grid item xs={12}>
+                                            <Typography>{item.compra.folio}:{item.compra.clave} - {item.producto.descripcion}</Typography>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            {item.cantidad} - {item.empaques} x {item.precio}
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography children={item.importe} />
+                                        </Grid>
+                                    </Grid>
+                                    ))                                                    
+                            }
+                            </div>
 
-                }
-            </Grid>
+                        }
 
+                        {venta.pagos.length === 0 ?
+                            null
+                        :
+                            <Grid container spacing={2}>
+                                <Typography variant="h6" align="center" children="PAGOS:" />
+                                {
+                                    venta.pagos.map((pago, i) => (
+                                        <Grid container kay={i}>
+                                            <Grid item xs={12}>
+                                                {pago.fecha} - {pago.ubicacion.nombre} - ${formatNumber(pago.importe,2)}
+                                            </Grid>
+                                        </Grid>
+                                    ))
+                                }                                        
+                            </Grid>
+                        }
+                    </Grid>   
+                :
+                    null                     
 
-        </React.Fragment>
+            }
+        </Grid>
     )
 }
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import moment from 'moment'
 
 import useStyles from '../hooks/useStyles'
@@ -7,18 +7,10 @@ import { MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, } fro
 
 import useUbicacions from '../hooks/useUbicacions'
 
-import {
-    DatePicker,
-    MuiPickersUtilsProvider,
-    } from "@material-ui/pickers";
-
-import MomentUtils from '@date-io/moment';
-import "moment/locale/es";
 
 export default function PosAcceso({values, checkCorte, handleChange}){
     const classes = useStyles();
     const {ubicacions} = useUbicacions();
-    const [locale] = useState("es")
     const handleSubmit = (e) => {
         e.preventDefault()
         checkCorte()
@@ -54,16 +46,15 @@ export default function PosAcceso({values, checkCorte, handleChange}){
                         ))}
                     </TextField>
 
-                    <MuiPickersUtilsProvider utils={MomentUtils} locale={locale}>
-                        <DatePicker
+                    <TextField
+                            id="fecha"
                             value={values.fecha}
                             fullWidth
                             margin="normal"
-                            variant="outlined" 
-                            format="DD/MM/YYYY"
-                            onChange={e => handleChange('fecha', e)}
+                            variant="outlined"                             
+                            onChange={e => handleChange('fecha', e.target.value)}
                         />
-                    </MuiPickersUtilsProvider>
+                    
                     
                     <Grid container justify="flex-end">
                         <Button 

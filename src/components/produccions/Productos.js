@@ -1,6 +1,7 @@
 import React from 'react'
-import { Card, CardContent, CardHeader, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography, } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Divider, LinearProgress, Typography, } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete'
+import Producto from './Producto'
 import { formatNumber, sumImporte } from '../Tools';
 export default function Productos(props){
     const {productos, eliminar, 
@@ -10,15 +11,11 @@ export default function Productos(props){
     // const agregar = () => {
 
     // }
-
-    const handleEliminar = (producto) => {
-        eliminar(producto)
-    }
     return (
         <Card>
             {
                 productos === null ?
-                    null
+                    <LinearProgress variant="query" />
                 :
                     <div>
                         <CardHeader title="Productos"
@@ -30,34 +27,20 @@ export default function Productos(props){
                                 productos.length === 0 ?
                                         <Typography align="center">No hay productos</Typography>
                                     :
-                                        <Table size="small">
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>Descripción</TableCell>
-                                                    <TableCell>Cantidad</TableCell>
-                                                    <TableCell>Costo/u</TableCell>
-                                                    <TableCell>Importe</TableCell>
-                                                    <TableCell></TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {
-                                                    productos.map((op, i) => (
-                                                        <TableRow key={i}>
-                                                            <TableCell>{op.producto.descripcion}</TableCell>
-                                                            <TableCell align="right">{op.cantidad}</TableCell>
-                                                            <TableCell align="right">{formatNumber(op.costo,2)}</TableCell>
-                                                            <TableCell align="right">{formatNumber(op.importe)}</TableCell>
-                                                            <TableCell>
-                                                                <IconButton onClick={() => handleEliminar(op)}>
-                                                                    <DeleteIcon color="secondary"/>
-                                                                </IconButton>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                }
-                                            </TableBody>
-                                        </Table>
+                                    <div>
+                                        {
+                                            productos.map ( (op, i) => (
+                                                <div index={i}>
+                                                    <Producto producto={op} eliminar={eliminar}/>
+                                                    <Divider />
+                                                </div>
+                                            ))
+                                        }
+                                        
+                                            <Typography align="right" variant="h6" children={"$"+formatNumber(sumImporte(productos),2)} />
+                                        
+                                    </div>
+
                             }
                         </CardContent>
                     </div>

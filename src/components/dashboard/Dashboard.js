@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
-
 import Balance from './Balance'
-import CuentasPorCobrar from './CuentasPorCobrar'
+
+import Produccions from '../produccions/Produccions'
+
+import CuentasxCobrar from '../cxc/CuentasxCobrar'
+import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 
 import CuentasPorPagar from './CuentasPorPagar'
 import ComprasDash from './ComprasDash'
@@ -10,7 +13,6 @@ import Cobrar from '../creators/Cobro'
 
 import useUser from '../hooks/useUser'
 
-import Produccions from '../produccions/Produccions'
 
 
 import { Grid, Box, IconButton, Backdrop, Typography, CircularProgress } from '@material-ui/core';
@@ -24,6 +26,7 @@ import { useSnackbar } from 'notistack';
 
 export default function Dashboard() {
     const { enqueueSnackbar } = useSnackbar()
+    const {cuentasxCobrar} = useCuentasxCobrar()
     const classes = useStyles();
     const { user } = useUser()
     const balance = useBalance()
@@ -104,7 +107,7 @@ export default function Dashboard() {
                         <Grid item xs={12} md={5}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
-                                    <CuentasPorCobrar />
+                                    <CuentasxCobrar cuentas={cuentasxCobrar} />
 
                                 </Grid>
                                 <Grid item xs={12}>

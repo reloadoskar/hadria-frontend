@@ -31,6 +31,7 @@ const useBalance = () => {
                 dispPorUbic: data.disponiblePorUbicacion,
             })
         })
+        return () => setBalance(null)
     }, [])
 
     

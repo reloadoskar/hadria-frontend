@@ -45,9 +45,9 @@ export const sumSaldo = (list) => {
     let suma = 0
 
     list.forEach(function(item){
-        if(item.tipoPago === 'CRÉDITO'){
+        // if(item.tipoPago === 'CRÉDITO'){
             suma += parseFloat(item.saldo)
-        }
+        // }
     })
 
     return suma

@@ -24,9 +24,9 @@ const useStyles = makeStyles(theme => ({
 const initialState = {
 	nombre: '',
     rfc: '',
-    direccion: '',
-    tel1: '',
-    email: '',
+    direccion: 'NO DISP',
+    tel1: '1234567890',
+    email: 'nomail@mail.com',
     diasDeCredito: 0,
     limiteDeCredito: 0,
 }
@@ -96,7 +96,6 @@ export default function ClientesDialog({ addCliente, isShowing, toggle }) {
 							</Grid>
 							<Grid item xs={6} md={3}>
 								<TextField
-									required
 									fullWidth
 									id="direccion"
 									label="Dirección"
@@ -109,7 +108,6 @@ export default function ClientesDialog({ addCliente, isShowing, toggle }) {
 							</Grid>
 							<Grid item xs={6} md={3}>
 								<TextField
-									required
 									fullWidth
 									id="tel1"
 									label="Teléfono"
@@ -123,7 +121,6 @@ export default function ClientesDialog({ addCliente, isShowing, toggle }) {
 							</Grid>
 							<Grid item xs={6} md={3}>
 								<TextField
-                                    required
 									fullWidth
 									id="email"
 									label="email"
