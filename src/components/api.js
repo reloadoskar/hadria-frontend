@@ -554,6 +554,21 @@ export const createCuentaPorCobrar = (cuenta) => {
     }
 }
 
+export const getCxcCliente = (id) => {
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + `/cuentasporcobrar/cliente/${id}`)
+                .then( res => {
+                    return res.data
+                })
+
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
 export const getCuentasPorCobrar = () => {
     try{
         if(decoded){
@@ -598,6 +613,20 @@ export const saveIngreso = (ingreso) => {
     }
 }
 
+export const getIngresos = () => {
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database+  '/ingresos')
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
 // RETIRO
 
 export const saveRetiro = (retiro) => {
@@ -626,6 +655,20 @@ export const saveEgreso = (egreso) => {
                 })
         }
     }catch(err){
+        console.log(err)
+    }
+}
+
+export const getEgresos = () => {
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database+  '/egresos')
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
         console.log(err)
     }
 }

@@ -1,19 +1,29 @@
 import { useEffect, useState } from 'react'
-import { getCuentasPorCobrar } from '../api'
+import { getCuentasPorCobrar, getCxcCliente } from '../api'
 export default function useCuentasxCobrar(){
     const [cuentasxCobrar, setCuentasxCobrar] = useState(null)
+    const [cuentasxcCliente , setCuentasxcCliente] = useState(null)
     const [updating, setUpdating] = useState(false)
     useEffect(() => {
 		async function loadCuentas() {
-			const res = await getCuentasPorCobrar()
+            const res = await getCuentasPorCobrar()
 			setCuentasxCobrar(res.ventas);
 		}
         loadCuentas()
         
         return () => setCuentasxCobrar(null)
-	}, [updating])
+    }, [updating])
+    
+    const CxcCliente = (id) => {
+        getCxcCliente(id).then(res => {
+            setCuentasxcCliente(res.cuentas)
+        })
+    } 
+
     return {
-        cuentasxCobrar
+        cuentasxCobrar,
+        cuentasxcCliente,
+        CxcCliente
 
     }
 }

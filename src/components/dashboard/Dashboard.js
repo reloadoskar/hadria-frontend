@@ -4,14 +4,17 @@ import Balance from './Balance'
 import Produccions from '../produccions/Produccions'
 
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
-import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
-
+import EstadoDeCuenta from '../cxc/EstadoDeCuenta'
+import UltimosMovimientos from './UltimosMovimientos'
 import CuentasPorPagar from './CuentasPorPagar'
 import ComprasDash from './ComprasDash'
 import Pagar from './Pagar'
 import Cobrar from '../creators/Cobro'
 
 import useUser from '../hooks/useUser'
+import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
+import useIngresos from '../ingresos/useIngresos'
+import useEgresos from '../egresos/useEgresos'
 
 
 
@@ -26,7 +29,9 @@ import { useSnackbar } from 'notistack';
 
 export default function Dashboard() {
     const { enqueueSnackbar } = useSnackbar()
-    const {cuentasxCobrar} = useCuentasxCobrar()
+    const {cuentasxCobrar, cuentasxcCliente, CxcCliente} = useCuentasxCobrar()
+    const {ingresos} = useIngresos()
+    const {egresos} = useEgresos()
     const classes = useStyles();
     const { user } = useUser()
     const balance = useBalance()
@@ -94,6 +99,12 @@ export default function Dashboard() {
                         <Grid item xs={12} md={7}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
+                                    <UltimosMovimientos 
+                                        ingresos={ingresos}
+                                        egresos={egresos}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
                                     <Produccions 
                                         showMessage={showMessage}/>
                                 </Grid>
@@ -107,8 +118,8 @@ export default function Dashboard() {
                         <Grid item xs={12} md={5}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
-                                    <CuentasxCobrar cuentas={cuentasxCobrar} />
-
+                                    <CuentasxCobrar cuentas={cuentasxCobrar} getCuentasCliente={CxcCliente}/>
+                                    {/* <EstadoDeCuenta cuentas={cuentasxcCliente}/> */}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <CuentasPorPagar />

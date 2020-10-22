@@ -7,6 +7,9 @@ export default function CuentasxCobrar(props) {
     const handleClick = (cuenta) => {
         console.log(cuenta)
     }
+    const getCuentas = (clienteId) => {
+
+    }
     return (
         <Card>
             <CardHeader title="Créditos" />
@@ -25,17 +28,18 @@ export default function CuentasxCobrar(props) {
                                             </Avatar>
                                         </Grid>
                                         <Grid item xs={10}>
-                                            <Typography variant="h6">
-                                                {cuenta._id[0]}
+                                            <Typography align="right" variant="h6">
+                                                {cuenta._id[0].nombre}
                                             </Typography>
-                                            <Typography variant="subtitle2">
+                                            <Typography align="right" variant="subtitle2">
                                                 ${formatNumber(cuenta.saldo,2)}
                                             </Typography>
                                         </Grid>                                
                                     </Grid>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <Grid container spacing={2}>
+                                    {/* <EstadoDeCuenta cuentas={getCuentas(cuenta._id[0])}/> */}
+                                    {/* <Grid container spacing={2}>
                                         <Grid item xs={12}>
                                             {
                                                 cuenta.ventas.map((venta, i) => (   
@@ -84,7 +88,7 @@ export default function CuentasxCobrar(props) {
                                             }
                                         
                                         </Grid>
-                                    </Grid>
+                                    </Grid> */}
                                 </AccordionDetails> 
                             </Accordion>
                         ))} 

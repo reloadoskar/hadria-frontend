@@ -48,6 +48,7 @@ export default function PosAcceso({values, checkCorte, handleChange}){
 
                     <TextField
                             id="fecha"
+                            type="date"
                             value={values.fecha}
                             fullWidth
                             margin="normal"
