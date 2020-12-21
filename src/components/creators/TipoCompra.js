@@ -2,6 +2,7 @@ import React, {useState}from 'react';
 
 // Material UI
 import { TextField, Grid, Button, Dialog, Slide, DialogContent, DialogTitle, DialogActions } from '@material-ui/core';
+import useStyles from '../hooks/useStyles';
 
 //HOOKS
 
@@ -13,17 +14,20 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function TipoCompra({ creator, open, close, report }) {
 
-	const [tipoCompra, setTipoCompra] = useState({tipo:''})
-
+	const [tipoCompra, setTipoCompra] = useState({tipo: ""})
+    const classes = useStyles()
     const handleSubmit = (event) => {
         event.preventDefault()
+        close()
         creator(tipoCompra)
             .then( res => {
-                console.log(res)
-                setTipoCompra('')
+                setTipoCompra({tipo: ''})
                 report(res.message, res.status)
-                close()
             })
+    }
+
+    const handleChange = (value) => {
+        setTipoCompra({tipo: value.toUpperCase()})
     }
 
     return (
@@ -43,7 +47,7 @@ export default function TipoCompra({ creator, open, close, report }) {
                                     margin="normal"
 									variant="outlined"
 									value={tipoCompra.tipo}
-									onChange={(e) => setTipoCompra({tipo: e.target.value})}
+									onChange={(e) => handleChange(e.target.value)}
 									/>
 							</Grid>							
 							
@@ -52,8 +56,8 @@ export default function TipoCompra({ creator, open, close, report }) {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={close} variant="contained" color="secondary" >Cancelar</Button>
-                    <Button type="submit" variant="contained" color="primary" >Guardar</Button>
+                    <Button className={classes.botonSimplon} onClick={close} >Cancelar</Button>
+                    <Button className={classes.botonGenerico} type="submit" >Guardar</Button>
                 </DialogActions>
                 </form>
 				

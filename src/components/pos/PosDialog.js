@@ -4,8 +4,8 @@ import moment from 'moment'
 import PosMenu from './PosMenu'
 import PosComprasFor from './PosComprasFor'
 import PosListaDeVenta from './PosListaDeVenta'
-
-import { Typography, IconButton, Dialog, Slide, AppBar, Toolbar, Grid, Container, } from '@material-ui/core';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import { Typography, IconButton, Dialog, Slide, AppBar, Toolbar, Grid, Button, } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import useStyles from '../hooks/useStyles'
@@ -15,6 +15,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function PosDialog({ 
+        inventario,
+        ubicacion,
+        fecha,
         values, 
         isOpen,
         wantThisItem, 
@@ -56,7 +59,7 @@ export default function PosDialog({
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        POS| {values.ubicacion.nombre} | {moment(values.fecha).format("DD MMMM [de] YYYY")}
+                        {ubicacion.nombre} | {moment(fecha).format("DD MMMM [de] YYYY")}
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -66,19 +69,28 @@ export default function PosDialog({
             <Grid container spacing={2}>
                 <Grid item xs={12} md>
                     <PosComprasFor
-                        inventario={values.inventarioFiltrado}
+                        inventario={inventario}
                         wantThisItem={wantThisItem}
                         showMessage={showMessage} />
 
                 </Grid>
                 <Grid item xs={12} md>
-                    <Container fixed>
                     <PosListaDeVenta
                         items={values.itemsToSave}
                         openDialog={openDialog}
                         total={values.total}
                         removeItem={removeItem} />
-                    </Container>
+                    <Button 
+                        size="large"
+                        fullWidth
+                        disabled={values.total > 0 ? false : true}
+                        className={ values.total === 0 ? classes.botonGenerico : classes.botonCosmico}
+                        onClick={() => openDialog('cobrarDialog')}
+                        variant="contained">
+                            <ShoppingCartIcon />
+                        Cobrar ${values.total} (x)
+                    </Button>
+
                 </Grid>
             </Grid>
 

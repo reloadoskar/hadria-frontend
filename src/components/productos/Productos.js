@@ -1,21 +1,54 @@
 import React, { useState } from 'react';
-import ProductosDialog from './ProductosDialog';
 import Loading from '../Loading'
 
-import { Container, Grid, IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Paper, Button, Divider } from '@material-ui/core';
+import { 
+    ButtonGroup,
+    MenuItem, Container, Grid, IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Paper, Button, Divider, TextField, Box } from '@material-ui/core';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 
 // HOOKS
 import useProducts from '../hooks/useProducts';
 import { useSnackbar } from 'notistack';
+import CrearProducto from './CrearProducto';
+// function searchBy(field, array, search){
+//     var found = []
+//     if (search.length > 0){
+//         for (var i=0; i < array.length; i++) {
+//             var el = array[i]
+//             if(el[field].indexOf(search) !== -1){
+//                 // console.log(el[field])
+//                 found.push( el )
+//             }
+//         }
+//     }
+//     return found
+// }
 
 function Productos() {
     const { products, add, del } = useProducts()
     const [dialog, setDialog] = useState(false)
     const [loading] = useState(true)
+    const fields = ["clave", "descripcion"]
+    const [fieldSelected, setFieldSelected] = useState('descripcion')
+    const [searchField, setSearchField] = useState('')
+    const [resultado, setResultado] = useState([])
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
+
+    function searchBy(field, search){
+        var found = []
+        if (search.length > 0){
+            for (var i=0; i < products.length; i++) {
+                var el = products[i]
+                if(el[field].indexOf(search) !== -1){
+                    // console.log(el[field])
+                    found.push( el )
+                }
+            }
+        }
+        return found
+    }
 
     const showDialog = () => {
         setDialog(true)
@@ -35,34 +68,74 @@ function Productos() {
         })
     }
 
-    function removeProduct(index, id) {
+    function removeProduct(id) {
         showMessage("Eliminando...", "info")
-        del(index, id).then(res => {
+        setResultado([])
+        setSearchField('')
+        del(id).then(res => {
             if(res.status === 'success'){
                 showMessage(res.message, res.status)
             }
         })
     }
 
+    function handleChange(field, value){
+        switch(field)
+        {
+            case "field":
+                return setFieldSelected(value)
+            case "search":
+                setResultado( searchBy(fieldSelected, value.toUpperCase()) )
+                return setSearchField(value)
+            default: 
+                return setSearchField(value)
+        }
+    }
+
     return (
-        <Paper>
+        <React.Fragment>
+            <Box>
+                <Grid container justify="flex-end">
+                    <ButtonGroup size="small" variant="contained">
+                        <Button onClick={showDialog}>Agregar</Button>
+                        {/* <Button onClick={showCreateEgreso}>Egreso</Button>
+                        <Button onClick={showCobrar}>Cobrar</Button>
+                        <Button onClick={showPagar}>Pagar</Button>
+                        <Button>Traspasar</Button> */}
+                    </ButtonGroup>
+                    <CrearProducto addProducto={addProducto} isShowing={dialog} close={closeDialog} search={searchBy} />
+                </Grid>
+            </Box>
+            <Paper>
+
             {
                 products === null ?
-                    <Loading loading={loading} />
-                    :
-                    <Container maxWidth="lg">
+                <Loading loading={loading} />
+                :
+                <Container maxWidth="lg">
                         <Grid container spacing={2}>
-                            <Grid item xs={12} md={6}>
-                                <Typography variant="h3" children="Productos"/>
-                                <Typography variant="subtitle1" children={ products.length + " productos en la lista" } />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <Grid container justify="flex-end">
-                                    <Button variant="contained" color="secondary" onClick={showDialog}>
-                                        + Agregar un producto
-                                    </Button>
-                                    <ProductosDialog addProducto={addProducto} isShowing={dialog} close={closeDialog} />
+                            <Grid item xs={6}>
+                                <Grid container>
+                                    <Grid item xs={12}>
+                                        <Typography variant="h3" children={ products.length + " Productos"}/>
+                                        <Typography variant="subtitle1" children="en la lista" />
+                                    </Grid>
                                 </Grid>
+                            </Grid>
+                            <Grid item xs={6}>
+                                Buscar por: 
+                                {/* <Button children={fieldSelected} />  */}
+                                    <TextField 
+                                        select 
+                                        value={fieldSelected}
+                                        onChange={(e) => handleChange('field', e.target.value)}
+                                        >
+
+                                                {fields.map((el, index) => (
+                                                    <MenuItem key={index} value={el}>{el}</MenuItem>
+                                                    ))}
+                                    </TextField> 
+                                    <TextField helperText="Ingrese un texto de bùsqueda." fullWidth value={searchField} onChange={(e) => handleChange('search', e.target.value)}/>
                             </Grid>
 
                         </Grid>
@@ -71,8 +144,8 @@ function Productos() {
 
                         <Grid container>
 
-                            {products.length === 0 ?
-                                <Typography variant="h6" align="center" gutterBottom>No hay productos registrados.</Typography>
+                            {resultado.length === 0 ?
+                                null
                                 :
                                 <Table size="small">
                                     <TableHead>
@@ -88,7 +161,7 @@ function Productos() {
                                     </TableHead>
                                     <TableBody>
                                         {
-                                            products.map((row, index) => (
+                                            resultado.map((row, index) => (
                                                 <TableRow key={index} index={index}>
                                                     <TableCell >{row.clave}</TableCell>
                                                     <TableCell component="th" scope="row">{row.descripcion}</TableCell>
@@ -98,8 +171,8 @@ function Productos() {
                                                     <TableCell align="right">{row.precio3}</TableCell>
                                                     <TableCell align="right">
                                                         <IconButton aria-label="delete"
-                                                            onClick={() => removeProduct(index, row._id)}
-                                                        >
+                                                            onClick={() => removeProduct(row._id)}
+                                                            >
                                                             <DeleteIcon />
                                                         </IconButton>
                                                     </TableCell>
@@ -113,8 +186,9 @@ function Productos() {
                         
                     </Container>
 
-            }
-        </Paper>
+}
+            </Paper>
+        </React.Fragment>
     )
 }
 

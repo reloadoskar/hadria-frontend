@@ -12,22 +12,37 @@ import ConfirmDialog from './ConfirmDialog'
 import Buscador from './Buscador'
 
 import useCompras from '../hooks/useCompras';
+import useProducts from '../hooks/useProducts'
+import useProvedors from '../hooks/useProvedors';
+import useTipoCompras from '../hooks/useTipoCompras';
+import useUbicacions from '../hooks/useUbicacions';
 
 import AddIcon from '@material-ui/icons/Add';
-
+import useStyles from '../hooks/useStyles'
 
 
 
 function Compras() {
+    const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
-    const { compras, addCompra, del, } = useCompras();
+    const {products} = useProducts()
+    const {provedors, add} = useProvedors();
+    const {tipoCompras, addTipoCompra} = useTipoCompras();
+    const {ubicacions} = useUbicacions();
+
+    const { compras, crear, eliminar, } = useCompras();
     const [showDialog, setShowDialog] = useState(false)
     const [detCompra, setDetCompra] = useState(false)
     const [compra, setCompra] = useState(null)
     const [confirm, setConfirm] = useState(false)
 
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
-
+    const crearCompra = (compra) => {
+        return crear(compra).then(res => {
+            closeDialog()
+            return res
+        })
+    }
     const openDialog = () => {
         setShowDialog(true)
     }
@@ -46,7 +61,8 @@ function Compras() {
         setCompra(null)
     }
 
-    const openConfirm = (compra) => {
+    const openConfirm = (compra, index) => {
+        compra.index = index
         setCompra(compra)
         setConfirm(true)
     }
@@ -57,13 +73,13 @@ function Compras() {
     }
 
     const okConfirm = (data) => {
-
-        del(data._id).then(res => {
+        
+        cancelConfirm()
+        eliminar(data._id, data.index).then(res => {
             if (res.status === 'error') {
             } else {
                 showMessage(res.message, res.status)
             }
-            cancelConfirm()
         })
     }
 
@@ -74,7 +90,7 @@ function Compras() {
                     <Buscador />
                 </Grid>
                 <Grid item xs={6}>
-                    <Button fullWidth margin="normal" variant="contained" color="secondary" onClick={() => openDialog('comprasDialog')}>
+                    <Button className={classes.botonGenerico} fullWidth onClick={() => openDialog('comprasDialog')}>
                         <AddIcon /> Crear Compra
       		        </Button>
                     <ComprasDialog
@@ -82,7 +98,13 @@ function Compras() {
                         open={showDialog}
                         close={closeDialog}
                         showMessage={showMessage}
-                        addCompra={addCompra}
+                        crear={crearCompra}
+                        products={products}
+                        provedors={provedors}
+                        tipoCompras={tipoCompras}
+                        ubicacions={ubicacions}
+                        addTipoCompra={addTipoCompra}
+                        add={add}
                     />
                 </Grid>
             </Grid>

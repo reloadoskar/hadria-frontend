@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, Divider, LinearProgress, Typography, } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete'
+// import DeleteIcon from '@material-ui/icons/Delete'
 import Producto from './Producto'
 import { formatNumber, sumImporte } from '../Tools';
 export default function Productos(props){

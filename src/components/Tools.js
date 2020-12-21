@@ -134,9 +134,12 @@ export const calcTotal = (ventas, creditos, acuenta, ingresos, egresos) => {
 
 export const calcCostoInventario = (items) => {
     let costoInventario = 0
-    items.forEach(function(item) {
-        costoInventario += (item.stock * item.costo)
-    })
+    if(items !== null){
+        items.forEach(function(item) {
+            costoInventario += (item.stock * item.costo)
+        })
+        return costoInventario
+    }
     return costoInventario
 }
 

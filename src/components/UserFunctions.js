@@ -4,6 +4,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle'
 import { useHistory } from 'react-router-dom'
 import StatusDialog from './StatusDialog'
 import useUser from './hooks/useUser'
+import {restartApp} from './api'
 
 const UserFunctions = (props) => {
     const {auth} = props
@@ -50,6 +51,12 @@ const UserFunctions = (props) => {
         })
     }
 
+    const restart = () => {
+        restartApp().then(res=>{
+            history.push("/app")
+        })
+    }
+
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget)
     }
@@ -89,7 +96,7 @@ const UserFunctions = (props) => {
                         onClose={handleClose}
                     >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
+                        <MenuItem onClick={restart}>Restart</MenuItem>
                         <Divider />
                         <MenuItem onClick={logout}>Salir</MenuItem>
                     </Menu>

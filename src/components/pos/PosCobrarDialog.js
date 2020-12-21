@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {saveVenta, ticketVenta, ticketSalida} from '../api'
+import {ticketVenta, ticketSalida} from '../api'
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -8,6 +8,7 @@ import { Typography, Grid, DialogActions, Button, TextField, MenuItem } from '@m
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
 import useClientes from '../hooks/useClientes'
+import useStyles from '../hooks/useStyles';
 
 function ReprintDialog(props) {
     const { open, cancel, ok } = props
@@ -45,7 +46,8 @@ function ReprintDialog(props) {
     )
 }
 
-export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessage, addToSaldo, resetVenta }) {
+export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen, close, showMessage, addToSaldo, resetVenta, crearVenta, crearPago }) {
+    const classes = useStyles()
     const {clientes} = useClientes()
     const [venta, setVenta] = useState(null)
     const [reprintDialog, setReprintDialog] = useState(false)
@@ -121,19 +123,19 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
         setValues(initialData)
     }
 
-    const updateCLientCredit = () => {
-        let cliente = values.cliente
+    // const updateCLientCredit = () => {
+    //     let cliente = values.cliente
 
-        cliente.credito_disponible -= values.saldo
-        setValues({...values, cliente: cliente})
-    }
+    //     cliente.credito_disponible -= values.saldo
+    //     setValues({...values, cliente: cliente})
+    // }
     
     const handleSubmit = (e) => {
         e.preventDefault()
         setLoading(true)
-        const venta = {
-            ubicacion: valuesToSave.ubicacion,
-            fecha: valuesToSave.fecha,
+        const nventa = {
+            ubicacion: ubicacion,
+            fecha: fecha,
             cliente: values.cliente,
             tipoPago: values.tipoPago,
             total: valuesToSave.total,
@@ -143,18 +145,13 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
             acuenta: values.acuenta,
             saldo: values.saldo,
         }
-        setVenta(venta)
-        saveVenta(venta)
+        setVenta(nventa)
+
+        crearVenta(nventa)
             .then(res => {
-                setVenta(res.venta)
-                if(venta.tipoPago === 'CRÉDITO'){
-                    updateCLientCredit()
-                    addToSaldo(venta.acuenta)
-                }else{
-                    addToSaldo(venta.total)
-                }
                 showMessage(res.message, res.status)
                 clearFields()
+                close('cobrarDialog')
                 ticketSalida(res.venta)
                 ticketVenta(res.venta).then(res=> {
                     if(res.status === 'warning'){
@@ -165,8 +162,7 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                     }
                 })
                 // rePrintTicket()
-                close('cobrarDialog')
-                setLoading(true)
+                setLoading(false)
             })
     }
 
@@ -335,11 +331,14 @@ export default function PosCobrarDialog({ valuesToSave, isOpen, close, showMessa
                     
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleClose('cobrarDialog')} color="primary">
+                    <Button className={classes.botonSimplon} onClick={() => handleClose('cobrarDialog')} >
                         Cancel
                     </Button>
-                    <Button type="submit" variant="contained" color="primary" disabled={loading}>
-                        Registrar (r)
+                    <Button 
+                        type="submit" 
+                        className={ loading ? classes.botonGenerico : classes.botonCosmico} 
+                        disabled={loading}>
+                        { loading ? "Espere..." : "Registrar (r)"}
                     </Button>
                 </DialogActions>
             </form>

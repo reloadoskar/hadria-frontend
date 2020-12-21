@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import {getBalance} from '../api'
 import { sumImporte, sumSaldo, calcCostoInventario } from '../Tools'
+import {getBalance} from '../api'
 const useBalance = () => {
     const [balance, setBalance] = useState(null)
-
+    const [dispPorUbicacion , setDispPorUbicacion] = useState(null)
     useEffect(() => {
         getBalance().then(data => {
             // console.log(balance)
@@ -30,13 +30,16 @@ const useBalance = () => {
                 cuentasPp: data.porPagar,
                 dispPorUbic: data.disponiblePorUbicacion,
             })
+
+            setDispPorUbicacion(data.disponiblePorUbicacion)
         })
         return () => setBalance(null)
     }, [])
-
     
-
-    return balance;
+    return {
+        balance,
+        dispPorUbicacion
+    }
 }
 
 export default useBalance

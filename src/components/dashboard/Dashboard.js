@@ -4,47 +4,94 @@ import Balance from './Balance'
 import Produccions from '../produccions/Produccions'
 
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
-import EstadoDeCuenta from '../cxc/EstadoDeCuenta'
+import CuentasxPagar from '../cxp/CuentasxPagar'
+// import EstadoDeCuenta from '../cxc/EstadoDeCuenta'
 import UltimosMovimientos from './UltimosMovimientos'
-import CuentasPorPagar from './CuentasPorPagar'
 import ComprasDash from './ComprasDash'
 import Pagar from './Pagar'
-import Cobrar from '../creators/Cobro'
+import Cobro from '../creators/Cobro'
+import CrearIngreso from '../ingresos/CrearIngreso'
+import CrearEgreso from '../egresos/CrearEgreso'
 
 import useUser from '../hooks/useUser'
+import useInventario from '../hooks/useInventario'
 import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
+import useCuentasxPagar from '../cxp/useCuentasxPagar.js'
 import useIngresos from '../ingresos/useIngresos'
 import useEgresos from '../egresos/useEgresos'
-
-
-
-import { Grid, Box, IconButton, Backdrop, Typography, CircularProgress } from '@material-ui/core';
-
-import useBalance from '../hooks/useBalance'
+// import useBalance from '../hooks/useBalance'
+import useCompras from '../hooks/useCompras'
 import useStyles from '../hooks/useStyles'
-import PaymentIcon from '@material-ui/icons/Payment';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
-import { useSnackbar } from 'notistack';
+import useUbicacions from '../hooks/useUbicacions'
 
+// import {calcCostoInventario} from '../Tools'
+
+import { Grid, Box, 
+    // IconButton, 
+    Backdrop, Typography, CircularProgress, ButtonGroup, Button } from '@material-ui/core';
+
+// import PaymentIcon from '@material-ui/icons/Payment';
+// import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+// import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
+import { useSnackbar } from 'notistack';
+const initBalance = {
+    total: 0,
+    disponible: 0,
+    inventario: 0,
+    porCobrar: 0,
+    porPagar: 0,
+    dispPorUbic: [],
+}
 export default function Dashboard() {
     const { enqueueSnackbar } = useSnackbar()
-    const {cuentasxCobrar, cuentasxcCliente, CxcCliente} = useCuentasxCobrar()
-    const {ingresos} = useIngresos()
-    const {egresos} = useEgresos()
+    const {cuentasxCobrar, savePagoCxc, CxcCliente, totalCxc} = useCuentasxCobrar()
+    const {
+        cuentasxPagar, 
+        totalCxp,
+        // savePagoCxp, 
+        // CxpProv, 
+        } = useCuentasxPagar()
+    const {compras} = useCompras()
+    const {ingresos, totalIngresos, addIngreso} = useIngresos()
+    const {
+        inventario, 
+        totalInventario} = useInventario()
+    const {egresos, totalEgresos, addEgreso} = useEgresos()
+    const{ubicacions} = useUbicacions()
     const classes = useStyles();
     const { user } = useUser()
-    const balance = useBalance()
+    // const {balance, dispPorUbicacion} = useBalance()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
-    const[bckdrpOpen, setBdopen] = useState(false)
+    const [crearIngreso, setCrearIngreso] = useState(false)
+    const [crearEgreso, setCrearEgreso] = useState(false)
+    const[
+        bckdrpOpen, 
+        // setBdopen
+    ] = useState(false)
+    const [balance, setBalance] = useState(initBalance)
     useEffect(() => {
-        if(balance === null){
-            setBdopen(true)
-        }else{
-            setBdopen(false)
-        }
-    }, [balance])
+        // if(inventario !== null){
+            // console.log(inventario)
+            var disponible = totalIngresos - totalEgresos
+            // var inventario_compras = inventario.inventario.compras
+            // var inventario_produccion = inventario.produccion
+            // var t_inv_compras = calcCostoInventario(inventario_compras.items)
+            // var t_inv_prod = calcCostoInventario(inventario_produccion.items)
+            var porCobrar = totalCxc
+            var porPagar = totalCxp
+            var balanceT = disponible  + porCobrar - porPagar + totalInventario
+            setBalance({
+                total: balanceT,
+                disponible: disponible,
+                inventario: totalInventario,
+                porCobrar: porCobrar,
+                porPagar: porPagar,
+                dispPorUbic: [],
+            })
+        // }
+        
+    }, [totalIngresos,totalEgresos, totalInventario, totalCxc, totalCxp, inventario])
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
     const showPagar = () => {
@@ -61,6 +108,23 @@ export default function Dashboard() {
 
     const closeCobrar = () => {
         setCobrar(false)
+    }
+
+    const showCreateIngreso = () =>{
+        setCrearIngreso(true)
+    }
+    // const createIngreso = () => {
+
+    // }
+    const closeCreateIngreso = () =>{
+        setCrearIngreso(false)
+    }
+
+    const showCreateEgreso = () => {
+        setCrearEgreso(true)
+    }
+    const closeCreateEgreso = () => {
+        setCrearEgreso(false)
     }
     return (
 
@@ -79,21 +143,45 @@ export default function Dashboard() {
                         <Grid item xs={12}>
                             <Box display={user.level > 1 ? 'none' : 'inline'}>
                                 <Grid container justify="flex-end">
-                                    <IconButton onClick={showCobrar}>
+                                    <ButtonGroup size="small" variant="contained">
+                                        <Button onClick={showCreateIngreso}>Ingreso</Button>
+                                        <Button onClick={showCreateEgreso}>Egreso</Button>
+                                        <Button onClick={showCobrar}>Cobrar</Button>
+                                        <Button onClick={showPagar}>Pagar</Button>
+                                        <Button>Traspasar</Button>
+                                    </ButtonGroup>
+                                    <CrearIngreso 
+                                        open={crearIngreso} 
+                                        close={closeCreateIngreso} 
+                                        crear={addIngreso} 
+                                        ubicacions={ubicacions} 
+                                        mensaje={showMessage}/>
+                                    <CrearEgreso 
+                                        open={crearEgreso} 
+                                        close={closeCreateEgreso} 
+                                        crear={addEgreso} 
+                                        ubicacions={ubicacions} 
+                                        compras={compras} 
+                                        mensaje={showMessage}
+                                        disponible={balance.disponible}
+                                    />
+                                    {/* <IconButton >
                                         <PaymentIcon />
                                     </IconButton>
-                                    <IconButton onClick={showPagar}>
+                                    <IconButton >
                                         <AttachMoneyIcon />
                                     </IconButton>
                                     <IconButton>
                                         <CompareArrowsIcon />
-                                    </IconButton>
+                                    </IconButton> */}
                                 </Grid>
                             </Box>
                         </Grid>
                         <Grid item xs={12}>
                             <Box display={user.level > 1 ? 'none' : 'inline'}>
-                                <Balance balance={balance} />
+                                <Balance 
+                                    balance={balance} 
+                                    />
                             </Box>
                         </Grid>
                         <Grid item xs={12} md={7}>
@@ -118,16 +206,16 @@ export default function Dashboard() {
                         <Grid item xs={12} md={5}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
-                                    <CuentasxCobrar cuentas={cuentasxCobrar} getCuentasCliente={CxcCliente}/>
+                                    <CuentasxCobrar cuentas={cuentasxCobrar} total={totalCxc}/>
                                     {/* <EstadoDeCuenta cuentas={cuentasxcCliente}/> */}
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <CuentasPorPagar />
+                                    <CuentasxPagar cuentas={cuentasxPagar} total={totalCxp}/>
                                 </Grid>
                             </Grid>
                         </Grid>
 
-                        <Cobrar isOpen={cobrar} cuentas={balance.cuentasPc} close={closeCobrar} showMessage={showMessage} />
+                        {/* <Cobro isOpen={cobrar} cuentas={cuentasxCobrar} close={closeCobrar} showMessage={showMessage} save={savePagoCxc}/> */}
                         <Pagar isOpen={pagar} cuentas={balance.cuentasPp} close={closePagar} saldos={balance.dispPorUbic} showMessage={showMessage} />
                     </React.Fragment>
             }

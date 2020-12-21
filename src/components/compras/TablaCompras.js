@@ -14,7 +14,7 @@ import {
 
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+import {formatNumber, sumImporte, sumSaldo} from '../Tools'
 export default function TablaCompras( {compras, editCompra, openConfirm }){
     return (
         <TableContainer component={Paper}>
@@ -27,38 +27,34 @@ export default function TablaCompras( {compras, editCompra, openConfirm }){
                     <Table size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Folio</TableCell>
-                                <TableCell>Clave</TableCell>
-                                <TableCell>Remisión</TableCell>
-                                <TableCell>Proveedor</TableCell>
-                                <TableCell>Ubicación</TableCell>
-                                <TableCell>Tipo</TableCell>
+                                <TableCell></TableCell>
                                 <TableCell>Status</TableCell>
+                                <TableCell align="right">Importe</TableCell>
+                                <TableCell align="right">Saldo</TableCell>
                                 <TableCell>Acciones</TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
                             {
-                                    compras.map((compra) => (
-                                        <TableRow key={compra._id}>
-                                            <TableCell >{compra.folio}</TableCell>
-                                            <TableCell >{compra.clave}</TableCell>
-                                            <TableCell >{compra.remision}</TableCell>
-                                            <TableCell >{compra.provedor.nombre}</TableCell>
-                                            <TableCell >{compra.ubicacion.nombre}</TableCell>
-                                            <TableCell >{compra.tipoCompra.tipo}</TableCell>
+                                    compras.map((compra, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell >{compra.folio} | {compra.clave} {compra.provedor.nombre}</TableCell>
                                             <TableCell >{compra.status}</TableCell>
+                                            <TableCell align="right">{formatNumber(compra.importe,1)}</TableCell>
+                                            <TableCell align="right">{formatNumber(compra.saldo,1)}</TableCell>
                                             <TableCell align="right">
                                                 <IconButton
+                                                    size="small"
                                                     onClick={() => editCompra(compra)}
                                                 >
                                                     <VisibilityIcon />
                                                 </IconButton>
                                                 <IconButton
+                                                    size="small"
                                                     disabled={compra.status === "CANCELADO" ? true : false}
                                                     aria-label="delete"
-                                                    onClick={() => openConfirm(compra)}
+                                                    onClick={() => openConfirm(compra, index)}
                                                 >
                                                     <DeleteIcon />
                                                 </IconButton>
@@ -67,6 +63,12 @@ export default function TablaCompras( {compras, editCompra, openConfirm }){
                                     ))
                                    
                             }
+                            <TableRow>
+                                <TableCell colSpan={2} align="right">TOTAL</TableCell>
+                                <TableCell align="right">{ formatNumber(sumImporte(compras),1) }</TableCell>
+                                <TableCell align="right">{ formatNumber(sumSaldo(compras),1) }</TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
                         </TableBody>
                     </Table>
 

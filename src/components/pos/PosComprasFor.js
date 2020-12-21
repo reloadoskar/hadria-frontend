@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { List, ListItem, ListItemIcon, Grid, } from '@material-ui/core';
 import PostAddIcon from '@material-ui/icons/PostAdd';
-
+import {sumEmpaques, sumEmpStock, sumStock} from '../Tools'
 const useStyles = makeStyles(theme => ({
 	root: {
 		width: '100%',
@@ -45,84 +45,106 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 				inventario.length === 0 ?
 					<Typography variant="h6" children="No se encontraron productos." align="center" />
 				:
-				inventario.map( (option, index) => (
+				inventario.map( (compra, index) =>   {
+					var cant = sumStock(compra.items) 
+					var empDisp = sumEmpaques(compra.items) - sumEmpStock(compra.items) 
+					if(cant > 0){
+						return (
+	
+							<Accordion key={compra._id} index={index} expanded={expanded === compra.clave} onChange={handleChange(compra.clave)}>
+								
+								<AccordionSummary
+									expandIcon={<ExpandMoreIcon />}
+									aria-controls="panel1bh-content"
+									id="panel1bh-header"
+									>
+									<Typography variant="body2">{compra.folio + ":" + compra.clave} | </Typography>
+									<Typography variant="subtitle2"> Disponible: {cant} | </Typography>
+									<Typography variant="subtitle2" > Empaques vacios: {empDisp}</Typography>
+								</AccordionSummary>
+	
+								<AccordionDetails>
+	
+									<List className={classes.root}>
+										<ListItem>
+											<Grid container spacing={2}>
+												<Grid item xs={2}>
+													
+												</Grid>
+												<Grid item xs={4}>
+													<Typography variant="body2" children="Descripción" />
+												</Grid>
+												<Grid item xs={2}>
+													<Typography 
+													align="right"
+													variant="body2" children="Emp" />
+												</Grid>
+												<Grid item xs={2}>
+													<Typography 
+													align="right"
+													variant="body2" children="Cant" />
+												</Grid>
+												<Grid item xs={2}>
+													<Typography 
+													align="right"
+													variant="body2" children="Precio" />
+												</Grid>
+											</Grid>
+										</ListItem>
+	
+									{compra.items.map((item, i) => {
+										if(item.stock === 0){
+											return null
+										}else{
+											return(
+												<ListItem button key={i} onClick={()=> iWantThisItem(item, i, compra._id)}>
+													<Grid container spacing={2}>
+			
+														<Grid item xs={2}>
+															<ListItemIcon>
+																<PostAddIcon />
+															</ListItemIcon>
+														</Grid>
+														<Grid item xs={4} >
+															<Typography>																
+																{item.producto.descripcion}																
+															</Typography>															
+														</Grid>
+														<Grid item xs={2}>
+															<Typography 
+															align="right"
+															children={item.empaquesStock} />
+														</Grid>
+														<Grid item xs={2}>
+															<Typography 
+															align="right"
+															children={item.stock} />
+														</Grid>
+														<Grid item xs={2}>
+															<Grid container justify="flex-end">
+																<Typography align="right">
+																	$ {item.producto.precio1}
+																</Typography>
+															</Grid>
+														</Grid>
+													</Grid>
+												</ListItem>
 
-				<ExpansionPanel key={option._id} index={index} expanded={expanded === option.clave} onChange={handleChange(option.clave)}>
-					<ExpansionPanelSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel1bh-content"
-						id="panel1bh-header"
-						>
-						<Typography className={classes.heading} variant="h2">{option.folio + ":" + option.clave}</Typography>
-						<Typography className={classes.secondaryHeading}>{option.items.length} productos en: {option.clave}</Typography>
-					</ExpansionPanelSummary>
-
-					<ExpansionPanelDetails>
-
-						<List className={classes.root}>
-							<ListItem>
-								<Grid container spacing={2}>
-									<Grid item xs={2}>
-										
-									</Grid>
-									<Grid item xs={2}>
-										<Typography variant="body2" children="Emp" />
-									</Grid>
-									<Grid item xs={4}>
-										<Typography variant="body2" children="Descripción" />
-									</Grid>
-									<Grid item xs={2}>
-										<Typography variant="body2" children="Cant" />
-									</Grid>
-									<Grid item xs={2}>
-										<Typography variant="body2" children="Precio" />
-									</Grid>
-								</Grid>
-							</ListItem>
-
-						{option.items.map((item, i) => (
-							<ListItem button key={i} onClick={()=> iWantThisItem(item, i, option._id)}>
-								<Grid container spacing={2}>
-
-									<Grid item xs={2}>
-										<ListItemIcon>
-											<PostAddIcon />
-										</ListItemIcon>
-									</Grid>
-									<Grid item xs={2}>
-										<Typography children={item.empaquesStock} />
-									</Grid>
-									<Grid item xs={4} >
-										<Typography>
-											{
-												!item.provedor ?
-													item.producto.descripcion
-												:
-													item.producto.descripcion+ " (" + item.provedor.clave + ")"
-											}
-										</Typography>
-									</Grid>
-									<Grid item xs={2}>
-										<Typography children={item.stock} />
-									</Grid>
-									<Grid item xs={2}>
-										<Grid container justify="flex-end">
-											<Typography>
-												$ {item.producto.precio1}
-											</Typography>
-										</Grid>
-									</Grid>
-								</Grid>
-							</ListItem>
-
-						))}
-						</List>
-						
-
-						
-					</ExpansionPanelDetails>
-				</ExpansionPanel>
-			))}
+											)
+										}
+	
+									})}
+									</List>
+								</AccordionDetails>
+							</Accordion>
+						)
+					}
+					else{
+						return false
+					}
+					
+				})
+			}
 		</div>
 	);
 }

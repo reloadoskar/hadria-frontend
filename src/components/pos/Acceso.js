@@ -1,21 +1,22 @@
 import React from 'react'
 import moment from 'moment'
-
 import useStyles from '../hooks/useStyles'
 
-import { MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, } from '@material-ui/core';
+import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, } from '@material-ui/core';
 
 import useUbicacions from '../hooks/useUbicacions'
 
 
-export default function PosAcceso({values, checkCorte, handleChange}){
+export default function PosAcceso({ubicacion, fecha, checkCorte, handleChange, invUbic}){
     const classes = useStyles();
     const {ubicacions} = useUbicacions();
     const handleSubmit = (e) => {
         e.preventDefault()
         checkCorte()
     }
+    
     return (
+        <Container maxWidth="sm">
         <Card className={classes.posCard}>
                 <CardHeader 
                     title="Selección de Ubicación"
@@ -35,21 +36,27 @@ export default function PosAcceso({values, checkCorte, handleChange}){
                         fullWidth
                         margin="normal"
                         variant="outlined"
-                        value={values.ubicacion}
+                        value={ubicacion}
                         // onChange={(e) => setUbicacion(e.target.value)}
                         onChange={(e) => handleChange('ubicacion',e.target.value)}
                         >
-                        {ubicacions.map((option, index) => (
-                            <MenuItem key={index} value={option}>
-                                {option.nombre}
-                            </MenuItem>
-                        ))}
+                        {ubicacions.map((option, index) =>{ 
+                            if(option.tipo=== 'SUCURSAL'){
+                                return (
+                                    <MenuItem key={index} value={option}>
+                                        {option.nombre}
+                                    </MenuItem>
+                                )
+                            }else{
+                                return false
+                            }
+                        })}
                     </TextField>
 
                     <TextField
                             id="fecha"
                             type="date"
-                            value={values.fecha}
+                            value={fecha}
                             fullWidth
                             margin="normal"
                             variant="outlined"                             
@@ -59,7 +66,9 @@ export default function PosAcceso({values, checkCorte, handleChange}){
                     
                     <Grid container justify="flex-end">
                         <Button 
-                            disabled={!values.ubicacion || !values.fecha ? true : false }
+                            fullWidth
+                            className={ invUbic === null ? classes.botonGenerico : classes.botonCosmico}
+                            disabled={invUbic === null ? true : false }
                             type="button" 
                             variant="contained" 
                             color="primary" 
@@ -70,5 +79,6 @@ export default function PosAcceso({values, checkCorte, handleChange}){
                     </form>
                 </CardContent>
             </Card>
+            </Container>
     )
 }

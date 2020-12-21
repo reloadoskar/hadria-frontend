@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, Typography, Button, TextField } from '@material-ui/core';
+import useStyles from '../hooks/useStyles';
 
 const calclulaImporte = (cant, prec) => {
     return cant * prec
 }
 
 export default function AddItemDialog({item, isOpen, close, showMessage, add }) {
+    const classes = useStyles()
     const initData = {
         precio: item.item.producto.precio1,
         item: item,
@@ -91,16 +93,16 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
             <DialogTitle id="dialog-add">
                 
                 <Grid container spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <Typography variant="h6" >{item.item.producto.descripcion}</Typography>
-                        <Typography variant="subtitle2" >Disponible: {item.item.stock}</Typography>
+                        <Typography variant="subtitle2" >Disponible: {item.item.stock} {item.item.producto.unidad.abr}</Typography>                        
                     </Grid>
 
                 </Grid>
             </DialogTitle>
                 <form onSubmit={handleSubmit}>
                     <DialogContent>
-                        <Grid container spacing={2}>
+                        <Grid container spacing={2} alignItems="center">
                             <Grid item xs={12} md={3}>
                                 <TextField 
                                     id="cantidad"
@@ -152,11 +154,11 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => handleClose('addItemDialog')} color="primary">
-                            Cancel
+                        <Button className={classes.botonSimplon} onClick={() => handleClose('addItemDialog')} >
+                            Cancelar
                         </Button>
-                        <Button type="submit" variant="contained" color="primary" disabled={values.cantidad > 0 ? false : true }>
-                            Registrar
+                        <Button className={classes.botonGenerico} type="submit" disabled={values.cantidad > 0 ? false : true }>
+                            Agregar
                         </Button>
                     </DialogActions>
                 </form>

@@ -1,26 +1,23 @@
 import React, { useState } from 'react'
-import {savePagoACuentaPorCobrar, ticketCobranza} from '../api'
+import {ticketCobranza} from '../api'
 
-import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
+import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem, LinearProgress } from '@material-ui/core';
 import useUbicacions from '../hooks/useUbicacions'
-import useClientes from '../hooks/useClientes'
 import moment from 'moment'
 const initialData = {
-    cliente: '',
+    fecha: moment().format("YYYY-MM-DD"),
     ubicacion: '',
     cuenta: '',
-    importe: 0,
-    referencia: '',
     tipoPago: 'EFECTIVO',
-    fecha: moment().format("YYYY-MM-DD")
+    importe: 0,
+    referencia: 'PAGO EN CAJA',
 }
-export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage }) {
+export default function Cobro({ cuentas, isOpen=false, close, showMessage, save }) {
     
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
-    const {clientes} = useClientes()
     const {ubicacions} = useUbicacions()
     const [values, setValues] = useState(initialData)
-    const [reprint] = useState(true)
+    // const [reprint] = useState(true)
     
     const clearFields = () => {
         setValues(initialData)
@@ -54,16 +51,15 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage })
             fecha: values.fecha
            
         }
-        savePagoACuentaPorCobrar(pago).then(res =>{
+        save(pago).then(res=>{
             showMessage(res.message, res.status)
-            close('cobroDialog')
-            //updateSaldoCuenta() FALTA
-            // addToSaldo(pago.importe)
             clearFields()
             ticketCobranza(pago)
-            if(reprint){
-                ticketCobranza(pago)
-            }
+            close()
+            //     //updateSaldoCuenta() FALTA
+            //     if(reprint){
+            //         ticketCobranza(pago)
+            //     }
         })
     }
 
@@ -83,28 +79,23 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage })
             </DialogTitle>
             <form onSubmit={handleSubmit}>
                 <DialogContent>
+                    {
+                        cuentas === null ?
+                            <LinearProgress variant="query" />
+                            :
                     <Grid container spacing={2}>
+
                         <Grid item xs={12}>
                             <TextField
-                                id="cliente"
-                                select
-                                variant="outlined"
-                                autoFocus
-                                required
+                                id="fecha"
+                                type="date"
+                                label="fecha"
                                 fullWidth
-                                label="Selecciona un Cliente"
-                                value={values.cliente}
-                                onChange={(e) => handleChange('cliente', e.target.value)}
-                                >
-                                    {
-                                        clientes.map( (opt, index) => (
-                                            <MenuItem key={index} value={opt}>
-                                                {opt.nombre}
-                                            </MenuItem>
-                                        ))
-                                    }
-                                </TextField>
+                                value={values.fecha}
+                                onChange={(e) => handleChange('fecha', e.target.value)}
+                                />
                         </Grid>
+
                         <Grid item xs={12}>
                             <TextField
                                 id="ubicacion"
@@ -116,7 +107,7 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage })
                                 label="Selecciona una Ubicación"
                                 value={values.ubicacion}
                                 onChange={(e) => handleChange('ubicacion', e.target.value)}
-                            >
+                                >
                                 {ubicacions.map((option, index) => (
                                     <MenuItem key={index} value={option}>
                                         {option.nombre}
@@ -135,17 +126,14 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage })
                                 label="Selecciona una Cuenta por Cobrar"
                                 value={values.cuenta}
                                 onChange={(e) => handleChange('cuenta', e.target.value)}
-                            >
+                                >
                                 {cuentas.map((option, index) => (
                                     <MenuItem key={index} value={option}>
                                         <Grid container >
-                                            <Grid item xs={4}>
-                                                <Typography>{option.cliente.nombre}</Typography>
+                                            <Grid item xs={6}>
+                                                <Typography>{option._id[0].nombre}</Typography>
                                             </Grid>
-                                            <Grid item xs={4}>
-                                                <Typography color="textSecondary">{option.fecha}</Typography>
-                                            </Grid>
-                                            <Grid item xs={4}>
+                                            <Grid item xs={6}>
                                                 <Grid container justify="flex-end">
                                                     <Typography>${option.saldo}</Typography>
                                                 </Grid>
@@ -166,7 +154,7 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage })
                                 label="Tipo de pago"
                                 value={values.tipoPago}
                                 onChange={(e) => handleChange('tipoPago', e.target.value)}
-                            >
+                                >
                                 {tipos.map((option, index) => (
                                     <MenuItem key={index} value={option}>
                                         {option}
@@ -185,7 +173,7 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage })
                                 type="number"
                                 value={values.importe}
                                 onChange={(e) => handleChange('importe', e.target.value)}
-                            />
+                                />
                         </Grid>
                         {values.tipoPago !== 'EFECTIVO' &&
                             <Grid item xs={12}>
@@ -197,21 +185,12 @@ export default function Cobrar({ cuentas=[], isOpen=false, close, showMessage })
                                     fullWidth
                                     value={values.referencia}
                                     onChange={(e) => handleChange('referencia', e.target.value)}
-                                />
+                                    />
                             </Grid>
-                        }
-                        <Grid item xs={12}>
-                            <TextField
-                                id="fecha"
-                                type="date"
-                                label="fecha"
-                                fullWidth
-                                value={values.fecha}
-                                onChange={(e) => handleChange('fecha', e.target.value)}
-                                />
-                        </Grid>
+                        }                        
 
                     </Grid>
+                }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => handleClose('cobroDialog')} color="primary">

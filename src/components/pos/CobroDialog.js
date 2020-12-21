@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 
-import {savePagoACuentaPorCobrar, ticketCobranza} from '../api'
+import {ticketCobranza} from '../api'
 
 import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
-
+import useStyles from '../hooks/useStyles';
+import {formatNumber, sumSaldo} from '../Tools'
 const initialData = {
     cliente: '',
     cuenta: '',
@@ -11,8 +12,8 @@ const initialData = {
     referencia: '',
     tipoPago: 'EFECTIVO'
 }
-export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMessage, addToSaldo, fecha }) {
-    
+export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMessage, addToSaldo, fecha, cobrar }) {
+    const classes = useStyles()
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const [values, setValues] = useState(initialData)
     const [reprint] = useState(true)
@@ -23,7 +24,7 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
 
     const handleChange = (type, value) => {
         if (type === 'importe') {
-            if (value > values.cuenta.saldo) {
+            if (value > sumSaldo(values.cuenta.cuentas)) {
                 showMessage("El importe es mayor al saldo de la cuenta.", "warning")
                 setValues({ ...values, importe: '' })
                 return false
@@ -40,7 +41,6 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log("enviando...")
         var pago = {
             ubicacion: ubicacion,
             cuenta: values.cuenta,
@@ -49,11 +49,11 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
             referencia: values.referencia,
             fecha: fecha
         }
-        savePagoACuentaPorCobrar(pago).then(res =>{
-            showMessage(res.message, res.status)
+        cobrar(pago).then(res =>{
             close('cobroDialog')
+            showMessage(res.message, res.status)
             //updateSaldoCuenta() FALTA
-            addToSaldo(pago.importe)
+            // addToSaldo(pago.importe)
             clearFields()
             ticketCobranza(pago).then(res=>{
                 if(res.status === 'warning'){
@@ -100,18 +100,15 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
                                 value={values.cuenta}
                                 onChange={(e) => handleChange('cuenta', e.target.value)}
                             >
-                                {cuentas.map((option, index) => (
-                                    <MenuItem key={index} value={option}>
+                                {cuentas.map((cliente, index) => (
+                                    <MenuItem key={index} value={cliente}>
                                         <Grid container >
-                                            <Grid item xs={4}>
-                                                <Typography>{option.cliente.nombre}</Typography>
+                                            <Grid item xs={6}>
+                                                <Typography>{cliente.nombre}</Typography>
                                             </Grid>
-                                            <Grid item xs={4}>
-                                                <Typography color="textSecondary">{option.fecha}</Typography>
-                                            </Grid>
-                                            <Grid item xs={4}>
+                                            <Grid item xs={6}>
                                                 <Grid container justify="flex-end">
-                                                    <Typography>${option.saldo}</Typography>
+                                                    <Typography>${formatNumber(sumSaldo(cliente.cuentas))}</Typography>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -168,10 +165,10 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleClose('cobroDialog')} color="primary">
+                    <Button className={classes.botonSimplon} onClick={() => handleClose('cobroDialog')} >
                         Cancel
                     </Button>
-                    <Button type="submit" variant="contained" color="primary" disabled={values.importe > 0 ? false : true}>
+                    <Button className={classes.botonGenerico} type="submit" disabled={values.importe > 0 ? false : true}>
                         Registrar
                     </Button>
                 </DialogActions>

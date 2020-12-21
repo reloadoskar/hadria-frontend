@@ -2,22 +2,23 @@ import React from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Avatar, Card, CardContent, CardHeader, 
     Grid, 
     Typography,
-    LinearProgress, 
+    LinearProgress,
 } from '@material-ui/core'
+import EstadoDeCuenta from '../cxp/EstadoDeCuenta'
 import PersonIcon from '@material-ui/icons/Person';
 import {formatNumber, sumSaldo} from '../Tools'
-import EstadoDeCuenta from './EstadoDeCuenta'
-export default function CuentasxCobrar(props) {
+export default function CuentasxPagar(props) {
     const {cuentas=null, total} = props
+
     return (
         <Card>
-            <CardHeader title="Créditos" />
+            <CardHeader title="Deudas" />
                 {cuentas === null ?
                     <LinearProgress variant="query" />
                     :
                     <CardContent>
                         <div >                        
-                        {cuentas.map((cliente,i) =>(
+                        {cuentas.map((prov,i) =>(
                             <Accordion key={i}>
                                 <AccordionSummary>
                                     <Grid container >
@@ -28,16 +29,16 @@ export default function CuentasxCobrar(props) {
                                         </Grid>
                                         <Grid item xs={10}>
                                             <Typography align="right" variant="h6">
-                                                {cliente.nombre}
+                                                {prov.nombre}
                                             </Typography>
                                             <Typography align="right" variant="subtitle2">
-                                                ${formatNumber(sumSaldo(cliente.cuentas),2)}
+                                                ${formatNumber(sumSaldo(prov.cuentas),2)}
                                             </Typography>
                                         </Grid>                                
                                     </Grid>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <EstadoDeCuenta cuentas={cliente.cuentas}/>                                    
+                                    <EstadoDeCuenta cuentas={prov.cuentas}/>
                                 </AccordionDetails> 
                             </Accordion>
                         ))} 

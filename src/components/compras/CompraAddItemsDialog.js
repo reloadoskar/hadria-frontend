@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FormControlLabel, Switch, Dialog, DialogTitle, Button, DialogContent, DialogActions, Grid, TextField, MenuItem, Box } from '@material-ui/core';
+import { Dialog, DialogTitle, Button, DialogContent, DialogActions, Grid, TextField, MenuItem } from '@material-ui/core';
 // import SaveIcon from '@material-ui/icons/Save';
 
 import useProducts from '../hooks/useProducts'
@@ -43,7 +43,6 @@ export default function CompraAddItemsDialog({ open, handleClose, addItemToList,
         e.preventDefault()
         let item = {
             producto: values.producto,
-            provedor: values.provedor,
             cantidad: values.cantidad,
             stock: values.cantidad,
             empaques: values.empaques,
@@ -79,16 +78,6 @@ export default function CompraAddItemsDialog({ open, handleClose, addItemToList,
                         </DialogTitle>
                         <form onSubmit={handleSubmit}>
                         <DialogContent>
-                            <Grid container >
-                                <Grid item>
-                                <FormControlLabel
-                                    control={
-                                    <Switch checked={values.checked} onChange={(e) => handleChange('checked', e.target.checked)} value="checked" />
-                                    }
-                                    label="Agregar Productor"
-                                />
-                                </Grid>
-                            </Grid>
                             <Grid container spacing={2}>
                                 {/* Select: Producto return Object producto*/}
                                 <Grid item xs={4}>
@@ -112,26 +101,6 @@ export default function CompraAddItemsDialog({ open, handleClose, addItemToList,
                                             ))
                                         }
                                     </TextField>
-                                    <Box display={ !values.checked ? 'none' : 'block' }>
-                                        <TextField
-                                                id="provedor"
-                                                select
-                                                required
-                                                fullWidth
-                                                label="Selecciona un Proveedor"
-                                                helperText="Por favor selecciona un Proveedor."
-                                                margin="normal"
-                                                value={values.provedor}
-                                                onChange={(e) => handleChange('provedor',  e.target.value)}
-                                                variant="outlined"
-                                                >
-                                                    {provedors.map((option, index) => (
-                                                        <MenuItem key={index} value={option}>
-                                                            {option.clave} - {option.nombre}
-                                                        </MenuItem>
-                                                    ))}
-                                            </TextField>
-                                    </Box>
                                 </Grid>
                                 {/* Input: Cantidad */}
                                 <Grid item xs={2}>

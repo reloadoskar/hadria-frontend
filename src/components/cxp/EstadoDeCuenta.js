@@ -9,7 +9,6 @@ export default function EstadoDeCuenta(props){
                 <TableRow>
                     <TableCell><Typography align="right" variant="caption" children="Folio" /></TableCell>
                     <TableCell><Typography align="right" variant="caption" children="Fecha" /></TableCell>
-                    <TableCell align="right"><Typography variant="caption" children="Importe" /></TableCell>
                     <TableCell align="right"><Typography variant="caption" children="Saldo" /></TableCell>
                 </TableRow>
             </TableHead>
@@ -18,17 +17,14 @@ export default function EstadoDeCuenta(props){
                 cuentas.map((cuenta, i) => (   
                     <TableRow key={i}>
                         <TableCell >
-                            <Typography align="right" variant="subtitle2" children={cuenta.venta.folio} />
+                            <Typography align="right" variant="subtitle2" children={cuenta.folio + " " +cuenta.compra.clave} />
                         </TableCell>
                         <TableCell>
-                            <Typography align="right" variant="subtitle2" children={cuenta.venta.fecha} />                                                    
-                        </TableCell>
-                        <TableCell>
-                            <Typography align="right" variant="subtitle2" children={"$"+formatNumber(cuenta.venta.importe)} />
+                            <Typography align="right" variant="subtitle2" children={cuenta.concepto} />                                                    
                         </TableCell>
                         <TableCell>
                             <Typography align="right" variant="subtitle2" children={"$"+formatNumber(cuenta.saldo)} />
-                        </TableCell>
+                        </TableCell>                            
                     </TableRow>                                         
                 ))
             }                       

@@ -2,7 +2,6 @@ import React, {useReducer, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import moment from 'moment'
 import {getDataFrom, getCuentasPorCobrar, getCuentasPorPagar, existCorte} from '../api'
-
 import Acceso from './Acceso'
 import PosDialog from './PosDialog'
 import PosCobrarDialog from './PosCobrarDialog'
@@ -14,14 +13,17 @@ import AddItemDialog from './AddItemDialog'
 import CobroDialog from './CobroDialog'
 import CorteDialog from './CorteDialog'
 import RetiroDialog from './RetiroDialog'
-import Loading from '../Loading'
+// import Loading from '../Loading'
 
-import { Container, } from '@material-ui/core';
+import { Container, } from '@material-ui/core'
 
 import reducer from './PosReducer'
 
-import useInventario from '../hooks/useInventario';
-
+import useInventario from '../hooks/useInventario'
+import useIngresos from '../ingresos/useIngresos'
+import useCuentasxPagar from '../cxp/useCuentasxPagar'
+// import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
+import 'moment/locale/es-mx';
 const initialState = {
     saldoEnUbicacion: 0, 
     // POS DIALOG
@@ -36,36 +38,47 @@ const initialState = {
     egresoDialog: false,
     // INGRESO DIALOG
     ingresoDialog: false,
-
+    
     retiroDialog: false,
     // COBRO DIALOG
     cobroDialog: false,
     menuDialog: false,
     corteDialog: false,
-
+    
     inventarioFiltrado: [],
     ubicacion: '', 
     fecha: moment().format('YYYY-MM-DD'), 
     itemToAdd: null,
     itemsToSave: [],
     total: 0,
-
+    
     // CORTE
     corteExist: false,
     ventasCorte: [],
     egresosCorte: [],
     ingresosCorte: [],
     creditosCorte: [],
-
+    
     cuentasPorPagar: [],
     cuentasPorCobrar: [],
 }
 
 function PosContainer() {
-    const [loading] = useState(true)
+    // const [loading] = useState(true)
+    const {
+        // addIngreso, 
+        addVenta, cuentasxCobrar, addPagoCxc} = useIngresos()
     const { enqueueSnackbar } = useSnackbar()
-    const {inventario} = useInventario();
+    const {invUbic, getInvUbic} = useInventario();
+    const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
+    const [ubicacion, setUbicacion] = useState("")
+    const [fecha, setFecha] = useState( moment().format('YYYY-MM-DD') )
+    
     const [values, dispatch] = useReducer(reducer, initialState)
+
+    const savePagoCxp = (pago) => {
+        return addPagoCxp(pago)
+    }
     
     const openDialog = dialog =>{ 
         if( dialog === 'pagarDialog'){
@@ -125,15 +138,12 @@ function PosContainer() {
 
     const handleChange = (type, value) => { 
         if(type === 'ubicacion'){
-            dispatch({type: 'ubicacion', value: value, inv: inventario})
-            // getDataFrom(value._id, values.fecha).then(res => {
-            //     dispatch({type: 'setCorte', value: res.corte})
-            // })
-            return
+            getInvUbic(value._id)
+            return setUbicacion(value)
         }
         if(type === 'fecha'){
             var f = moment(value).format('YYYY-MM-DD')
-            return dispatch({type: type, value: f}) 
+            return setFecha(f)
         }
         dispatch({type: type, value: value}) 
     }
@@ -141,7 +151,7 @@ function PosContainer() {
     const startPos = () =>{
         // e.preventDefault()
         loadBalance()
-        if(values.inventarioFiltrado.length <= 0){
+        if(invUbic.length <= 0){
             enqueueSnackbar(" No se encontró inventario en "+values.ubicacion.nombre, {
                 variant: 'info',
                 anchorOrigin: {
@@ -158,14 +168,14 @@ function PosContainer() {
 
     const loadBalance = () => {
 
-        getDataFrom(values.ubicacion._id, values.fecha).then(res => {
+        getDataFrom(ubicacion._id, fecha).then(res => {
             dispatch({type: 'setCorte', value: res.corte})
         })
 
     }
 
     const checkCorte = () => {
-        existCorte(values.ubicacion._id, values.fecha).then( res =>{
+        existCorte(ubicacion._id, fecha).then( res =>{
             if(res.corte.length === 0){
                 // dispatch({type: 'corteExist', value: false})                
                 startPos()
@@ -184,22 +194,28 @@ function PosContainer() {
 
 
     return (
-        <Container maxWidth="sm">
+        <Container>
 
             {
-                inventario === null ?
+                // invUbic !== null ?
                     // <LinearProgress variant="query" />
-                    <Loading loading={loading}/>
-                :
                     <Acceso 
-                        values={values} 
-                        checkCorte={checkCorte} 
-                        handleChange={handleChange}/>
+                    ubicacion={ubicacion} 
+                    fecha={fecha} 
+                    checkCorte={checkCorte} 
+                    invUbic={invUbic}
+                    handleChange={handleChange}/>
+                    // :
+                    // null
+                    // <Loading loading={loading}/>
             }
 
 
             <PosDialog 
                 values={values}
+                inventario={invUbic}
+                ubicacion={ubicacion}
+                fecha={fecha}
                 wantThisItem={wantThisItem}
                 menuDialog={values.menuDialog}
                 showMessage={showMessage}
@@ -222,16 +238,21 @@ function PosContainer() {
 
             <PosCobrarDialog
                 valuesToSave={values}
+                ubicacion={ubicacion}
+                fecha={fecha}
                 isOpen={values.cobrarDialog}
+                crearVenta={addVenta}
+                crearPago={addPagoCxc}
                 close={closeDialog}
                 showMessage={showMessage}
                 addToSaldo={addToSaldo}
                 resetVenta={resetVenta}
                 />
             <PagarDialog 
-                fecha={values.fecha}
-                cuentas={values.cuentasPorPagar}
-                ubicacion={values.ubicacion}
+                fecha={fecha}
+                cuentas={cuentasxPagar}
+                pagar={savePagoCxp}
+                ubicacion={ubicacion}
                 isOpen={values.pagarDialog}
                 saldoDisponible={values.saldoEnUbicacion}
                 close={closeDialog}
@@ -240,8 +261,8 @@ function PosContainer() {
             />
 
             <EgresoDialog 
-                fecha={values.fecha}
-                ubicacion={values.ubicacion}
+                fecha={fecha}
+                ubicacion={ubicacion}
                 isOpen={values.egresoDialog}
                 saldoDisponible={values.saldoEnUbicacion}
                 close={closeDialog}
@@ -250,8 +271,8 @@ function PosContainer() {
             />
 
             <IngresoDialog 
-                fecha={values.fecha}
-                ubicacion={values.ubicacion}
+                fecha={fecha}
+                ubicacion={ubicacion}
                 isOpen={values.ingresoDialog}
                 close={closeDialog}
                 showMessage={showMessage}
@@ -259,18 +280,18 @@ function PosContainer() {
             />
 
             <RetiroDialog
-                fecha={values.fecha}
-                ubicacion={values.ubicacion}
+                fecha={fecha}
+                ubicacion={ubicacion}
                 isOpen={values.retiroDialog}
                 close={closeDialog}
                 showMessage={showMessage}
-                subFromSaldo={subFromSaldo}
-            />
+                subFromSaldo={subFromSaldo}/>
 
             <CobroDialog 
-                fecha={values.fecha}
-                cuentas={values.cuentasPorCobrar}
-                ubicacion={values.ubicacion}
+                fecha={fecha}
+                cuentas={cuentasxCobrar}
+                cobrar={addPagoCxc}
+                ubicacion={ubicacion}
                 isOpen={values.cobroDialog}
                 saldoDisponible={values.saldoEnUbicacion}
                 close={closeDialog}

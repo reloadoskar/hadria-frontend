@@ -39,6 +39,7 @@ function Ubicaciones() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Ubicacion</TableCell>
+                                    <TableCell>Tipo</TableCell>
                                     <TableCell>Acciones</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -47,6 +48,7 @@ function Ubicaciones() {
                                 ubicacions.map((row, index) => (
                                     <TableRow key={index} index={index}>
                                         <TableCell>{row.nombre}</TableCell>
+                                        <TableCell>{row.tipo}</TableCell>
                                         <TableCell align="right">
                                             <IconButton aria-label="delete"
                                                 onClick={() => removeUbicacion(index, row._id)}

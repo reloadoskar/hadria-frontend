@@ -1,11 +1,8 @@
 import React from 'react'
-import { formatNumber, sumImporte, } from '../Tools'
+import { formatNumber } from '../Tools'
 import { Typography, Grid, Card, CardHeader, CardContent, CardActions, Tooltip, LinearProgress } from '@material-ui/core';
 
 export default function Balance({balance}) {
-
-    
-
     return (
         <Grid container direction="row" alignItems="center" justify="space-around" spacing={2}>
 
@@ -32,8 +29,8 @@ export default function Balance({balance}) {
                                             align="right"
                                             variant="h4"
                                             color={balance.total < 0 ? 'error' : 'inherit'}
-
-                                            children={"$" + formatNumber(balance.total)} />
+                                            children={"$" + formatNumber(balance.total)} 
+                                            />
                                     </CardContent>
                                     <CardActions>
 
@@ -46,17 +43,17 @@ export default function Balance({balance}) {
                                     </CardHeader>
                                     <Tooltip title={
                                         <React.Fragment>
-                                            {
+                                            {/* {
                                                 !balance.dispPorUbic ?
                                                     null
                                                     :
                                                     balance.dispPorUbic.map((el, index) => {
-                                                        let disponible = sumImporte(el.ingresos) - sumImporte(el.egresos)
+                                                        let disp = sumImporte(el.ingresos) - sumImporte(el.egresos)
                                                         return (
-                                                            <Typography children={el.nombre + ": " + formatNumber(disponible)} key={index} />
+                                                            <Typography children={el.nombre + ": " + formatNumber(disp)} key={index} />
                                                         )
                                                     })
-                                            }
+                                            } */}
                                         </React.Fragment>
                                     } placement="right">
                                         <CardContent>

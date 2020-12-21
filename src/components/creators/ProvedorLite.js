@@ -7,14 +7,15 @@ import { TextField, Grid, Button, Dialog, Slide, DialogContent, DialogTitle, Dia
 
 //REDUCER
 import reducer from '../reducers/ProvedorsReducer';
+import useStyles from '../hooks/useStyles';
 
 const initialState = {
 	nombre: '',
     clave: '',
     rfc: '',
     direccion: 'NO DISP',
-    tel1: '5555555555',
-    email: 'nomail@mail.com',
+    tel1: '',
+    email: '',
     cta1: '1234567890',
     diasDeCredito: '10',
     comision: '10',
@@ -27,7 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function ProvedorLite({ addProvedor, open, close }) {
 
 	const [values, dispatch] = useReducer(reducer, initialState)
-
+	const classes = useStyles()
     const handleSubmit = (event) => {
         event.preventDefault()
 		addProvedor(values)
@@ -74,14 +75,13 @@ export default function ProvedorLite({ addProvedor, open, close }) {
 								<TextField
                                     required
 									fullWidth
-									id="email"
-									label="email"
-									type="email"
-									helperText="Correo electrónico."
+									id="tel1"
+									label="Teléfono"
+									type="number"
 									margin="normal"
 									variant="outlined"
-									value={values.email}
-									onChange={(e) => dispatch({type: 'email', value: e.target.value})}
+									value={values.tel1}
+									onChange={(e) => dispatch({type: 'tel1', value: e.target.value})}
 									/>
 							</Grid>
 							
@@ -94,8 +94,8 @@ export default function ProvedorLite({ addProvedor, open, close }) {
                 
                 <DialogActions>
 					
-                    	<Button onClick={close} variant="contained" color="secondary" >Cancelar</Button>
-                    	<Button type="submit" variant="contained" color="primary" >Guardar</Button>
+                    	<Button className={classes.botonSimplon} onClick={close} >Cancelar</Button>
+                    	<Button className={classes.botonGenerico} type="submit" >Guardar</Button>
 					
                 </DialogActions>
                 </form>

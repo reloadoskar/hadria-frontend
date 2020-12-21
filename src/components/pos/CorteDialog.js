@@ -2,14 +2,42 @@ import React, { useState } from 'react'
 import ConfirmDialog from './ConfirmDialog'
 import {saveCorte} from '../api'
 
-import { Dialog, Slide, DialogTitle, DialogContent, Grid, Typography, Divider, ListItem, DialogActions, Button } from '@material-ui/core'
+import { Dialog, Slide, DialogTitle, DialogContent, Grid, Typography, Divider, ListItem, DialogActions, Button, Tabs, Tab } from '@material-ui/core'
 
-import {sumImporte, sumAcuenta, calcTotal} from '../Tools'
+import {sumImporte, sumAcuenta, calcTotal, formatNumber} from '../Tools'
 
 import ContenedorTabla from './ContenedorTabla'
 import TablaVentas from './TablaVentas'
 import TablaIngresos from './TablaIngresos'
 import TablaEgresos from './TablaEgresos'
+import useStyles from '../hooks/useStyles'
+
+function a11yProps(index) {
+    return {
+      id: `scrollable-auto-tab-${index}`,
+      'aria-controls': `scrollable-auto-tabpanel-${index}`,
+    };
+}
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`scrollable-auto-tabpanel-${index}`}
+        aria-labelledby={`scrollable-auto-tab-${index}`}
+        {...other}
+      >
+        {value === index && 
+          
+          children
+          
+        }
+      </div>
+    );
+  }
 
 const ShowTable = ({show, table, data}) => (
     
@@ -25,20 +53,22 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CorteDialog({isOpen, close, data, showMessage}){
+const init = {
+    ventas: [],
+    ingresos: [],
+    creditos: [],
+    egresos: [],
+    total: 0,
+    totalVentas:0,
+    totalIngresos:0,
+    totalCreditos:0,
+    totalEgresos:0,
+}
 
-    const [values, setValues] = useState({show: false, confirm: false, table: '', data: ''})
-    const [corteData, setCorteData] = useState({
-        ventas: [],
-        ingresos: [],
-        creditos: [],
-        egresos: [],
-        total: 0,
-        totalVentas:0,
-        totalIngresos:0,
-        totalCreditos:0,
-        totalEgresos:0,
-    })
+export default function CorteDialog({isOpen, close, data, showMessage}){
+    const classess = useStyles()
+    const [values, setValues] = useState({show: false, confirm: false, table: '', data: '', tabSelected: 0})
+    const [corteData, setCorteData] = useState(init)
 
     React.useEffect(() => {
         if (isOpen) {
@@ -57,6 +87,7 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
                 total: calcTotal( sumImporte(data.ventasCorte), sumImporte(data.creditosCorte), sumAcuenta(data.creditosCorte), sumImporte(data.ingresosCorte), sumImporte(data.egresosCorte) ),
             });
         }
+        return () => setCorteData(init)
     }, [data, isOpen]);
 
     const handleClick = (table, data) => {
@@ -83,6 +114,10 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
             close('posDialog')
         })
     }
+
+    const handleChange = (event, newValue) => {
+        setValues({...values, tabSelected: newValue});
+    }
     
     return (
         <div>
@@ -108,14 +143,14 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
                 {data.ventasCorte.length > 0 || data.egresosCorte.length > 0 || data.ingresosCorte.length > 0 ?
                     <div>
                     <Grid container>
-                        <Grid item xs>
+                        <Grid item xs={12} md>
                             <ListItem 
                                 button
                                 children={
                                     <Grid container justify="flex-end" direction="column">
 
-                                        <Typography align="right" variant="h5">{corteData.ventas.length} Ventas</Typography>
-                                        <Typography align="right" variant="h4">$ {corteData.totalVentas}</Typography>
+                                        <Typography align="right" variant="body1">{corteData.ventas.length} Ventas</Typography>
+                                        <Typography align="right" variant="h4">$ {formatNumber(corteData.totalVentas)}</Typography>
                                         <Typography align="right" variant="body2" children="Bruto" color="textSecondary" paragraph/>
 
                                     </Grid>
@@ -123,26 +158,26 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
                                 onClick={() => handleClick('Ventas', corteData.ventas)}
                             />
                         </Grid>
-                        <Grid item xs>
+                        <Grid item xs={12} md>
                             <ListItem
                                 button
                                 children={
                                     <Grid container justify="flex-end" direction="column">
-                                        <Typography align="right" variant="h5">{corteData.ingresos.length} Ingresos</Typography>
-                                        <Typography align="right" variant="h4" >+ ${corteData.totalIngresos}</Typography>
+                                        <Typography align="right" variant="body1">{corteData.ingresos.length} Ingresos</Typography>
+                                        <Typography align="right" variant="h4" >+ ${formatNumber(corteData.totalIngresos)}</Typography>
                                         <Typography align="right" variant="body2" children="Cobranza / Otros" color="textSecondary" paragraph/>
                                     </Grid>
                                 }
                                 onClick={() => handleClick('Ingresos', corteData.ingresos)}
                             />
                         </Grid>
-                        <Grid item xs>
+                        <Grid item xs={12} md>
                             <ListItem
                                 button
                                 children={
                                     <Grid container justify="flex-end" direction="column">
-                                        <Typography align="right" variant="h5">{corteData.creditos.length} Créditos</Typography>
-                                        <Typography align="right" variant="h4" color="secondary">- ${corteData.totalCreditos}</Typography>
+                                        <Typography align="right" variant="body1">{corteData.creditos.length} Créditos</Typography>
+                                        <Typography align="right" variant="h4" color="secondary">- ${formatNumber(corteData.totalCreditos)}</Typography>
                                         <Typography align="right" variant="h6" children={"+ $"+corteData.totalAcuenta}/>
                                         <Typography align="right" variant="body2" children="a cuenta" color="textSecondary"  paragraph/>
                                     </Grid>
@@ -150,31 +185,54 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
                                 onClick={() => handleClick('Créditos', corteData.creditos)}
                                 />
                         </Grid>
-                        <Grid item xs>
+                        <Grid item xs={12} md>
                             <ListItem 
                                 button
                                 children={
                                     <Grid container justify="flex-end" direction="column">
-                                        <Typography align="right" variant="h5">{corteData.egresos.length} Egresos</Typography>
-                                        <Typography align="right" variant="h4" color="secondary">- ${corteData.totalEgresos}</Typography>
+                                        <Typography align="right" variant="body1">{corteData.egresos.length} Egresos</Typography>
+                                        <Typography align="right" variant="h4" color="secondary">- ${formatNumber(corteData.totalEgresos)}</Typography>
                                         <Typography align="right" variant="body2" children="Egresos / Gastos / Pagos" color="textSecondary" paragraph/>
                                     </Grid>
                                 }
                                 onClick={() => handleClick('Egresos', corteData.egresos)}
                             />
                         </Grid>
-                        <Grid item xs>
-                            <Typography align="right" variant="h5">Total</Typography>
-                            <Typography align="right" variant="h4" >= ${corteData.total}</Typography>
+                        <Grid item xs={12} md>
+                            <Typography align="right" variant="body1">Total</Typography>
+                            <Typography align="right" variant="h4" >= ${formatNumber(corteData.total)}</Typography>
                             <Typography align="right" variant="body2" children="Saldo en caja" color="textSecondary" paragraph/>
                         </Grid>
                     </Grid>
 
                     <Divider />
-                    <TablaVentas table="Ventas" data={corteData.ventas }/>
-                    <TablaIngresos table="Ingresos" data={corteData.ingresos} />
-                    <TablaEgresos table="Egresos" data={corteData.egresos} />
-                    <ShowTable show={values.show} table={values.table} data={values.data} />
+
+                    <Tabs
+                        value={values.tabSelected}
+                        onChange={handleChange}
+                        centered
+                    >
+                        <Tab label="Ventas" {...a11yProps(0)}></Tab>
+                        <Tab label="Ingresos" {...a11yProps(1)}></Tab>
+                        <Tab label="Creditos" {...a11yProps(2)}></Tab>
+                        <Tab label="Egresos" {...a11yProps(3)}></Tab>
+
+                    </Tabs>
+                        <TabPanel  value={values.tabSelected} index={0}>
+                            <TablaVentas table="Ventas" data={corteData.ventas }/>
+                        </TabPanel>
+                        <TabPanel  value={values.tabSelected} index={1}>
+                            <TablaIngresos table="Ingresos" data={corteData.ingresos} />
+                        </TabPanel>
+                        <TabPanel  value={values.tabSelected} index={1}>
+                            <ShowTable show={values.show} table={values.table} data={values.data} />
+                        </TabPanel>
+                        <TabPanel  value={values.tabSelected} index={1}>
+                            <TablaEgresos table="Egresos" data={corteData.egresos} />
+                        </TabPanel>
+                    {/* 
+                    
+                     */}
                 </div>
                 :
                 <Typography align="center" variant="h3" children="No se encontraron datos." />
@@ -182,10 +240,10 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
 
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => handleClose('corteDialog')} color="primary">
+                <Button className={classess.botonSimplon} onClick={() => handleClose('corteDialog')} >
                     Salir
                 </Button>
-                <Button type="button" variant="contained" onClick={() => confirm()} color="primary">
+                <Button className={classess.botonGenerico} type="button" onClick={() => confirm()} >
                     Cerrar corte
                 </Button>
             </DialogActions>

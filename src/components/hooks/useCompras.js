@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getCompras, cancelCompra, closeCompra } from '../api'
+import { getCompras, cancelCompra, closeCompra, saveCompra } from '../api'
 const useCompras = () => {
 	const [compras, setCompras] = useState(null)
 	const [updating, setUpdating] = useState(false)
@@ -10,22 +10,26 @@ const useCompras = () => {
 		}
 		loadCompras()
 		return () => {
-            setCompras(null)
+            setCompras([])
         }
-	}, [updating])
+	}, [])
 
-	const addCompra = (compra) => {
-		setUpdating(true)
-		const newCompra = [compra, ...compras]
-		setCompras(newCompra)	
-		return setUpdating(false)
+	const crear = (compra) => {
+		// setUpdating(true)
+		return saveCompra(compra).then(res => {
+			const newCompra = [...compras, res.compra]
+			setCompras(newCompra)	
+			// setUpdating(!updating)
+			return res
+		})
 	}
 	
-
-	const del = (id) =>{
-		setUpdating(true)
+	const eliminar = (id, index) =>{
 		return cancelCompra(id).then( res => {
-			setUpdating(false)
+			// setUpdating(!updating)
+			const n = compras
+			n.splice(index, 1)
+			setCompras(n)
 			return res
 		})
 
@@ -42,8 +46,8 @@ const useCompras = () => {
 	return {
 		compras,
 		cerrar,
-		addCompra,
-		del,
+		crear,
+		eliminar,
 		updating
 	}
 };

@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTitle, Typography, Grid, DialogActions, Bu
 
 import useCompras from '../hooks/useCompras'
 import useConceptos from '../hooks/useConceptos'
+import useStyles from '../hooks/useStyles';
 export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessage, subFromSaldo, saldoDisponible}) {
     const initialData ={
         tipo: 'GASTO DE CAJA',
@@ -13,6 +14,7 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
 
         importe: 0,
     }
+    const classes = useStyles()
     const {compras} = useCompras() 
     const [values, setValues] = useState(initialData)
     const {conceptos} = useConceptos()
@@ -27,14 +29,20 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
     }
 
     const handleChange = (type, value) => {
-        if(type === 'importe'){
-            if(value > saldoDisponible){
-                showMessage("El importe es mayor al Saldo disponible.", "error")
-                setValues({...values, importe: ''})
-                return false
-            }
+        switch(type){
+            case 'importe':
+                if(value > saldoDisponible){
+                    showMessage("El importe es mayor al Saldo disponible.", "error")
+                    return setValues({...values, importe: ''})
+                }
+                break;
+            case 'descripcion':
+                return setValues({...values, [type]: value.toUpperCase()})
+                
+            default:
+                return setValues({...values, [type]: value})
+
         }
-        setValues({...values, [type]: value})
     }
 
     const handleClose = (dialog) => {
@@ -64,11 +72,11 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
 
             // console.log(egreso)
             
+            close('egresoDialog')
             saveEgreso(egreso).then(res => {
                 showMessage(res.message, res.status)
                 subFromSaldo(egreso.importe)
                 clearFields()
-                close('egresoDialog')
                 ticketEgreso(egreso)
             })
         }
@@ -135,7 +143,7 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
                                     ))}
                                 </TextField>
                             </Grid>
-                            {values.tipo === "GASTO A COMPRA" && 
+                            {values.tipo === "GASTO A COMPRA" ? 
                                 <Grid item xs={12}>
                                     <TextField
                                     id="compra"
@@ -153,6 +161,8 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
                                         ))}
                                     </TextField>
                                 </Grid>
+                                :
+                                null
                             }
                             <Grid item xs={12}>
                                 <TextField 
@@ -181,10 +191,10 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
                     </DialogContent>
 
                     <DialogActions>
-                        <Button onClick={() => handleClose('egresoDialog')} color="primary">
+                        <Button className={classes.botonSimplon} onClick={() => handleClose('egresoDialog')} >
                             Cancel
                         </Button>
-                        <Button type="submit" variant="contained" color="primary" disabled={values.importe > 0 ? false : true }>
+                        <Button className={classes.botonGenerico} type="submit" disabled={values.importe === 0 ? true : false }>
                             Registrar
                         </Button>
                     </DialogActions>

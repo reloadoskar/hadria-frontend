@@ -1,17 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import { Card, CardHeader, CardContent, Grid, Typography, Divider, LinearProgress } from '@material-ui/core';
 import { formatNumber, sumSaldoList } from '../Tools'
-import {getCuentasPorPagar} from '../api'
+
 import moment from 'moment'
-export default function CuentasPorPagar( ){
-    const [cuentas, setCuentas] = useState(false)
-    const [saldo, setSaldo] = useState(0)
-    useEffect(() => {
-        getCuentasPorPagar().then(res => {
-            setCuentas(res.cuentas)
-            setSaldo(sumSaldoList(res.cuentas))
-        })
-    }, [])
+export default function CuentasPorPagar(props){
+    var {cuentas, saldo=0} = props
     const diasParaPagar = (fecha, dias) => {
         let fecha_compra = moment(fecha)
         let fecha_vence = fecha_compra.add(dias, 'd')
@@ -50,13 +43,13 @@ export default function CuentasPorPagar( ){
                             return (
                                 <Grid key={index} container spacing={2}>
                                     <Grid item xs={3}>
-                                        <Typography variant="body2" children={cta.folio+":"+cta.clave} />
+                                        <Typography variant="body2" children={cta.folio+":"+cta.compra.clave+":"+cta.concepto} />
                                     </Grid>
                                     <Grid item xs>
-                                        <Typography variant="body2" children={cta.provedor.nombre} />
+                                        <Typography variant="body2" children={cta.compra.provedor.nombre} />
                                     </Grid>
                                     <Grid item xs>
-                                        {diasParaPagar(cta.fecha, cta.provedor.diasDeCredito)}
+                                        {diasParaPagar(cta.fecha, cta.compra.provedor.diasDeCredito)}
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" children={"$"+formatNumber(cta.saldo)} align="right" />

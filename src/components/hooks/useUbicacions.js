@@ -3,11 +3,14 @@ import { useSnackbar } from 'notistack';
 import { getUbicacions, saveUbicacion, deleteUbicacion } from '../api'
 const useUbicacions = () => {
 	const [ubicacions, setUbicacions] = useState([])
+	// const [ubicacionsSaldo, setUbicacionsSaldo] = useState([])
 	const { enqueueSnackbar } = useSnackbar()
 	useEffect(() => {
 		async function loadData() {
 			const res = await getUbicacions()
-			setUbicacions(res.ubicacions);
+			setUbicacions(res.ubicacions)
+			// const saldo = await getUbicacionsSaldo()
+			// setUbicacionsSaldo(saldo.data)
 		}
 		loadData()
 	}, [])
@@ -36,6 +39,7 @@ const useUbicacions = () => {
 
 	return {
 		ubicacions,
+		// ubicacionsSaldo,
 		add,
 		del
 	}

@@ -7,8 +7,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 
 import { Grid, Typography, Divider } from '@material-ui/core';
+import useStyles from '../hooks/useStyles';
 
 export default function ConfirmaDialog(props) {
+    const classess = useStyles()
     const { 
         onClose, 
         open, data, cierraCorte} = props;
@@ -80,10 +82,10 @@ export default function ConfirmaDialog(props) {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button autoFocus onClick={handleCancel} color="primary">
+                <Button className={classess.botonSimplon} autoFocus onClick={handleCancel} >
                     Todavia No
         </Button>
-                <Button variant="contained" onClick={handleOk} color="primary">
+                <Button className={classess.botonGenerico} onClick={handleOk} >
                     ¡Ciérralo!
         </Button>
             </DialogActions>

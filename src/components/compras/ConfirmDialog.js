@@ -7,7 +7,9 @@ import {
     DialogTitle,
     Button,
 } from '@material-ui/core';
+import useStyles from '../hooks/useStyles';
 const ConfirmDialog = (props) => {
+    const classes = useStyles()
     const { open, cancel, ok, data } = props
 
     const handleCancel = () => {
@@ -24,6 +26,7 @@ const ConfirmDialog = (props) => {
             maxWidth="sm"
             fullWidth
             open={open}
+            classes={{paper: classes.suspended}}                
         >
             <DialogTitle>CANCELAR</DialogTitle>
             {
@@ -31,16 +34,16 @@ const ConfirmDialog = (props) => {
                     null
                     :
                     <DialogContent dividers>
-                        <Typography variant="h6" align="center" color="secondary" children="Se va a CANCELAR la compra:" />
+                        <Typography variant="h6" align="center" color="secondary" children="¿CANCELAR la compra?:" />
                         <Typography variant="h4" align="center" children={data.folio + '-' + data.clave} />
                     </DialogContent>
 
             }
             <DialogActions>
-                <Button autoFocus onClick={handleCancel} color="primary">
+                <Button className={classes.botonSimplon} autoFocus onClick={handleCancel}>
                     No, espera.
         </Button>
-                <Button variant="contained" onClick={handleOk} color="primary">
+                <Button className={classes.botonGenerico} variant="contained" onClick={handleOk} color="primary">
                     Esta bien.
         </Button>
             </DialogActions>

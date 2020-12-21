@@ -52,7 +52,7 @@ function App() {
 export default function IntegrationNotistack() {
     return (
         <SnackbarProvider maxSnack={3} anchorOrigin={{
-            vertical: 'bottom',
+            vertical: 'top',
             horizontal: 'right',
         }}>
             <App />

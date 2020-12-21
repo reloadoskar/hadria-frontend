@@ -203,6 +203,21 @@ export const getUbicacions = () => {
         console.log(err)
     }
 }
+
+export const getUbicacionsSaldo = () =>{
+    try {
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/ubicacions/saldo')
+                .then(res => {
+                    return res.data
+                })
+        }
+
+    }catch(err){
+        console.log(err)
+    }
+}
 export const saveUbicacion = (ubicacion) => {
     try{
         if(decoded){
@@ -1284,6 +1299,20 @@ export const addStock = (id, cantidad) => {
         if(decoded){
             return axios
                 .post( url_client + decoded.database + '/items/add', {id, cantidad})
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const restartApp = () => {
+    try{
+        if(decoded){
+            return axios
+                .get( url_client + decoded.database + '/restartApp')
                 .then( res => {
                     return res.data
                 })

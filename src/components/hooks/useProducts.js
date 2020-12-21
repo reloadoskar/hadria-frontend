@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getProducts, saveProduct, deleteProduct } from '../api'
 const useProducts = () => {
-	const [products, setProducts] = useState(null)
+	const [products, setProducts] = useState([])
 	const [updating, setUpdating] = useState(false)
 
 	useEffect(() => {
@@ -10,28 +10,23 @@ const useProducts = () => {
 			setProducts(res.products);
 		}
 		loadProducts()
-		
+		return () => setProducts(null)
 	}, [updating])
 
 	function add(producto) {
 		setUpdating(true)
 		return saveProduct(producto).then(res => {
-			if (res.status === 'success') {
-				const newProduct = [res.producto, ...products];  
-				setProducts(newProduct)
+			if (res.status === 'success') { 
 				setUpdating(false)
 				return res
 			}
 		})
 	}
 
-	function del(index, productoId) {
+	function del(productoId) {
 		setUpdating(true)
 		return deleteProduct(productoId).then(res => {
 			if(res.status === 'success'){
-				const newProducts = [...products];
-                newProducts.splice(index,1);
-				setProducts(newProducts);
 				setUpdating(false)
 				return res
 			}
