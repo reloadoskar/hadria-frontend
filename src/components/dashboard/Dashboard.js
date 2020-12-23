@@ -15,8 +15,8 @@ import CrearEgreso from '../egresos/CrearEgreso'
 
 import useUser from '../hooks/useUser'
 import useInventario from '../hooks/useInventario'
-import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
-import useCuentasxPagar from '../cxp/useCuentasxPagar.js'
+// import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
+// import useCuentasxPagar from '../cxp/useCuentasxPagar.js'
 import useIngresos from '../ingresos/useIngresos'
 import useEgresos from '../egresos/useEgresos'
 // import useBalance from '../hooks/useBalance'
@@ -44,19 +44,12 @@ const initBalance = {
 }
 export default function Dashboard() {
     const { enqueueSnackbar } = useSnackbar()
-    const {cuentasxCobrar, savePagoCxc, CxcCliente, totalCxc} = useCuentasxCobrar()
-    const {
-        cuentasxPagar, 
-        totalCxp,
-        // savePagoCxp, 
-        // CxpProv, 
-        } = useCuentasxPagar()
+    const {cuentasxCobrar, addPagoCxc, totalCxc, ingresos, totalIngresos, addIngreso} = useIngresos()
+    const {egresos, totalEgresos, addEgreso, cuentasxPagar, totalCxp, addPagoCxp} = useEgresos()
     const {compras} = useCompras()
-    const {ingresos, totalIngresos, addIngreso} = useIngresos()
     const {
         inventario, 
         totalInventario} = useInventario()
-    const {egresos, totalEgresos, addEgreso} = useEgresos()
     const{ubicacions} = useUbicacions()
     const classes = useStyles();
     const { user } = useUser()
@@ -186,7 +179,7 @@ export default function Dashboard() {
                         </Grid>
                         <Grid item xs={12} md={7}>
                             <Grid container spacing={2}>
-                                <Grid item xs={12}>
+                                {/* <Grid item xs={12}>
                                     <UltimosMovimientos 
                                         ingresos={ingresos}
                                         egresos={egresos}
@@ -195,13 +188,12 @@ export default function Dashboard() {
                                 <Grid item xs={12}>
                                     <Produccions 
                                         showMessage={showMessage}/>
-                                </Grid>
+                                </Grid> */}
                                 <Grid item xs={12}>
                                     <ComprasDash />
                                 </Grid>
                             </Grid>
-
-                        </Grid>
+                        </Grid> 
 
                         <Grid item xs={12} md={5}>
                             <Grid container spacing={3}>
@@ -215,8 +207,23 @@ export default function Dashboard() {
                             </Grid>
                         </Grid>
 
-                        {/* <Cobro isOpen={cobrar} cuentas={cuentasxCobrar} close={closeCobrar} showMessage={showMessage} save={savePagoCxc}/> */}
-                        <Pagar isOpen={pagar} cuentas={balance.cuentasPp} close={closePagar} saldos={balance.dispPorUbic} showMessage={showMessage} />
+                        <Cobro 
+                            open={cobrar} 
+                            cuentas={cuentasxCobrar}
+                            ubicacions={ubicacions}
+                            close={closeCobrar} 
+                            showMessage={showMessage} 
+                            save={addPagoCxc}
+                            />
+                        <Pagar 
+                            open={pagar} 
+                            cuentas={cuentasxPagar} 
+                            ubicacions={ubicacions}
+                            close={closePagar} 
+                            disponible={balance.disponible} 
+                            showMessage={showMessage} 
+                            save={addPagoCxp}
+                            />
                     </React.Fragment>
             }
         </Grid>

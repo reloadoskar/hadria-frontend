@@ -11,14 +11,14 @@ const LandingBar = () => {
                     <Grid item xs={10}>
                         <Typography variant="h5" children="H A D R I A  2.0" />
                     </Grid>
-                    <Grid item xs>
+                    {/* <Grid item xs>
                         <NavLink color="inherit" to="/register">
                             <Button color="primary">Registrar</Button>
                         </NavLink>
                         <NavLink color="inherit" to="/">
                         <Button color="primary">Log in</Button>
                         </NavLink>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </Toolbar>
         </AppBar>

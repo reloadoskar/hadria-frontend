@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 
 import {ticketPago} from '../api'
 
@@ -14,46 +14,51 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const classes = useStyles()
     const [values, setValues] = useState({
+        provedor: '',
         cuenta: '',
         tipoPago: 'EFECTIVO',
         importe: '',
         referencia: '',
     })
-    const [subCuentas, setSubCuentas] = useState([])
-    useEffect(()=> {
-        if(cuentas){
-            cuentas.forEach(cliente => {
-                cliente.cuentas.forEach(c => {
-                    var cts = subCuentas
-                    var ncta = { 
-                        _id: c._id,
-                        nombre: cliente.nombre, 
-                        provedor: cliente._id,
-                        concepto: c.concepto +"-"+c.compra.folio+":"+c.compra.clave , 
-                        saldo: c.saldo}
-                    cts.push(ncta)
-                    setSubCuentas( cts )  
-                })
-            })
-        }
-        return () => setSubCuentas([])
-    }, [cuentas, subCuentas])
+    // const [subCuentas, setSubCuentas] = useState([])
+    // useEffect(()=> {
+    //     if(cuentas){
+    //         cuentas.forEach(cliente => {
+    //             cliente.cuentas.forEach(c => {
+    //                 var cts = subCuentas
+    //                 var ncta = { 
+    //                     _id: c._id,
+    //                     nombre: cliente.nombre, 
+    //                     provedor: cliente._id,
+    //                     concepto: c.concepto +"-"+c.compra.folio+":"+c.compra.clave , 
+    //                     saldo: c.saldo}
+    //                 cts.push(ncta)
+    //                 setSubCuentas( cts )  
+    //             })
+    //         })
+    //     }
+    //     return () => setSubCuentas([])
+    // }, [cuentas])
 
     const handleChange = (type, value) => {
-        if(type === 'importe'){
-            if(value > saldoDisponible){
-                showMessage("El importe es mayor al Saldo disponible.", "error")
-                setValues({...values, importe: 0})
-                return false
-            }
-            if(value > values.cuenta.saldo){
-                showMessage("El importe es mayor al saldo de la cuenta.", "warning")
-                setValues({...values, importe: ''})
-                return false
-            }
+        switch(type){
+            case 'importe':
+                if(value > saldoDisponible){
+                    showMessage("El importe es mayor al Saldo disponible.", "error")
+                    setValues({...values, importe: 0})
+                    return false
+                }
+                if(value > values.cuenta.saldo){
+                    showMessage("El importe es mayor al saldo de la cuenta.", "warning")
+                    setValues({...values, importe: 0})
+                    return false
+                }else{
+                    return setValues({...values, [type]: value})    
+                }
 
-        }
-        setValues({...values, [type]: value})
+            default:
+                return setValues({...values, [type]: value})
+        }        
     }
 
     const handleClose = (dialog) => {
@@ -66,6 +71,7 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
     const handleSubmit = (e) => {
         e.preventDefault()
         var pago = {
+            provedor: values.provedor,
             ubicacion: ubicacion,
             cuenta: values.cuenta,
             tipoPago: values.tipoPago,
@@ -78,6 +84,7 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
             showMessage(res.message, res.status)
             subFromSaldo(pago.importe)
             setValues({
+                provedor: '',
                 cuenta: '',
                 tipoPago: 'EFECTIVO',
                 importe: '',
@@ -119,33 +126,57 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
                             <Grid item xs={12}>
                                 <TextField
                                     select
-                                    id="cuenta"
+                                    id="provedor"
                                     variant="outlined"
                                     autoFocus
                                     required
                                     fullWidth
-                                    label="Selecciona una Cuenta por Pagar"
-                                    value={values.cuenta}
-                                    onChange={(e) => handleChange('cuenta', e.target.value)}
+                                    label="Selecciona una Proveedor"
+                                    value={values.provedor}
+                                    onChange={(e) => handleChange('provedor', e.target.value)}
                                 >
-                                    {subCuentas.map((cta) => {
-                                        
-                                                return (
-                                                    <MenuItem key={cta._id} value={cta}>                                                
-                                                        <Grid container>
-                                                            <Grid item xs={6}>
-                                                                <Typography>{cta.nombre} - {cta.concepto}</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={6}>
-                                                                <Typography align="right">$ {formatNumber(cta.saldo)}</Typography>
-                                                            </Grid>
-                                                        </Grid>                           
-                                                    </MenuItem>
-                                                    ) 
-
-                                    })} 
+                                    {cuentas.map((cta, i) => (
+                                        <MenuItem key={i} value={cta}>                                                
+                                            <Grid container>
+                                                <Grid item xs={6}>
+                                                    <Typography>{cta.nombre}</Typography>
+                                                </Grid>                                        
+                                            </Grid>                           
+                                        </MenuItem>
+                                    ))} 
                                 </TextField>
                             </Grid>
+                            {
+                            values.provedor !== '' ?
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="cuenta"
+                                        label="Selecciona una cuenta"
+                                        select
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        value={values.cuenta}
+                                        onChange={(e) => handleChange('cuenta', e.target.value)}
+                                    >
+                                        {
+                                            values.provedor.cuentas.map((cta,index)=>(
+                                                <MenuItem key={index} value={cta}>
+                                                    <Grid container>
+                                                        <Grid item xs={6}>
+                                            <Typography>{cta.concepto} {cta.compra.folio}:{cta.compra.clave}</Typography>
+                                                        </Grid>
+                                                        <Grid item xs={6}>
+                                                            <Typography align="right">{formatNumber(cta.saldo)}</Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                </MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
+                                </Grid>
+                            : null
+                        }
                             <Grid item xs={6}>
                                 <TextField
                                     id="tipoPago"

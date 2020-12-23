@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { getCuentasPorCobrar, getCxcCliente, savePagoACuentaPorCobrar } from '../api'
 import { sumSaldo } from '../Tools'
 export default function useCuentasxCobrar(){
-    const [cuentasxCobrar, setCuentasxCobrar] = useState([])
+    const [cuentasxCobrar, setCuentasxCobrar] = useState(null)
     const [totalCxc, setTotalCxc] = useState(0)
     const [cuentasxcCliente , setCuentasxcCliente] = useState(null)
     const [updating, setUpdating] = useState(false)

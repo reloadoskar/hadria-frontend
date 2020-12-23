@@ -54,22 +54,15 @@ export default function ComprasDash(){
                             :
                             <ListItem button key={index} onClick={()=> handleMenu('ver', compra._id)}>
                             <Grid key={index} container >
-                                <Grid item xs={12} md={6}>
+                                <Grid item xs={6} md={6}>
                                     <Typography variant="h5">{compra.folio + ":" +compra.clave}</Typography>
                                     <Typography variant="body2">{compra.ubicacion.nombre} | {compra.tipoCompra.tipo}</Typography>
                                 </Grid>
-                                <Grid item xs={12} md>
-                                    <Typography children={compra.status} />
-                                </Grid>
                                 <Grid item xs={6} md>
-                                    <Typography variant="body2" align="right" children="Unidades:" />
-                                    <Typography variant="h5" align="right" children={sumStock(compra.items) + " | "} />
+                                    <Typography align="right" children={compra.status} />
+                                    <Typography variant="body2" align="right" children="Unidades / Empaques" />
+                                    <Typography variant="h5" align="right" children={sumStock(compra.items) + " | " + sumEmpStock(compra.items)} />
                                 </Grid>
-                                <Grid item xs={6} md>
-                                    <Typography variant="body2" children="Empaques: " />
-                                    <Typography variant="h5" align="left" children={sumEmpStock(compra.items) } />
-                                </Grid>
-                                
                             </Grid>
                             </ListItem>
                         ))

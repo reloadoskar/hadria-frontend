@@ -53,7 +53,7 @@ const UserFunctions = (props) => {
 
     const restart = () => {
         restartApp().then(res=>{
-            history.push("/app")
+            logout()
         })
     }
 

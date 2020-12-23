@@ -1,50 +1,52 @@
-import React, {useState} from 'react';
-
-import {savePagoACuentaPorPagar, ticketPago} from '../api'
-import {sumImporte} from '../Tools'
+import React, { useState} from 'react';
+import {ticketPago} from '../api'
+import { formatNumber} from '../Tools'
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Typography, Grid, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
-import {
-    MuiPickersUtilsProvider,
-    DatePicker
-} from '@material-ui/pickers';
-import moment from 'moment'
-import MomentUtils from '@date-io/moment';
 
-export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showMessage, saldoDisponible, subFromSaldo, fecha = Date()}) {
+import moment from 'moment'
+import useStyles from '../hooks/useStyles';
+
+const init = {
+    fecha: moment().format("YYYY-MM-DD"),
+    ubicacion: '',
+    provedor: '',
+    cuentaPorPagar: '',
+    tipoPago: 'EFECTIVO',
+    importe: 0,
+    referencia: '',
+}
+export default function Pagar({ubicacions=[], cuentas, open, close, showMessage, disponible, save }) {
+    const classess = useStyles()
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
-    const [locale] = useState("es")
-    const [values, setValues] = useState({
-        cuentaPorPagar: '',
-        tipoPago: 'EFECTIVO',
-        importe: '',
-        referencia: '',
-        ubicacion: '',
-        fecha: moment().format('YYYY-MM-DD'),
-    })
+    const [pago, setPago] = useState(init)
 
     const handleChange = (type, value) => {
-        if(type === 'importe'){
-            if(value > saldoDisponible){
-                showMessage("El importe es mayor al Saldo disponible.", "error")
-                setValues({...values, importe: ''})
-                return false
-            }
-            if(value > values.cuentaPorPagar.saldo){
-                showMessage("El importe es mayor al saldo de la cuenta.", "warning")
-                setValues({...values, importe: ''})
-                return false
-            }
-
+        switch(type){
+            case 'importe':
+            //     if(value > disponible){
+            //         showMessage("El importe es mayor al Saldo disponible.", "error")
+            //         setPago({...pago, importe: 0})
+            //         return false
+            //     }
+                if(value > pago.cuentaPorPagar.saldo){
+                    showMessage("El importe es mayor al saldo de la cuenta.", "warning")
+                    return setPago({...pago, importe: 0})
+            //         return false
+                }else{
+                    return setPago({...pago, importe: value})
+                }
+            case 'provedor':
+                return setPago({...pago, provedor: value})
+            default:
+                setPago({...pago, [type]: value})
         }
-
-        setValues({...values, [type]: value})
     }
 
     const handleClose = (dialog) => {
-        setValues({...values, cuentaPorPagar: '', importe: '', referencia: ''})
+        setPago(init)
         close(dialog)
     }
 
@@ -52,24 +54,20 @@ export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showM
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        var pago = {
-            ubicacion: values.ubicacion,
-            cuenta: values.cuentaPorPagar,
-            tipoPago: values.tipoPago,
-            importe: values.importe,
-            referencia: values.referencia,
-            fecha: values.fecha
+        var npago = {
+            ubicacion: pago.ubicacion,
+            provedor: pago.provedor,
+            cuenta: pago.cuentaPorPagar,
+            tipoPago: pago.tipoPago,
+            importe: pago.importe,
+            referencia: pago.referencia,
+            fecha: pago.fecha
         }
-        savePagoACuentaPorPagar(pago).then(res =>{
+        save(npago).then(res =>{
             showMessage(res.message, res.status)
             close('pagarDialog')
             //subFromSaldo(pago.importe)
-            setValues({
-                cuentaPorPagar: '',
-                tipoPago: 'EFECTIVO',
-                importe: '',
-                ubicacion: ''
-            })
+            setPago(init)
             ticketPago(pago)
         })
     }
@@ -79,7 +77,7 @@ export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showM
         <Dialog 
             fullWidth={true}
             maxWidth="sm" 
-            open={isOpen} 
+            open={open} 
             onClose={() => handleClose('pagarDialog')} >
 
             <React.Fragment>
@@ -95,69 +93,98 @@ export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showM
 
                 <DialogContent>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
+                            <TextField
+                                id="provedor"
+                                select
+                                variant="outlined"
+                                autoFocus
+                                required
+                                fullWidth
+                                label="Selecciona un Proveedor"
+                                value={pago.provedor}
+                                onChange={(e) => handleChange('provedor', e.target.value)}
+                            >
+                                {cuentas.map((provedor, index) => (
+                                        
+                                    <MenuItem key={index} value={provedor}>
+                                        <Grid container >
+                                            <Grid item xs={12}>
+                                                <Typography>{provedor.nombre}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </MenuItem>
+
+                                ))} 
+                            </TextField>
+                        </Grid>
+                        {
+                            pago.provedor !== '' ?
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="cuentaPorPagar"
+                                        label="Selecciona una cuenta"
+                                        select
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        value={pago.cuentaPorPagar}
+                                        onChange={(e) => handleChange('cuentaPorPagar', e.target.value)}
+                                    >
+                                        {
+                                            pago.provedor.cuentas.map((cta,index)=>(
+                                                <MenuItem key={index} value={cta}>
+                                                    <Grid container>
+                                                        <Grid item xs={6}>
+                                            <Typography>{cta.concepto} {cta.compra.folio}:{cta.compra.clave}</Typography>
+                                                        </Grid>
+                                                        <Grid item xs={6}>
+                                                            <Typography align="right">{formatNumber(cta.saldo)}</Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                </MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
+                                </Grid>
+                            : null
+                        }
+
+                        {
+                            pago.cuentaPorPagar !== '' ?
+                                <React.Fragment>
+                                    <Grid item xs={12}>
                             <TextField
                                 id="ubicacion"
                                 select
                                 variant="outlined"
-                                autoFocus
                                 required
                                 fullWidth
                                 label="Selecciona una Ubicación"
-                                value={values.ubicacion}
+                                value={pago.ubicacion}
                                 onChange={(e) => handleChange('ubicacion', e.target.value)}
                             >
-                                {saldos.map((option, index) => (
+                                {ubicacions.map((option, index) => (
                                     <MenuItem key={index} value={option}>
-                                        {option.nombre} ${(sumImporte(option.ingresos) - sumImporte(option.egresos))}
+                                        {option.nombre}
                                     </MenuItem>
                                 ))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={6}>
-                        <Grid item xs={12} md={4}>
-                                <MuiPickersUtilsProvider utils={MomentUtils} locale={locale}>
-                                    <DatePicker
-                                        id="fecha"
-                                        
-                                        value={values.fecha}
-                                        onChange={(e) => handleChange('fecha', e)}
-                                        margin="normal"
-                                        fullWidth
-                                        format="YYYY/MM/DD"
-                                        />
-                                </MuiPickersUtilsProvider>
-                            </Grid>
-                        </Grid>
                         <Grid item xs={12}>
+
                             <TextField
-                                id="cuentaPorPagar"
-                                select
-                                variant="outlined"
-                                autoFocus
-                                required
+                                id="fecha"
+                                type="date"
+                                label="fecha"
                                 fullWidth
-                                label="Selecciona una Cuenta por Pagar"
-                                value={values.cuentaPorPagar}
-                                onChange={(e) => handleChange('cuentaPorPagar', e.target.value)}
-                            >
-                                {cuentas.map((option, index) => (
-                                    <MenuItem key={index} value={option}>
-                                        <Grid container >
-                                            <Grid item xs={6}>
-                                                <Typography>{option.provedor.nombre} {option.folio}:{option.clave}</Typography>                                                
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Grid container justify="flex-end">
-                                                    <Typography>${option.saldo}</Typography>                                                
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                    </MenuItem>
-                                ))} 
-                            </TextField>
+                                value={pago.fecha}
+                                onChange={(e) => handleChange('fecha', e.target.value)}
+                            />
+
                         </Grid>
-                        <Grid item xs={6}>
+                        
+                        <Grid item xs={12}>
                             <TextField
                                 id="tipoPago"
                                 select
@@ -165,7 +192,7 @@ export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showM
                                 required
                                 fullWidth
                                 label="Tipo de pago"
-                                value={values.tipoPago}
+                                value={pago.tipoPago}
                                 onChange={(e) => handleChange('tipoPago', e.target.value)}
                             >
                                 {tipos.map((option, index) => (
@@ -178,7 +205,7 @@ export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showM
 
 
 
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <TextField 
                                     id="importe"
                                     variant="outlined"
@@ -186,11 +213,11 @@ export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showM
                                     required
                                     fullWidth
                                     type="number"
-                                    value={values.importe}
+                                    value={pago.importe}
                                     onChange={(e) => handleChange('importe', e.target.value)}
                                     />
                             </Grid>
-                            {values.tipoPago !== 'EFECTIVO' &&
+                            {pago.tipoPago !== 'EFECTIVO' &&
                                 <Grid item xs={12}>
                                     <TextField 
                                         id="referencia"
@@ -198,21 +225,25 @@ export default function Pagar({saldos=[], cuentas=[], isOpen=false, close, showM
                                         variant="outlined"
                                         required
                                         fullWidth
-                                        value={values.referencia}
+                                        value={pago.referencia}
                                         onChange={(e) => handleChange('referencia', e.target.value)}
                                         />
                                 </Grid>
                             }
+                                </React.Fragment>
+                            : null
+                        }
+                        
 
                     </Grid>
 
                     
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleClose('pagarDialog')} color="primary">
+                    <Button className={classess.botonSimplon} onClick={() => handleClose('pagarDialog')} color="secondary">
                         Cancel
                     </Button>
-                    <Button type="submit" variant="contained" color="primary">
+                    <Button className={classess.botonMagico} type="submit" disabled={pago.importe > 0 ? false : true}>
                         Registrar
                     </Button>
                 </DialogActions>

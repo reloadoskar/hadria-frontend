@@ -17,7 +17,8 @@ export default function CuentasxCobrar(props) {
                     :
                     <CardContent>
                         <div >                        
-                        {cuentas.map((cliente,i) =>(
+                        {cuentas.map((cliente,i) =>{
+                            return cliente.cuentas.length > 0 ?
                             <Accordion key={i}>
                                 <AccordionSummary>
                                     <Grid container >
@@ -40,7 +41,8 @@ export default function CuentasxCobrar(props) {
                                     <EstadoDeCuenta cuentas={cliente.cuentas}/>                                    
                                 </AccordionDetails> 
                             </Accordion>
-                        ))} 
+                            : null
+                        })} 
                     </div>
                     <Typography align="right" variant="h6" children={"$" + formatNumber(total,2)} />
                 </CardContent>

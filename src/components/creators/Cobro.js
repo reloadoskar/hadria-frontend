@@ -2,37 +2,48 @@ import React, { useState } from 'react'
 import {ticketCobranza} from '../api'
 
 import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem, LinearProgress } from '@material-ui/core';
-import useUbicacions from '../hooks/useUbicacions'
 import moment from 'moment'
-const initialData = {
+import {sumSaldo, formatNumber} from '../Tools'
+import useStyles from '../hooks/useStyles';
+
+const init = {
     fecha: moment().format("YYYY-MM-DD"),
     ubicacion: '',
     cuenta: '',
     tipoPago: 'EFECTIVO',
     importe: 0,
+    cambio: 0,
     referencia: 'PAGO EN CAJA',
 }
-export default function Cobro({ cuentas, isOpen=false, close, showMessage, save }) {
-    
+export default function Cobro({ cuentas, ubicacions, open, close, showMessage, save }) {
+    const classess = useStyles()
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
-    const {ubicacions} = useUbicacions()
-    const [values, setValues] = useState(initialData)
+    const [cobro, setCobro] = useState(init)
     // const [reprint] = useState(true)
     
     const clearFields = () => {
-        setValues(initialData)
+        setCobro(init)
     }
 
     const handleChange = (type, value) => {
-        if (type === 'importe') {
-            if (value > values.cuenta.saldo) {
-                showMessage("El importe es mayor al saldo de la cuenta.", "warning")
-                setValues({ ...values, importe: '' })
-                return false
-            }
-        }
+        switch(type){
+            case 'importe':
+                if(value < 0){
+                    return setCobro({ ...cobro, [type]: 0, cambio: 0 })
+                }
+                if (value > sumSaldo(cobro.cuenta.cuentas)) {
+                    // showMessage("El importe es mayor al saldo de la cuenta.", "warning")
+                    setCobro({ ...cobro, importe: value, cambio: value - sumSaldo(cobro.cuenta.cuentas) })
+                    return false
+                }else{
+                    return setCobro({ ...cobro, [type]: value, cambio: 0 })
+                }
+            default:
+                return setCobro({ ...cobro, [type]: value })
 
-        setValues({ ...values, [type]: value })
+        }
+         
+
     }
 
     const handleClose = (dialog) => {
@@ -43,19 +54,18 @@ export default function Cobro({ cuentas, isOpen=false, close, showMessage, save 
     const handleSubmit = (e) => {
         e.preventDefault()
         var pago = {
-            ubicacion: values.ubicacion,
-            cuenta: values.cuenta,
-            tipoPago: values.tipoPago,
-            importe: values.importe,
-            referencia: values.referencia,
-            fecha: values.fecha
+            ubicacion: cobro.ubicacion,
+            cuenta: cobro.cuenta,
+            tipoPago: cobro.tipoPago,
+            importe: cobro.importe - cobro.cambio,
+            referencia: cobro.referencia,
+            fecha: cobro.fecha
            
         }
         save(pago).then(res=>{
             showMessage(res.message, res.status)
-            clearFields()
             ticketCobranza(pago)
-            close()
+            handleClose('cobroDialog')
             //     //updateSaldoCuenta() FALTA
             //     if(reprint){
             //         ticketCobranza(pago)
@@ -67,7 +77,7 @@ export default function Cobro({ cuentas, isOpen=false, close, showMessage, save 
         <Dialog
             fullWidth={true}
             maxWidth="sm"
-            open={isOpen}
+            open={open}
             onClose={() => handleClose('cobroDialog')} >
             <DialogTitle>
                 <Grid container spacing={2}>
@@ -87,11 +97,43 @@ export default function Cobro({ cuentas, isOpen=false, close, showMessage, save 
 
                         <Grid item xs={12}>
                             <TextField
+                                id="cuenta"
+                                select
+                                variant="outlined"
+                                autoFocus
+                                required
+                                fullWidth
+                                label="Selecciona una Cuenta por Cobrar"
+                                value={cobro.cuenta}
+                                onChange={(e) => handleChange('cuenta', e.target.value)}
+                                >
+                                {cuentas.map((cliente, index) => {
+                                    return cliente.cuentas.length > 0 ?
+                                        <MenuItem key={index} value={cliente}>
+                                            <Grid container >
+                                                <Grid item xs={6}>
+                                                    <Typography>{cliente.nombre}</Typography>
+                                                </Grid>
+                                                <Grid item xs={6}>
+                                                    <Grid container justify="flex-end">
+                                                        <Typography>${formatNumber(sumSaldo(cliente.cuentas))}</Typography>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </MenuItem>
+                                        :null
+                                    }
+                                )}
+                            </TextField>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <TextField
                                 id="fecha"
                                 type="date"
                                 label="fecha"
                                 fullWidth
-                                value={values.fecha}
+                                value={cobro.fecha}
                                 onChange={(e) => handleChange('fecha', e.target.value)}
                                 />
                         </Grid>
@@ -105,7 +147,7 @@ export default function Cobro({ cuentas, isOpen=false, close, showMessage, save 
                                 required
                                 fullWidth
                                 label="Selecciona una Ubicación"
-                                value={values.ubicacion}
+                                value={cobro.ubicacion}
                                 onChange={(e) => handleChange('ubicacion', e.target.value)}
                                 >
                                 {ubicacions.map((option, index) => (
@@ -115,36 +157,9 @@ export default function Cobro({ cuentas, isOpen=false, close, showMessage, save 
                                 ))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="cuenta"
-                                select
-                                variant="outlined"
-                                autoFocus
-                                required
-                                fullWidth
-                                label="Selecciona una Cuenta por Cobrar"
-                                value={values.cuenta}
-                                onChange={(e) => handleChange('cuenta', e.target.value)}
-                                >
-                                {cuentas.map((option, index) => (
-                                    <MenuItem key={index} value={option}>
-                                        <Grid container >
-                                            <Grid item xs={6}>
-                                                <Typography>{option._id[0].nombre}</Typography>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Grid container justify="flex-end">
-                                                    <Typography>${option.saldo}</Typography>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
+                        
 
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
                             <TextField
                                 id="tipoPago"
                                 select
@@ -152,7 +167,7 @@ export default function Cobro({ cuentas, isOpen=false, close, showMessage, save 
                                 required
                                 fullWidth
                                 label="Tipo de pago"
-                                value={values.tipoPago}
+                                value={cobro.tipoPago}
                                 onChange={(e) => handleChange('tipoPago', e.target.value)}
                                 >
                                 {tipos.map((option, index) => (
@@ -162,20 +177,30 @@ export default function Cobro({ cuentas, isOpen=false, close, showMessage, save 
                                 ))}
                             </TextField>
                         </Grid>
-
-                        <Grid item xs={6}>
-                            <TextField
-                                id="importe"
-                                variant="outlined"
-                                label="Importe"
-                                required
-                                fullWidth
-                                type="number"
-                                value={values.importe}
-                                onChange={(e) => handleChange('importe', e.target.value)}
-                                />
-                        </Grid>
-                        {values.tipoPago !== 'EFECTIVO' &&
+                        {
+                            cobro.cuenta !== '' ?
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="importe"
+                                        variant="outlined"
+                                        label="Importe"
+                                        required
+                                        fullWidth
+                                        type="number"
+                                        value={cobro.importe}
+                                        onChange={(e) => handleChange('importe', e.target.value)}
+                                        />
+                                </Grid>
+                            : null
+                        }            
+                        {
+                        cobro.cambio > 0 ?
+                            <Grid item xs={12}>
+                                <Typography align="center" variant="h6" children={"Cambio: " + formatNumber(cobro.cambio)} color="secondary" />
+                            </Grid>
+                            : null
+                        }
+                        {cobro.tipoPago !== 'EFECTIVO' &&
                             <Grid item xs={12}>
                                 <TextField
                                     id="referencia"
@@ -183,7 +208,7 @@ export default function Cobro({ cuentas, isOpen=false, close, showMessage, save 
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    value={values.referencia}
+                                    value={cobro.referencia}
                                     onChange={(e) => handleChange('referencia', e.target.value)}
                                     />
                             </Grid>
@@ -193,10 +218,10 @@ export default function Cobro({ cuentas, isOpen=false, close, showMessage, save 
                 }
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleClose('cobroDialog')} color="primary">
+                    <Button className={classess.botonSimplon} onClick={() => handleClose('cobroDialog')} color="secondary" >
                         Cancel
                     </Button>
-                    <Button type="submit" variant="contained" color="primary" disabled={values.importe > 0 ? false : true}>
+                    <Button className={classess.botonMagico} type="submit" disabled={cobro.importe > 0 ? false : true}>
                         Registrar
                     </Button>
                 </DialogActions>
