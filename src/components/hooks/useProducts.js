@@ -10,17 +10,13 @@ const useProducts = () => {
 			setProducts(res.products);
 		}
 		loadProducts()
-		return () => setProducts(null)
+		return () => setProducts([])
 	}, [updating])
 
-	function add(producto) {
-		setUpdating(true)
-		return saveProduct(producto).then(res => {
-			if (res.status === 'success') { 
-				setUpdating(false)
-				return res
-			}
-		})
+	async function addProduct(producto) {
+		const res = await saveProduct(producto);
+		setUpdating(!updating)
+		return res;
 	}
 
 	function del(productoId) {
@@ -35,7 +31,7 @@ const useProducts = () => {
 
 	return {
 		products,
-		add,
+		addProduct,
 		del
 	}
 };

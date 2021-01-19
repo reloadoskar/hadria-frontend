@@ -11,19 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import useProducts from '../hooks/useProducts';
 import { useSnackbar } from 'notistack';
 import CrearProducto from './CrearProducto';
-// function searchBy(field, array, search){
-//     var found = []
-//     if (search.length > 0){
-//         for (var i=0; i < array.length; i++) {
-//             var el = array[i]
-//             if(el[field].indexOf(search) !== -1){
-//                 // console.log(el[field])
-//                 found.push( el )
-//             }
-//         }
-//     }
-//     return found
-// }
+import {searchBy} from '../Tools'
 
 function Productos() {
     const { products, add, del } = useProducts()
@@ -35,20 +23,6 @@ function Productos() {
     const [resultado, setResultado] = useState([])
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
-
-    function searchBy(field, search){
-        var found = []
-        if (search.length > 0){
-            for (var i=0; i < products.length; i++) {
-                var el = products[i]
-                if(el[field].indexOf(search) !== -1){
-                    // console.log(el[field])
-                    found.push( el )
-                }
-            }
-        }
-        return found
-    }
 
     const showDialog = () => {
         setDialog(true)
@@ -62,9 +36,7 @@ function Productos() {
         showMessage("Agregando...", "info")
         closeDialog()
         add(producto).then(res => {
-            if(res.status === "success"){
-                showMessage(res.message, res.status)
-            }
+            showMessage(res.message, res.status)
         })
     }
 
@@ -85,7 +57,7 @@ function Productos() {
             case "field":
                 return setFieldSelected(value)
             case "search":
-                setResultado( searchBy(fieldSelected, value.toUpperCase()) )
+                setResultado( searchBy(fieldSelected, value.toUpperCase(), products) )
                 return setSearchField(value)
             default: 
                 return setSearchField(value)
@@ -103,7 +75,7 @@ function Productos() {
                         <Button onClick={showPagar}>Pagar</Button>
                         <Button>Traspasar</Button> */}
                     </ButtonGroup>
-                    <CrearProducto addProducto={addProducto} isShowing={dialog} close={closeDialog} search={searchBy} />
+                    <CrearProducto addProducto={addProducto} open={dialog} close={closeDialog} search={searchBy} />
                 </Grid>
             </Box>
             <Paper>

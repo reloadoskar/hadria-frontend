@@ -8,7 +8,7 @@ export default function Items(props){
     return(
         <Card>
             <CardContent>
-                <AgregarItem {...props} />
+                <AgregarItem {...props} />                
                 { 
                     items.length === 0 ?
                         <Typography>No se encontraron productos.</Typography>

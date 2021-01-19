@@ -34,11 +34,13 @@ export default function ComprasDash(){
     }
     return (
         <Card>
-            <CardHeader title="Compras" action ={
-                <IconButton onClick={(e) => openDialog()}>
-                    <AddIcon />
-                </IconButton>
-            } />
+            <CardHeader title="Compras" 
+                // action ={
+                //     <IconButton onClick={(e) => openDialog()}>
+                //         <AddIcon />
+                //     </IconButton>
+                // } 
+            />
             <CardContent>                
                 {
                     compras === null ?

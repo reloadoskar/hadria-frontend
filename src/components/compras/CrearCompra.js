@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Stepper, Step, StepLabel, Grid } from '@material-ui/core'
 import { 
     Button,
     Typography,
-} from '@material-ui/core';
+    Stepper, Step, StepLabel, Grid, AppBar, Dialog, Slide, Toolbar, IconButton } from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
-// import useProduccions from '../hooks/useProduccions';
 
 import useStyles from '../hooks/useStyles'
 
@@ -19,7 +18,12 @@ import TipoCompra from '../creators/TipoCompra'
 import {formatNumber, sumImporte} from '../Tools'
 import { ticketCompra } from '../api'
 
-export default function CrearCompra({ crear, showMessage, cerrar, products, provedors, add, tipoCompras, ubicacions, addTipoCompra }) {
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+export default function CrearCompra(props){
+    const { open, crear, showMessage, close, provedors, add, tipoCompras, ubicacions, addTipoCompra } = props
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0)
     const steps = ["Datos generales", "Agregar productos", "Agregar Gastos", "Resumen"]
@@ -131,6 +135,11 @@ export default function CrearCompra({ crear, showMessage, cerrar, products, prov
         setGuardando(false)
     }
 
+    const handleClose = () => {
+        clearAll()
+        close()
+    }
+
     function getStepContent(stepIndex) {
         switch (stepIndex) {
             case 0:
@@ -150,7 +159,7 @@ export default function CrearCompra({ crear, showMessage, cerrar, products, prov
                 )
             case 1:
                 return (
-                    <Items items={items} crear={crearItem} eliminar={eliminarItem} showMessage={showMessage} products={products}/>
+                    <Items items={items} crear={crearItem} eliminar={eliminarItem} {...props}/>
                     // <div>
                     //     <AgregarItem addItemToList={addItemToList} showMessage={showMessage}/>
                     //     <ListaItems items={items} clearItems={clearItems} removeItem={removeItem}/>
@@ -225,7 +234,22 @@ export default function CrearCompra({ crear, showMessage, cerrar, products, prov
         
     }
     return (
-        <div>
+        <Dialog fullScreen open={open} onClose={() => handleClose()} TransitionComponent={Transition}>
+
+            <AppBar className={classes.comprasBar}>
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" onClick={() => handleClose()} aria-label="close">
+                        <CloseIcon />
+                    </IconButton>
+                    <Typography variant="h6" className={classes.title}>
+                        Nueva Compra
+                    </Typography>
+                    <Button color="inherit" onClick={() => handleClose()}>
+                        Salir
+                    </Button>
+                </Toolbar>
+            </AppBar>
+
             <Stepper activeStep={activeStep}>
                 {steps.map((label) => (
                     <Step key={label}>
@@ -295,6 +319,6 @@ export default function CrearCompra({ crear, showMessage, cerrar, products, prov
                         )
                     
             }
-        </div>
+        </Dialog>
     )
 }   

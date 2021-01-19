@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Balance from './Balance'
-
 import Produccions from '../produccions/Produccions'
 
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
@@ -19,13 +18,13 @@ import useInventario from '../hooks/useInventario'
 // import useCuentasxPagar from '../cxp/useCuentasxPagar.js'
 import useIngresos from '../ingresos/useIngresos'
 import useEgresos from '../egresos/useEgresos'
-// import useBalance from '../hooks/useBalance'
+import useBalance from '../hooks/useBalance'
 import useCompras from '../hooks/useCompras'
 import useStyles from '../hooks/useStyles'
 import useUbicacions from '../hooks/useUbicacions'
 
 // import {calcCostoInventario} from '../Tools'
-
+import moment from 'moment'
 import { Grid, Box, 
     // IconButton, 
     Backdrop, Typography, CircularProgress, ButtonGroup, Button } from '@material-ui/core';
@@ -43,6 +42,8 @@ const initBalance = {
     dispPorUbic: [],
 }
 export default function Dashboard() {
+    // const {balance} = useBalance()
+    const now = moment()
     const { enqueueSnackbar } = useSnackbar()
     const {cuentasxCobrar, addPagoCxc, totalCxc, ingresos, totalIngresos, addIngreso} = useIngresos()
     const {egresos, totalEgresos, addEgreso, cuentasxPagar, totalCxp, addPagoCxp} = useEgresos()
@@ -53,18 +54,23 @@ export default function Dashboard() {
     const{ubicacions} = useUbicacions()
     const classes = useStyles();
     const { user } = useUser()
-    // const {balance, dispPorUbicacion} = useBalance()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
     const [crearIngreso, setCrearIngreso] = useState(false)
     const [crearEgreso, setCrearEgreso] = useState(false)
     const[
         bckdrpOpen, 
-        // setBdopen
-    ] = useState(false)
+        setBdopen
+    ] = useState(true)
     const [balance, setBalance] = useState(initBalance)
+    useEffect(()=>{
+        if(balance !== []){
+            setBdopen(false)
+        }
+        return () => setBdopen(true)
+    }, [balance])
     useEffect(() => {
-        // if(inventario !== null){
+        if(inventario !== null){
             // console.log(inventario)
             var disponible = totalIngresos - totalEgresos
             // var inventario_compras = inventario.inventario.compras
@@ -82,7 +88,7 @@ export default function Dashboard() {
                 porPagar: porPagar,
                 dispPorUbic: [],
             })
-        // }
+        }
         
     }, [totalIngresos,totalEgresos, totalInventario, totalCxc, totalCxp, inventario])
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
@@ -136,39 +142,37 @@ export default function Dashboard() {
                         <Grid item xs={12}>
                             <Box display={user.level > 1 ? 'none' : 'inline'}>
                                 <Grid container justify="flex-end">
-                                    <ButtonGroup size="small" variant="contained">
-                                        <Button onClick={showCreateIngreso}>Ingreso</Button>
-                                        <Button onClick={showCreateEgreso}>Egreso</Button>
-                                        <Button onClick={showCobrar}>Cobrar</Button>
-                                        <Button onClick={showPagar}>Pagar</Button>
-                                        <Button>Traspasar</Button>
-                                    </ButtonGroup>
-                                    <CrearIngreso 
-                                        open={crearIngreso} 
-                                        close={closeCreateIngreso} 
-                                        crear={addIngreso} 
-                                        ubicacions={ubicacions} 
-                                        mensaje={showMessage}/>
-                                    <CrearEgreso 
-                                        open={crearEgreso} 
-                                        close={closeCreateEgreso} 
-                                        crear={addEgreso} 
-                                        ubicacions={ubicacions} 
-                                        compras={compras} 
-                                        mensaje={showMessage}
-                                        disponible={balance.disponible}
-                                    />
-                                    {/* <IconButton >
-                                        <PaymentIcon />
-                                    </IconButton>
-                                    <IconButton >
-                                        <AttachMoneyIcon />
-                                    </IconButton>
-                                    <IconButton>
-                                        <CompareArrowsIcon />
-                                    </IconButton> */}
+                                    <Grid item xs={6}>
+                                        <Typography variant="h6">{now.format("dddd, D [de] MMMM YYYY, h:mm a")}</Typography>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <ButtonGroup size="small" variant="contained">
+                                            <Button onClick={showCreateIngreso}>Ingreso</Button>
+                                            <Button onClick={showCreateEgreso}>Egreso</Button>
+                                            <Button onClick={showCobrar}>Cobrar</Button>
+                                            <Button onClick={showPagar}>Pagar</Button>
+                                            <Button>Traspasar</Button>
+                                        </ButtonGroup>
+                                    </Grid>
                                 </Grid>
                             </Box>
+
+                            <CrearIngreso 
+                                open={crearIngreso} 
+                                close={closeCreateIngreso} 
+                                crear={addIngreso} 
+                                ubicacions={ubicacions} 
+                                mensaje={showMessage}/>
+                            <CrearEgreso 
+                                open={crearEgreso} 
+                                close={closeCreateEgreso} 
+                                crear={addEgreso} 
+                                ubicacions={ubicacions} 
+                                compras={compras} 
+                                mensaje={showMessage}
+                                disponible={balance.disponible}
+                            />
+
                         </Grid>
                         <Grid item xs={12}>
                             <Box display={user.level > 1 ? 'none' : 'inline'}>

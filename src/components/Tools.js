@@ -189,4 +189,18 @@ export const calcComision = (compra, ventas) => {
 
 export const formatNumber = (num, dec=0) => {
     return num.toFixed(dec).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-  }
+}
+
+export const searchBy = (field, search, array) => {
+    var found = []
+    if (search.length > 0){
+        for (var i=0; i < array.length; i++) {
+            var el = array[i]
+            if(el[field].indexOf(search) !== -1){
+                // console.log(el[field])
+                found.push( el )
+            }
+        }
+    }
+    return found
+}

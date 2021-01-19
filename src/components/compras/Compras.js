@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ComprasDialog from './ComprasDialog';
 import TablaCompras from './TablaCompras';
 import { useSnackbar } from 'notistack';
 import {
@@ -19,19 +18,21 @@ import useUbicacions from '../hooks/useUbicacions';
 
 import AddIcon from '@material-ui/icons/Add';
 import useStyles from '../hooks/useStyles'
+import CrearCompra from './CrearCompra';
 
 
 
 function Compras() {
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
-    const {products} = useProducts()
+    const {products, addProduct } = useProducts()
     const {provedors, add} = useProvedors();
     const {tipoCompras, addTipoCompra} = useTipoCompras();
     const {ubicacions} = useUbicacions();
 
     const { compras, crear, eliminar, } = useCompras();
     const [showDialog, setShowDialog] = useState(false)
+    const [showDialogP, setShowDialogP] = useState(false)
     const [detCompra, setDetCompra] = useState(false)
     const [compra, setCompra] = useState(null)
     const [confirm, setConfirm] = useState(false)
@@ -49,6 +50,13 @@ function Compras() {
 
     const closeDialog = () => {
         setShowDialog(false)
+    }
+    const openDialogP = () => {
+        setShowDialogP(true)
+    }
+
+    const closeDialogP = () => {
+        setShowDialogP(false)
     }
 
     const editCompra = (compra) => {
@@ -93,13 +101,16 @@ function Compras() {
                     <Button className={classes.botonGenerico} fullWidth onClick={() => openDialog('comprasDialog')}>
                         <AddIcon /> Crear Compra
       		        </Button>
-                    <ComprasDialog
-                        fullWidth
+                    <CrearCompra
                         open={showDialog}
+                        dialogP={showDialogP}
                         close={closeDialog}
+                        openP={openDialogP}
+                        closeP={closeDialogP}
                         showMessage={showMessage}
                         crear={crearCompra}
                         products={products}
+                        addProducto={addProduct}
                         provedors={provedors}
                         tipoCompras={tipoCompras}
                         ubicacions={ubicacions}

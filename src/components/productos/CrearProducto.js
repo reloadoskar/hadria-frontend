@@ -1,25 +1,13 @@
 import React, {useState}from 'react';
 
-// Material UI
-import { makeStyles } from '@material-ui/core/styles';
-import { Container, TextField, Grid, Button, Dialog, AppBar, Toolbar, IconButton, Typography, Slide, MenuItem } from '@material-ui/core';
+import { Container, TextField, Grid, Button, Dialog, AppBar, Toolbar, IconButton, Typography, Slide, MenuItem, DialogActions, DialogTitle, DialogContent } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 //HOOKS
 import useUnidades from '../hooks/useUnidades'
 import useEmpaques from '../hooks/useEmpaques'
-
-const useStyles = makeStyles(theme => ({
-	appBar: {
-		position: 'relative',
-		background: '#1E2F23',
-	},
-	title: {
-		marginLeft: theme.spacing(2),
-		flex: 1,
-	},
-}));
-
+import useStyles from '../hooks/useStyles'
+import {searchBy as search} from '../Tools'
 const initialState = {
 	clave: '',
     descripcion: '',
@@ -37,34 +25,57 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CrearProducto({ addProducto, isShowing, close, search }) {
+export default function CrearProducto({ addProducto, open, close, products }) {
 	const {unidades} = useUnidades()
 	const {empaques} = useEmpaques()
     const classes = useStyles();
     const [values, setValues] = useState(initialState)
-
+	const [isReady, setIsReady] = useState(false)
+	const isItReady = () => {
+		if(
+			values.descripcion !== '' && 
+			values.clave !=='' &&
+			values.costo !=='' &&
+			values.unidad !== '' &&
+			values.empaque !== '' &&
+			values.precio1 !== ''
+		){
+			return setIsReady(true)
+		}
+	}
     const handleChange = (field, value) => {
+		isItReady()
         var busqueda = ''
         switch (field){
             case 'descripcion':
-                var desc = value
-                busqueda = search('descripcion', value.toUpperCase())
+                var desc = value.toUpperCase()
+				busqueda = search('descripcion', desc, products)
+				var arrayCadena = desc.split(" ")
+				var c =""
+				for (var i=0; i < arrayCadena.length; i++) {
+					var palabra = arrayCadena[i]
+					c = c + palabra.charAt(0)
+				}
+
                 if(busqueda.length > 1){
                     // console.log(busqueda)
                     return setValues({
                         ...values, 
-                        [field]: desc.toUpperCase(),
+						[field]: desc,
+						clave: c,
                         existeDescripcion: false
                     })
                 }
                 if(busqueda.length === 1){
                     return setValues({...values, 
-                        [field]: desc.toUpperCase(),
+						[field]: desc,
+						clave: c,
                         existeDescripcion: true})
                 }
                 if(busqueda.length === 0){
                     return setValues({...values, 
-                        [field]: desc.toUpperCase(),
+						[field]: desc,
+						clave: c,
                         existeDescripcion: false
                         })
                 }
@@ -72,7 +83,7 @@ export default function CrearProducto({ addProducto, isShowing, close, search })
                 
             case 'clave':
                 var clave = value
-                busqueda = search('clave', value.toUpperCase())
+                busqueda = search('clave', value.toUpperCase(), products)
                 if(busqueda.length > 1){
                     // console.log(busqueda)
                     return setValues({
@@ -95,9 +106,20 @@ export default function CrearProducto({ addProducto, isShowing, close, search })
                 // return setValues({...values, [field]: clave.toUpperCase()})
                 break;
             case 'reset':
-                return setValues(initialState)
+				return setValues(initialState)
+				
+			case 'costo':
+				var p1 = parseFloat(value) + ( parseFloat(value) * 1)
+				var p2 = parseFloat(value) + ( parseFloat(value) * .5)
+				var p3 = parseFloat(value) + ( parseFloat(value) * .10)
+				return setValues({...values,
+					costo: value,
+					precio1: p1,
+					precio2: p2,
+					precio3: p3
+				})
             default:
-                return setValues({...values, [field]: value})
+				return setValues({...values, [field]: value})
         }
     }
         
@@ -105,7 +127,7 @@ export default function CrearProducto({ addProducto, isShowing, close, search })
     const handleSubmit = (event) => {
         event.preventDefault()
 		addProducto(values)
-		handleChange('reset')
+		handleClose()
 	}
 	
 	const handleClose = () => {
@@ -113,66 +135,52 @@ export default function CrearProducto({ addProducto, isShowing, close, search })
 		close()
 	}
 
-    return (
-        <div>
-            
-            <Dialog fullScreen open={isShowing} onClose={handleClose} TransitionComponent={Transition}>
-                <AppBar className={classes.appBar}>
-                    <Toolbar>
-                        <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-                            <CloseIcon />
-                        </IconButton>
-                        <Typography variant="h6" className={classes.title}>
-                            Nuevo Producto
-            			</Typography>
-                        <Button color="inherit" onClick={handleClose}>
-                            Salir
-            			</Button>
-                    </Toolbar>
-                </AppBar>
+    return (            
+    	<Dialog open={open} onClose={handleClose} TransitionComponent={Transition}>
+			
+			<DialogTitle>Nuevo Producto</DialogTitle>
+			
+			<DialogContent>
 				
-				<Container>
-                	<form onSubmit={handleSubmit}>
-						<Grid container spacing={2}>
-							<Grid item xs={12}>
-								<TextField
-									autoFocus
-									required
-									id="descripcion"
-									label="Descripción"
-									helperText={values.existeDescripcion ? "Ya existe el producto" : "Descripción del producto"}
-                                    fullWidth
-                                    error={values.existeDescripcion}
-									margin="normal"
-									variant="outlined"
-									value={values.descripcion}
-									// onChange={(e) => dispatch({type: 'descripcion', value: e.target.value})}
-									onChange={(e) => handleChange('descripcion', e.target.value)}
-									/>
-							</Grid>
+				<Grid container spacing={1}>
+					
+					<Grid item xs={12}>
+						
+						<TextField
+							autoFocus
+							required
+							id="descripcion"
+							label="Descripción"
+                            fullWidth
+                            error={values.existeDescripcion}
+							margin="normal"
+							variant="outlined"
+							value={values.descripcion}
+							onChange={(e) => handleChange('descripcion', e.target.value)}
+						/>
+					</Grid>
+					
+					<Grid item xs={12} md={4}>
+						<TextField
+                            required
+                            error={values.existeClave}
+							id="clave"
+							label="Clave"
+							fullWidth
+							margin="normal"
+							variant="outlined"
+							value={values.clave}
+                            // onChange={(e) => dispatch({type: 'clave', value: e.target.value})}
+                            onChange={(e) => handleChange('clave', e.target.value)}
+						/>
+					</Grid>
 							<Grid item xs={12} md={4}>
-								<TextField
-                                    required
-                                    error={values.existeClave}
-									id="clave"
-									label="Clave"
-									helperText="Clave de producto, máximo 4 caracteres."
-									fullWidth
-									margin="normal"
-									variant="outlined"
-									value={values.clave}
-                                    // onChange={(e) => dispatch({type: 'clave', value: e.target.value})}
-                                    onChange={(e) => handleChange('clave', e.target.value)}
-									/>
-							</Grid>
-							<Grid item xs={6} md={4}>
 								<TextField
 									required
 									fullWidth
 									select
 									id="unidad"
 									label="Unidad"
-									helperText="Unidad de compra del producto."
 									margin="normal"
 									variant="outlined"
 									value={values.unidad}
@@ -184,14 +192,13 @@ export default function CrearProducto({ addProducto, isShowing, close, search })
 									))}
 								</TextField>
 							</Grid>
-							<Grid item xs={6} md={4}>
+							<Grid item xs={12} md={4}>
 								<TextField
 									required
 									fullWidth
 									select
 									id="empaque"
 									label="Empaque"
-									helperText="Empaque del producto."
 									margin="normal"
 									variant="outlined"
 									value={values.empaque}
@@ -203,14 +210,13 @@ export default function CrearProducto({ addProducto, isShowing, close, search })
 									))}
 								</TextField>
 							</Grid>
-							<Grid item xs={6} md={3}>
+							<Grid item xs={12} md={3}>
 								<TextField
 									required
 									fullWidth
 									id="costo"
 									label="Costo"
 									type="number"
-									helperText="Costo del producto."
 									margin="normal"
 									variant="outlined"
 									value={values.costo}
@@ -218,14 +224,13 @@ export default function CrearProducto({ addProducto, isShowing, close, search })
 									onChange={(e) => handleChange('costo', e.target.value)}
 									/>
 							</Grid>
-							<Grid item xs={6} md={3}>
+							<Grid item xs={12} md={3}>
 								<TextField
 									required
 									fullWidth
 									id="precio1"
 									label="Precio de Lista"
 									type="number"
-									helperText="Precio de lista."
 									margin="normal"
 									variant="outlined"
 									value={values.precio1}
@@ -233,44 +238,42 @@ export default function CrearProducto({ addProducto, isShowing, close, search })
                                     onChange={(e) => handleChange('precio1', e.target.value)}
 									/>
 							</Grid>
-							<Grid item xs={6} md={3}>
+							<Grid item xs={12} md={3}>
 								<TextField
 									fullWidth
 									id="precio2"
 									label="Precio de Mayoreo"
 									type="number"
-									helperText="Precio de Mayoreo."
 									margin="normal"
 									variant="outlined"
 									value={values.precio2}
-                                    // onChange={(e) => dispatch({type: 'precio2', value: e.target.value})}
                                     onChange={(e) => handleChange('precio2', e.target.value)}
 									/>
 
 							</Grid>
-							<Grid item xs={6} md={3}>
+							<Grid item xs={12} md={3}>
 								<TextField
 									fullWidth
 									id="precio3"
 									label="Precio Especial"
 									type="number"
-									helperText="Precio especial para clientes especiales."
 									margin="normal"
 									variant="outlined"
 									value={values.precio3}
-                                    // onChange={(e) => dispatch({type: 'precio3', value: e.target.value})}
                                     onChange={(e) => handleChange('precio3', e.target.value)}
 									/>
 							</Grid>
-							<Grid container justify="flex-end">
-                    			<Button type="submit" variant="contained" color="primary" >Guardar</Button>
-							</Grid>
 						</Grid>
 						
-                </form>
-				</Container>
+				</DialogContent>
+
+				<DialogActions>
+					<Button clssName={classes.botonSimplon} color="secondary" onClick={handleClose}>cancelar</Button>
+					<Button 
+						disabled= {isReady ? false : true}
+						className={classes.botonGenerico} onClick={(e) => handleSubmit(e)}>Guardar</Button>
+				</DialogActions>
 
             </Dialog>
-        </div>
     );
 }

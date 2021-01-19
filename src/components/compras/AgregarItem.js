@@ -6,10 +6,11 @@ import {
     MenuItem, 
 } from '@material-ui/core';
 // import SaveIcon from '@material-ui/icons/Save';
-
+import CrearProducto from '../productos/CrearProducto'
 import {objectIsNull} from '../Tools'
 import useStyles from '../hooks/useStyles'
-export default function AgregarItem({ crear, showMessage, products }) {
+export default function AgregarItem(props){
+    const { crear, showMessage, products, openP } = props 
     const classes = useStyles();
     
     const [values, setValues] = useState({
@@ -63,6 +64,10 @@ export default function AgregarItem({ crear, showMessage, products }) {
         }
 
     }
+
+    const openDialogProducto = () => {
+        openP()
+    }
     return (
         
             <form onSubmit={handleSubmit}>                    
@@ -88,6 +93,7 @@ export default function AgregarItem({ crear, showMessage, products }) {
                                     </MenuItem>
                                 ))
                             }
+                                <MenuItem onClick={(e) => openDialogProducto(e)} value="">Nuevo...</MenuItem>
                             </TextField>
                         </Grid>
                         
@@ -155,7 +161,7 @@ export default function AgregarItem({ crear, showMessage, products }) {
                             </Grid>
                         </Grid>                    
                     </Grid>
-
+                    <CrearProducto {...props} open={props.dialogP} close={props.closeP}  />
             </form>
 
     )

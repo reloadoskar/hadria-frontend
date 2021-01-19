@@ -316,7 +316,7 @@ export default function DefaultDrawer({ toggle, open, url }) {
                             <ListItemIcon>
                                 <StorefrontIcon />
                             </ListItemIcon>
-                            <ListItemText primary="POS" />
+                            <ListItemText primary="Punto De Venta" />
                         </ListItem>
                         :
                         <StyledTooltip title="POS" placement="right">

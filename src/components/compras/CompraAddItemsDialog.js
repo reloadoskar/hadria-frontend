@@ -5,10 +5,12 @@ import { Dialog, DialogTitle, Button, DialogContent, DialogActions, Grid, TextFi
 import useProducts from '../hooks/useProducts'
 import useProvedors from '../hooks/useProvedors'
 import {objectIsNull} from '../Tools'
+import CrearProducto from '../productos/CrearProducto';
 
 export default function CompraAddItemsDialog({ open, handleClose, addItemToList, showMessage }) {
-    const {products} = useProducts()
+    const {products, add} = useProducts()
     const {provedors} = useProvedors()
+    const [dialogProducto, setDialogProducto] = useState(false)
     const [values, setValues] = useState({
         producto: '',
         provedor: '',
@@ -18,6 +20,12 @@ export default function CompraAddItemsDialog({ open, handleClose, addItemToList,
         importe: '',
         checked: false
     })
+    const openDialogProducto = () => {
+        setDialogProducto(true)
+    }
+    const closeDialogProducto = () => {
+        setDialogProducto(false)
+    }
 
     const clearFields = () => {
         setValues({producto: '', provedor: '', cantidad: '', empaques: '', costo: '', importe: '', checked: false})
@@ -100,6 +108,7 @@ export default function CompraAddItemsDialog({ open, handleClose, addItemToList,
                                                 </MenuItem>
                                             ))
                                         }
+                                        
                                     </TextField>
                                 </Grid>
                                 {/* Input: Cantidad */}
@@ -173,7 +182,7 @@ export default function CompraAddItemsDialog({ open, handleClose, addItemToList,
                         </form>
                     </Dialog>
             }
-
+            
         </div>
     )
 }
