@@ -1,7 +1,10 @@
 import React, {useState}from 'react';
 
-import { Container, TextField, Grid, Button, Dialog, AppBar, Toolbar, IconButton, Typography, Slide, MenuItem, DialogActions, DialogTitle, DialogContent } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { 
+	TextField, Grid, Button, Dialog, 
+	// AppBar, Toolbar, IconButton, Typography, 
+	Slide, MenuItem, DialogActions, DialogTitle, DialogContent } from '@material-ui/core';
+// import CloseIcon from '@material-ui/icons/Close';
 
 //HOOKS
 import useUnidades from '../hooks/useUnidades'

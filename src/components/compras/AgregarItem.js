@@ -10,7 +10,7 @@ import CrearProducto from '../productos/CrearProducto'
 import {objectIsNull} from '../Tools'
 import useStyles from '../hooks/useStyles'
 export default function AgregarItem(props){
-    const { crear, showMessage, products, openP } = props 
+    const { crearItem, showMessage, products, openP } = props 
     const classes = useStyles();
     
     const [values, setValues] = useState({
@@ -58,7 +58,7 @@ export default function AgregarItem(props){
             showMessage("Faltan datos.", 'error')
             return false
         }else{
-            crear(item)
+            crearItem(item)
             clearFields()
             showMessage("Se agregó un producto", 'success')
         }

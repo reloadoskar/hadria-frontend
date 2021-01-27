@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
-import { Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgress, IconButton } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgress, 
+    // IconButton 
+} from '@material-ui/core';
+// import AddIcon from '@material-ui/icons/Add';
 import useCompras from '../hooks/useCompras';
 import {sumStock, sumEmpStock} from '../Tools'
 import VerCompra from './VerCompra'
@@ -29,17 +31,12 @@ export default function ComprasDash(){
         }
     }
 
-    const openDialog = () => {
-        setShowDialog(true)
-    }
+    // const openDialog = () => {
+    //     setShowDialog(true)
+    // }
     return (
         <Card>
             <CardHeader title="Compras" 
-                // action ={
-                //     <IconButton onClick={(e) => openDialog()}>
-                //         <AddIcon />
-                //     </IconButton>
-                // } 
             />
             <CardContent>                
                 {
@@ -50,6 +47,7 @@ export default function ComprasDash(){
                     compras.length === 0 ?
                         <Typography variant="h6" align="center" gutterBottom>No hay Compras registradas.</Typography>
                     : 
+                        // null
                         compras.map( (compra, index) => (
                             updating === true ?
                                 <LinearProgress key={index} variant="query" />

@@ -145,6 +145,25 @@ export default function DefaultDrawer({ toggle, open, url }) {
                 }
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
+                        <NavLink to={`${url}/empleados`} className={classes.link}>
+                            {open ?
+                                <ListItem button onClick={toggle} className={classes.nested}>
+                                    <ListItemIcon>
+                                        <GroupIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Empleados" />
+                                </ListItem>
+                            :
+                                <StyledTooltip title="Empleados" placement="right">
+                                    <ListItem button onClick={toggle} className={classes.nested}>
+                                        <ListItemIcon>
+                                            <TocIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Empleados" />
+                                    </ListItem>
+                                </StyledTooltip>
+                            }
+                        </NavLink>
                         <NavLink to={`${url}/productos`} className={classes.link}>
                             {open
                                 ?

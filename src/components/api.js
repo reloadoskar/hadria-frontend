@@ -746,6 +746,19 @@ export const getBalance = () => {
         console.log(err+ ' Desconectado?')
     }
 }
+export const getDisponiblexUbicacion = () => {
+    try{
+        if (decoded){
+            return axios
+                .get(url_client + decoded.database + '/balance/disponiblexubicacion/')
+                .then( res => {
+                    return res.data.disp
+                })
+        }
+    }catch (err) {
+        console.log(err+ ' Desconectado?')
+    }
+}
 
 // UNIDADES
 
@@ -1313,6 +1326,49 @@ export const restartApp = () => {
         if(decoded){
             return axios
                 .get( url_client + decoded.database + '/restartApp')
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+// EMPLEADOS
+
+export const getEmpleados = () => {
+    try{
+        if(decoded){
+            return axios
+                .get( url_client + decoded.database + '/empleados')
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const addEmpleado = (empleado) => {
+    try{
+        if(decoded){
+            return axios
+                .post( url_client + decoded.database + '/empleados/add', empleado)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+export const delEmpleado = (idEmpleado) => {
+    try{
+        if(decoded){
+            return axios
+                .delete( url_client + decoded.database + `/empleado/${idEmpleado}`)
                 .then( res => {
                     return res.data
                 })

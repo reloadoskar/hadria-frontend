@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Balance from './Balance'
-import Produccions from '../produccions/Produccions'
+// import Produccions from '../produccions/Produccions'
 
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
 import CuentasxPagar from '../cxp/CuentasxPagar'
 // import EstadoDeCuenta from '../cxc/EstadoDeCuenta'
-import UltimosMovimientos from './UltimosMovimientos'
+// import UltimosMovimientos from './UltimosMovimientos'
 import ComprasDash from './ComprasDash'
 import Pagar from './Pagar'
 import Cobro from '../creators/Cobro'
@@ -42,11 +42,15 @@ const initBalance = {
     dispPorUbic: [],
 }
 export default function Dashboard() {
-    // const {balance} = useBalance()
+    const {disp} = useBalance()
     const now = moment()
     const { enqueueSnackbar } = useSnackbar()
-    const {cuentasxCobrar, addPagoCxc, totalCxc, ingresos, totalIngresos, addIngreso} = useIngresos()
-    const {egresos, totalEgresos, addEgreso, cuentasxPagar, totalCxp, addPagoCxp} = useEgresos()
+    const {cuentasxCobrar, addPagoCxc, totalCxc, 
+        // ingresos, 
+        totalIngresos, addIngreso} = useIngresos()
+    const {
+        // egresos, 
+        totalEgresos, addEgreso, cuentasxPagar, totalCxp, addPagoCxp} = useEgresos()
     const {compras} = useCompras()
     const {
         inventario, 
@@ -86,11 +90,11 @@ export default function Dashboard() {
                 inventario: totalInventario,
                 porCobrar: porCobrar,
                 porPagar: porPagar,
-                dispPorUbic: [],
+                dispPorUbic: disp,
             })
         }
         
-    }, [totalIngresos,totalEgresos, totalInventario, totalCxc, totalCxp, inventario])
+    }, [totalIngresos,totalEgresos, totalInventario, totalCxc, totalCxp, inventario, disp])
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
     const showPagar = () => {

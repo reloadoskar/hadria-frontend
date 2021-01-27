@@ -1,7 +1,7 @@
 import React, {useReducer, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import moment from 'moment'
-import {getDataFrom, getCuentasPorCobrar, getCuentasPorPagar, existCorte} from '../api'
+import {getCuentasPorCobrar, getCuentasPorPagar, existCorte} from '../api'
 import Acceso from './Acceso'
 import PosDialog from './PosDialog'
 import PosCobrarDialog from './PosCobrarDialog'
@@ -22,6 +22,8 @@ import reducer from './PosReducer'
 import useInventario from '../hooks/useInventario'
 import useIngresos from '../ingresos/useIngresos'
 import useCuentasxPagar from '../cxp/useCuentasxPagar'
+import useCortes from '../hooks/useCortes'
+import useUbicacions from '../hooks/useUbicacions'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';
 const initialState = {
@@ -71,6 +73,8 @@ function PosContainer() {
     const { enqueueSnackbar } = useSnackbar()
     const {invUbic, getInvUbic} = useInventario();
     const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
+    const {corte, getCorte} = useCortes()
+    const {ubicacions} = useUbicacions();
     const [ubicacion, setUbicacion] = useState("")
     const [fecha, setFecha] = useState( moment().format('YYYY-MM-DD') )
     
@@ -167,11 +171,7 @@ function PosContainer() {
     }
 
     const loadBalance = () => {
-
-        getDataFrom(ubicacion._id, fecha).then(res => {
-            dispatch({type: 'setCorte', value: res.corte})
-        })
-
+        getCorte(ubicacion._id, fecha)
     }
 
     const checkCorte = () => {
@@ -200,6 +200,7 @@ function PosContainer() {
                 // invUbic !== null ?
                     // <LinearProgress variant="query" />
                     <Acceso 
+                    ubicacions={ubicacions}
                     ubicacion={ubicacion} 
                     fecha={fecha} 
                     checkCorte={checkCorte} 
@@ -254,7 +255,7 @@ function PosContainer() {
                 pagar={savePagoCxp}
                 ubicacion={ubicacion}
                 isOpen={values.pagarDialog}
-                saldoDisponible={values.saldoEnUbicacion}
+                saldoDisponible={corte.total}
                 close={closeDialog}
                 showMessage={showMessage}
                 subFromSaldo={subFromSaldo}
@@ -264,7 +265,7 @@ function PosContainer() {
                 fecha={fecha}
                 ubicacion={ubicacion}
                 isOpen={values.egresoDialog}
-                saldoDisponible={values.saldoEnUbicacion}
+                saldoDisponible={corte.total}
                 close={closeDialog}
                 showMessage={showMessage}
                 subFromSaldo={subFromSaldo}
@@ -285,6 +286,7 @@ function PosContainer() {
                 isOpen={values.retiroDialog}
                 close={closeDialog}
                 showMessage={showMessage}
+                saldoDisponible={corte.total}
                 subFromSaldo={subFromSaldo}/>
 
             <CobroDialog 
@@ -293,18 +295,27 @@ function PosContainer() {
                 cobrar={addPagoCxc}
                 ubicacion={ubicacion}
                 isOpen={values.cobroDialog}
-                saldoDisponible={values.saldoEnUbicacion}
+                saldoDisponible={corte.total}
                 close={closeDialog}
                 showMessage={showMessage}
                 addToSaldo={addToSaldo}
             />
-
-            <CorteDialog 
-                data={values}
-                isOpen={values.corteDialog}
-                close={closeDialog}
-                showMessage={showMessage}
-            />
+            {
+                corte.length === 0 ?
+                    null
+                    :
+                    // console.log(corte)
+                    <CorteDialog 
+                        fecha={fecha}
+                        ubicacions={ubicacions}
+                        ubicacion={ubicacion}
+                        data={values}
+                        corte={corte}
+                        isOpen={values.corteDialog}
+                        close={closeDialog}
+                        showMessage={showMessage}
+                    />
+            }
         </Container>
 
     )

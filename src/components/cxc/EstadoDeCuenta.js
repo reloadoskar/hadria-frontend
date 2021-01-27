@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core'
 import {formatNumber} from '../Tools'
+import moment from 'moment'
 export default function EstadoDeCuenta(props){
     const {cuentas} =props
     return (
@@ -21,7 +22,7 @@ export default function EstadoDeCuenta(props){
                             <Typography align="right" variant="subtitle2" children={cuenta.venta.folio} />
                         </TableCell>
                         <TableCell>
-                            <Typography align="right" variant="subtitle2" children={cuenta.venta.fecha} />                                                    
+                            <Typography align="right" variant="subtitle2" children={moment(cuenta.venta.fecha).format("D/M/YY")} />                                                    
                         </TableCell>
                         <TableCell>
                             <Typography align="right" variant="subtitle2" children={"$"+formatNumber(cuenta.venta.importe)} />

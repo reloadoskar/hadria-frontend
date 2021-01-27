@@ -159,7 +159,7 @@ export default function CrearCompra(props){
                 )
             case 1:
                 return (
-                    <Items items={items} crear={crearItem} eliminar={eliminarItem} {...props}/>
+                    <Items items={items} crearItem={crearItem} eliminar={eliminarItem} {...props}/>
                     // <div>
                     //     <AgregarItem addItemToList={addItemToList} showMessage={showMessage}/>
                     //     <ListaItems items={items} clearItems={clearItems} removeItem={removeItem}/>

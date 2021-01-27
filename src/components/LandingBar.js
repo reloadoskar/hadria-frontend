@@ -1,6 +1,8 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom';
-import { AppBar, Toolbar, Grid, Typography, Button } from '@material-ui/core'
+// import { NavLink } from 'react-router-dom';
+import { AppBar, Toolbar, Grid, Typography, 
+    // Button 
+} from '@material-ui/core'
 import useStyles from './hooks/useStyles'
 const LandingBar = () => {
     const classes = useStyles()

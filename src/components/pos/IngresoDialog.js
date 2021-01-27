@@ -14,7 +14,15 @@ const conceptos = ["INGRESO A CAJA", "OTRO"]
 const [values, setValues] = useState(initialData) 
 const [loading, setLoading] = useState(false)
 const handleChange = (field, value) => {
-    setValues({...values, [field]: value})
+    switch (field) {
+        case 'descripcion':
+            setValues({...values, [field]: value.toUpperCase()})
+            break;
+    
+        default:
+            setValues({...values, [field]: value})
+            break;
+    }
 }
 
 const handleClose = (dialog) => {

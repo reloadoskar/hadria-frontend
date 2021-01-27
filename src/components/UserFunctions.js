@@ -51,6 +51,10 @@ const UserFunctions = (props) => {
         })
     }
 
+    // const sendToPOS = () => {
+    //     history.push("/app/pos")
+    // }
+
     const restart = () => {
         restartApp().then(res=>{
             logout()
@@ -96,7 +100,11 @@ const UserFunctions = (props) => {
                         onClose={handleClose}
                     >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={restart}>Restart</MenuItem>
+                        {
+                            user.level === 0 ?
+                            <MenuItem onClick={restart}>Restart</MenuItem>
+                            : null
+                        }
                         <Divider />
                         <MenuItem onClick={logout}>Salir</MenuItem>
                     </Menu>

@@ -43,17 +43,14 @@ export default function Balance({balance}) {
                                     </CardHeader>
                                     <Tooltip title={
                                         <React.Fragment>
-                                            {/* {
+                                            {
                                                 !balance.dispPorUbic ?
                                                     null
                                                     :
-                                                    balance.dispPorUbic.map((el, index) => {
-                                                        let disp = sumImporte(el.ingresos) - sumImporte(el.egresos)
-                                                        return (
-                                                            <Typography children={el.nombre + ": " + formatNumber(disp)} key={index} />
-                                                        )
-                                                    })
-                                            } */}
+                                                    balance.dispPorUbic.map((el, index) => (
+                                                            <Typography children={el.ubicacion + ": " + formatNumber(el.disponible)} key={index} />
+                                                    ))
+                                            }
                                         </React.Fragment>
                                     } placement="right">
                                         <CardContent>

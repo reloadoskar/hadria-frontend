@@ -34,6 +34,8 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
                 if(value > saldoDisponible){
                     showMessage("El importe es mayor al Saldo disponible.", "error")
                     return setValues({...values, importe: ''})
+                }else{
+                    setValues({...values, [type]: value})
                 }
                 break;
             case 'descripcion':

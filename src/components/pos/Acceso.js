@@ -4,12 +4,9 @@ import useStyles from '../hooks/useStyles'
 
 import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, } from '@material-ui/core';
 
-import useUbicacions from '../hooks/useUbicacions'
-
-
-export default function PosAcceso({ubicacion, fecha, checkCorte, handleChange, invUbic}){
+export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, handleChange, invUbic}){
     const classes = useStyles();
-    const {ubicacions} = useUbicacions();
+    
     const handleSubmit = (e) => {
         e.preventDefault()
         checkCorte()

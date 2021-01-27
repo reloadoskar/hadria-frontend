@@ -3,6 +3,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import Produccions from './components/Produccions'
+import Empleados from './components/empleados/Empleados'
 import Productos from './components/productos/Productos';
 import Clientes from './components/Clientes';
 import Provedores from './components/Provedores';
@@ -14,6 +15,7 @@ import Header from './components/Header';
 import Container from './components/pos/Container';
 import ConceptosTabs from './components/conceptos/ConceptosTabs';
 import Ventas from './components/ventas/Ventas';
+import useUser from './components/hooks/useUser'
 // import {PrivateRoute} from './privateRoute' 
 // import Error from './components/Error'
 
@@ -23,6 +25,7 @@ export default function Router({auth}){
     let { path, url } = useRouteMatch();
     let history = useHistory();
     const classes = useStyles()
+    const {user} = useUser()
     const [open, setOpen] = useState(false)
     useEffect(()=> {
         if (!auth.isAuthenticated()){
@@ -37,7 +40,7 @@ export default function Router({auth}){
     };
         return (
             <div className={classes.root}>
-                <Header url={url} auth={auth} open={open} toggle={toggle} />
+                <Header url={url} auth={auth} open={open} toggle={toggle} user={user} />
                     <main 
                         className={
                             clsx(
@@ -66,6 +69,7 @@ export default function Router({auth}){
                             <Route exact path={`${path}/inventario`} component={Inventario}></Route>
                             <Route exact path={`${path}/pos`} component={Container}></Route>
                             <Route exact path={`${path}/ventas`} component={Ventas}></Route>
+                            <Route exact path={`${path}/empleados`} component={Empleados}></Route>
                         </Switch>
                     </main>
 

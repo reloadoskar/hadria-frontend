@@ -96,13 +96,13 @@ function Inventario() {
                                                 <Grid item xs={2}>
                                                     <Typography variant="h6"
                                                         align="right"
-                                                        children={sumStock(compra.items)}
+                                                        children={sumEmpStock(compra.items)}
                                                         />
                                                 </Grid>
                                                 <Grid item xs={2}>
                                                     <Typography variant="h6"
                                                         align="right"
-                                                        children={sumEmpStock(compra.items)}
+                                                        children={sumStock(compra.items)}
                                                         />
                                                 </Grid>
                                             </Grid>
