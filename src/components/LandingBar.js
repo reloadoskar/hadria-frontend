@@ -11,7 +11,7 @@ const LandingBar = () => {
             <Toolbar>
                 <Grid container spacing={2} >
                     <Grid item xs={10}>
-                        <Typography variant="h5" children="H A D R I A  2.0" />
+                        <Typography variant="h5" children="H A D R I A  2" />
                     </Grid>
                     {/* <Grid item xs>
                         <NavLink color="inherit" to="/register">

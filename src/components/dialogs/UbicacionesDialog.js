@@ -3,9 +3,8 @@ import React, {useReducer}from 'react';
 // Material UI
 import useStyles from '../hooks/useStyles'
 import { 
-	MenuItem, 
-	Container, TextField, Grid, Button, Dialog, AppBar, Toolbar, IconButton, Typography, Slide, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+	MenuItem, 	
+	TextField, Grid, Button, Dialog, Slide, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 
 //HOOKS
 
