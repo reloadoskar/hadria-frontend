@@ -21,11 +21,6 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         alignItems: 'center',
     },
-    landingBar: {
-        position: 'relative',
-        backgroundColor: '#0F1A20',
-        height: 72
-    },
     basicBar: {
         position: 'relative',
         backgroundColor: '#222831'

@@ -7,7 +7,7 @@ import useStyles from './hooks/useStyles'
 const LandingBar = () => {
     const classes = useStyles()
     return (
-        <AppBar className={classes.basicBar}>
+        <AppBar classes={{root: classes.basicBar}}>
             <Toolbar>
                 <Grid container spacing={2} >
                     <Grid item xs={10}>
