@@ -14,7 +14,11 @@ export default function TopBar(props) {
     
     return (
 
-        <AppBar position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: open })}>
+        <AppBar 
+            position="fixed" 
+            className={clsx(classes.appBar, { 
+                [classes.appBarShift]: open,
+                })}>
             <Toolbar>
                 { user.level >= 3 ?
                     null

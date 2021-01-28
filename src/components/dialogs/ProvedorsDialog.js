@@ -42,7 +42,7 @@ export default function ProvedorsDialog({ addProvedor, isShowing, toggle }) {
             <Button className={classes.botonGenerico} onClick={toggle}>
                 + Agregar un Proveedor
       		</Button>
-            <Dialog fullWidth open={isShowing} onClose={toggle} TransitionComponent={Transition} maxWidth="lg">
+            <Dialog fullWidth open={isShowing} onClose={toggle} TransitionComponent={Transition} maxWidth="md">
 				<DialogTitle>Nuevo Proveedor</DialogTitle>
                 <form onSubmit={handleSubmit}>
 					{
@@ -178,7 +178,7 @@ export default function ProvedorsDialog({ addProvedor, isShowing, toggle }) {
 					}
 				<DialogActions>
 					<Button className={classes.botonSimplon} onClick={toggle}>Cancelar</Button>
-					<Button className={classes.botonMagico} type="submit">Guardar</Button>
+					<Button className={classes.botonGenerico} type="submit">Guardar</Button>
 				</DialogActions>
                 </form>
 

@@ -144,12 +144,11 @@ export default function CrearEgreso(props) {
             <DialogActions>
                 <Button 
                     onClick={handleClose}
-                    color="secondary"
                 >
                     cancelar
                 </Button>
                 <Button 
-                    className={classes.botonMagico}
+                    className={classes.botonGenerico}
                     disabled = {egreso.importe === "" || egreso.ubicacion === "" || egreso.fecha === "" || guardando===true ? true : false }
                     onClick={handleRegistrar}
                     variant="contained">

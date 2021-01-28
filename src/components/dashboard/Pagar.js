@@ -247,10 +247,10 @@ export default function Pagar({ubicacions=[], cuentas, open, close, showMessage,
                     </DialogContent>
                 }
                     <DialogActions>
-                        <Button className={classess.botonSimplon} onClick={() => handleClose('pagarDialog')} color="secondary">
+                        <Button className={classess.botonSimplon} onClick={() => handleClose('pagarDialog')} >
                             Cancel
                         </Button>
-                        <Button className={classess.botonMagico} type="submit" disabled={pago.importe > 0 && pagando === false ? false : true}>
+                        <Button className={classess.botonGenerico} type="submit" disabled={pago.importe > 0 && pagando === false ? false : true}>
                             Registrar
                         </Button>
                     </DialogActions>

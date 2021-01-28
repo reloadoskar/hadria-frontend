@@ -3,15 +3,16 @@ import { useSnackbar } from 'notistack';
 import useConceptos from '../hooks/useConceptos'
 import { Card, CardHeader, Grid, TextField, CardContent, CardActions, Button, Typography, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+import useStyles from '../hooks/useStyles'
 const ConceptosEgresos = () => {
     const { enqueueSnackbar } = useSnackbar()
+    const classes = useStyles()
     const {conceptos, add, del} = useConceptos()
     const [concepto, setConcepto] = useState('')
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
     const handleChange = (value) => {
-        setConcepto(value)
+        setConcepto(value.toUpperCase())
     }
 
     const addConcepto = (concepto) => {
@@ -49,8 +50,8 @@ const ConceptosEgresos = () => {
                     </CardContent>
                     <CardActions>
                         <Grid container justify="flex-end">
-                            <Grid item xs={12}>
-                                <Button variant="contained" size="small" onClick={() => addConcepto(concepto)} disabled={concepto === '' ? true : false}>Agregar</Button>
+                            <Grid item>
+                                <Button className={classes.botonGenerico} onClick={() => addConcepto(concepto)} disabled={concepto === '' ? true : false}>Agregar</Button>
                             </Grid>
                         </Grid>
                     </CardActions>

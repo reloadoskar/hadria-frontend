@@ -134,12 +134,11 @@ export default function CrearIngreso(props) {
             <DialogActions>
                 <Button 
                     onClick={handleClose}
-                    color="secondary"
                 >
                     cancelar
                 </Button>
                 <Button 
-                    className={classes.botonMagico}
+                    className={classes.botonGenerico}
                     disabled = {ingreso.importe === "" || ingreso.ubicacion === "" || ingreso.fecha === "" || guardando === true ? true : false }
                     onClick={handleRegistrar}
                     variant="contained">

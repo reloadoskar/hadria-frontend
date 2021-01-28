@@ -271,7 +271,7 @@ export default function CrearProducto({ add, open, close, products }) {
 				</DialogContent>
 
 				<DialogActions>
-					<Button className={classes.botonSimplon} color="secondary" onClick={handleClose}>cancelar</Button>
+					<Button className={classes.botonSimplon} onClick={handleClose}>cancelar</Button>
 					<Button 
 						disabled= {isReady ? false : true}
 						className={classes.botonGenerico} onClick={(e) => handleSubmit(e)}>Guardar</Button>

@@ -167,7 +167,7 @@ export default function ClientesDialog({ addCliente, isShowing, toggle }) {
 				}
 				<DialogActions>
 					<Button className={classes.botonSimplon} onClick={toggle}>Cancelar</Button>
-                    <Button className={classes.botonMagico} type="submit" >Guardar</Button>
+                    <Button className={classes.botonGenerico} type="submit" >Guardar</Button>
 
 				</DialogActions>
 				</form>

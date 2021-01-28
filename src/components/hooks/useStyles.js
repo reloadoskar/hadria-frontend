@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
         position: 'absolute',
         left: 0,
         right: 0,
-        top: 72,
+        top: 64,
         bottom: 0,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
@@ -32,17 +32,20 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#0F1A20',
         height: 72
     },
-    appBar: {
-        backgroundColor: '#23395B',
-        zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
+    basicBar: {
+        position: 'relative',
+        backgroundColor: '#222831'
     },
     posBar: {
         position: 'relative',
-        backgroundColor: '#D81E5B'
+        backgroundColor: '#e6b566'
+    },
+    appBar: {
+        backgroundColor: '#393e46',
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
     },
     compraBar: {
         position: 'relative',
@@ -203,11 +206,11 @@ const useStyles = makeStyles(theme => ({
         height: 48
     },
     botonGenerico: {
-        background: 'linear-gradient(45deg, #1982C4 30%, #4AABE8 90%)',
+        background: 'linear-gradient(45deg, #ffd369 50%, #ffdf91 90%)',
         border: 0,
         borderRadius: 3,
         // boxShadow: '0 3px 5px 2px rgba(61, 61, 61, .3)',
-        color: 'white',
+        color: 'black',
         height: 48,
         padding: '0 30px',
     },

@@ -226,10 +226,10 @@ export default function Cobro({ cuentas, ubicacions, open, close, showMessage, s
                     </DialogContent>
                 }
                 <DialogActions>
-                    <Button className={classess.botonSimplon} onClick={() => handleClose('cobroDialog')} color="secondary" >
+                    <Button className={classess.botonSimplon} onClick={() => handleClose('cobroDialog')} >
                         Cancel
                     </Button>
-                    <Button className={classess.botonMagico} type="submit" disabled={cobro.importe > 0 && cobrando === false ? false : true}>
+                    <Button className={classess.botonGenerico} type="submit" disabled={cobro.importe > 0 && cobrando === false ? false : true}>
                         Registrar
                     </Button>
                 </DialogActions>

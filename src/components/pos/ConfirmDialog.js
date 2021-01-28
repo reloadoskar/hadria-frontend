@@ -30,7 +30,7 @@ export default function ConfirmaDialog(props) {
 
     return (
         <Dialog
-            maxWidth="lg"
+            maxWidth="xs"
             fullWidth
             disableBackdropClick
             disableEscapeKeyDown

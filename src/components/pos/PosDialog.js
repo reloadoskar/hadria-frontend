@@ -53,7 +53,7 @@ export default function PosDialog({
             onClose={() => closeDialog('posDialog')} 
             TransitionComponent={Transition}>
             
-            <AppBar className={classes.posBar} position="fixed">
+            <AppBar className={classes.basicBar} position="fixed">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" onClick={ (e) => handleClick('menuDialog', e) } aria-label="close">
                         <MenuIcon />
