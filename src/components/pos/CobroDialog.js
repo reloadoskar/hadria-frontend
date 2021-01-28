@@ -2,22 +2,23 @@ import React, { useState } from 'react'
 
 import {ticketCobranza} from '../api'
 
-import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
+import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
 import useStyles from '../hooks/useStyles';
 import {formatNumber, sumSaldo} from '../Tools'
 const initialData = {
-    cliente: '',
+    // cliente: '',
     cuenta: '',
     importe: 0,
     referencia: '',
     tipoPago: 'EFECTIVO'
 }
-export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMessage, addToSaldo, fecha, cobrar }) {
+export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMessage, fecha, cobrar }) {
     const classes = useStyles()
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const [values, setValues] = useState(initialData)
-    const [reprint] = useState(true)
-    
+    // const [reprint] = useState(true)
+    const [guardando, setGuardando] = useState(false)
+
     const clearFields = () => {
         setValues(initialData)
     }
@@ -40,6 +41,7 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
     }
 
     const handleSubmit = (e) => {
+        setGuardando(true)
         e.preventDefault()
         var pago = {
             ubicacion: ubicacion,
@@ -50,20 +52,19 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
             fecha: fecha
         }
         cobrar(pago).then(res =>{
-            close('cobroDialog')
+            setGuardando(false)
             showMessage(res.message, res.status)
             //updateSaldoCuenta() FALTA
             // addToSaldo(pago.importe)
-            clearFields()
+            setValues(initialData)
             ticketCobranza(pago).then(res=>{
                 if(res.status === 'warning'){
                     showMessage(res.message, res.status)
                 }else{
                     ticketCobranza(pago)
                 }
+                close('cobroDialog')
             })
-            if(reprint){
-            }
         })
     }
 
@@ -86,6 +87,11 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
                 </Grid>
             </DialogTitle>
             <form onSubmit={handleSubmit}>
+            { guardando === true ?
+                <Zoom in={guardando}>
+                    <Typography variant="h5" align="center">Guardando...</Typography>
+                </Zoom>
+                :
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
@@ -100,20 +106,27 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
                                 value={values.cuenta}
                                 onChange={(e) => handleChange('cuenta', e.target.value)}
                             >
-                                {cuentas.map((cliente, index) => (
-                                    <MenuItem key={index} value={cliente}>
-                                        <Grid container >
-                                            <Grid item xs={6}>
-                                                <Typography>{cliente.nombre}</Typography>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Grid container justify="flex-end">
-                                                    <Typography>${formatNumber(sumSaldo(cliente.cuentas))}</Typography>
+                                {cuentas.map((cliente, index) => {
+                                    let scuentas = sumSaldo(cliente.cuentas)
+                                    if(scuentas>0){
+                                        return(
+                                            <MenuItem key={index} value={cliente}>
+                                                <Grid container >
+                                                    <Grid item xs={6}>
+                                                        <Typography>{cliente.nombre}</Typography>
+                                                    </Grid>
+                                                    <Grid item xs={6}>
+                                                        <Grid container justify="flex-end">
+                                                            <Typography>${formatNumber(sumSaldo(cliente.cuentas))}</Typography>
+                                                        </Grid>
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
-                                        </Grid>
-                                    </MenuItem>
-                                ))}
+                                            </MenuItem>
+                                        )
+                                    }else{
+                                        return false
+                                    }
+                                })}
                             </TextField>
                         </Grid>
 
@@ -164,11 +177,12 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
 
                     </Grid>
                 </DialogContent>
+            }
                 <DialogActions>
                     <Button className={classes.botonSimplon} onClick={() => handleClose('cobroDialog')} >
                         Cancel
                     </Button>
-                    <Button className={classes.botonGenerico} type="submit" disabled={values.importe > 0 ? false : true}>
+                    <Button className={classes.botonGenerico} type="submit" disabled={values.importe === 0 || guardando === true ? true : false}>
                         Registrar
                     </Button>
                 </DialogActions>

@@ -30,9 +30,10 @@ export default function ConfirmaDialog(props) {
 
     return (
         <Dialog
+            maxWidth="lg"
+            fullWidth
             disableBackdropClick
             disableEscapeKeyDown
-            maxWidth="lg"
             open={open}
         >
             <DialogTitle>¿Desea cerrar el día?</DialogTitle>

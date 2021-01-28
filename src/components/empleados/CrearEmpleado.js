@@ -15,9 +15,9 @@ const nempleado = {
     password: ""
 }
 const areas = [
-    {level: 1, area: "ADMINISTRACIÓN"},
-    {level: 2, area: "ALMACÉN"},
-    {level: 3, area: "AUX. GENERAL"},
+    {level: 2, area: "ADMINISTRACIÓN"},
+    {level: 3, area: "ALMACÉN"},
+    {level: 4, area: "GENERAL"},
 ]
 const CrearEmpleado = (props) =>{
     const {open, close, crear} = props

@@ -35,6 +35,15 @@ export default function Router({auth}){
         }
     }, [auth, history])
 
+    useEffect(()=>{
+        if(user.level === 3){
+            history.push('/app/inventario')
+        }
+        if(user.level === 4){
+            history.push(`/app/pos`)
+        }
+    },[user, history])
+
     const toggle = () => {
         setOpen(!open)
     };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {saveIngreso} from '../api'
-import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, MenuItem, TextField } from '@material-ui/core';
+import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, MenuItem, TextField, Zoom } from '@material-ui/core';
 import useStyles from '../hooks/useStyles';
 
 export default function IngresoDialog({ubicacion, fecha, isOpen, close, showMessage, addToSaldo}){
@@ -35,8 +35,8 @@ const clearFields = () => {
 }
 
 const handleSubmit = (e) => {
+    setLoading(true)
     e.preventDefault()
-    close('ingresoDialog')
     let ingreso = {
         fecha: fecha,
         ubicacion: ubicacion,
@@ -44,12 +44,12 @@ const handleSubmit = (e) => {
         descripcion: values.descripcion,
         importe: values.importe,
     }
-    setLoading(true)
     saveIngreso(ingreso).then(res => {
         showMessage(res.message, res.status)
         setLoading(false)
         addToSaldo(ingreso.importe)
         clearFields()
+        close('ingresoDialog')
     })
 
 }
@@ -72,6 +72,12 @@ return (
                 </Grid>
         </DialogTitle>
         <form onSubmit={handleSubmit}>
+            {
+                loading === true ?
+                <Zoom in={loading}>
+                    <Typography align="center" variant="h5">Guardando...</Typography>
+                </Zoom>
+                :
             <DialogContent>
                 <Grid container spacing={2}>
 
@@ -120,9 +126,10 @@ return (
 
                 </Grid>
             </DialogContent>
+            }
             <DialogActions>
                 <Button className={classes.botonSimplon} onClick={() => handleClose('ingresoDialog')} >Cancelar</Button>
-                <Button className={classes.botonGenerico} type="submit" disabled={values.importe > 0 || loading !== true   ? false : true }>Registrar</Button>
+                <Button className={classes.botonGenerico} type="submit" disabled={values.importe > 0 && loading !== true   ? false : true }>Registrar</Button>
             </DialogActions>
         </form>
     </Dialog>

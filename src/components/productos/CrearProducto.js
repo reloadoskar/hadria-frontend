@@ -28,7 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CrearProducto({ addProducto, open, close, products }) {
+export default function CrearProducto({ add, open, close, products }) {
 	const {unidades} = useUnidades()
 	const {empaques} = useEmpaques()
     const classes = useStyles();
@@ -129,7 +129,7 @@ export default function CrearProducto({ addProducto, open, close, products }) {
     
     const handleSubmit = (event) => {
         event.preventDefault()
-		addProducto(values)
+		add(values)
 		handleClose()
 	}
 	
@@ -271,7 +271,7 @@ export default function CrearProducto({ addProducto, open, close, products }) {
 				</DialogContent>
 
 				<DialogActions>
-					<Button clssName={classes.botonSimplon} color="secondary" onClick={handleClose}>cancelar</Button>
+					<Button className={classes.botonSimplon} color="secondary" onClick={handleClose}>cancelar</Button>
 					<Button 
 						disabled= {isReady ? false : true}
 						className={classes.botonGenerico} onClick={(e) => handleSubmit(e)}>Guardar</Button>

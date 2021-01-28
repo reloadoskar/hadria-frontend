@@ -18,6 +18,7 @@ const useUser = () => {
             apellido: decoded.apellido,
             email: decoded.email,
             level: decoded.level,
+            database: decoded.database,
             licenceEnds: decoded.paidPeriodEnds,
             venceEnDias: diasVencimientoLicencia,
         })

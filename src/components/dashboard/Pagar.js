@@ -4,7 +4,7 @@ import { formatNumber} from '../Tools'
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Typography, Grid, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
+import { Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
 
 import moment from 'moment'
 import useStyles from '../hooks/useStyles';
@@ -22,6 +22,7 @@ export default function Pagar({ubicacions=[], cuentas, open, close, showMessage,
     const classess = useStyles()
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const [pago, setPago] = useState(init)
+    const [pagando, setPagando] = useState(false)
 
     const handleChange = (type, value) => {
         switch(type){
@@ -53,6 +54,7 @@ export default function Pagar({ubicacions=[], cuentas, open, close, showMessage,
 
 
     const handleSubmit = (e) => {
+        setPagando(true)
         e.preventDefault()
         var npago = {
             ubicacion: pago.ubicacion,
@@ -65,10 +67,11 @@ export default function Pagar({ubicacions=[], cuentas, open, close, showMessage,
         }
         save(npago).then(res =>{
             showMessage(res.message, res.status)
-            close('pagarDialog')
-            //subFromSaldo(pago.importe)
             setPago(init)
+            setPagando(false)
+            //subFromSaldo(pago.importe)
             ticketPago(pago)
+            close('pagarDialog')
         })
     }
 
@@ -91,162 +94,167 @@ export default function Pagar({ubicacions=[], cuentas, open, close, showMessage,
                 </Grid>
                 </DialogTitle>
 
-                <DialogContent>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="provedor"
-                                select
-                                variant="outlined"
-                                autoFocus
-                                required
-                                fullWidth
-                                label="Selecciona un Proveedor"
-                                value={pago.provedor}
-                                onChange={(e) => handleChange('provedor', e.target.value)}
-                            >
-                                {cuentas.map((provedor, index) => (
-                                        
-                                    <MenuItem key={index} value={provedor}>
-                                        <Grid container >
-                                            <Grid item xs={12}>
-                                                <Typography>{provedor.nombre}</Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </MenuItem>
-
-                                ))} 
-                            </TextField>
-                        </Grid>
-                        {
-                            pago.provedor !== '' ?
-                                <Grid item xs={12}>
-                                    <TextField
-                                        id="cuentaPorPagar"
-                                        label="Selecciona una cuenta"
-                                        select
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        value={pago.cuentaPorPagar}
-                                        onChange={(e) => handleChange('cuentaPorPagar', e.target.value)}
-                                    >
-                                        {
-                                            pago.provedor.cuentas.map((cta,index)=>(
-                                                <MenuItem key={index} value={cta}>
-                                                    <Grid container>
-                                                        <Grid item xs={6}>
-                                            <Typography>{cta.concepto} {cta.compra.folio}:{cta.compra.clave}</Typography>
-                                                        </Grid>
-                                                        <Grid item xs={6}>
-                                                            <Typography align="right">{formatNumber(cta.saldo)}</Typography>
-                                                        </Grid>
-                                                    </Grid>
-                                                </MenuItem>
-                                            ))
-                                        }
-                                    </TextField>
-                                </Grid>
-                            : null
-                        }
-
-                        {
-                            pago.cuentaPorPagar !== '' ?
-                                <React.Fragment>
-                                    <Grid item xs={12}>
-                            <TextField
-                                id="ubicacion"
-                                select
-                                variant="outlined"
-                                required
-                                fullWidth
-                                label="Selecciona una Ubicación"
-                                value={pago.ubicacion}
-                                onChange={(e) => handleChange('ubicacion', e.target.value)}
-                            >
-                                {ubicacions.map((option, index) => (
-                                    <MenuItem key={index} value={option}>
-                                        {option.nombre}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-
-                            <TextField
-                                id="fecha"
-                                type="date"
-                                label="fecha"
-                                fullWidth
-                                value={pago.fecha}
-                                onChange={(e) => handleChange('fecha', e.target.value)}
-                            />
-
-                        </Grid>
-                        
-                        <Grid item xs={12}>
-                            <TextField
-                                id="tipoPago"
-                                select
-                                variant="outlined"
-                                required
-                                fullWidth
-                                label="Tipo de pago"
-                                value={pago.tipoPago}
-                                onChange={(e) => handleChange('tipoPago', e.target.value)}
-                            >
-                                {tipos.map((option, index) => (
-                                    <MenuItem key={index} value={option}>
-                                        {option}
-                                    </MenuItem>
-                                ))} 
-                            </TextField>
-                        </Grid>
-
-
-
+                {pagando === true ? 
+                    <Zoom in={pagando}>
+                        <DialogContent>
+                            <Typography variant = "h5" align="center">Pagando...</Typography>
+                        </DialogContent>
+                    </Zoom>
+                    :
+                    <DialogContent>
+                        <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <TextField 
-                                    id="importe"
+                                <TextField
+                                    id="provedor"
+                                    select
                                     variant="outlined"
-                                    label="Importe"
+                                    autoFocus
                                     required
                                     fullWidth
-                                    type="number"
-                                    value={pago.importe}
-                                    onChange={(e) => handleChange('importe', e.target.value)}
-                                    />
+                                    label="Selecciona un Proveedor"
+                                    value={pago.provedor}
+                                    onChange={(e) => handleChange('provedor', e.target.value)}
+                                >
+                                    {cuentas.map((provedor, index) => (
+                                            
+                                        <MenuItem key={index} value={provedor}>
+                                            <Grid container >
+                                                <Grid item xs={12}>
+                                                    <Typography>{provedor.nombre}</Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </MenuItem>
+
+                                    ))} 
+                                </TextField>
                             </Grid>
-                            {pago.tipoPago !== 'EFECTIVO' &&
+                            {
+                                pago.provedor !== '' ?
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            id="cuentaPorPagar"
+                                            label="Selecciona una cuenta"
+                                            select
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            value={pago.cuentaPorPagar}
+                                            onChange={(e) => handleChange('cuentaPorPagar', e.target.value)}
+                                        >
+                                            {
+                                                pago.provedor.cuentas.map((cta,index)=>(
+                                                    <MenuItem key={index} value={cta}>
+                                                        <Grid container>
+                                                            <Grid item xs={6}>
+                                                <Typography>{cta.concepto} {cta.compra.folio}:{cta.compra.clave}</Typography>
+                                                            </Grid>
+                                                            <Grid item xs={6}>
+                                                                <Typography align="right">{formatNumber(cta.saldo)}</Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+                                    </Grid>
+                                : null
+                            }
+
+                            {
+                                pago.cuentaPorPagar !== '' ?
+                                    <React.Fragment>
+                                        <Grid item xs={12}>
+                                <TextField
+                                    id="ubicacion"
+                                    select
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    label="Selecciona una Ubicación"
+                                    value={pago.ubicacion}
+                                    onChange={(e) => handleChange('ubicacion', e.target.value)}
+                                >
+                                    {ubicacions.map((option, index) => (
+                                        <MenuItem key={index} value={option}>
+                                            {option.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={12}>
+
+                                <TextField
+                                    id="fecha"
+                                    type="date"
+                                    label="fecha"
+                                    fullWidth
+                                    value={pago.fecha}
+                                    onChange={(e) => handleChange('fecha', e.target.value)}
+                                />
+
+                            </Grid>
+                            
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="tipoPago"
+                                    select
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    label="Tipo de pago"
+                                    value={pago.tipoPago}
+                                    onChange={(e) => handleChange('tipoPago', e.target.value)}
+                                >
+                                    {tipos.map((option, index) => (
+                                        <MenuItem key={index} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))} 
+                                </TextField>
+                            </Grid>
+
+
+
                                 <Grid item xs={12}>
                                     <TextField 
-                                        id="referencia"
-                                        label="referencia"
+                                        id="importe"
                                         variant="outlined"
+                                        label="Importe"
                                         required
                                         fullWidth
-                                        value={pago.referencia}
-                                        onChange={(e) => handleChange('referencia', e.target.value)}
+                                        type="number"
+                                        value={pago.importe}
+                                        onChange={(e) => handleChange('importe', e.target.value)}
                                         />
                                 </Grid>
+                                {pago.tipoPago !== 'EFECTIVO' &&
+                                    <Grid item xs={12}>
+                                        <TextField 
+                                            id="referencia"
+                                            label="referencia"
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            value={pago.referencia}
+                                            onChange={(e) => handleChange('referencia', e.target.value)}
+                                            />
+                                    </Grid>
+                                }
+                                    </React.Fragment>
+                                : null
                             }
-                                </React.Fragment>
-                            : null
-                        }
-                        
+                        </Grid>
+                    </DialogContent>
+                }
+                    <DialogActions>
+                        <Button className={classess.botonSimplon} onClick={() => handleClose('pagarDialog')} color="secondary">
+                            Cancel
+                        </Button>
+                        <Button className={classess.botonMagico} type="submit" disabled={pago.importe > 0 && pagando === false ? false : true}>
+                            Registrar
+                        </Button>
+                    </DialogActions>
 
-                    </Grid>
-
-                    
-                </DialogContent>
-                <DialogActions>
-                    <Button className={classess.botonSimplon} onClick={() => handleClose('pagarDialog')} color="secondary">
-                        Cancel
-                    </Button>
-                    <Button className={classess.botonMagico} type="submit" disabled={pago.importe > 0 ? false : true}>
-                        Registrar
-                    </Button>
-                </DialogActions>
             </form>
             </React.Fragment>             
         </Dialog>

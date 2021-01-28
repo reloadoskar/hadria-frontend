@@ -8,6 +8,9 @@ const useUnidades = () => {
 			setUnidades(res.unidads);
 		}
 		loadUnidades()
+		return () => {
+			setUnidades([])
+		}
     }, [])
     
     const addItem = (item) => {

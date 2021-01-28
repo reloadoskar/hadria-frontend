@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {saveEgreso, ticketEgreso} from '../api'
-import { Dialog, DialogContent, DialogTitle, Typography, Grid, DialogActions, Button, TextField, MenuItem } from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle, Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
 
 import useCompras from '../hooks/useCompras'
 import useConceptos from '../hooks/useConceptos'
@@ -19,6 +19,7 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
     const [values, setValues] = useState(initialData)
     const {conceptos} = useConceptos()
     const tipos = ["GASTO DE CAJA", "GASTO A COMPRA"] 
+    const [guardando, setGuardando] = useState(false)
     
     function hasNull(target) {
         for (var member in target) {
@@ -57,6 +58,7 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
     }
 
     const handleSubmit = (e) => {
+        setGuardando(true)
         e.preventDefault()
         if( hasNull(values) ) {
             showMessage("Faltan datos", 'error')
@@ -74,12 +76,13 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
 
             // console.log(egreso)
             
-            close('egresoDialog')
             saveEgreso(egreso).then(res => {
+                setGuardando(false)
                 showMessage(res.message, res.status)
                 subFromSaldo(egreso.importe)
                 clearFields()
                 ticketEgreso(egreso)
+                close('egresoDialog')
             })
         }
     }
@@ -105,6 +108,12 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
                 </Grid>
             </DialogTitle>
             <form onSubmit={handleSubmit}>
+                {
+                    guardando === true ?
+                        <Zoom in={guardando}>
+                            <Typography variant="h6" align="center">Guardando...</Typography>
+                        </Zoom>
+                        :
                     <DialogContent>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
@@ -191,12 +200,13 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
                             </Grid>
                         </Grid>
                     </DialogContent>
+                }
 
                     <DialogActions>
                         <Button className={classes.botonSimplon} onClick={() => handleClose('egresoDialog')} >
                             Cancel
                         </Button>
-                        <Button className={classes.botonGenerico} type="submit" disabled={values.importe === 0 ? true : false }>
+                        <Button className={classes.botonGenerico} type="submit" disabled={values.importe === 0 || guardando === true ? true : false }>
                             Registrar
                         </Button>
                     </DialogActions>

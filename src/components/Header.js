@@ -15,7 +15,7 @@ export default function Header(props){
 
                 <TopBar toggle={toggle} open={open} auth={auth} user={user}/>
                 
-                <DefaultDrawer url={url} toggle={toggle} open={open}/>
+                <DefaultDrawer url={url} toggle={toggle} open={open} user={user}/>
             
             </React.Fragment>
         )

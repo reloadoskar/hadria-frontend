@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getEgresos, saveEgreso, getCuentasPorPagar, savePagoACuentaPorPagar } from '../api'
+import { getEgresos, saveEgreso, getCuentasPorPagar, savePagoACuentaPorPagar, getDisponiblexUbicacion } from '../api'
 import { sumImporte, sumSaldo } from '../Tools'
 const useEgresos = () => {
 	const [egresos, setEgresos] = useState([])
@@ -21,7 +21,18 @@ const useEgresos = () => {
 			setTotalEgresos(sumImporte(egresos))
 		}
 	}, [egresos])
-
+	const [disp, setDisp] = useState([])
+	useEffect(()=>{
+        getDisponiblexUbicacion().then(res=>{
+            let disp = []
+            res.forEach(el => {
+                disp.push({ubicacion: el.nombre, disponible: (sumImporte(el.ingresos) - sumImporte(el.egresos))})
+            })
+            setDisp(disp)
+        })
+        return () => setDisp([])
+    }, [updating])
+	
 	const [cuentasxPagar, setCuentas] = useState([])
 	useEffect(() => {
 		async function loadCuentas() {
@@ -57,6 +68,7 @@ const useEgresos = () => {
 
 	const addPagoCxp = (pago) => {
 		return savePagoACuentaPorPagar(pago).then(res =>{
+			setEgresos([...egresos, res.pago])
 			setUpdating(!updating)
 			return res
 		})
@@ -69,7 +81,9 @@ const useEgresos = () => {
 		
 		cuentasxPagar,
 		totalCxp,
-		addPagoCxp
+		addPagoCxp,
+
+		disp
 	}
 };
 

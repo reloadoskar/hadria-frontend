@@ -3,12 +3,10 @@ import { Grid, IconButton, Typography, Menu, MenuItem, Divider } from '@material
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import { useHistory } from 'react-router-dom'
 import StatusDialog from './StatusDialog'
-import useUser from './hooks/useUser'
 import {restartApp} from './api'
 
 const UserFunctions = (props) => {
-    const {auth} = props
-    const {user} = useUser()
+    const {auth, user} = props
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl)
     const [statusCheck, setStatusCheck] = useState(false)

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Loading from '../Loading'
 
 import { 
-    ButtonGroup,
     MenuItem, Container, Grid, IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Paper, Button, Divider, TextField, Box } from '@material-ui/core';
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -12,9 +11,11 @@ import useProducts from '../hooks/useProducts';
 import { useSnackbar } from 'notistack';
 import CrearProducto from './CrearProducto';
 import {searchBy} from '../Tools'
+import useStyles from '../hooks/useStyles';
 
 function Productos() {
-    const { products, add, del } = useProducts()
+    const classes = useStyles()
+    const { products, addProduct, del } = useProducts()
     const [dialog, setDialog] = useState(false)
     const [loading] = useState(true)
     const fields = ["clave", "descripcion"]
@@ -35,7 +36,7 @@ function Productos() {
     function addProducto(producto) {
         showMessage("Agregando...", "info")
         closeDialog()
-        add(producto).then(res => {
+        addProduct(producto).then(res => {
             showMessage(res.message, res.status)
         })
     }
@@ -68,14 +69,8 @@ function Productos() {
         <React.Fragment>
             <Box>
                 <Grid container justify="flex-end">
-                    <ButtonGroup size="small" variant="contained">
-                        <Button onClick={showDialog}>Agregar</Button>
-                        {/* <Button onClick={showCreateEgreso}>Egreso</Button>
-                        <Button onClick={showCobrar}>Cobrar</Button>
-                        <Button onClick={showPagar}>Pagar</Button>
-                        <Button>Traspasar</Button> */}
-                    </ButtonGroup>
-                    <CrearProducto addProducto={addProducto} open={dialog} close={closeDialog} search={searchBy} />
+                        <Button className={classes.botonGenerico} onClick={showDialog}>Agregar</Button>
+                        <CrearProducto add={addProducto} open={dialog} close={closeDialog} search={searchBy} />
                 </Grid>
             </Box>
             <Paper>

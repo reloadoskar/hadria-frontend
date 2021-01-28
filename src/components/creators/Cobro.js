@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {ticketCobranza} from '../api'
 
-import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem, LinearProgress } from '@material-ui/core';
+import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem, LinearProgress, Zoom } from '@material-ui/core';
 import moment from 'moment'
 import {sumSaldo, formatNumber} from '../Tools'
 import useStyles from '../hooks/useStyles';
@@ -10,7 +10,7 @@ const init = {
     fecha: moment().format("YYYY-MM-DD"),
     ubicacion: '',
     cuenta: '',
-    tipoPago: 'EFECTIVO',
+    tipoPago: '',
     importe: 0,
     cambio: 0,
     referencia: 'PAGO EN CAJA',
@@ -19,6 +19,7 @@ export default function Cobro({ cuentas, ubicacions, open, close, showMessage, s
     const classess = useStyles()
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const [cobro, setCobro] = useState(init)
+    const [cobrando, setCobrando] = useState(false)
     // const [reprint] = useState(true)
     
     const clearFields = () => {
@@ -52,6 +53,7 @@ export default function Cobro({ cuentas, ubicacions, open, close, showMessage, s
     }
 
     const handleSubmit = (e) => {
+        setCobrando(true)
         e.preventDefault()
         var pago = {
             ubicacion: cobro.ubicacion,
@@ -64,12 +66,10 @@ export default function Cobro({ cuentas, ubicacions, open, close, showMessage, s
         }
         save(pago).then(res=>{
             showMessage(res.message, res.status)
+            setCobro(init)
             ticketCobranza(pago)
-            handleClose('cobroDialog')
-            //     //updateSaldoCuenta() FALTA
-            //     if(reprint){
-            //         ticketCobranza(pago)
-            //     }
+            setCobrando(false)
+            close('cobroDialog')
         })
     }
 
@@ -88,140 +88,148 @@ export default function Cobro({ cuentas, ubicacions, open, close, showMessage, s
                 </Grid>
             </DialogTitle>
             <form onSubmit={handleSubmit}>
-                <DialogContent>
-                    {
-                        cuentas === null ?
-                            <LinearProgress variant="query" />
-                            :
-                    <Grid container spacing={2}>
+                {
+                    cobrando === true ? 
+                        <Zoom in={cobrando}>
+                            <Typography variant="h5" align="center">Cobrando...</Typography>
+                        </Zoom>
+                        :
 
-                        <Grid item xs={12}>
-                            <TextField
-                                id="cuenta"
-                                select
-                                variant="outlined"
-                                autoFocus
-                                required
-                                fullWidth
-                                label="Selecciona una Cuenta por Cobrar"
-                                value={cobro.cuenta}
-                                onChange={(e) => handleChange('cuenta', e.target.value)}
-                                >
-                                {cuentas.map((cliente, index) => {
-                                    return cliente.cuentas.length > 0 ?
-                                        <MenuItem key={index} value={cliente}>
-                                            <Grid container >
-                                                <Grid item xs={6}>
-                                                    <Typography>{cliente.nombre}</Typography>
-                                                </Grid>
-                                                <Grid item xs={6}>
-                                                    <Grid container justify="flex-end">
-                                                        <Typography>${formatNumber(sumSaldo(cliente.cuentas))}</Typography>
-                                                    </Grid>
-                                                </Grid>
-                                            </Grid>
-                                        </MenuItem>
-                                        :null
-                                    }
-                                )}
-                            </TextField>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                id="fecha"
-                                type="date"
-                                label="fecha"
-                                fullWidth
-                                value={cobro.fecha}
-                                onChange={(e) => handleChange('fecha', e.target.value)}
-                                />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                id="ubicacion"
-                                select
-                                variant="outlined"
-                                autoFocus
-                                required
-                                fullWidth
-                                label="Selecciona una Ubicación"
-                                value={cobro.ubicacion}
-                                onChange={(e) => handleChange('ubicacion', e.target.value)}
-                                >
-                                {ubicacions.map((option, index) => (
-                                    <MenuItem key={index} value={option}>
-                                        {option.nombre}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        
-
-                        <Grid item xs={12}>
-                            <TextField
-                                id="tipoPago"
-                                select
-                                variant="outlined"
-                                required
-                                fullWidth
-                                label="Tipo de pago"
-                                value={cobro.tipoPago}
-                                onChange={(e) => handleChange('tipoPago', e.target.value)}
-                                >
-                                {tipos.map((option, index) => (
-                                    <MenuItem key={index} value={option}>
-                                        {option}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
+                    <DialogContent>
                         {
-                            cobro.cuenta !== '' ?
-                                <Grid item xs={12}>
-                                    <TextField
-                                        id="importe"
-                                        variant="outlined"
-                                        label="Importe"
-                                        required
-                                        fullWidth
-                                        type="number"
-                                        value={cobro.importe}
-                                        onChange={(e) => handleChange('importe', e.target.value)}
-                                        />
-                                </Grid>
-                            : null
-                        }            
-                        {
-                        cobro.cambio > 0 ?
-                            <Grid item xs={12}>
-                                <Typography align="center" variant="h6" children={"Cambio: " + formatNumber(cobro.cambio)} color="secondary" />
-                            </Grid>
-                            : null
-                        }
-                        {cobro.tipoPago !== 'EFECTIVO' &&
+                            cuentas === null ?
+                                <LinearProgress variant="query" />
+                                :
+                        <Grid container spacing={2}>
+
                             <Grid item xs={12}>
                                 <TextField
-                                    id="referencia"
-                                    label="referencia"
+                                    id="cuenta"
+                                    select
+                                    variant="outlined"
+                                    autoFocus
+                                    required
+                                    fullWidth
+                                    label="Selecciona una Cuenta por Cobrar"
+                                    value={cobro.cuenta}
+                                    onChange={(e) => handleChange('cuenta', e.target.value)}
+                                    >
+                                    {cuentas.map((cliente, index) => {
+                                        return cliente.cuentas.length > 0 ?
+                                            <MenuItem key={index} value={cliente}>
+                                                <Grid container >
+                                                    <Grid item xs={6}>
+                                                        <Typography>{cliente.nombre}</Typography>
+                                                    </Grid>
+                                                    <Grid item xs={6}>
+                                                        <Grid container justify="flex-end">
+                                                            <Typography>${formatNumber(sumSaldo(cliente.cuentas))}</Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </MenuItem>
+                                            :null
+                                        }
+                                    )}
+                                </TextField>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="fecha"
+                                    type="date"
+                                    label="fecha"
+                                    fullWidth
+                                    value={cobro.fecha}
+                                    onChange={(e) => handleChange('fecha', e.target.value)}
+                                    />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="ubicacion"
+                                    select
+                                    variant="outlined"
+                                    autoFocus
+                                    required
+                                    fullWidth
+                                    label="Selecciona una Ubicación"
+                                    value={cobro.ubicacion}
+                                    onChange={(e) => handleChange('ubicacion', e.target.value)}
+                                    >
+                                    {ubicacions.map((option, index) => (
+                                        <MenuItem key={index} value={option}>
+                                            {option.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                            
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="tipoPago"
+                                    select
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    value={cobro.referencia}
-                                    onChange={(e) => handleChange('referencia', e.target.value)}
-                                    />
+                                    label="Tipo de pago"
+                                    value={cobro.tipoPago}
+                                    onChange={(e) => handleChange('tipoPago', e.target.value)}
+                                    >
+                                    {tipos.map((option, index) => (
+                                        <MenuItem key={index} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
                             </Grid>
-                        }                        
+                            {
+                                cobro.cuenta !== '' ?
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            id="importe"
+                                            variant="outlined"
+                                            label="Importe"
+                                            required
+                                            fullWidth
+                                            type="number"
+                                            value={cobro.importe}
+                                            onChange={(e) => handleChange('importe', e.target.value)}
+                                            />
+                                    </Grid>
+                                : null
+                            }            
+                            {
+                            cobro.cambio > 0 ?
+                                <Grid item xs={12}>
+                                    <Typography align="center" variant="h6" children={"Cambio: " + formatNumber(cobro.cambio)} color="secondary" />
+                                </Grid>
+                                : null
+                            }
+                            {cobro.tipoPago !== 'EFECTIVO' &&
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="referencia"
+                                        label="referencia"
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        value={cobro.referencia}
+                                        onChange={(e) => handleChange('referencia', e.target.value)}
+                                        />
+                                </Grid>
+                            }                        
 
-                    </Grid>
+                        </Grid>
+                    }
+                    </DialogContent>
                 }
-                </DialogContent>
                 <DialogActions>
                     <Button className={classess.botonSimplon} onClick={() => handleClose('cobroDialog')} color="secondary" >
                         Cancel
                     </Button>
-                    <Button className={classess.botonMagico} type="submit" disabled={cobro.importe > 0 ? false : true}>
+                    <Button className={classess.botonMagico} type="submit" disabled={cobro.importe > 0 && cobrando === false ? false : true}>
                         Registrar
                     </Button>
                 </DialogActions>

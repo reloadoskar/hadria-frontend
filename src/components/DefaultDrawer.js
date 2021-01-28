@@ -74,7 +74,7 @@ const useStyles = makeStyles(theme => ({
 
 }))
 
-export default function DefaultDrawer({ toggle, open, url }) {
+export default function DefaultDrawer({ toggle, open, url, user }) {
     const classes = useStyles()
     const [expanded, setExpanded] = useState(false)
     const handleCollapse = () => {
@@ -145,25 +145,29 @@ export default function DefaultDrawer({ toggle, open, url }) {
                 }
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <NavLink to={`${url}/empleados`} className={classes.link}>
-                            {open ?
-                                <ListItem button onClick={toggle} className={classes.nested}>
-                                    <ListItemIcon>
-                                        <GroupIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Empleados" />
-                                </ListItem>
-                            :
-                                <StyledTooltip title="Empleados" placement="right">
-                                    <ListItem button onClick={toggle} className={classes.nested}>
-                                        <ListItemIcon>
-                                            <TocIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Empleados" />
-                                    </ListItem>
-                                </StyledTooltip>
-                            }
-                        </NavLink>
+                        {
+                            user.level > 1 ? null :
+                                <NavLink to={`${url}/empleados`} className={classes.link}>
+                                    {open ?
+                                        <ListItem button onClick={toggle} className={classes.nested}>
+                                            <ListItemIcon>
+                                                <GroupIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Empleados" />
+                                        </ListItem>
+                                    :
+                                        <StyledTooltip title="Empleados" placement="right">
+                                            <ListItem button onClick={toggle} className={classes.nested}>
+                                                <ListItemIcon>
+                                                    <TocIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Empleados" />
+                                            </ListItem>
+                                        </StyledTooltip>
+                                    }
+                                </NavLink>
+
+                        }
                         <NavLink to={`${url}/productos`} className={classes.link}>
                             {open
                                 ?
@@ -226,26 +230,29 @@ export default function DefaultDrawer({ toggle, open, url }) {
 
                             }
                         </NavLink>
-                        <NavLink to={`${url}/ubicaciones`} className={classes.link}>
-                            {open
-                                ?
-                                <ListItem button onClick={toggle} className={classes.nested}>
-                                    <ListItemIcon>
-                                        <HomeWorkIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Ubicaciones" />
-                                </ListItem>
-                                :
-                                <StyledTooltip title="Ubicaciones" placement="right" >
-                                    <ListItem button className={classes.nested}>
-                                        <ListItemIcon>
-                                            <HomeWorkIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Ubicaciones" />
-                                    </ListItem>
-                                </StyledTooltip>
-                            }
-                        </NavLink>
+                        {
+                            user.level > 1 ? null :
+                                <NavLink to={`${url}/ubicaciones`} className={classes.link}>
+                                    {open
+                                        ?
+                                        <ListItem button onClick={toggle} className={classes.nested}>
+                                            <ListItemIcon>
+                                                <HomeWorkIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Ubicaciones" />
+                                        </ListItem>
+                                        :
+                                        <StyledTooltip title="Ubicaciones" placement="right" >
+                                            <ListItem button className={classes.nested}>
+                                                <ListItemIcon>
+                                                    <HomeWorkIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Ubicaciones" />
+                                            </ListItem>
+                                        </StyledTooltip>
+                                    }
+                                </NavLink>
+                        }
                         <NavLink to={`${url}/conceptos`} className={classes.link}>
                             {open
                                 ?
@@ -291,19 +298,21 @@ export default function DefaultDrawer({ toggle, open, url }) {
 
                     }
                 </NavLink>
+                {
+                    user.level > 1 ? null :
+                        <NavLink to={`${url}/produccions`} className={classes.link}>
 
-                <NavLink to={`${url}/produccions`} className={classes.link}>
+                            <StyledTooltip title="Producción" placement="right">
+                                <ListItem button onClick={toggle}>
+                                    <ListItemIcon>
+                                        <BallotIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Producción" />
+                                </ListItem>
+                            </StyledTooltip>
 
-                    <StyledTooltip title="Producción" placement="right">
-                        <ListItem button onClick={toggle}>
-                            <ListItemIcon>
-                                <BallotIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Producción" />
-                        </ListItem>
-                    </StyledTooltip>
-
-                </NavLink>
+                        </NavLink>
+                }
 
                 <NavLink to={`${url}/inventario`} className={classes.link}>
                     {open

@@ -193,12 +193,14 @@ export const formatNumber = (num, dec=0) => {
 
 export const searchBy = (field, search, array) => {
     var found = []
-    if (search.length > 0){
-        for (var i=0; i < array.length; i++) {
-            var el = array[i]
-            if(el[field].indexOf(search) !== -1){
-                // console.log(el[field])
-                found.push( el )
+    if (array ){
+        if (search.length > 0){
+            for (var i=0; i < array.length; i++) {
+                var el = array[i]
+                if(el[field].indexOf(search) !== -1){
+                    // console.log(el[field])
+                    found.push( el )
+                }
             }
         }
     }

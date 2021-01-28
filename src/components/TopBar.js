@@ -16,7 +16,7 @@ export default function TopBar(props) {
 
         <AppBar position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: open })}>
             <Toolbar>
-                { user.level === 3 ?
+                { user.level >= 3 ?
                     null
                     :
                     <IconButton
@@ -33,7 +33,7 @@ export default function TopBar(props) {
                 <Typography variant="h6" className={classes.title}>
                     H A D R I A
         	    </Typography>
-                <UserFunctions auth={auth}/>
+                <UserFunctions auth={auth} user={user}/>
                 
             </Toolbar>
         </AppBar>

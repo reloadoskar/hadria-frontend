@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Dialog, DialogActions, DialogContent, DialogTitle,  Grid, TextField, MenuItem, Button } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, DialogTitle,  Grid, TextField, MenuItem, Button, Zoom, Typography } from '@material-ui/core'
 import moment from 'moment'
 import useStyles from '../hooks/useStyles'
 
@@ -20,6 +20,7 @@ export default function CrearEgreso(props) {
     const tipos = ["GASTO DE CAJA", "GASTO DE COMPRA", "GASTO DE PRODUCCION"] 
     const classes = useStyles()
     const [egreso, setEgreso] = useState(init)
+    const [guardando, setGuardando] = useState(false)
     const resetFields = () => {
         setEgreso(init)
     }
@@ -43,94 +44,103 @@ export default function CrearEgreso(props) {
         }
     }
     const handleRegistrar = () => {
-        handleClose()
-        mensaje("Guardando...", "info")
+        setGuardando(true)
         crear(egreso).then(res=>{
+            setGuardando(false)
             mensaje(res.message, res.status)
+            handleClose()
         })
     }
     return (
         <Dialog
+            fullWidth
             open={open}
             onClose={handleClose}
             maxWidth="sm"
         >
             <DialogTitle>Crear Egreso</DialogTitle>
-            <DialogContent>
-                <Grid container spacing={2}>
-                        <TextField
-                            id="tipo"
-                            select
-                            required
-                            fullWidth
-                            value={egreso.tipo}
-                            onChange={(e) => handleChange('tipo', e.target.value)}
-                            >
-                            {tipos.map((op,i) =>(
-                                <MenuItem key={i} value={op}>
-                                    {op}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                        {egreso.tipo === "GASTO DE COMPRA" ? 
-                            <TextField
-                                id="compra"
-                                label="Selecciona una compra"
-                                select
-                                fullWidth
-                                value={egreso.compra}
-                                onChange={(e) => handleChange('compra', e.target.value)}
+            {
+                guardando === true ? 
+                    <Zoom in={guardando}>
+                        <Typography variant="h5" align="center">Guardando...</Typography>
+                    </Zoom>
+                :
+                    <DialogContent>
+                        <Grid container spacing={2}>
+                                <TextField
+                                    id="tipo"
+                                    select
+                                    required
+                                    fullWidth
+                                    value={egreso.tipo}
+                                    onChange={(e) => handleChange('tipo', e.target.value)}
+                                    >
+                                    {tipos.map((op,i) =>(
+                                        <MenuItem key={i} value={op}>
+                                            {op}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                                {egreso.tipo === "GASTO DE COMPRA" ? 
+                                    <TextField
+                                        id="compra"
+                                        label="Selecciona una compra"
+                                        select
+                                        fullWidth
+                                        value={egreso.compra}
+                                        onChange={(e) => handleChange('compra', e.target.value)}
+                                        >
+                                        {compras.map((option, index) => (
+                                            <MenuItem key={index} value={option._id}>
+                                                {option.folio}:{option.clave}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                        :
+                                        null
+                                    }
+                                <TextField
+                                    id="ubicacion"
+                                    label="Selecciona una Ubicación"
+                                    select
+                                    required
+                                    fullWidth
+                                    value={egreso.ubicacion}
+                                    onChange={(e) => handleChange('ubicacion', e.target.value)}
                                 >
-                                {compras.map((option, index) => (
-                                    <MenuItem key={index} value={option._id}>
-                                        {option.folio}:{option.clave}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                                :
-                                null
-                            }
-                        <TextField
-                            id="ubicacion"
-                            label="Selecciona una Ubicación"
-                            select
-                            required
-                            fullWidth
-                            value={egreso.ubicacion}
-                            onChange={(e) => handleChange('ubicacion', e.target.value)}
-                        >
-                            {ubicacions.map((option, index) => (
-                                <MenuItem key={index} value={option}>
-                                    {option.nombre}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                        <TextField 
-                            id="fecha"
-                            label="Fecha"
-                            type="date"
-                            fullWidth
-                            value={egreso.fecha}
-                            onChange={(e) => handleChange('fecha', e.target.value)}
-                        />
-                        <TextField 
-                            id="descripcion"
-                            label="Descripción"
-                            fullWidth
-                            value={egreso.descripcion}
-                            onChange={(e) => handleChange('descripcion', e.target.value)}
-                        />
-                        <TextField 
-                            id="importe"
-                            label="Importe"
-                            type="number"
-                            fullWidth
-                            value={egreso.importe}
-                            onChange={(e) => handleChange('importe', e.target.value)}
-                        />
+                                    {ubicacions.map((option, index) => (
+                                        <MenuItem key={index} value={option}>
+                                            {option.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                                <TextField 
+                                    id="fecha"
+                                    label="Fecha"
+                                    type="date"
+                                    fullWidth
+                                    value={egreso.fecha}
+                                    onChange={(e) => handleChange('fecha', e.target.value)}
+                                />
+                                <TextField 
+                                    id="descripcion"
+                                    label="Descripción"
+                                    fullWidth
+                                    value={egreso.descripcion}
+                                    onChange={(e) => handleChange('descripcion', e.target.value)}
+                                />
+                                <TextField 
+                                    id="importe"
+                                    label="Importe"
+                                    type="number"
+                                    fullWidth
+                                    value={egreso.importe}
+                                    onChange={(e) => handleChange('importe', e.target.value)}
+                                />
 
-                </Grid>
-            </DialogContent>
+                        </Grid>
+                    </DialogContent>
+            }
             <DialogActions>
                 <Button 
                     onClick={handleClose}
@@ -140,7 +150,7 @@ export default function CrearEgreso(props) {
                 </Button>
                 <Button 
                     className={classes.botonMagico}
-                    disabled = {egreso.importe === "" || egreso.ubicacion === "" || egreso.fecha === "" ? true : false }
+                    disabled = {egreso.importe === "" || egreso.ubicacion === "" || egreso.fecha === "" || guardando===true ? true : false }
                     onClick={handleRegistrar}
                     variant="contained">
                     registrar
