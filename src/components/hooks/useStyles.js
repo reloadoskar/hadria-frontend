@@ -47,7 +47,8 @@ const useStyles = makeStyles(theme => ({
     },
     basicBar: {
         position: 'relative',
-        backgroundColor: '#222831'
+        backgroundColor: '#222831',
+        height: 72
     },
     posCard: {
         maxWidth: 400,
