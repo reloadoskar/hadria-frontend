@@ -72,14 +72,12 @@ const UserFunctions = (props) => {
     }
     return (
         <div>
-            <Grid container spacing={2} alignItems="center">
-                <Grid item xs >
-                    <Typography variant="h6" children={user.nombre} />
-                </Grid>
-                <Grid item xs >
+            <Grid container spacing={2} alignItems="center" justify="flex-end">
+                <Grid item >
                     <IconButton
                         onClick={handleMenu}
                         color="inherit">
+                        <Typography variant="h6"children={user.nombre} />
                         <AccountCircle />
                     </IconButton>
                     <Menu

@@ -51,6 +51,8 @@ const useStyles = makeStyles(theme => ({
         height: 72,
     },
     center: {
+        paddingLeft: 15,
+        paddingRight: 15,
         lineHeight: "72px",
         height: "72px",
         color: "#ffffff"
@@ -81,7 +83,10 @@ const useStyles = makeStyles(theme => ({
         zIndex: -2,
     },
     appBar: {
-        backgroundColor: '#393e46',
+        background: 'linear-gradient(45deg, #393e46 30%, #222831 90%)',
+        position: "fixed",
+        height: 72,
+        width: "100%",
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,

@@ -2,7 +2,7 @@ import React from 'react'
 import UserFunctions from './UserFunctions'
 
 import clsx from 'clsx';
-import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
+import { Grid, IconButton, Typography, Box } from '@material-ui/core';
 
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -14,32 +14,35 @@ export default function TopBar(props) {
     
     return (
 
-        <AppBar 
-            position="fixed" 
-            className={clsx(classes.appBar, { 
-                [classes.appBarShift]: open,
-                })}>
-            <Toolbar>
+        <Box
+            className={clsx(classes.appBar, {[classes.appBarShift]: open, })}>
+            <Grid container spacing={2} className={classes.center} alignItems="center">
                 { user.level >= 3 ?
                     null
                     :
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        onClick={toggle}
-                        className={clsx(classes.menuButton, {
-                            [classes.hide]: open,
-                        })}>
-                        <MenuIcon />
-                    </IconButton>
+                    <Grid item xs>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            onClick={toggle}
+                            className={clsx(classes.menuButton, {
+                                [classes.hide]: open,
+                            })}>
+                            <MenuIcon />
+                        </IconButton>
+                    </Grid>
                 }
-                <Typography variant="h6" className={classes.title}>
-                    H A D R I A
-        	    </Typography>
-                <UserFunctions auth={auth} user={user}/>
+                <Grid item xs={7}>
+                    <Typography variant="h6">
+                        H A D R I A
+                    </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                    <UserFunctions auth={auth} user={user}/>
+                </Grid>
+            </Grid>
                 
-            </Toolbar>
-        </AppBar>
+        </Box>
     )
 }

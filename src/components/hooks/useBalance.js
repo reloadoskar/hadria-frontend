@@ -213,7 +213,8 @@ const useBalance = () => {
 		if(inventario !== null){
 			var i = inventario.compras
 			var tti = 0
-			if(i !== null){
+			console.log(i)
+			if(i !== undefined){
 				i.map(compra => {
 					return compra.items.map(itm=>{
 						return tti += itm.stock * itm.costo
