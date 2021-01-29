@@ -5,7 +5,7 @@ import PosMenu from './PosMenu'
 import PosComprasFor from './PosComprasFor'
 import PosListaDeVenta from './PosListaDeVenta'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { Typography, IconButton, Dialog, Slide, AppBar, Toolbar, Grid, Button, } from '@material-ui/core';
+import { Typography, IconButton, Dialog, Slide, AppBar, Toolbar, Grid, Button, DialogContent, } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import useStyles from '../hooks/useStyles'
@@ -65,34 +65,35 @@ export default function PosDialog({
             </AppBar>
 
             <PosMenu anchorEl={anchorEl} openDialog={openDialog} showCorte={showCorte} isOpen={menuDialog} closeDialog={closeDialog}/>
-            
-            <Grid container spacing={2}>
-                <Grid item xs={12} md>
-                    <PosComprasFor
-                        inventario={inventario}
-                        wantThisItem={wantThisItem}
-                        showMessage={showMessage} />
+            <DialogContent>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md>
+                        <PosComprasFor
+                            inventario={inventario}
+                            wantThisItem={wantThisItem}
+                            showMessage={showMessage} />
 
-                </Grid>
-                <Grid item xs={12} md>
-                    <PosListaDeVenta
-                        items={values.itemsToSave}
-                        openDialog={openDialog}
-                        total={values.total}
-                        removeItem={removeItem} />
-                    <Button 
-                        size="large"
-                        fullWidth
-                        disabled={values.total > 0 ? false : true}
-                        className={ values.total === 0 ? classes.botonGenerico : classes.botonCosmico}
-                        onClick={() => openDialog('cobrarDialog')}
-                        variant="contained">
-                            <ShoppingCartIcon />
-                        Cobrar ${values.total} (x)
-                    </Button>
+                    </Grid>
+                    <Grid item xs={12} md>
+                        <PosListaDeVenta
+                            items={values.itemsToSave}
+                            openDialog={openDialog}
+                            total={values.total}
+                            removeItem={removeItem} />
+                        <Button 
+                            size="large"
+                            fullWidth
+                            disabled={values.total > 0 ? false : true}
+                            className={ values.total === 0 ? classes.botonGenerico : classes.botonCosmico}
+                            onClick={() => openDialog('cobrarDialog')}
+                            variant="contained">
+                                <ShoppingCartIcon />
+                            Cobrar ${values.total} (x)
+                        </Button>
 
+                    </Grid>
                 </Grid>
-            </Grid>
+            </DialogContent>
 
         </Dialog>
     )

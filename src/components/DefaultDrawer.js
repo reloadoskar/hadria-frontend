@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 
 import { IconButton, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Collapse, Tooltip } from '@material-ui/core';
@@ -21,58 +21,55 @@ import StoreIcon from '@material-ui/icons/Store';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import ReceiptIcon from '@material-ui/icons/Receipt';
-
-const drawerWidth = 240;
+import useStyles from './hooks/useStyles'
+// const drawerWidth = 240;
 const StyledTooltip = withStyles(theme => ({
     tooltip: {
         background: 'linear-gradient(45deg, #23395B , #6F7A73 )',
         fontSize: theme.typography.pxToRem(12),
     }
 }))(Tooltip)
-const useStyles = makeStyles(theme => ({
+// const useStyles = makeStyles(theme => ({
 
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
-    drawerOpen: {
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerClose: {
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        overflowX: 'hidden',
-        width: theme.spacing(7) + 1,
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9) + 1,
-        },
-    },
-    toolbar: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: theme.spacing(0, 1),
-        ...theme.mixins.toolbar,
-    },
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
+//     drawer: {
+//         width: drawerWidth,
+//         flexShrink: 0,
+//     },
+//     drawerPaper: {
+//         width: drawerWidth,
+//     },
+//     drawerOpen: {
+//         width: drawerWidth,
+//         transition: theme.transitions.create('width', {
+//             easing: theme.transitions.easing.sharp,
+//             duration: theme.transitions.duration.enteringScreen,
+//         }),
+//     },
+//     drawerClose: {
+//         transition: theme.transitions.create('width', {
+//             easing: theme.transitions.easing.sharp,
+//             duration: theme.transitions.duration.leavingScreen,
+//         }),
+//         overflowX: 'hidden',
+//         width: theme.spacing(7) + 1,
+//         [theme.breakpoints.up('sm')]: {
+//             width: theme.spacing(9) + 1,
+//         },
+//     },
+//     toolbar: {
+//         display: 'flex',
+//         alignItems: 'center',
+//         justifyContent: 'flex-end',
+//         padding: theme.spacing(0, 1),
+//         ...theme.mixins.toolbar,
+//     },
+//     nested: {
+//         paddingLeft: theme.spacing(4),
+//     },
 
-    link: {
-        color: '#3d3d3d',
-        textDecoration: 'none',
-    }
+    
 
-}))
+// }))
 
 export default function DefaultDrawer({ toggle, open, url, user }) {
     const classes = useStyles()
@@ -100,7 +97,14 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
             <Divider />
 
             <List component="nav" aria-label="menú principal">
-                <NavLink to="/app" className={classes.link}>
+                <NavLink exact to="/app" 
+                    className={classes.link} 
+                    activeClassName={classes.active} 
+                // activeStyle={{
+                //     fontWeight: "bold",
+                //     color: "#ffd369",                    
+                // }}
+                >
                     {open
                         ?
                         <ListItem button onClick={toggle}>
@@ -147,7 +151,10 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                     <List component="div" disablePadding>
                         {
                             user.level > 1 ? null :
-                                <NavLink to={`${url}/empleados`} className={classes.link}>
+                                <NavLink 
+                                className={classes.link} 
+                                activeClassName={classes.active} 
+                                exact to={`${url}/empleados`}>
                                     {open ?
                                         <ListItem button onClick={toggle} className={classes.nested}>
                                             <ListItemIcon>
@@ -168,7 +175,10 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                                 </NavLink>
 
                         }
-                        <NavLink to={`${url}/productos`} className={classes.link}>
+                        <NavLink exact to={`${url}/productos`} 
+                            className={classes.link} 
+                            activeClassName={classes.active} 
+                        >
                             {open
                                 ?
                                 <ListItem button onClick={toggle} className={classes.nested}>
@@ -189,7 +199,10 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
 
                             }
                         </NavLink>
-                        <NavLink to={`${url}/clientes`} className={classes.link}>
+                        <NavLink exact to={`${url}/clientes`} 
+                            className={classes.link} 
+                            activeClassName={classes.active} 
+                        >
                             {open
                                 ?
                                 <ListItem button onClick={toggle} className={classes.nested}>
@@ -209,7 +222,10 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                                 </StyledTooltip>
                             }
                         </NavLink>
-                        <NavLink to={`${url}/provedores`} className={classes.link}>
+                        <NavLink exact to={`${url}/provedores`} 
+                            className={classes.link} 
+                            activeClassName={classes.active} 
+                        >
                             {open
                                 ?
                                 <ListItem button onClick={toggle} className={classes.nested}>
@@ -232,7 +248,10 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                         </NavLink>
                         {
                             user.level > 1 ? null :
-                                <NavLink to={`${url}/ubicaciones`} className={classes.link}>
+                                <NavLink exact to={`${url}/ubicaciones`}
+                                className={classes.link} 
+                                activeClassName={classes.active} 
+                                >
                                     {open
                                         ?
                                         <ListItem button onClick={toggle} className={classes.nested}>
@@ -253,7 +272,10 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                                     }
                                 </NavLink>
                         }
-                        <NavLink to={`${url}/conceptos`} className={classes.link}>
+                        <NavLink exact to={`${url}/conceptos`}
+                            className={classes.link} 
+                            activeClassName={classes.active} 
+                        >
                             {open
                                 ?
                                 <ListItem button onClick={toggle} className={classes.nested}>
@@ -277,7 +299,10 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                     </List>
                 </Collapse>
 
-                <NavLink to={`${url}/compras`} className={classes.link}>
+                <NavLink exact to={`${url}/compras`}
+                    className={classes.link} 
+                    activeClassName={classes.active} 
+                >
                     {open
                         ?
                         <ListItem button onClick={toggle}>
@@ -300,7 +325,10 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                 </NavLink>
                 {
                     user.level > 1 ? null :
-                        <NavLink to={`${url}/produccions`} className={classes.link}>
+                        <NavLink exact to={`${url}/produccions`} 
+                            className={classes.link} 
+                            activeClassName={classes.active} 
+                        >
 
                             <StyledTooltip title="Producción" placement="right">
                                 <ListItem button onClick={toggle}>
@@ -314,7 +342,10 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                         </NavLink>
                 }
 
-                <NavLink to={`${url}/inventario`} className={classes.link}>
+                <NavLink exact to={`${url}/inventario`}
+                    className={classes.link} 
+                    activeClassName={classes.active} 
+                >
                     {open
                         ?
                         <ListItem button onClick={toggle}>
@@ -337,7 +368,10 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                 </NavLink>
                 <Divider />
 
-                <NavLink to={`${url}/pos`} className={classes.link}>
+                <NavLink exact to={`${url}/pos`} 
+                    className={classes.link} 
+                    activeClassName={classes.active} 
+                >
                     {open
                         ?
                         <ListItem button onClick={toggle}>
@@ -360,7 +394,9 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                     }
                 </NavLink>
 
-                <NavLink to={`${url}/ventas`} className={classes.link} >
+                <NavLink exact to={`${url}/ventas`} 
+                    className={classes.link} 
+                    activeClassName={classes.active} >
                     {open
                         ?
                         <ListItem button onClick={toggle}>
