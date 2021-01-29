@@ -43,8 +43,8 @@ const UserFunctions = (props) => {
 
     const logout = () => {
         
-        localStorage.clear()
         auth.logout(() => {
+            localStorage.clear()
             history.push("/")
         })
     }

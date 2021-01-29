@@ -33,6 +33,7 @@ export default function ClientesDialog({ addCliente, isShowing, toggle }) {
         event.preventDefault()
 		addCliente(values)
 		dispatch({type: 'reset'})
+		setGuardando(false)
     }
 
     return (

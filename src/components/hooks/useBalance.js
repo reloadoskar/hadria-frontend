@@ -213,11 +213,13 @@ const useBalance = () => {
 		if(inventario !== null){
 			var i = inventario.compras
 			var tti = 0
-			i.map(compra => {
-				return compra.items.map(itm=>{
-					return tti += itm.stock * itm.costo
+			if(i !== null){
+				i.map(compra => {
+					return compra.items.map(itm=>{
+						return tti += itm.stock * itm.costo
+					})
 				})
-			})
+			}
 			setTotalInventario(tti)
 		}
 

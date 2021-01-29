@@ -4,10 +4,10 @@ import moment from 'moment'
 import PosMenu from './PosMenu'
 import PosComprasFor from './PosComprasFor'
 import PosListaDeVenta from './PosListaDeVenta'
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { Typography, IconButton, Dialog, Slide, AppBar, Toolbar, Grid, Button, DialogContent, } from '@material-ui/core';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import { Typography, IconButton, Dialog, Slide, Toolbar, Grid, Button, DialogContent, DialogActions } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-
+import {formatNumber} from '../Tools'
 import useStyles from '../hooks/useStyles'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -52,17 +52,14 @@ export default function PosDialog({
             onEnter={resetVenta}
             onClose={() => closeDialog('posDialog')} 
             TransitionComponent={Transition}>
-            
-            <AppBar className={classes.basicBar}>
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" onClick={ (e) => handleClick('menuDialog', e) } aria-label="close">
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" className={classes.title}>
-                        {ubicacion.nombre} | {moment(fecha).format("DD MMMM [de] YYYY")}
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+            <Toolbar>
+                <IconButton edge="start" color="inherit" onClick={ (e) => handleClick('menuDialog', e) } aria-label="close">
+                    <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" className={classes.title}>
+                    {ubicacion.nombre} | {moment(fecha).format("DD MMMM [de] YYYY")}
+                </Typography>
+            </Toolbar>
 
             <PosMenu anchorEl={anchorEl} openDialog={openDialog} showCorte={showCorte} isOpen={menuDialog} closeDialog={closeDialog}/>
             <DialogContent>
@@ -80,20 +77,23 @@ export default function PosDialog({
                             openDialog={openDialog}
                             total={values.total}
                             removeItem={removeItem} />
+
+                    </Grid>
+                </Grid>
+            </DialogContent>
+            <DialogActions>
                         <Button 
                             size="large"
                             fullWidth
                             disabled={values.total > 0 ? false : true}
                             className={ values.total === 0 ? classes.botonGenerico : classes.botonCosmico}
                             onClick={() => openDialog('cobrarDialog')}
-                            variant="contained">
-                                <ShoppingCartIcon />
-                            Cobrar ${values.total} (x)
+                            variant="contained"
+                            startIcon={<MonetizationOnIcon />}
+                        >
+                            Cobrar ${formatNumber( values.total )} (x)
                         </Button>
-
-                    </Grid>
-                </Grid>
-            </DialogContent>
+            </DialogActions>
 
         </Dialog>
     )

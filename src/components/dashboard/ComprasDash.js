@@ -6,7 +6,7 @@ import { Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgre
 import useCompras from '../hooks/useCompras';
 import {sumStock, sumEmpStock} from '../Tools'
 import VerCompra from './VerCompra'
-import ComprasDialog from '../compras/ComprasDialog'
+import CrearCompra from '../compras/CrearCompra'
 import { useSnackbar } from 'notistack';
 export default function ComprasDash(){
     const {compras, addCompra, cerrar, updating} = useCompras();
@@ -69,7 +69,7 @@ export default function ComprasDash(){
                 }
             </CardContent>
             <VerCompra compraId={compraSelected} isOpen={verCompra} handleClose={handleClose} cerrar={cerrar}/>
-            <ComprasDialog
+            <CrearCompra
                 fullWidth
                 open={showDialog}
                 close={closeDialog}

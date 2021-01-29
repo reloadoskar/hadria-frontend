@@ -1,14 +1,12 @@
 import React from 'react'
-import { Grid, TextField, MenuItem, Card, CardContent } from '@material-ui/core'
+import { Grid, TextField, MenuItem, } from '@material-ui/core'
 export default function DatosGenerales(props){
     const {provedor, tipoCompra, provedors, tipoCompras, fecha, remision, ubicacion, ubicacions, handleChange, openDialogProvedor, openDialogTipoCompra} = props
     return(
-        <Card>
-            <CardContent>
 
                 <Grid container spacing={2} alignItems="center">
 
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={4}>
                         <TextField
                             autoFocus
                             id="provedor"
@@ -30,7 +28,7 @@ export default function DatosGenerales(props){
                         </TextField>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={4}>
                         <TextField
                             id="tipoCompra"
                             select
@@ -51,13 +49,13 @@ export default function DatosGenerales(props){
                         </TextField>                                    
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={4}>
                         <TextField
                             fullWidth
                             id="remision"
                             type="text"
                             label="Número de remisión"
-                            helperText="Ingresa el Número de Remisión de la compra"
+                            placeholder="Ingresa el Número de Remisión de la compra"
                             margin="normal"
                             value={remision}
                             onChange={(e) => handleChange('remision', e.target.value)}
@@ -101,7 +99,6 @@ export default function DatosGenerales(props){
                     </Grid>
                                         
                 </Grid>
-            </CardContent>
-        </Card>
+
     )
 }

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { 
     Button,
     Typography,
-    Stepper, Step, StepLabel, Grid, AppBar, Dialog, Slide, Toolbar, IconButton } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close';
+    Stepper, Step, StepLabel, Grid, Dialog, Slide, DialogTitle, DialogContent, DialogActions } from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save';
 
 import useStyles from '../hooks/useStyles'
@@ -108,9 +107,9 @@ export default function CrearCompra(props){
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
     
-    const handleReset = () => {
-        setActiveStep(0);
-    };
+    // const handleReset = () => {
+    //     setActiveStep(0);
+    // };
 
     const openDialogProvedor = () => {
         setProvedorFastDialog(true)
@@ -205,6 +204,7 @@ export default function CrearCompra(props){
     }
 
     const handleSubmit = (event) => {
+        setGuardando(true)
         event.preventDefault()
         var nCompra = {
             provedor: provedor,
@@ -217,11 +217,11 @@ export default function CrearCompra(props){
             importeItems: totalItems,
             importe: total,
         }
-        setGuardando(true)
         crear(nCompra).then( (res) => {
             if(res.status === "error"){
                     showMessage(res.message, res.status)
                 }else{
+                    setActiveStep(0)
                     clearAll()
                     showMessage(res.message, res.status)              
                     ticketCompra(res.compra).then(res =>{
@@ -234,29 +234,53 @@ export default function CrearCompra(props){
         
     }
     return (
-        <Dialog fullScreen open={open} onClose={() => handleClose()} TransitionComponent={Transition}>
+        <Dialog fullWidth maxWidth="xl" open={open} onClose={() => handleClose()} TransitionComponent={Transition}>
 
-            <AppBar className={classes.comprasBar}>
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" onClick={() => handleClose()} aria-label="close">
-                        <CloseIcon />
-                    </IconButton>
-                    <Typography variant="h6" className={classes.title}>
-                        Nueva Compra
-                    </Typography>
-                    <Button color="inherit" onClick={() => handleClose()}>
-                        Salir
+            <DialogTitle>Nueva Compra</DialogTitle>
+            { guardando === true ?
+                <Typography align="center" variant="h5">Guardando...</Typography>
+                :
+                <DialogContent>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Stepper activeStep={activeStep}>
+                                {steps.map((label) => (
+                                    <Step key={label}>
+                                        <StepLabel>{label}</StepLabel>
+                                    </Step>
+                                ))}
+                            </Stepper>
+                        </Grid>
+                        <Grid item xs={12}>
+                            {getStepContent(activeStep)}
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+            }
+            <DialogActions>                
+                <Button
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                    className={classes.botonSimplon}
+                >
+                    Atrás
+                </Button>
+                {activeStep === steps.length - 1 ?
+                    <Button 
+                    disabled = { provedor !== '' && ubicacion !== '' && tipoCompra !== '' ? false : true }
+                    className={classes.botonCosmico} onClick={(e) => handleSubmit(e)}>
+                        Guardar Compra <SaveIcon />
                     </Button>
-                </Toolbar>
-            </AppBar>
-
-            <Stepper activeStep={activeStep}>
-                {steps.map((label) => (
-                    <Step key={label}>
-                        <StepLabel>{label}</StepLabel>
-                    </Step>
-                ))}
-            </Stepper>
+                :
+                    <Button 
+                        className={classes.botonGenerico}
+                        onClick={handleNext}
+                    >                                    
+                        {activeStep === steps.length - 1 ? 'Guardar Compra' : 'Siguiente'}
+                    </Button>
+                }                
+            </DialogActions>
+                 
             <ProvedorLite 
                 open={provedorFastDialog}
                 close={closeProvedorFastDialog}
@@ -268,57 +292,7 @@ export default function CrearCompra(props){
                 close={closeTipoCompraDialog}
                 creator={addTipoCompra}
                 report={showMessage}
-            />
-            {
-                guardando === true ?
-                    <Typography align="center">Guardando...</Typography>
-                    :
-
-                    
-                        activeStep === steps.length ? (
-                            <div>
-                                <Typography className={classes.instructions}>All steps completed</Typography>
-                                <Button onClick={handleReset}>Reset</Button>
-                            </div>
-                        ) : (
-                            <Grid container >
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        {getStepContent(activeStep)}
-                                    </Grid>
-                                </Grid>
-                                <Grid container justify="flex-end">
-                                    <Grid item>
-                                        <Button
-                                            disabled={activeStep === 0}
-                                            onClick={handleBack}
-                                            className={classes.botonSimplon}
-                                        >
-                                            Atrás
-                                        </Button>
-                                    </Grid>
-                                    <Grid item>
-                                        {
-                                            activeStep === steps.length - 1 ?
-                                                <Button 
-                                                disabled = { provedor !== '' && ubicacion !== '' && tipoCompra !== '' ? false : true }
-                                                className={classes.botonCosmico} onClick={(e) => handleSubmit(e)}>
-                                                    Guardar Compra <SaveIcon />
-                                                </Button>
-                                            :
-                                            <Button 
-                                            className={classes.botonGenerico}
-                                            onClick={handleNext}
-                                                >                                    
-                                                {activeStep === steps.length - 1 ? 'Guardar Compra' : 'Siguiente'}
-                                            </Button>
-                                        }
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        )
-                    
-            }
+            />            
         </Dialog>
     )
 }   
