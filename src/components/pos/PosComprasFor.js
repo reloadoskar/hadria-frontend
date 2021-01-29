@@ -40,7 +40,7 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 	}
 
 	return (
-		<div className={classes.root}>
+		<div>
 			{
 				inventario.length === 0 ?
 					<Typography variant="h6" children="No se encontraron productos." align="center" />
