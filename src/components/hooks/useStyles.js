@@ -45,6 +45,16 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         alignItems: 'center',
     },
+    landingBar: {
+        background: 'linear-gradient(45deg, #393e46 30%, #222831 90%)',
+        // backgroundColor: '#393e46',
+        height: 72,
+    },
+    center: {
+        lineHeight: "72px",
+        height: "72px",
+        color: "#ffffff"
+    },
     basicBar: {
         position: 'relative',
         backgroundColor: '#222831',
@@ -59,6 +69,7 @@ const useStyles = makeStyles(theme => ({
     },
     backgroundCustom: {
         background: 'linear-gradient(30deg,'+ getRandomColor()+','+getRandomColor()+')',
+        // background: 'linear-gradient(45deg, #ffffff 30%, #FDF6EC 90%)',
         backgroundPosition: 'center',
         position: 'absolute',
         left: 0,

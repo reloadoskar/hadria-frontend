@@ -91,8 +91,7 @@ const Landing = (props) => {
                         <CardActions>
                             <Grid container justify="flex-end"  >
                                 <Button 
-                                    variant="contained" 
-                                    color="secondary" 
+                                    className={classes.botonGenerico}
                                     disabled={!data.email || !data.password || isLoading ? true : false}
                                     type="submit">Entrar</Button>
                             </Grid>
