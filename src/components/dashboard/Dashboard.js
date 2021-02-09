@@ -20,6 +20,7 @@ import useUbicacions from '../hooks/useUbicacions'
 
 import {formatNumber} from '../Tools'
 import moment from 'moment'
+
 import { Grid, Box, 
     // IconButton, 
     Backdrop, Typography, CircularProgress, ButtonGroup, Button, Card, CardContent, Divider } from '@material-ui/core';
@@ -108,24 +109,24 @@ export default function Dashboard() {
     }
     return (
         <div>
-            <Backdrop className={classes.backdrop} open={bckdrpOpen}>
-                <div>
-                    <Typography align="center" variant="subtitle1" children="Espere..." />
-                    <CircularProgress color="inherit" />
-                </div>
-            </Backdrop>
-                {balance === null ?
-                    null
+                {balance === null || ubicacions === [] || compras === [] ?
+                    
+                    <Backdrop className={classes.backdrop} open={bckdrpOpen}>
+                        <div>
+                            <Typography align="center" variant="subtitle1" children="Espere..." />
+                            <CircularProgress color="inherit" />
+                        </div>
+                    </Backdrop>
                     :
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Box display={user.level > 2 ? 'none' : 'inline'}>
                             <Grid container>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={6}>
                                     <Typography variant="h6">{now.format("dddd, D [de] MMMM YYYY, h:mm a")}</Typography>
                                 </Grid>
-                                <Grid item xs={6}>
-                                    <ButtonGroup variant="text" className={classes.botonGenerico}>
+                                <Grid item xs={12} md={6}>
+                                    <ButtonGroup size="small" variant="text" className={classes.botonGenerico}>
                                         <Button onClick={showCreateIngreso}>Ingreso</Button>
                                         <Button onClick={showCreateEgreso}>Egreso</Button>
                                         <Button onClick={showCobrar}>Cobrar</Button>

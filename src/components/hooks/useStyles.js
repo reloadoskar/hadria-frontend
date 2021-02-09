@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     landingBar: {
         background: 'linear-gradient(45deg, #393e46 30%, #222831 90%)',
         // backgroundColor: '#393e46',
-        height: 72,
+        height: 72,        
     },
     center: {
         paddingLeft: 15,
@@ -83,7 +83,8 @@ const useStyles = makeStyles(theme => ({
         zIndex: -2,
     },
     appBar: {
-        background: 'linear-gradient(45deg, #393e46 30%, #222831 90%)',
+        backgroundColor: '#393e46',
+        // background: 'linear-gradient(45deg, #393e46 30%, #222831 90%)',
         position: "fixed",
         height: 72,
         width: "100%",
@@ -91,6 +92,7 @@ const useStyles = makeStyles(theme => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
+        zIndex: theme.zIndex.drawer + 1,
     },
     appBarShift: {
         marginLeft: drawerWidth,
@@ -273,7 +275,7 @@ const useStyles = makeStyles(theme => ({
         padding: '0 30px',
     },
     media: {
-        height: 140,
+        height: 190,
     }
 
 }));

@@ -102,7 +102,7 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
                     </Grid>
                     <Grid item xs={6}>
                         <Grid container justify="flex-end">
-                            <Typography variant="h6" >{ubicacion.nombre}</Typography>
+                            {/* <Typography variant="h6" >{ubicacion.nombre}</Typography> */}
                         </Grid>
                     </Grid>
                 </Grid>

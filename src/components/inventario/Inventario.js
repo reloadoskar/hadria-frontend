@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { Divider, IconButton, Typography, Container, Grid, Card, CardHeader, CardContent, LinearProgress } from '@material-ui/core';
+import { Divider, Typography, Container, Grid, Card, CardHeader, CardContent, LinearProgress, Button, TextField, MenuItem } from '@material-ui/core';
 
-import useInventario from './hooks/useInventario';
+import useInventario from '../hooks/useInventario';
 import ReceiptIcon from '@material-ui/icons/Receipt';
-import {sumStock, sumEmpStock} from "./Tools"
-
-import {ticketInventario} from "./api"
+import {sumStock, sumEmpStock} from "../Tools"
+import useStyles from '../hooks/useStyles'
+import {ticketInventario} from "../api"
+import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
+import Mover from './Mover'
+import useUbicacions from '../hooks/useUbicacions';
 function Inventario() {
+    const classes = useStyles()
+    const select = ["FOLIO","PRODUCTOR","UBICACION"]
     const { enqueueSnackbar } = useSnackbar()
-    const { inventario } = useInventario();
+    const { invxubic, inventario, mover } = useInventario()
+    const {ubicacions } = useUbicacions()
+    const [orderBy, setOrderby] = useState('FOLIO')
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+
+    const [moverDialog, setMoverDialog] = useState(false)
+    const handleChange = (value) =>{
+        setOrderby(value)
+    }
     const handleClick = () =>{
         ticketInventario(inventario).then(res =>{
             if(res.status === 'error'){
@@ -21,18 +33,65 @@ function Inventario() {
             }
         })
     }
+    const openMoverDialog = () => {
+        setMoverDialog(true)
+    }
+    const closeMoverDialog = () =>{
+        setMoverDialog(false)
+    }
     return (
 
         <Container maxWidth="lg">
             <Grid container >
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                     <Typography variant="h4" children="Inventario" paragraph />
                 </Grid>
-                <Grid item xs={12} md={6}>
-                    Imprimir
-                    <IconButton onClick={() => handleClick(inventario)}>
-                        <ReceiptIcon />
-                    </IconButton>
+                <Grid item xs={12} md={8}>
+                    <Grid container >
+                        <Grid item xs={4}>
+                            <TextField
+                            disabled
+                            select
+                            fullWidth
+                            id="orderBy"
+                            label="Ordenar por:"
+                            value={orderBy}
+                            onChange={(e) => handleChange(e.target.value)}
+                            >
+                                {select.map((opt, i) => (
+                                    <MenuItem key={i} value={opt}>
+                                        {opt}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Button 
+                                className={classes.botonGenerico}
+                                endIcon={<CompareArrowsIcon />}
+                                onClick={openMoverDialog}
+                                >
+                                Mover
+                            </Button>
+                            <Mover
+                                open={moverDialog} 
+                                close={closeMoverDialog}
+                                inventario={invxubic} 
+                                ubicacions={ubicacions}
+                                mover={mover}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Button
+                                className={classes.botonGenerico}
+                                onClick={() => handleClick(inventario)}
+                                endIcon={<ReceiptIcon />}
+                            >
+                                Imprimir
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    
                 </Grid>
             </Grid>
             <Grid container spacing={3}>
@@ -41,10 +100,10 @@ function Inventario() {
                     inventario === null ?
                         <LinearProgress variant="query" />
                         :
-                        inventario.compras.length === 0 ?
+                        inventario.length === 0 ?
                             <Typography variant="h6" align="center" gutterBottom>No se encontró información.</Typography>
                             :
-                            inventario.compras.map((compra, index) => (
+                            inventario.map((compra, index) => (
                                 <Grid item xs={12} key={index}>
                                     <Card>
                                         <CardHeader 
@@ -59,7 +118,12 @@ function Inventario() {
                                                     item.stock > 0 ? 
                                                         <Grid item xs={12} key={i}>
                                                             <Grid container >
-                                                                <Grid item xs={8}>
+                                                                <Grid item xs>
+                                                                    <Typography 
+                                                                        children={item.ubicacion.nombre}
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item xs={6}>
                                                                     <Typography
                                                                         children={item.producto.descripcion}
                                                                         />

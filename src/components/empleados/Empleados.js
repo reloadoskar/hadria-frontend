@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import { Button, Card, CardMedia, CardContent, Container, Grid, Typography } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
-import avatar from '../../img/avatar.png'
+import avatarh from '../../img/avatarH1.png'
+import avatarm from '../../img/avatarM2.png'
 import useEmpleados from './useEmpleados'
-
 import CrearEmpleado from './CrearEmpleado'
 
 export default function Empleados(){
@@ -22,7 +22,11 @@ export default function Empleados(){
     return(
         <Container>
             <Grid container>
-                <Grid item xs>Empleados</Grid>
+                <Grid item xs>
+                    <Typography variant="h6" >
+                        Empleados
+                    </Typography>
+                </Grid>
                 <Grid item xs>
                     <Button className={classes.botonGenerico} onClick={() => setDialogOpen(true)}>
                         Agregar
@@ -34,19 +38,20 @@ export default function Empleados(){
             <Grid container spacing={2}>
                 {
                     empleados.map((empleado, i) => (
-                        <Grid item xs={4} key={i}>
-                            <Card>
-                                <CardMedia
-                                    className={classes.media}
-                                    image={avatar}
-                                />
-                                <CardContent>
-                                    <Typography variant="h6" >{empleado.nombre}</Typography>
-                                    <Typography>{empleado.telefono}</Typography>
-                                    <Typography>{empleado.email}</Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
+                            <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
+                                <Card>
+                                    <CardMedia
+                                        className={classes.media}
+                                        image={empleado.sexo === 'H' ? avatarh : avatarm}
+                                    />
+                                    <CardContent>
+                                        <Typography variant="h6" >{empleado.nombre}</Typography>
+                                        <Typography>{empleado.telefono}</Typography>
+                                        <Typography>{empleado.email}</Typography>
+                                        <Typography>{empleado.ubicacion.nombre}</Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                     ))
                 }
             </Grid>

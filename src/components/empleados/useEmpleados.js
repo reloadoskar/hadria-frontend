@@ -5,7 +5,7 @@ const useEmpleados = () => {
     const [updtng, setupdtng] = useState(false)
     useEffect(()=>{
         getEmpleados().then(res=>{
-            setEmpleados(res.users)
+            setEmpleados(res.empleados)
         })
         return () =>{
             setEmpleados([])

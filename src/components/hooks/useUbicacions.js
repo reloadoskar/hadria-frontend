@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
-import { getUbicacions, saveUbicacion, deleteUbicacion } from '../api'
+import { getUbicacion, getUbicacions, saveUbicacion, deleteUbicacion } from '../api'
 const useUbicacions = () => {
 	const [ubicacions, setUbicacions] = useState([])
 	// const [ubicacionsSaldo, setUbicacionsSaldo] = useState([])
@@ -13,6 +13,10 @@ const useUbicacions = () => {
 			// setUbicacionsSaldo(saldo.data)
 		}
 		loadData()
+
+		return () => {
+			setUbicacions([])
+		}
 	}, [])
 
 	function add(ubicacion) {
@@ -36,10 +40,19 @@ const useUbicacions = () => {
 		})
 	}
 
+	function verUbicacion(id) {
+		if(id === undefined){console.log("quepedote")}
+		getUbicacion(id).then(res => {
+			// console.log(res)
+			return res
+		})
+	}
+
 
 	return {
 		ubicacions,
 		// ubicacionsSaldo,
+		verUbicacion,
 		add,
 		del
 	}

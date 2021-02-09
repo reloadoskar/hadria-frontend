@@ -150,6 +150,8 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         {
+                            user !== null ?
+
                             user.level > 1 ? null :
                                 <NavLink 
                                 className={classes.link} 
@@ -173,6 +175,8 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                                         </StyledTooltip>
                                     }
                                 </NavLink>
+                            :
+                            null
 
                         }
                         <NavLink exact to={`${url}/productos`} 
@@ -247,6 +251,7 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                             }
                         </NavLink>
                         {
+                            user !== null ?
                             user.level > 1 ? null :
                                 <NavLink exact to={`${url}/ubicaciones`}
                                 className={classes.link} 
@@ -271,6 +276,8 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                                         </StyledTooltip>
                                     }
                                 </NavLink>
+                            :
+                            null
                         }
                         <NavLink exact to={`${url}/conceptos`}
                             className={classes.link} 
@@ -324,6 +331,8 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                     }
                 </NavLink>
                 {
+                    user !== null ?
+
                     user.level > 1 ? null :
                         <NavLink exact to={`${url}/produccions`} 
                             className={classes.link} 
@@ -340,6 +349,8 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                             </StyledTooltip>
 
                         </NavLink>
+                    :
+                    null
                 }
 
                 <NavLink exact to={`${url}/inventario`}

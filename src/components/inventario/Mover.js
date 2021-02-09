@@ -1,0 +1,240 @@
+import React, { useState } from 'react'
+import Pesadas from './Pesadas'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, Typography, TextField, Button } from '@material-ui/core'
+import useStyles from '../hooks/useStyles'
+const init = {
+    origen: '',
+    origensel: '',
+    destino: '',
+    itemsel: '',
+    itemselcantidad: 0,
+    itemselempaques: '',
+    pesadas: []
+
+}
+
+export default function Mover(props){
+    const classes = useStyles()
+    const {open, close, inventario, ubicacions, mover} = props
+    const [guardando, setGuardando] = useState(false)
+    const [movimiento, setMovimiento] = useState(init)
+    const [pesadas, setPesadas] = useState(false)
+    const handleChange = (field, value) =>{
+        switch (field) {
+            case "origen":
+                setMovimiento({...movimiento, origen: value._id[0], origensel: value})
+                break;
+            case "itemselcantidad":
+                // console.log("cambiando cant: "+value)
+                if(parseFloat(value) > movimiento.itemsel.stock){
+                    setMovimiento({...movimiento, itemselcantidad: ''})
+                }else{
+                    setMovimiento({...movimiento, itemselcantidad: value})
+                }
+                break
+            case "itemselempaques":
+                if(value > movimiento.itemsel.empaquesStock){
+                    setMovimiento({...movimiento, itemselempaques: ''})
+                }else{
+                    setMovimiento({...movimiento, itemselempaques: value})
+                }
+                break
+            default:
+                setMovimiento({...movimiento, [field]: value})
+                break;
+        }
+    }
+    const openPesadas = () => {
+        setPesadas(true)
+    }
+    const closePesadas = () => {
+        setPesadas(false)
+    }
+    const addPesada = (pesada) => {
+        var lista = movimiento.pesadas
+        lista.push(pesada)
+        var emps = lista.length
+        var cant = parseFloat(movimiento.itemselcantidad) + parseFloat(pesada)
+        setMovimiento({...movimiento, pesadas: lista, itemselcantidad: cant, itemselempaques: emps })
+    }
+    const clearPesadas = () => {
+        setMovimiento({...movimiento, pesadas: [], itemselcantidad: 0, itemselempaques:0})
+    }
+    const handleReset = () => {
+        setMovimiento(init)
+    }
+    const validar = (mov) => {
+        var valid = false
+        if(mov.origen === ''){ return valid }
+        if(mov.destino === ''){ return valid }
+        if(mov.itemselcantidad <= 0){ return valid }
+        if(mov.itemselempaques <= 0){ return valid }
+        else{ valid= true}
+        return valid
+    } 
+    const handleClose = () => {
+        handleReset()
+        return close()
+    }
+    const handleSubmit = (e) =>{
+        e.preventDefault()
+        setGuardando(true)
+        if(validar(movimiento)){
+            mover(movimiento).then(res => {
+                console.log(res)
+                handleClose()
+                setGuardando(false)
+            })
+        }else{
+            console.log("invalido")
+        }
+        return false
+    }
+    return (
+        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+            <DialogTitle>Mover inventario</DialogTitle>
+            {/* <form onSubmit={handleSubmit}> */}
+            <DialogContent>
+            { guardando === true ?
+                <Typography variant="h6" align="center" >Guardando...</Typography>
+                :
+                inventario !== null ?
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        select
+                                        id="origen"
+                                        label="Origen"
+                                        fullWidth
+                                        variant="outlined"
+                                        value={movimiento.origensel}
+                                        onChange={(e) => handleChange('origen', e.target.value)}
+                                        >
+                                            <MenuItem value=""></MenuItem>
+                                        {inventario.map((option, index) =>{ 
+                                            if(option._id[0].tipo === 'SUCURSAL'){
+                                                return (
+                                                    <MenuItem key={index} value={option}>
+                                                        {option._id[0].nombre}
+                                                    </MenuItem>
+                                                )
+                                            }else{
+                                                return false
+                                            }
+                                        })}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        id="destino"
+                                        select
+                                        label="Destino"
+                                        fullWidth
+                                        variant="outlined"
+                                        value={movimiento.destino}
+                                        onChange={(e) => handleChange('destino', e.target.value)}
+                                    >
+                                        {ubicacions.map((ub, i)=>(
+                                            <MenuItem key={i} value={ub}>
+                                                {ub.nombre}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                { movimiento.origen === '' ?
+                                    null
+                                    :
+                                    <Grid item xs={12}>                                        
+                                        {/* { movimiento.origen.items.lenght > 0 ? */}
+                                            <TextField
+                                                id="itemsel"
+                                                select
+                                                label="Selecciona un producto"
+                                                fullWidth
+                                                variant="outlined"
+                                                value={movimiento.itemsel}
+                                                onChange={(e) => handleChange('itemsel', e.target.value)}
+                                            >
+                                                {
+                                                    movimiento.origensel.items.map((itm,i)=>(
+                                                        <MenuItem key={i} value={itm}>                                                            
+                                                            {itm.compra[0].folio + "-" + itm.compra[0].clave + " " + itm.producto[0].descripcion + " " + itm.stock +"/" +itm.empaquesStock}
+                                                        </MenuItem>          
+                                                    ))
+
+                                                }
+                                            </TextField>
+                                            {/* : null
+                                        } */}
+
+                                    </Grid>
+
+                                }
+                            </Grid>
+                            {
+                                movimiento.itemsel === '' ?
+                                null
+                                :
+                                <Grid item xs={12}>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs>
+                                            <Button className={classes.botonGenerico} onClick={openPesadas}>Agrega Pesadas</Button>
+                                            <Pesadas 
+                                                open={pesadas} 
+                                                close={closePesadas} 
+                                                pesadas={movimiento.pesadas} 
+                                                addPesada={addPesada} 
+                                                totalcant={movimiento.itemselcantidad}
+                                                totalemp={movimiento.itemselempaques}
+                                                clearPesadas={clearPesadas} 
+                                                classes={classes}/>
+                                        </Grid>
+                                        <Grid item xs>
+                                            <TextField
+                                                id="itemselcantidad"
+                                                label="Cantidad"
+                                                fullWidth
+                                                required
+                                                variant="outlined"
+                                                value={movimiento.itemselcantidad}
+                                                onChange={(e) => handleChange('itemselcantidad', e.target.value)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs>
+                                            <TextField
+                                                id="itemselempaques"
+                                                label="Empaques"
+                                                type="number"
+                                                fullWidth
+                                                required
+                                                variant="outlined"
+                                                value={movimiento.itemselempaques}
+                                                onChange={(e) => handleChange('itemselempaques', e.target.value)}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            }
+
+
+
+                        </Grid>
+                    </Grid>
+                :
+                null
+            }
+            </DialogContent>
+            <DialogActions>
+                <Button className={classes.botonSimplon} onClick={handleReset}>Empezar de nuevo</Button>
+                <Button 
+                    onClick={handleSubmit}
+                    // type="submit"
+                    className={classes.botonCosmico} 
+                    >Mover</Button>
+            </DialogActions>
+            {/* </form> */}
+        </Dialog>
+    )
+}

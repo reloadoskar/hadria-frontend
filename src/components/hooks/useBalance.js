@@ -43,7 +43,9 @@ const useBalance = () => {
     useEffect(() => {
 		async function loadIngresos() {
 			const res = await getIngresos()
-			setIngresos(res.ingresos)
+			if(res !== undefined){
+				setIngresos(res.ingresos)
+			}
 		}
         loadIngresos()
         return () => {
@@ -211,16 +213,12 @@ const useBalance = () => {
     
     useEffect(() => {
 		if(inventario !== null){
-			var i = inventario.compras
 			var tti = 0
-			console.log(i)
-			if(i !== undefined){
-				i.map(compra => {
-					return compra.items.map(itm=>{
-						return tti += itm.stock * itm.costo
-					})
+			inventario.map(compra => {
+				return compra.items.map(itm=>{
+					return tti += itm.stock * itm.costo
 				})
-			}
+			})
 			setTotalInventario(tti)
 		}
 

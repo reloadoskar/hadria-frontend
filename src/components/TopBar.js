@@ -16,32 +16,36 @@ export default function TopBar(props) {
 
         <Box
             className={clsx(classes.appBar, {[classes.appBarShift]: open, })}>
-            <Grid container spacing={2} className={classes.center} alignItems="center">
-                { user.level >= 3 ?
-                    null
-                    :
-                    <Grid item xs>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            onClick={toggle}
-                            className={clsx(classes.menuButton, {
-                                [classes.hide]: open,
-                            })}>
-                            <MenuIcon />
-                        </IconButton>
+                {user != null ?
+                    <Grid container spacing={2} className={classes.center} alignItems="center">
+                        { user.level >= 3 ?
+                            null
+                            :
+                            <Grid item xs={1}>
+                                <IconButton
+                                    edge="start"
+                                    color="inherit"
+                                    aria-label="menu"
+                                    onClick={toggle}
+                                    className={clsx(classes.menuButton, {
+                                        [classes.hide]: open,
+                                    })}>
+                                    <MenuIcon />
+                                </IconButton>
+                            </Grid>
+                        }
+                        <Grid item xs>
+                            <Typography variant="h6">
+                                H A D R I A
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <UserFunctions auth={auth} user={user}/>
+                        </Grid>
                     </Grid>
+                :
+                "nada"
                 }
-                <Grid item xs={7}>
-                    <Typography variant="h6">
-                        H A D R I A
-                    </Typography>
-                </Grid>
-                <Grid item xs={4}>
-                    <UserFunctions auth={auth} user={user}/>
-                </Grid>
-            </Grid>
                 
         </Box>
     )

@@ -3,25 +3,31 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuIt
 import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import useStyles from '../hooks/useStyles'
+import useUbicacions from '../hooks/useUbicacions';
 const nempleado = {
     nombre: '',
     area: "",
+    level: "",
     edad: 0,
+    sexo: '',
     direccion: "",
     telefono: "0123456789",
     email: "",
     instagram: "",
     facebook: "",
-    password: ""
+    password: "", 
+    ubicacion: ''
 }
 const areas = [
     {level: 2, area: "ADMINISTRACIÓN"},
     {level: 3, area: "ALMACÉN"},
-    {level: 4, area: "GENERAL"},
+    {level: 4, area: "CAJAS"},
+    {level: 5, area: "GENERAL"},
 ]
 const CrearEmpleado = (props) =>{
     const {open, close, crear} = props
     const classes = useStyles()
+    const {ubicacions} = useUbicacions()
     const [empleado, setEmpleado] = useState(nempleado)
     
     const handleSubmit = (e) =>{
@@ -33,6 +39,8 @@ const CrearEmpleado = (props) =>{
 
     const handleChange = (field, value) => {
         switch(field){
+            case 'area':
+                return setEmpleado({...empleado, area: value, level: value.level})
             case 'nombre':
                 return setEmpleado({...empleado, nombre: value.toUpperCase()})
             case 'direccion':
@@ -47,7 +55,7 @@ const CrearEmpleado = (props) =>{
             <form onSubmit={(e) => handleSubmit(e)}>
                 <DialogContent>
                     <Grid container spacing={2}>
-                        <Grid item xs={10}>
+                        <Grid item xs={8}>
                             <TextField 
                                 id="nombre"
                                 fullWidth
@@ -70,6 +78,21 @@ const CrearEmpleado = (props) =>{
                                 onChange={(e) => handleChange('edad', e.target.value)}
                             />
                         </Grid>
+                        <Grid item xs={2}>
+                            <TextField 
+                                id="sexo"
+                                select
+                                fullWidth
+                                label="Sexo"
+                                variant="outlined"
+                                value={empleado.sexo}
+                                onChange={(e) => handleChange('sexo', e.target.value)}
+                            >
+                                <MenuItem key="h" value="H">HOMBRE</MenuItem>
+                                <MenuItem key="m" value="M">MUJER</MenuItem>
+                            </TextField>
+
+                        </Grid>
                         <Grid item xs={12}>
                             <TextField 
                                 id="area"
@@ -86,6 +109,25 @@ const CrearEmpleado = (props) =>{
                                         {op.area}
                                     </MenuItem>
                                 ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                id="ubicacion"
+                                select
+                                fullWidth
+                                label="Asigna una ubicación"
+                                variant="outlined"
+                                value={empleado.ubicacion}
+                                onChange={(e) => handleChange('ubicacion', e.target.value)}
+                                >
+                                {ubicacions.map((ub, i)=>(
+                                    <MenuItem key={i} value={ub}>
+                                        {ub.nombre}
+                                    </MenuItem>
+                                ))
+
+                                }
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>

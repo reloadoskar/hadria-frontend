@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from 'react'
-import { Grid, IconButton, Typography, Menu, MenuItem, Divider } from '@material-ui/core'
+import { Grid, Menu, MenuItem, Divider, Button } from '@material-ui/core'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import { useHistory } from 'react-router-dom'
 import StatusDialog from './StatusDialog'
 import {restartApp} from './api'
+import useStyles from './hooks/useStyles'
 
 const UserFunctions = (props) => {
     const {auth, user} = props
+    const classes = useStyles()
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl)
     const [statusCheck, setStatusCheck] = useState(false)
@@ -74,12 +76,13 @@ const UserFunctions = (props) => {
         <div>
             <Grid container spacing={2} alignItems="center" justify="flex-end">
                 <Grid item >
-                    <IconButton
+                    <Button
+                        color="inherit"
                         onClick={handleMenu}
-                        color="inherit">
-                        <Typography variant="h6"children={user.nombre} />
-                        <AccountCircle />
-                    </IconButton>
+                        className={classes.botonUserFuncions}
+                        endIcon={<AccountCircle />}>
+                            {user.nombre}
+                    </Button>
                     <Menu
                         id="menu-usuario"
                         anchorEl={anchorEl}

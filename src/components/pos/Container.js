@@ -1,4 +1,4 @@
-import React, {useReducer, useState } from 'react';
+import React, {useEffect, useReducer, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import moment from 'moment'
 import {getCuentasPorCobrar, getCuentasPorPagar, existCorte} from '../api'
@@ -26,6 +26,7 @@ import useCortes from '../hooks/useCortes'
 import useUbicacions from '../hooks/useUbicacions'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';
+import useUser from '../hooks/useUser';
 const initialState = {
     saldoEnUbicacion: 0, 
     // POS DIALOG
@@ -66,17 +67,36 @@ const initialState = {
 }
 
 function PosContainer() {
-    // const [loading] = useState(true)
+    const {user} = useUser()
+    const { enqueueSnackbar } = useSnackbar()
     const {
         // addIngreso, 
         addVenta, cuentasxCobrar, addPagoCxc} = useIngresos()
-    const { enqueueSnackbar } = useSnackbar()
-    const {invUbic, getInvUbic} = useInventario();
+    const {invUbic, invxubic} = useInventario();
     const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
     const {corte, getCorte} = useCortes()
     const {ubicacions} = useUbicacions();
-    const [ubicacion, setUbicacion] = useState("")
+
+    const [ubicacion, setUbicacion] = useState(null)
+    const [invSelected, setInvSelected] = useState(null)
     const [fecha, setFecha] = useState( moment().format('YYYY-MM-DD') )
+
+    useEffect(() => {
+        if(user !== null && invxubic !== null){
+            invxubic.forEach(el => {
+                if(user.ubicacion._id === el._id[0]._id){
+                    // console.log("Aqui")
+                    // console.log(el)
+                    return handleChange('ubicacion', el)
+                }
+            });
+            // console.log(user)
+            // getInvUbic(user.ubicacion._id)
+            setUbicacion(user.ubicacion)
+            // handleChange('ubicacion', user.ubicacion)
+        }
+    },[user, invxubic])
+    // const [loading] = useState(true)
     
     const [values, dispatch] = useReducer(reducer, initialState)
 
@@ -142,8 +162,9 @@ function PosContainer() {
 
     const handleChange = (type, value) => { 
         if(type === 'ubicacion'){
-            getInvUbic(value._id)
-            return setUbicacion(value)
+            setUbicacion(value)
+            setInvSelected(value.items)
+            return 
         }
         if(type === 'fecha'){
             var f = moment(value).format('YYYY-MM-DD')
@@ -175,7 +196,7 @@ function PosContainer() {
     }
 
     const checkCorte = () => {
-        existCorte(ubicacion._id, fecha).then( res =>{
+        existCorte(ubicacion._id[0]._id, fecha).then( res =>{
             if(res.corte.length === 0){
                 // dispatch({type: 'corteExist', value: false})                
                 startPos()
@@ -192,130 +213,142 @@ function PosContainer() {
         openDialog('corteDialog')
     }
 
+    // const accesar = (ubicacion, fecha) => {
+    //     getCorte(ubicacion._id, fecha)
+    // }
+
 
     return (
         <Container>
 
             {
-                // invUbic !== null ?
-                    // <LinearProgress variant="query" />
+                user !== null  ?
+                <div>
                     <Acceso 
-                    ubicacions={ubicacions}
-                    ubicacion={ubicacion} 
-                    fecha={fecha} 
-                    checkCorte={checkCorte} 
-                    invUbic={invUbic}
-                    handleChange={handleChange}/>
-                    // :
-                    // null
-                    // <Loading loading={loading}/>
-            }
-
-
-            <PosDialog 
-                values={values}
-                inventario={invUbic}
-                ubicacion={ubicacion}
-                fecha={fecha}
-                wantThisItem={wantThisItem}
-                menuDialog={values.menuDialog}
-                showMessage={showMessage}
-                isOpen={values.posDialog}
-                openDialog={openDialog}
-                removeItem={removeItem}
-                showCorte={showCorte}
-                resetVenta={resetVenta}
-                closeDialog={closeDialog}/>
-            
-            {values.itemToAdd &&
-                <AddItemDialog 
-                    isOpen={values.addItemDialog}
-                    close={closeDialog}
-                    item={values.itemToAdd}
-                    add={add}
-                    showMessage={showMessage}
-                />
-            }
-
-            <PosCobrarDialog
-                valuesToSave={values}
-                ubicacion={ubicacion}
-                fecha={fecha}
-                isOpen={values.cobrarDialog}
-                crearVenta={addVenta}
-                crearPago={addPagoCxc}
-                close={closeDialog}
-                showMessage={showMessage}
-                addToSaldo={addToSaldo}
-                resetVenta={resetVenta}
-                />
-            <PagarDialog 
-                fecha={fecha}
-                cuentas={cuentasxPagar}
-                pagar={savePagoCxp}
-                ubicacion={ubicacion}
-                isOpen={values.pagarDialog}
-                saldoDisponible={corte.total}
-                close={closeDialog}
-                showMessage={showMessage}
-                subFromSaldo={subFromSaldo}
-            />
-
-            <EgresoDialog 
-                fecha={fecha}
-                ubicacion={ubicacion}
-                isOpen={values.egresoDialog}
-                saldoDisponible={corte.total}
-                close={closeDialog}
-                showMessage={showMessage}
-                subFromSaldo={subFromSaldo}
-            />
-
-            <IngresoDialog 
-                fecha={fecha}
-                ubicacion={ubicacion}
-                isOpen={values.ingresoDialog}
-                close={closeDialog}
-                showMessage={showMessage}
-                addToSaldo={addToSaldo}
-            />
-
-            <RetiroDialog
-                fecha={fecha}
-                ubicacion={ubicacion}
-                isOpen={values.retiroDialog}
-                close={closeDialog}
-                showMessage={showMessage}
-                saldoDisponible={corte.total}
-                subFromSaldo={subFromSaldo}/>
-
-            <CobroDialog 
-                fecha={fecha}
-                cuentas={cuentasxCobrar}
-                cobrar={addPagoCxc}
-                ubicacion={ubicacion}
-                isOpen={values.cobroDialog}
-                saldoDisponible={corte.total}
-                close={closeDialog}
-                showMessage={showMessage}
-                addToSaldo={addToSaldo}
-            />
-            {
-                corte.length === 0 ?
-                    null
+                        user={user}
+                        ubicacions={invxubic}
+                        ubicacion={ubicacion} 
+                        fecha={fecha} 
+                        checkCorte={checkCorte} 
+                        invUbic={invSelected}
+                        handleChange={handleChange}/>
+                    {ubicacion === null ?
+                        null
+                        :
+                        <div>
+                            <PosDialog 
+                                values={values}
+                                inventario={invSelected}
+                                ubicacion={ubicacion}
+                                fecha={fecha}
+                                wantThisItem={wantThisItem}
+                                menuDialog={values.menuDialog}
+                                showMessage={showMessage}
+                                isOpen={values.posDialog}
+                                openDialog={openDialog}
+                                removeItem={removeItem}
+                                showCorte={showCorte}
+                                resetVenta={resetVenta}
+                                closeDialog={closeDialog}/>
+                            
+                            {values.itemToAdd &&
+                                <AddItemDialog 
+                                    isOpen={values.addItemDialog}
+                                    close={closeDialog}
+                                    item={values.itemToAdd}
+                                    add={add}
+                                    showMessage={showMessage}
+                                />
+                            }
+        
+                            <PosCobrarDialog
+                                valuesToSave={values}
+                                ubicacion={ubicacion}
+                                fecha={fecha}
+                                isOpen={values.cobrarDialog}
+                                crearVenta={addVenta}
+                                crearPago={addPagoCxc}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                addToSaldo={addToSaldo}
+                                resetVenta={resetVenta}
+                                />
+                            <PagarDialog 
+                                fecha={fecha}
+                                cuentas={cuentasxPagar}
+                                pagar={savePagoCxp}
+                                ubicacion={ubicacion}
+                                isOpen={values.pagarDialog}
+                                saldoDisponible={corte.total}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                subFromSaldo={subFromSaldo}
+                            />
+        
+                            <EgresoDialog 
+                                fecha={fecha}
+                                ubicacion={ubicacion}
+                                isOpen={values.egresoDialog}
+                                saldoDisponible={corte.total}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                subFromSaldo={subFromSaldo}
+                            />
+        
+                            <IngresoDialog 
+                                fecha={fecha}
+                                ubicacion={ubicacion}
+                                isOpen={values.ingresoDialog}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                addToSaldo={addToSaldo}
+                            />
+        
+                            <RetiroDialog
+                                fecha={fecha}
+                                ubicacion={ubicacion}
+                                isOpen={values.retiroDialog}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                saldoDisponible={corte.total}
+                                subFromSaldo={subFromSaldo}/>
+        
+                            <CobroDialog 
+                                fecha={fecha}
+                                cuentas={cuentasxCobrar}
+                                cobrar={addPagoCxc}
+                                ubicacion={ubicacion}
+                                isOpen={values.cobroDialog}
+                                saldoDisponible={corte.total}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                addToSaldo={addToSaldo}
+                            />
+                            {
+                                corte.length === 0 ?
+                                    null
+                                    :
+                                    // console.log(corte)
+                                    <CorteDialog 
+                                        fecha={fecha}
+                                        ubicacions={ubicacions}
+                                        ubicacion={ubicacion}
+                                        data={values}
+                                        corte={corte}
+                                        isOpen={values.corteDialog}
+                                        close={closeDialog}
+                                        showMessage={showMessage}
+                                    />
+                            }
+                        </div>    
+                    }
+                </div>
                     :
-                    // console.log(corte)
-                    <CorteDialog 
-                        fecha={fecha}
-                        ubicacions={ubicacions}
-                        ubicacion={ubicacion}
-                        data={values}
-                        corte={corte}
-                        isOpen={values.corteDialog}
-                        close={closeDialog}
-                        showMessage={showMessage}
-                    />
+                    "loading"
             }
+
+
+
         </Container>
 
     )

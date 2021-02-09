@@ -37,6 +37,10 @@ export const login = user => {
 
     }catch (err) {
         console.log(err)
+        return {
+            message: "Error de conexión.",
+            status: "error"
+        }
     }
 }
 
@@ -190,6 +194,19 @@ export const deleteProvedor = (id) => {
 
 // API UBICACIONES
 
+export const getUbicacion = (id) => {
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/ubicacion/' + id)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
 export const getUbicacions = () => {
     try{
         if(decoded){
@@ -447,6 +464,33 @@ export const getInventarioBy = (ubicacion) => {
         if(decoded){
             return axios
                 .get(url_client + decoded.database +  `/inventario/${ubicacion}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+export const getInventarioUbicacion = () => {
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database +  `/inventarioxubicacion/`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const moveInventario = (move) => {
+    try{
+        if(decoded){
+            return axios
+                .post(url_client + decoded.database +  `/inventario/movimiento`, move)
                 .then(res => {
                     return res.data
                 })

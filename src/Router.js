@@ -9,7 +9,7 @@ import Clientes from './components/Clientes';
 import Provedores from './components/Provedores';
 import Ubicaciones from './components/Ubicaciones';
 import Compras from './components/compras/Compras';
-import Inventario from './components/Inventario';
+import Inventario from './components/inventario/Inventario';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/Header';
 import Container from './components/pos/Container';
@@ -36,11 +36,13 @@ export default function Router({auth}){
     }, [auth, history])
 
     useEffect(()=>{
-        if(user.level === 3){
-            history.push('/app/inventario')
-        }
-        if(user.level === 4){
-            history.push(`/app/pos`)
+        if(user !== null){
+            if(user.level === 3){
+                history.push('/app/inventario')
+            }
+            if(user.level === 4){
+                history.push(`/app/pos`)
+            }
         }
     },[user, history])
 
