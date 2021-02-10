@@ -77,10 +77,11 @@ function PosContainer() {
     const {corte, getCorte} = useCortes()
     const {ubicacions} = useUbicacions();
 
-    const [ubicacion, setUbicacion] = useState('')
+    const [ubicacion, setUbicacion] = useState(null)
     const [invSelected, setInvSelected] = useState(null)
     const [fecha, setFecha] = useState( moment().format('YYYY-MM-DD') )
     // const [itemSelected, setItemSelected] = useState()
+    const [values, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
         if(user !== null && invxubic !== null){
@@ -94,7 +95,6 @@ function PosContainer() {
     },[user, invxubic])
     // const [loading] = useState(true)
     
-    const [values, dispatch] = useReducer(reducer, initialState)
 
     const savePagoCxp = (pago) => {
         return addPagoCxp(pago)
