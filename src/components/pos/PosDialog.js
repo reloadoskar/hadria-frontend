@@ -1,5 +1,5 @@
 import React from 'react'
-// import moment from 'moment'
+import moment from 'moment'
 
 import PosMenu from './PosMenu'
 import PosComprasFor from './PosComprasFor'
@@ -57,7 +57,7 @@ export default function PosDialog({
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" className={classes.title}>
-                    {/* {ubicacion.nombre} | {moment(fecha).format("DD MMMM [de] YYYY")} */}
+                    {ubicacion._id[0].nombre} | {moment(fecha).format("DD MMMM [de] YYYY")}
                 </Typography>
             </Toolbar>
 

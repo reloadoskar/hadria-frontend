@@ -134,7 +134,7 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
         e.preventDefault()
         setLoading(true)
         const nventa = {
-            ubicacion: ubicacion,
+            ubicacion: ubicacion._id[0],
             fecha: fecha,
             cliente: values.cliente,
             tipoPago: values.tipoPago,
@@ -146,6 +146,7 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
             saldo: values.saldo,
         }
         setVenta(nventa)
+        // console.log(nventa)
 
         crearVenta(nventa)
             .then(res => {

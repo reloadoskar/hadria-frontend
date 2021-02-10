@@ -51,6 +51,7 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
             referencia: values.referencia,
             fecha: fecha
         }
+        console.log(pago)
         cobrar(pago).then(res =>{
             setGuardando(false)
             showMessage(res.message, res.status)

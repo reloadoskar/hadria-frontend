@@ -77,23 +77,19 @@ function PosContainer() {
     const {corte, getCorte} = useCortes()
     const {ubicacions} = useUbicacions();
 
-    const [ubicacion, setUbicacion] = useState(null)
+    const [ubicacion, setUbicacion] = useState('')
     const [invSelected, setInvSelected] = useState(null)
     const [fecha, setFecha] = useState( moment().format('YYYY-MM-DD') )
+    // const [itemSelected, setItemSelected] = useState()
 
     useEffect(() => {
         if(user !== null && invxubic !== null){
             invxubic.forEach(el => {
                 if(user.ubicacion._id === el._id[0]._id){
-                    // console.log("Aqui")
-                    // console.log(el)
                     return handleChange('ubicacion', el)
                 }
             });
-            // console.log(user)
-            // getInvUbic(user.ubicacion._id)
-            setUbicacion(user.ubicacion)
-            // handleChange('ubicacion', user.ubicacion)
+            // setUbicacion(user.ubicacion)
         }
     },[user, invxubic])
     // const [loading] = useState(true)
@@ -137,6 +133,7 @@ function PosContainer() {
             compraId: compraId
         }
         dispatch({type: 'itemWanted', value: wantThisItem})
+        // setItemSelected(wantThisItem)
         openDialog('addItemDialog')
     }
 
@@ -176,7 +173,7 @@ function PosContainer() {
     const startPos = () =>{
         // e.preventDefault()
         loadBalance()
-        if(invUbic.length <= 0){
+        if(invxubic.length <= 0){
             enqueueSnackbar(" No se encontró inventario en "+values.ubicacion.nombre, {
                 variant: 'info',
                 anchorOrigin: {
@@ -192,7 +189,7 @@ function PosContainer() {
     }
 
     const loadBalance = () => {
-        getCorte(ubicacion._id, fecha)
+        getCorte(ubicacion._id[0]._id, fecha)
     }
 
     const checkCorte = () => {

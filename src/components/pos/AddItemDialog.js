@@ -9,7 +9,7 @@ const calclulaImporte = (cant, prec) => {
 export default function AddItemDialog({item, isOpen, close, showMessage, add }) {
     const classes = useStyles()
     const initData = {
-        precio: item.item.producto.precio1,
+        precio: 0,
         item: item,
         cantidad: '',
         empaques: '',
@@ -47,7 +47,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                 }
                 imp = calclulaImporte(value, values.precio)
                 emp = calculaEmpaques(item.item.empaquesStock, stock, value)
-                return setValues({ ...values, [field]: value, empaques: emp, importe: imp})
+                return setValues({ ...values, [field]: value, importe: imp})
             
             case 'precio':
                 imp = calclulaImporte(values.cantidad, value)
@@ -95,7 +95,9 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Typography variant="h6" >{item.item.producto.descripcion}</Typography>
-                        <Typography variant="subtitle2" >Disponible: {item.item.stock} {item.item.producto.unidad.abr}</Typography>                        
+                        <Typography variant="subtitle2" >Disponible: {item.item.stock} 
+                        {/* {item.item.producto.unidad.abr} */}
+                        </Typography>                        
                     </Grid>
 
                 </Grid>
@@ -105,25 +107,25 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                         <Grid container spacing={2} alignItems="center">
                             <Grid item xs={12} md={3}>
                                 <TextField 
+                                    id="empaques"
+                                    label="Empaques"
+                                    variant="outlined"
+                                    autoFocus
+                                    required
+                                    fullWidth
+                                    value={values.empaques}
+                                    onChange={(e) => handleChange('empaques', e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <TextField 
                                     id="cantidad"
                                     label="Cantidad"
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    autoFocus
                                     value={values.cantidad}
                                     onChange={(e) => handleChange('cantidad', e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
-                                <TextField 
-                                    id="empaques"
-                                    label="Empaques"
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    value={values.empaques}
-                                    onChange={(e) => handleChange('empaques', e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} md={3}>

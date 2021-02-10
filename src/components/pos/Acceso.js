@@ -21,9 +21,7 @@ export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, han
                         )}
                 />
                 <CardContent>
-                    {ubicacion === null ?
-                        <Typography align="center">Espere...</Typography>
-                        :
+                    
                         <form onSubmit={(e) => handleSubmit(e)}>
                             {
                                 user.level < 9 ?
@@ -77,8 +75,8 @@ export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, han
                         <Grid container justify="flex-end">
                             <Button 
                                 fullWidth
-                                className={ invUbic === null ? classes.botonGenerico : classes.botonCosmico}
-                                disabled={invUbic === null ? true : false }
+                                className={ invUbic === null  ? classes.botonGenerico : classes.botonCosmico}
+                                disabled={invUbic === null || ubicacion === null ? true : false }
                                 type="button" 
                                 variant="contained" 
                                 color="primary" 
@@ -87,7 +85,7 @@ export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, han
                         </Grid>
 
                         </form>
-                    }
+                    
                 </CardContent>
             </Card>
             </Container>
