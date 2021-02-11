@@ -4,7 +4,7 @@ import { Divider, Typography, Container, Grid, Card, CardHeader, CardContent, Li
 
 import useInventario from '../hooks/useInventario';
 import ReceiptIcon from '@material-ui/icons/Receipt';
-import {sumStock, sumEmpStock} from "../Tools"
+import {sumStock, sumEmpStock, formatNumber} from "../Tools"
 import useStyles from '../hooks/useStyles'
 import {ticketInventario} from "../api"
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
@@ -42,34 +42,37 @@ function Inventario() {
     return (
 
         <Container maxWidth="lg">
-            <Grid container >
+            <Grid container spacing={2}>
                 <Grid item xs={12} md={4}>
                     <Typography variant="h4" children="Inventario" paragraph />
                 </Grid>
-                <Grid item xs={12} md={8}>
-                    <Grid container >
-                        <Grid item xs={4}>
-                            <TextField
-                            disabled
-                            select
-                            fullWidth
-                            id="orderBy"
-                            label="Ordenar por:"
-                            value={orderBy}
-                            onChange={(e) => handleChange(e.target.value)}
-                            >
-                                {select.map((opt, i) => (
-                                    <MenuItem key={i} value={opt}>
-                                        {opt}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={4}>
+                
+                <Grid item xs={12} md={4}>
+                    <TextField
+                    disabled
+                    select
+                    fullWidth
+                    id="orderBy"
+                    label="Ordenar por:"
+                    value={orderBy}
+                    onChange={(e) => handleChange(e.target.value)}
+                    >
+                        {select.map((opt, i) => (
+                            <MenuItem key={i} value={opt}>
+                                {opt}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
+                
+                <Grid item xs={12} md={4}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
                             <Button 
                                 className={classes.botonGenerico}
                                 endIcon={<CompareArrowsIcon />}
                                 onClick={openMoverDialog}
+                                fullWidth
                                 >
                                 Mover
                             </Button>
@@ -81,17 +84,17 @@ function Inventario() {
                                 mover={mover}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={6}>
                             <Button
+                                fullWidth
                                 className={classes.botonGenerico}
                                 onClick={() => handleClick(inventario)}
                                 endIcon={<ReceiptIcon />}
                             >
                                 Imprimir
-                            </Button>
+                            </Button>                    
                         </Grid>
                     </Grid>
-                    
                 </Grid>
             </Grid>
             <Grid container spacing={3}>
@@ -108,7 +111,6 @@ function Inventario() {
                                     <Card>
                                         <CardHeader 
                                         title={compra.folio+ " | " +compra.clave}  
-                                        subheader={compra.ubicacion.nombre}
                                         />
                                         <CardContent>
                                             <Grid container spacing={3}>
@@ -117,27 +119,38 @@ function Inventario() {
                                                     //     return(
                                                     item.stock > 0 ? 
                                                         <Grid item xs={12} key={i}>
-                                                            <Grid container >
-                                                                <Grid item xs>
+                                                            <Grid container spacing={1} alignItems="flex-end">
+                                                                <Grid item xs={12}>
                                                                     <Typography 
+                                                                        variant="h6"
                                                                         children={item.ubicacion.nombre}
                                                                     />
                                                                 </Grid>
-                                                                <Grid item xs={6}>
+                                                                <Grid item xs={12} md={6}>
                                                                     <Typography
                                                                         children={item.producto.descripcion}
                                                                         />
                                                                 </Grid>
-                                                                <Grid item xs={2}>
+                                                                <Grid item xs={6} md={3}>
                                                                     <Typography
                                                                         align="right"
-                                                                        children={item.empaquesStock + " " + item.producto.empaque.abr}
+                                                                        className={classes.sobreTexto}
+                                                                        children={item.producto.empaque.abr}
+                                                                        />
+                                                                    <Typography
+                                                                        align="right"                                                                        
+                                                                        children={formatNumber(item.empaquesStock)}
                                                                         />
                                                                 </Grid>
-                                                                <Grid item xs={2}>
+                                                                <Grid item xs={6} md={3}>
+                                                                <Typography
+                                                                        align="right"
+                                                                        className={classes.sobreTexto}
+                                                                        children={item.producto.unidad.abr}
+                                                                        />
                                                                     <Typography
                                                                         align="right"
-                                                                        children={item.stock + " " + item.producto.unidad.abr}
+                                                                        children={formatNumber(item.stock,2)}
                                                                         />
                                                                 </Grid>
                                                             </Grid>
@@ -151,22 +164,24 @@ function Inventario() {
                                                 )//}
 
                                                 )}
-                                                <Grid item xs={8}>
-                                                    <Typography align="right"
+                                                <Grid item xs={12} md={6}>
+                                                    <Typography align="center"
                                                         variant="h6"
-                                                        children="Total:"
+                                                        children="Total"
                                                         />
                                                 </Grid>
-                                                <Grid item xs={2}>
+                                                <Grid item xs={6} md={3}>
+                                                    <Typography className={classes.sobreTexto} variant="body2" align="right" children="Empaques" />
                                                     <Typography variant="h6"
                                                         align="right"
                                                         children={sumEmpStock(compra.items)}
                                                         />
                                                 </Grid>
-                                                <Grid item xs={2}>
+                                                <Grid item xs={6} md={3}>
+                                                    <Typography className={classes.sobreTexto} variant="body2" align="right" children="Cantidad" />
                                                     <Typography variant="h6"
                                                         align="right"
-                                                        children={sumStock(compra.items)}
+                                                        children={formatNumber(sumStock(compra.items),1)}
                                                         />
                                                 </Grid>
                                             </Grid>

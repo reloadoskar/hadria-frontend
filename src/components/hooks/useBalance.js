@@ -24,7 +24,6 @@ import {
     
     getInventario, 
     getInventarioBy,
-    // getDisponiblexUbicacion
 } from '../api'
 
 const useBalance = () => {
@@ -64,9 +63,10 @@ const useBalance = () => {
     
     useEffect(() => {
 		async function loadCuentas() {
-            const res = await getCuentasPorCobrar()
-            setCuentasxCobrar(res.clientes);
-            // setTotalCxc(sumSaldo(res.cuentas))
+			const res = await getCuentasPorCobrar()
+			if(res !== undefined){
+				setCuentasxCobrar(res.clientes);
+			}
 		}
         loadCuentas()        
         return () => setCuentasxCobrar([])
@@ -128,7 +128,9 @@ const useBalance = () => {
     useEffect(() => {
 		async function loadEgresos() {
 			const res = await getEgresos()
-			setEgresos(res.egresos);
+			if(res !== undefined){
+				setEgresos(res.egresos);
+			}
 		}
         loadEgresos()
         return () => {
@@ -144,11 +146,13 @@ const useBalance = () => {
     
 	useEffect(()=>{
         getDisponiblexUbicacion().then(res=>{
-            let disp = []
-            res.forEach(el => {
-                disp.push({ubicacion: el.nombre, disponible: (sumImporte(el.ingresos) - sumImporte(el.egresos))})
-            })
-            setDisp(disp)
+			if(res !== undefined){
+				let disp = []
+				res.forEach(el => {
+					disp.push({ubicacion: el.nombre, disponible: (sumImporte(el.ingresos) - sumImporte(el.egresos))})
+				})
+				setDisp(disp)
+			}
         })
         return () => setDisp([])
     }, [updatingEgresos, updatingIngresos])

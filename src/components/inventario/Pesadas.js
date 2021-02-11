@@ -20,9 +20,10 @@ export default function Pesadas(props){
                 <form onSubmit={handleSubmit}>
             <DialogContent>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} md={6}>
                             <TextField
                                 id="pesada"
+                                required
                                 fullWidth
                                 label="Peso"
                                 variant="outlined"
@@ -30,9 +31,9 @@ export default function Pesadas(props){
                                 onChange={(e) => handleChange(e.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={6}>
-                            <Button type="submit" className={classes.botonGenerico} >
-                                Agregar y continuar
+                        <Grid item xs={12} md={6}>
+                            <Button fullWidth type="submit" className={classes.botonGenerico} >
+                                Agregar
                             </Button>
                         </Grid>
                         {pesadas.length > 0 ?

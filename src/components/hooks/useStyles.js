@@ -14,6 +14,10 @@ const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
     },
+    sobreTexto: {
+        fontSize: '15px',
+        color: '#3d3d3d'
+    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),

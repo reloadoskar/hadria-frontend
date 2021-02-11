@@ -25,6 +25,7 @@ const Ventas = () => {
     // const classes = useStyles()
     const [loadingSomething, setLoadingSomething] = useState(false)
     const [confirm, setConfirm] = useState(false)
+    const [dialog, setDialog] = useState(false)
     const [data, setData] = useState({ 
         folio: '', 
         venta: false })
@@ -74,6 +75,7 @@ const Ventas = () => {
         getVenta(dataSend).then(res => {
             if (res.status === 'success') {
                 setData({ ...data, venta: res.venta })
+                setDialog(true)
             }
             setLoadingSomething(false)
         })
@@ -99,6 +101,10 @@ const Ventas = () => {
         //     }
         //     cancelConfirm()
         // })
+    }
+
+    const closeDialog = () => {
+        setDialog(false)
     }
 
     return (
@@ -225,7 +231,12 @@ const Ventas = () => {
                                         <Container>
                                         <Card>
                                             <CardContent>
-                                                <Venta data={data.venta} showMessage={showMessage} />
+                                                <Venta 
+                                                    data={data.venta} 
+                                                    showMessage={showMessage} 
+                                                    open={dialog} 
+                                                    close={closeDialog}
+                                                    />
                                             </CardContent>
                                         </Card>
                                         </Container>

@@ -100,128 +100,116 @@ export default function Mover(props){
                 :
                 inventario !== null ?
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} md={6}>
-                                    <TextField
-                                        select
-                                        id="origen"
-                                        label="Origen"
-                                        fullWidth
-                                        variant="outlined"
-                                        value={movimiento.origensel}
-                                        onChange={(e) => handleChange('origen', e.target.value)}
-                                        >
-                                            <MenuItem value=""></MenuItem>
-                                        {inventario.map((option, index) =>{ 
-                                            if(option._id[0].tipo === 'SUCURSAL'){
-                                                return (
-                                                    <MenuItem key={index} value={option}>
-                                                        {option._id[0].nombre}
-                                                    </MenuItem>
-                                                )
-                                            }else{
-                                                return false
-                                            }
-                                        })}
-                                    </TextField>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <TextField
-                                        id="destino"
-                                        select
-                                        label="Destino"
-                                        fullWidth
-                                        variant="outlined"
-                                        value={movimiento.destino}
-                                        onChange={(e) => handleChange('destino', e.target.value)}
-                                    >
-                                        {ubicacions.map((ub, i)=>(
-                                            <MenuItem key={i} value={ub}>
-                                                {ub.nombre}
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                select
+                                id="origen"
+                                label="Origen"
+                                fullWidth
+                                variant="outlined"
+                                value={movimiento.origensel}
+                                onChange={(e) => handleChange('origen', e.target.value)}
+                                >
+                                    <MenuItem value=""></MenuItem>
+                                {inventario.map((option, index) =>{ 
+                                    if(option._id[0].tipo === 'SUCURSAL'){
+                                        return (
+                                            <MenuItem key={index} value={option}>
+                                                {option._id[0].nombre}
                                             </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-                                { movimiento.origen === '' ?
-                                    null
-                                    :
-                                    <Grid item xs={12}>                                        
-                                        {/* { movimiento.origen.items.lenght > 0 ? */}
-                                            <TextField
-                                                id="itemsel"
-                                                select
-                                                label="Selecciona un producto"
-                                                fullWidth
-                                                variant="outlined"
-                                                value={movimiento.itemsel}
-                                                onChange={(e) => handleChange('itemsel', e.target.value)}
-                                            >
-                                                {
-                                                    movimiento.origensel.items.map((itm,i)=>(
-                                                        <MenuItem key={i} value={itm}>                                                            
-                                                            {itm.compra[0].folio + "-" + itm.compra[0].clave + " " + itm.producto[0].descripcion + " " + itm.stock +"/" +itm.empaquesStock}
-                                                        </MenuItem>          
-                                                    ))
-
-                                                }
-                                            </TextField>
-                                            {/* : null
-                                        } */}
-
-                                    </Grid>
-
-                                }
+                                        )
+                                    }else{
+                                        return false
+                                    }
+                                })}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                id="destino"
+                                select
+                                label="Destino"
+                                fullWidth
+                                variant="outlined"
+                                value={movimiento.destino}
+                                onChange={(e) => handleChange('destino', e.target.value)}
+                            >
+                                {ubicacions.map((ub, i)=>(
+                                    <MenuItem key={i} value={ub}>
+                                        {ub.nombre}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        
+                        { movimiento.origen === '' ?
+                            null
+                            :
+                            <Grid item xs={12}>                                                                                
+                                <TextField
+                                    id="itemsel"
+                                    select
+                                    label="Selecciona un producto"
+                                    fullWidth
+                                    variant="outlined"
+                                    value={movimiento.itemsel}
+                                    onChange={(e) => handleChange('itemsel', e.target.value)}
+                                >
+                                    {movimiento.origensel.items.map((itm,i)=>(
+                                        <MenuItem key={i} value={itm}>                                                            
+                                            {itm.compra[0].folio + "-" + itm.compra[0].clave + " " + itm.producto[0].descripcion + " " + itm.stock +"/" +itm.empaquesStock}
+                                        </MenuItem>          
+                                    ))}
+                                </TextField>                                
                             </Grid>
-                            {
-                                movimiento.itemsel === '' ?
-                                null
-                                :
-                                <Grid item xs={12}>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs>
-                                            <Button className={classes.botonGenerico} onClick={openPesadas}>Agrega Pesadas</Button>
-                                            <Pesadas 
-                                                open={pesadas} 
-                                                close={closePesadas} 
-                                                pesadas={movimiento.pesadas} 
-                                                addPesada={addPesada} 
-                                                totalcant={movimiento.itemselcantidad}
-                                                totalemp={movimiento.itemselempaques}
-                                                clearPesadas={clearPesadas} 
-                                                classes={classes}/>
-                                        </Grid>
-                                        <Grid item xs>
-                                            <TextField
-                                                id="itemselcantidad"
-                                                label="Cantidad"
-                                                fullWidth
-                                                required
-                                                variant="outlined"
-                                                value={movimiento.itemselcantidad}
-                                                onChange={(e) => handleChange('itemselcantidad', e.target.value)}
-                                            />
-                                        </Grid>
-                                        <Grid item xs>
-                                            <TextField
-                                                id="itemselempaques"
-                                                label="Empaques"
-                                                type="number"
-                                                fullWidth
-                                                required
-                                                variant="outlined"
-                                                value={movimiento.itemselempaques}
-                                                onChange={(e) => handleChange('itemselempaques', e.target.value)}
-                                            />
-                                        </Grid>
-                                    </Grid>
+                        }
+                        
+                        {movimiento.itemsel === '' ?
+                            null
+                            :
+                            <React.Fragment>
+                                <Grid item xs={12} md={4}>
+                                    <Button fullWidth className={classes.botonGenerico} onClick={openPesadas}>Agrega Pesadas</Button>
+                                    <Pesadas 
+                                        open={pesadas} 
+                                        close={closePesadas} 
+                                        pesadas={movimiento.pesadas} 
+                                        addPesada={addPesada} 
+                                        totalcant={movimiento.itemselcantidad}
+                                        totalemp={movimiento.itemselempaques}
+                                        clearPesadas={clearPesadas} 
+                                        classes={classes}/>
                                 </Grid>
-                            }
+                                <Grid item xs={6} md={4}>
+                                    <TextField
+                                        id="itemselcantidad"
+                                        label="Cantidad"
+                                        fullWidth
+                                        required
+                                        variant="outlined"
+                                        value={movimiento.itemselcantidad}
+                                        onChange={(e) => handleChange('itemselcantidad', e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={6} md={4}>
+                                    <TextField
+                                        id="itemselempaques"
+                                        label="Empaques"
+                                        type="number"
+                                        fullWidth
+                                        required
+                                        variant="outlined"
+                                        value={movimiento.itemselempaques}
+                                        onChange={(e) => handleChange('itemselempaques', e.target.value)}
+                                    />
+                                </Grid>
+                        </React.Fragment>
+                    }
 
 
 
                         </Grid>
-                    </Grid>
+
                 :
                 null
             }
