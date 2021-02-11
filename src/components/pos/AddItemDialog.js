@@ -9,7 +9,7 @@ const calclulaImporte = (cant, prec) => {
 export default function AddItemDialog({item, isOpen, close, showMessage, add }) {
     const classes = useStyles()
     const initData = {
-        precio: 0,
+        precio: '',
         item: item,
         cantidad: '',
         empaques: '',
@@ -67,7 +67,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        // e.preventDefault()
         let newItem = {
             selected: item,
             compra: item.compraId,
@@ -159,7 +159,9 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                         <Button className={classes.botonSimplon} onClick={() => handleClose('addItemDialog')} >
                             Cancelar
                         </Button>
-                        <Button className={classes.botonGenerico} type="submit" disabled={values.cantidad > 0 ? false : true }>
+                        <Button className={classes.botonGenerico} type="submit" 
+                        // disabled={values.cantidad > 0 ? false : true }
+                        >
                             Agregar
                         </Button>
                     </DialogActions>
