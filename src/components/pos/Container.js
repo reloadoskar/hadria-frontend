@@ -72,25 +72,25 @@ function PosContainer() {
     const {
         // addIngreso, 
         addVenta, cuentasxCobrar, addPagoCxc} = useIngresos()
-    const {invUbic, invxubic} = useInventario();
+    const {invxubic} = useInventario();
     const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
     const {corte, getCorte} = useCortes()
     const {ubicacions} = useUbicacions();
 
-    const [ubicacion, setUbicacion] = useState(null)
+    const [ubicacion, setUbicacion] = useState('')
     const [invSelected, setInvSelected] = useState(null)
     const [fecha, setFecha] = useState( moment().format('YYYY-MM-DD') )
     // const [itemSelected, setItemSelected] = useState()
     const [values, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
-        if(user !== null && invxubic !== null){
+        if(invxubic !== null ){
+            // console.log(invxubic)
             invxubic.forEach(el => {
                 if(user.ubicacion._id === el._id[0]._id){
                     return handleChange('ubicacion', el)
                 }
             });
-            // setUbicacion(user.ubicacion)
         }
     },[user, invxubic])
     // const [loading] = useState(true)
@@ -229,7 +229,7 @@ function PosContainer() {
                         checkCorte={checkCorte} 
                         invUbic={invSelected}
                         handleChange={handleChange}/>
-                    {ubicacion === null ?
+                    {ubicacion === '' ?
                         null
                         :
                         <div>

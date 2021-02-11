@@ -7,10 +7,11 @@ import {
 } from '@material-ui/core';
 // import SaveIcon from '@material-ui/icons/Save';
 import CrearProducto from '../productos/CrearProducto'
+import ListaItems from './ListaItems'
 import {objectIsNull} from '../Tools'
 import useStyles from '../hooks/useStyles'
 export default function AgregarItem(props){
-    const { crearItem, showMessage, products, openP } = props 
+    const { crearItem, showMessage, products, openP, items } = props 
     const classes = useStyles();
     
     const [values, setValues] = useState({
@@ -97,7 +98,7 @@ export default function AgregarItem(props){
                             </TextField>
                         </Grid>
                         
-                        <Grid item xs={2}>
+                        <Grid item xs={6} sm={2}>
                             <TextField
                                 id="cantidad"
                                 label="Cantidad"
@@ -111,7 +112,7 @@ export default function AgregarItem(props){
                             />
                         </Grid>
                         
-                        <Grid item xs={2}>
+                        <Grid item xs={6} sm={2}>
                             <TextField
                                 id="empaques"
                                 label="Empaques"
@@ -125,7 +126,7 @@ export default function AgregarItem(props){
                             />
                         </Grid>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={6} sm={2}>
                             <TextField
                                 id="costo"
                                 label="Costo"
@@ -139,7 +140,7 @@ export default function AgregarItem(props){
                             />
                         </Grid>
                         
-                        <Grid item xs={2}>
+                        <Grid item xs={6} sm={2}>
                             <TextField
                                 id="importe"
                                 label="Importe"
@@ -159,7 +160,14 @@ export default function AgregarItem(props){
                                     Agregar
                                 </Button>
                             </Grid>
-                        </Grid>                    
+                        </Grid>   
+                        <Grid item xs={12}>
+                            { items.length === 0 ?
+                                null
+                            :
+                                <ListaItems {...props} />
+                            }
+                        </Grid>                 
                     </Grid>
                     <CrearProducto {...props} open={props.dialogP} close={props.closeP}  />
             </form>

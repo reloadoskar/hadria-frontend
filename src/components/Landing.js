@@ -67,6 +67,7 @@ const Landing = (props) => {
                                         id="email"
                                         label="Usuario"
                                         variant="outlined"
+                                        autoComplete="username"
                                         fullWidth
                                         type="email"
                                         required
@@ -80,6 +81,7 @@ const Landing = (props) => {
                                         required
                                         label="Password"
                                         variant="outlined"
+                                        autoComplete="current-password"
                                         fullWidth
                                         type="password"
                                         value={data.password}

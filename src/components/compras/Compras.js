@@ -94,10 +94,10 @@ function Compras() {
     return (
         <Container maxWidth="xl">
             <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                     <Buscador />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                     <Button className={classes.botonGenerico} fullWidth onClick={() => openDialog('comprasDialog')}>
                         <AddIcon /> Crear Compra
       		        </Button>
@@ -118,9 +118,11 @@ function Compras() {
                         add={add}
                     />
                 </Grid>
+                <Grid item xs={12}>
+                    <TablaCompras compras={compras} editCompra={editCompra} openConfirm={openConfirm}/>
+                </Grid>
             </Grid>
          
-                <TablaCompras compras={compras} editCompra={editCompra} openConfirm={openConfirm}/>
                     
                 <DetalleCompra compra={compra} open={detCompra} close={closeCompra} showMessage={showMessage} />
                 <ConfirmDialog open={confirm} cancel={cancelConfirm} ok={okConfirm} data={compra} />

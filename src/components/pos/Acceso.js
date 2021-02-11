@@ -24,7 +24,7 @@ export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, han
                     
                         <form onSubmit={(e) => handleSubmit(e)}>
                             {
-                                user.level < 9 ?
+                                user.level < 3 ?
                                     <TextField
                                         id="ubicacion"
                                         label="Selecciona una ubicación"

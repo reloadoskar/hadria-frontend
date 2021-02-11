@@ -23,8 +23,8 @@ import {
 
 import { 
     cancelVenta, 
-    existCorte, 
-    ticketVenta 
+    // existCorte, 
+    // ticketVenta 
 } from '../api'
 import {formatNumber} from '../Tools'
 const Venta = (props) => {
@@ -33,28 +33,28 @@ const Venta = (props) => {
     const venta = props.data[0]
     const showMessage = props.showMessage
 
-    const handleClick = (action, venta) => {
-        switch (action) {
-            case 'edit':
-                return showMessage('No disponoble por el momento', 'error')
-            case 'delete':
-                existCorte(venta.ubicacion._id, venta.fecha).then(res => {
-                    if (res.corte.length > 0) {
-                        showMessage('No se puede eliminar la venta, el corte de caja esta CERRADO', 'error')
-                    }
-                    else {
-                        deleteVenta(venta._id).then(res => {
-                            return showMessage(res.message, res.status)
-                        })
-                    }
-                })
-                break
-            case 'reprint':
-                return ticketVenta(venta)
-            default:
-                return null
-        }
-    }
+    // const handleClick = (action, venta) => {
+    //     switch (action) {
+    //         case 'edit':
+    //             return showMessage('No disponoble por el momento', 'error')
+    //         case 'delete':
+    //             existCorte(venta.ubicacion._id, venta.fecha).then(res => {
+    //                 if (res.corte.length > 0) {
+    //                     showMessage('No se puede eliminar la venta, el corte de caja esta CERRADO', 'error')
+    //                 }
+    //                 else {
+    //                     deleteVenta(venta._id).then(res => {
+    //                         return showMessage(res.message, res.status)
+    //                     })
+    //                 }
+    //             })
+    //             break
+    //         case 'reprint':
+    //             return ticketVenta(venta)
+    //         default:
+    //             return null
+    //     }
+    // }
 
     const deleteVenta = (id) => {
         return cancelVenta(id)

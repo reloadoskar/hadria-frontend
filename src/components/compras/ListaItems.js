@@ -1,12 +1,52 @@
-import React from 'react'
-import { Grid, Table, TableHead, TableBody, TableRow, TableCell, IconButton } from '@material-ui/core'
-import DeleteIcon from '@material-ui/icons/Delete';
-import {sumCantidad, sumEmpaques, sumImporte, formatNumber} from '../Tools'
+import React, { useState } from 'react'
+import { Grid, IconButton, Chip, Dialog, DialogContent, Typography, Divider, Avatar } from '@material-ui/core'
+import CancelIcon from '@material-ui/icons/Cancel';
+import {formatNumber} from '../Tools'
 export default function ListaItems(props) {
     const {items, eliminar} = props
+    const [ver, setVer] = useState(false)
+    const handleClick = () =>{
+        setVer(!ver)
+    }
+    const onEliminar = (i) => {
+        eliminar(i)
+        handleClick()
+    }
     return(
-        <Grid container>
-            <Grid item xs={12}>
+        <Grid container justify="center">
+            <Chip 
+                // icon={<ListAltIcon />}
+                color="primary"
+                avatar={<Avatar>{items.length}</Avatar>}
+                clickable
+                label=" Ver lista"
+                onClick={handleClick}
+            />
+            <Dialog open={ver} onClose={handleClick} maxWidth="sm" fullWidth>
+                <DialogContent>
+                    <Grid container spacing={2}>
+                        { items.map((item, i) => (
+                            <Grid container alignItems="center" justify="flex-end" key={i}>
+                                <Grid item xs={10} >
+                                    <Typography>{i+1} - {item.producto.descripcion}</Typography>
+                                    <Typography align="right">{item.empaques}/{item.cantidad} x {item.costo}</Typography>
+                                    <Divider />
+                                    <Typography align="right">{formatNumber(item.importe,2)}</Typography>
+                                </Grid>
+                                <Grid item xs>
+                                    <IconButton 
+                                        color="secondary"
+                                        onClick={() => onEliminar(i)}
+                                    >
+                                        <CancelIcon />
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </DialogContent>
+            </Dialog>
+            {/* <Grid item>
                 {
                 items.length === 0 ?
                     null
@@ -51,7 +91,7 @@ export default function ListaItems(props) {
                         </TableBody>
                     </Table>
                 }
-            </Grid>
+            </Grid> */}
         </Grid>
 
     )

@@ -50,7 +50,7 @@ const CrearGasto = (props) => {
     }
     return (
         <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
                 <TextField
                     autoFocus
                     fullWidth
@@ -71,7 +71,7 @@ const CrearGasto = (props) => {
 
                 </TextField>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
                 <TextField 
                     fullWidth
                     id="descripcion"
@@ -82,7 +82,7 @@ const CrearGasto = (props) => {
                     onChange={(e) => handleChange('descripcion', e.target.value)}
                 />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
                 <TextField 
                     fullWidth
                     id="importe"
@@ -93,7 +93,7 @@ const CrearGasto = (props) => {
                     onChange={(e) => handleChange('importe', e.target.value)}
                 />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
                 <Button 
                     fullWidth
                     disabled={ !gastoReady }

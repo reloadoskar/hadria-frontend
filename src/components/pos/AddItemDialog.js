@@ -21,20 +21,20 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
         close(dialog)
     }
 
-    const calculaEmpaques = (emp, stock, cant) => {
-        let unit = 0
-        let calc = 0
+    // const calculaEmpaques = (emp, stock, cant) => {
+    //     let unit = 0
+    //     let calc = 0
 
-        unit = parseFloat(stock) / parseFloat(emp) 
+    //     unit = parseFloat(stock) / parseFloat(emp) 
 
-        calc = parseFloat(cant) / unit
-        return calc
-    }
+    //     calc = parseFloat(cant) / unit
+    //     return calc
+    // }
 
     const handleChange = (field, value) => {
         const stock = item.item.stock
         let imp = 0
-        let emp = 0
+        // let emp = 0
         switch(field){
             case 'cantidad':
                 if(value <= 0){
@@ -46,7 +46,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                     return setValues({...values, [field]: '', empaques: '', importe: ''})
                 }
                 imp = calclulaImporte(value, values.precio)
-                emp = calculaEmpaques(item.item.empaquesStock, stock, value)
+                // emp = calculaEmpaques(item.item.empaquesStock, stock, value)
                 return setValues({ ...values, [field]: value, importe: imp})
             
             case 'precio':

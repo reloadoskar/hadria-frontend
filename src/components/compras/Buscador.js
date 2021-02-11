@@ -20,9 +20,9 @@ export default function Buscador() {
         }
     }
     return (
-        <Grid container>
+        <Grid container spacing={2}>
             
-            <Grid item xs={2}>
+            <Grid item xs={6}>
                 <TextField
                     fullWidth
                     id="field"

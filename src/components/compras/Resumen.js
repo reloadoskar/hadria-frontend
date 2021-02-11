@@ -1,8 +1,10 @@
 import React from 'react'
 import { Card, CardContent, Grid, Typography } from '@material-ui/core'
 import moment from 'moment'
+import useStyles from '../hooks/useStyles'
 export default function Resumen(props){
-    var {provedor, ubicacion, fecha, total, totalItems, totalGastos, formatNumber} = props
+    const {provedor, ubicacion, fecha, total, totalItems, totalGastos, formatNumber} = props
+    const classes = useStyles()
     return (
         <Card>
             <CardContent>
@@ -15,26 +17,25 @@ export default function Resumen(props){
                             {ubicacion.nombre}
                         </Typography>
                     </Grid>
-                    <Grid item xs={4}>                                                
-                        <Typography variant="h5">
+                    <Grid item xs={12}>                                                
+                        <Typography variant="h6">
                             {provedor.nombre}
                         </Typography>                        
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Typography align="right" className={classes.sobreTexto}>Productos</Typography>
                         <Typography variant="h5" align="right">
                             $ {formatNumber(totalItems)}
-                        </Typography>                        
-                    </Grid>
-                    <Grid item xs={4}>
-                        <Typography variant="h5" align="right">
-                            Gastos
                         </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Typography align="right" className={classes.sobreTexto}>Gastos</Typography>
                         <Typography variant="h5" align="right">
                             $ {formatNumber(totalGastos)}
                         </Typography>
                     </Grid>
-                    <Grid item xs={4}>
-                        <Typography variant="h5" align="right">
-                            Total
-                        </Typography>
+                    <Grid item xs={12} md={4}>
+                        <Typography align="right" className={classes.sobreTexto}>Total compra</Typography>
                         <Typography variant="h5" align="right">
                             $ {formatNumber(total)}
                         </Typography>

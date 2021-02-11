@@ -17,13 +17,13 @@ import useBalance from '../hooks/useBalance'
 import useCompras from '../hooks/useCompras'
 import useStyles from '../hooks/useStyles'
 import useUbicacions from '../hooks/useUbicacions'
-
+import MenuIcon from '@material-ui/icons/Menu';
 import {formatNumber} from '../Tools'
 import moment from 'moment'
 
 import { Grid, Box, 
-    // IconButton, 
-    Backdrop, Typography, CircularProgress, ButtonGroup, Button, Card, CardContent, Divider } from '@material-ui/core';
+    IconButton, 
+    Backdrop, Typography, CircularProgress, Card, CardContent, Divider, Menu, MenuItem } from '@material-ui/core';
 
 // import PaymentIcon from '@material-ui/icons/Payment';
 // import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
@@ -72,6 +72,7 @@ export default function Dashboard() {
     const [pagar, setPagar] = useState(false)
     const [crearIngreso, setCrearIngreso] = useState(false)
     const [crearEgreso, setCrearEgreso] = useState(false)
+    const [anchorEl, setAnchorEl] = useState(null);
     
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
@@ -107,6 +108,15 @@ export default function Dashboard() {
     const closeCreateEgreso = () => {
         setCrearEgreso(false)
     }
+
+    const openMenu = (e) => {
+        setAnchorEl(e.currentTarget);
+    }
+
+    const closeMenu = () => {
+        setAnchorEl(null)
+    }
+
     return (
         <div>
                 {balance === null || ubicacions === [] || compras === [] ?
@@ -121,18 +131,32 @@ export default function Dashboard() {
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Box display={user.level > 2 ? 'none' : 'inline'}>
-                            <Grid container>
-                                <Grid item xs={12} md={6}>
-                                    <Typography variant="h6">{now.format("dddd, D [de] MMMM YYYY, h:mm a")}</Typography>
+                            <Grid container spacing={2} justify="flex-end" alignItems="center">
+                                <Grid item md={11}>
+                                    <Typography variant="h6">{now.format("MMMM DD, YYYY")}</Typography>
                                 </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <ButtonGroup size="small" variant="text" className={classes.botonGenerico}>
-                                        <Button onClick={showCreateIngreso}>Ingreso</Button>
-                                        <Button onClick={showCreateEgreso}>Egreso</Button>
-                                        <Button onClick={showCobrar}>Cobrar</Button>
-                                        <Button onClick={showPagar}>Pagar</Button>
-                                        <Button>Traspasar</Button>
-                                    </ButtonGroup>
+                                <Grid item md>
+                                    <IconButton
+                                        edge="start"
+                                        color="inherit"
+                                        aria-label="menu"
+                                        onClick={openMenu}
+                                        >
+                                        <MenuIcon />
+                                    </IconButton>
+                                    <Menu
+                                        id="dashboard-menu"
+                                        anchorEl={anchorEl}
+                                        keepMounted
+                                        open={Boolean(anchorEl)}
+                                        onClose={closeMenu}
+                                    >
+                                        <MenuItem onClick={showCreateIngreso}>Ingreso</MenuItem>
+                                        <MenuItem onClick={showCreateEgreso}>Egreso</MenuItem>
+                                        <MenuItem onClick={showCobrar}>Cobrar</MenuItem>
+                                        <MenuItem onClick={showPagar}>Pagar</MenuItem>
+                                        <MenuItem onClick={closeMenu}>Traspasar</MenuItem>
+                                    </Menu>
                                 </Grid>
                             </Grid>
                         </Box>

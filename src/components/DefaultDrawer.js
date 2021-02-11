@@ -1,8 +1,7 @@
 import React, {useState} from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 
-import { IconButton, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Collapse, Tooltip } from '@material-ui/core';
+import { IconButton, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Collapse } from '@material-ui/core';
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -22,55 +21,6 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import useStyles from './hooks/useStyles'
-// const drawerWidth = 240;
-const StyledTooltip = withStyles(theme => ({
-    tooltip: {
-        background: 'linear-gradient(45deg, #23395B , #6F7A73 )',
-        fontSize: theme.typography.pxToRem(12),
-    }
-}))(Tooltip)
-// const useStyles = makeStyles(theme => ({
-
-//     drawer: {
-//         width: drawerWidth,
-//         flexShrink: 0,
-//     },
-//     drawerPaper: {
-//         width: drawerWidth,
-//     },
-//     drawerOpen: {
-//         width: drawerWidth,
-//         transition: theme.transitions.create('width', {
-//             easing: theme.transitions.easing.sharp,
-//             duration: theme.transitions.duration.enteringScreen,
-//         }),
-//     },
-//     drawerClose: {
-//         transition: theme.transitions.create('width', {
-//             easing: theme.transitions.easing.sharp,
-//             duration: theme.transitions.duration.leavingScreen,
-//         }),
-//         overflowX: 'hidden',
-//         width: theme.spacing(7) + 1,
-//         [theme.breakpoints.up('sm')]: {
-//             width: theme.spacing(9) + 1,
-//         },
-//     },
-//     toolbar: {
-//         display: 'flex',
-//         alignItems: 'center',
-//         justifyContent: 'flex-end',
-//         padding: theme.spacing(0, 1),
-//         ...theme.mixins.toolbar,
-//     },
-//     nested: {
-//         paddingLeft: theme.spacing(4),
-//     },
-
-    
-
-// }))
-
 export default function DefaultDrawer({ toggle, open, url, user }) {
     const classes = useStyles()
     const [expanded, setExpanded] = useState(false)
@@ -96,286 +46,158 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
             </div>
             <Divider />
 
+            {!user ? null :
             <List component="nav" aria-label="menú principal">
-                <NavLink exact to="/app" 
-                    className={classes.link} 
-                    activeClassName={classes.active} 
-                // activeStyle={{
-                //     fontWeight: "bold",
-                //     color: "#ffd369",                    
-                // }}
-                >
-                    {open
-                        ?
+                { user.level > 2 ? null :
+                    <NavLink exact to="/app" 
+                        className={classes.link} 
+                        activeClassName={classes.active} 
+                        >
                         <ListItem button onClick={toggle}>
                             <ListItemIcon>
                                 <DashboardIcon />
                             </ListItemIcon>
                             <ListItemText primary="Dashboard" />
                         </ListItem>
-                        :
-                        <StyledTooltip title="Dashboard" placement="right">
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <DashboardIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Dashboard" />
-                            </ListItem>
-                        </StyledTooltip>
-                    }
-                </NavLink>
-
-                {open
-                    ?
-                    <ListItem button onClick={handleCollapse}>
-                        <ListItemIcon>
-                            <FolderIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Catálogos" className={classes.link} />
-                        {expanded ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    :
-                    <StyledTooltip title="Catálogos" placement="right">
-                        <ListItem button onClick={handleCollapse}>
-                            <ListItemIcon>
-                                <FolderIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Catálogos" className={classes.link} />
-                            {expanded ? <ExpandLess /> : <ExpandMore />}
-                        </ListItem>
-                    </StyledTooltip>
-
-
+                            
+                    </NavLink>
                 }
+
+
+                <ListItem button onClick={handleCollapse}>
+                    <ListItemIcon>
+                        <FolderIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Catálogos" className={classes.link} />
+                    {expanded ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {
-                            user !== null ?
-
-                            user.level > 1 ? null :
-                                <NavLink 
+                        {user.level > 2 ? null :
+                            <NavLink 
                                 className={classes.link} 
                                 activeClassName={classes.active} 
                                 exact to={`${url}/empleados`}>
-                                    {open ?
-                                        <ListItem button onClick={toggle} className={classes.nested}>
-                                            <ListItemIcon>
-                                                <GroupIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Empleados" />
-                                        </ListItem>
-                                    :
-                                        <StyledTooltip title="Empleados" placement="right">
-                                            <ListItem button onClick={toggle} className={classes.nested}>
-                                                <ListItemIcon>
-                                                    <TocIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Empleados" />
-                                            </ListItem>
-                                        </StyledTooltip>
-                                    }
-                                </NavLink>
-                            :
-                            null
-
+                                    <ListItem button onClick={toggle} className={classes.nested}>
+                                        <ListItemIcon>
+                                            <GroupIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Empleados" />
+                                    </ListItem>                                    
+                            </NavLink>
                         }
+                        
                         <NavLink exact to={`${url}/productos`} 
                             className={classes.link} 
                             activeClassName={classes.active} 
                         >
-                            {open
-                                ?
-                                <ListItem button onClick={toggle} className={classes.nested}>
-                                    <ListItemIcon>
-                                        <TocIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Productos" />
-                                </ListItem>
-                                :
-                                <StyledTooltip title="Productos" placement="right">
-                                    <ListItem button onClick={toggle} className={classes.nested}>
-                                        <ListItemIcon>
-                                            <TocIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Productos" />
-                                    </ListItem>
-                                </StyledTooltip>
-
-                            }
+                            <ListItem button onClick={toggle} className={classes.nested}>
+                                <ListItemIcon>
+                                    <TocIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Productos" />
+                            </ListItem>
+                                
                         </NavLink>
-                        <NavLink exact to={`${url}/clientes`} 
-                            className={classes.link} 
-                            activeClassName={classes.active} 
-                        >
-                            {open
-                                ?
+                        {user.level > 2 ? null :
+                            <NavLink exact to={`${url}/clientes`} 
+                                className={classes.link} 
+                                activeClassName={classes.active} 
+                                >
                                 <ListItem button onClick={toggle} className={classes.nested}>
                                     <ListItemIcon>
                                         <AssignmentIndIcon />
                                     </ListItemIcon>
                                     <ListItemText primary="Clientes" />
                                 </ListItem>
-                                :
-                                <StyledTooltip title="Clientes" placement="right">
-                                    <ListItem button className={classes.nested}>
-                                        <ListItemIcon>
-                                            <AssignmentIndIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Clientes" />
-                                    </ListItem>
-                                </StyledTooltip>
-                            }
-                        </NavLink>
-                        <NavLink exact to={`${url}/provedores`} 
-                            className={classes.link} 
-                            activeClassName={classes.active} 
-                        >
-                            {open
-                                ?
+                                    
+                            </NavLink>
+                        }
+
+                        {user.level > 2 ? null :
+                            <NavLink exact to={`${url}/provedores`} 
+                                className={classes.link} 
+                                activeClassName={classes.active} 
+                                >
                                 <ListItem button onClick={toggle} className={classes.nested}>
                                     <ListItemIcon>
                                         <GroupIcon />
                                     </ListItemIcon>
                                     <ListItemText primary="Proveedores" />
-                                </ListItem>
-                                :
-                                <StyledTooltip title="Proveedores" placement="right">
-                                    <ListItem button className={classes.nested}>
-                                        <ListItemIcon>
-                                            <GroupIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Proveedores" />
-                                    </ListItem>
-                                </StyledTooltip>
-
-                            }
-                        </NavLink>
-                        {
-                            user !== null ?
-                            user.level > 1 ? null :
-                                <NavLink exact to={`${url}/ubicaciones`}
-                                className={classes.link} 
-                                activeClassName={classes.active} 
-                                >
-                                    {open
-                                        ?
-                                        <ListItem button onClick={toggle} className={classes.nested}>
-                                            <ListItemIcon>
-                                                <HomeWorkIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Ubicaciones" />
-                                        </ListItem>
-                                        :
-                                        <StyledTooltip title="Ubicaciones" placement="right" >
-                                            <ListItem button className={classes.nested}>
-                                                <ListItemIcon>
-                                                    <HomeWorkIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Ubicaciones" />
-                                            </ListItem>
-                                        </StyledTooltip>
-                                    }
-                                </NavLink>
-                            :
-                            null
+                                </ListItem>                                
+                            </NavLink>
                         }
+
+                        { user.level > 2 ? null :
+                            <NavLink exact to={`${url}/ubicaciones`}
+                            className={classes.link} 
+                            activeClassName={classes.active} 
+                            >
+                                <ListItem button onClick={toggle} className={classes.nested}>
+                                    <ListItemIcon>
+                                        <HomeWorkIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Ubicaciones" />
+                                </ListItem>                                    
+                            </NavLink>
+                        }
+
                         <NavLink exact to={`${url}/conceptos`}
                             className={classes.link} 
                             activeClassName={classes.active} 
-                        >
-                            {open
-                                ?
-                                <ListItem button onClick={toggle} className={classes.nested}>
-                                    <ListItemIcon>
-                                        <ForumIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Conceptos" />
-                                </ListItem>
-                                :
-                                <StyledTooltip title="Conceptos" placement="right">
-                                    <ListItem button onClick={toggle} className={classes.nested}>
-                                        <ListItemIcon>
-                                            <ForumIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Conceptos" />
-                                    </ListItem>
-                                </StyledTooltip>
-                            }
+                            >
+                            <ListItem button onClick={toggle} className={classes.nested}>
+                                <ListItemIcon>
+                                    <ForumIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Conceptos" />
+                            </ListItem>
                         </NavLink>
 
                     </List>
                 </Collapse>
-
-                <NavLink exact to={`${url}/compras`}
-                    className={classes.link} 
-                    activeClassName={classes.active} 
-                >
-                    {open
-                        ?
+                
+                {user.level > 2 ? null :
+                    <NavLink exact to={`${url}/compras`}
+                        className={classes.link} 
+                        activeClassName={classes.active} 
+                    >
                         <ListItem button onClick={toggle}>
                             <ListItemIcon>
                                 <StoreIcon />
                             </ListItemIcon>
                             <ListItemText primary="Compras" />
+                        </ListItem>                        
+                    </NavLink>
+                }
+                
+                { user.level > 2 ? null :
+                    <NavLink exact to={`${url}/produccions`} 
+                        className={classes.link} 
+                        activeClassName={classes.active} 
+                    >
+                        <ListItem button onClick={toggle}>
+                            <ListItemIcon>
+                                <BallotIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Producción" />
                         </ListItem>
-                        :
-                        <StyledTooltip title="Compras" placement="right">
-                            <ListItem button onClick={toggle}>
-                                <ListItemIcon>
-                                    <StoreIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Compras" />
-                            </ListItem>
-                        </StyledTooltip>
-
-                    }
-                </NavLink>
-                {
-                    user !== null ?
-
-                    user.level > 1 ? null :
-                        <NavLink exact to={`${url}/produccions`} 
-                            className={classes.link} 
-                            activeClassName={classes.active} 
-                        >
-
-                            <StyledTooltip title="Producción" placement="right">
-                                <ListItem button onClick={toggle}>
-                                    <ListItemIcon>
-                                        <BallotIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Producción" />
-                                </ListItem>
-                            </StyledTooltip>
-
-                        </NavLink>
-                    :
-                    null
+                    </NavLink>
                 }
 
                 <NavLink exact to={`${url}/inventario`}
                     className={classes.link} 
                     activeClassName={classes.active} 
                 >
-                    {open
-                        ?
+
                         <ListItem button onClick={toggle}>
                             <ListItemIcon>
                                 <AssignmentIcon />
                             </ListItemIcon>
                             <ListItemText primary="Inventario" />
                         </ListItem>
-                        :
-                        <StyledTooltip title="Inventario" placement="right">
-                            <ListItem button onClick={toggle}>
-                                <ListItemIcon>
-                                    <AssignmentIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Inventario" />
-                            </ListItem>
-                        </StyledTooltip>
-
-                    }
+                        
                 </NavLink>
                 <Divider />
 
@@ -383,52 +205,31 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                     className={classes.link} 
                     activeClassName={classes.active} 
                 >
-                    {open
-                        ?
+
                         <ListItem button onClick={toggle}>
                             <ListItemIcon>
                                 <StorefrontIcon />
                             </ListItemIcon>
                             <ListItemText primary="Punto De Venta" />
                         </ListItem>
-                        :
-                        <StyledTooltip title="POS" placement="right">
-                            <ListItem button onClick={toggle}>
-                                <ListItemIcon>
-                                    <StorefrontIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="POS" />
-                            </ListItem>
-                        </StyledTooltip>
-
-
-                    }
+                        
                 </NavLink>
 
-                <NavLink exact to={`${url}/ventas`} 
-                    className={classes.link} 
-                    activeClassName={classes.active} >
-                    {open
-                        ?
+                {user.level > 2 ? null :
+                    <NavLink exact to={`${url}/ventas`} 
+                        className={classes.link} 
+                        activeClassName={classes.active} 
+                    >
                         <ListItem button onClick={toggle}>
                             <ListItemIcon>
                                 <ReceiptIcon />
                             </ListItemIcon>
                             <ListItemText primary="Ventas" />
-                        </ListItem>
-                        :
-                        <StyledTooltip title="Ventas" placement="right">
-                            <ListItem button onClick={toggle}>
-                                <ListItemIcon>
-                                    <ReceiptIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Ventas" />
-                            </ListItem>
-                        </StyledTooltip>
-                    }
-                </NavLink>
+                        </ListItem>    
+                    </NavLink>
+                }
             </List>
-
+            }
         </Drawer>
     )
 }

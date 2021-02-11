@@ -8,7 +8,6 @@ import SaveIcon from '@material-ui/icons/Save';
 import useStyles from '../hooks/useStyles'
 
 import moment from 'moment'
-import Items from './Items'
 import Gastos from './Gastos'
 import DatosGenerales from './DatosGenerales';
 import Resumen from './Resumen'
@@ -16,6 +15,7 @@ import ProvedorLite from '../creators/ProvedorLite'
 import TipoCompra from '../creators/TipoCompra'
 import {formatNumber, sumImporte} from '../Tools'
 import { ticketCompra } from '../api'
+import AgregarItem from './AgregarItem';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -124,6 +124,7 @@ export default function CrearCompra(props){
     // }
 
     const clearAll = () => {
+        setActiveStep(0)
         setProvedor('')
         setTipoCompra('')
         setRemision('')
@@ -158,11 +159,7 @@ export default function CrearCompra(props){
                 )
             case 1:
                 return (
-                    <Items items={items} crearItem={crearItem} eliminar={eliminarItem} {...props}/>
-                    // <div>
-                    //     <AgregarItem addItemToList={addItemToList} showMessage={showMessage}/>
-                    //     <ListaItems items={items} clearItems={clearItems} removeItem={removeItem}/>
-                    // </div>
+                    <AgregarItem items={items} crearItem={crearItem} eliminar={eliminarItem} {...props}/>
                 );
             case 2:
                 return (
@@ -243,7 +240,7 @@ export default function CrearCompra(props){
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Stepper activeStep={activeStep}>
+                            <Stepper activeStep={activeStep} alternativeLabel >
                                 {steps.map((label) => (
                                     <Step key={label}>
                                         <StepLabel>{label}</StepLabel>
@@ -267,9 +264,9 @@ export default function CrearCompra(props){
                 </Button>
                 {activeStep === steps.length - 1 ?
                     <Button 
-                    disabled = { provedor !== '' && ubicacion !== '' && tipoCompra !== '' ? false : true }
+                    disabled = { provedor !== '' && ubicacion !== '' && tipoCompra !== '' && guardando !== true? false : true }
                     className={classes.botonCosmico} onClick={(e) => handleSubmit(e)}>
-                        Guardar Compra <SaveIcon />
+                        Guardar <SaveIcon />
                     </Button>
                 :
                     <Button 

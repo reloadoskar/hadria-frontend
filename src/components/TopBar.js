@@ -18,9 +18,9 @@ export default function TopBar(props) {
             className={clsx(classes.appBar, {[classes.appBarShift]: open, })}>
                 {user != null ?
                     <Grid container spacing={2} className={classes.center} alignItems="center">
-                        { user.level >= 3 ?
+                        {/* { user.level >= 3 ?
                             null
-                            :
+                            : */}
                             <Grid item xs={1}>
                                 <IconButton
                                     edge="start"
@@ -33,7 +33,7 @@ export default function TopBar(props) {
                                     <MenuIcon />
                                 </IconButton>
                             </Grid>
-                        }
+                        {/* } */}
                         <Grid item xs>
                             <Typography variant="h6">
                                 H A D R I A
