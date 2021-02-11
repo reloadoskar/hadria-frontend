@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, Typography, Button, TextField } from '@material-ui/core';
 import useStyles from '../hooks/useStyles';
-
+import {formatNumber} from '../Tools'
 const calclulaImporte = (cant, prec) => {
     return cant * prec
 }
@@ -95,7 +95,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Typography variant="h6" >{item.item.producto.descripcion}</Typography>
-                        <Typography variant="subtitle2" >Disponible: {item.item.stock} 
+                        <Typography variant="subtitle2" >Disponible: {formatNumber(item.item.stock,2)} 
                         {/* {item.item.producto.unidad.abr} */}
                         </Typography>                        
                     </Grid>

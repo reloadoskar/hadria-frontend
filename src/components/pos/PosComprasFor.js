@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 import { List, ListItem, Grid, } from '@material-ui/core';
-
+import {formatNumber} from '../Tools'
 const useStyles = makeStyles(theme => ({
 	root: {
 		width: '100%',
@@ -72,13 +72,13 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 											<Typography>{item.producto[0].descripcion}</Typography>
 										</Grid>
 										<Grid item xs>
-											<Typography>{item.empaquesStock}</Typography>
+											<Typography align="right">{formatNumber(item.empaquesStock,2)}</Typography>
 										</Grid>
 										<Grid item xs>
-											<Typography>{item.stock}</Typography>
+											<Typography align="right">{formatNumber(item.stock,2)}</Typography>
 										</Grid>
 										<Grid item xs>
-											<Typography>{item.empaques - item.empaquesStock}</Typography>
+											<Typography align="right">{item.empaques - item.empaquesStock}</Typography>
 										</Grid>
 									</Grid>
 								</ListItem>
