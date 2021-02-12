@@ -501,11 +501,11 @@ export const moveInventario = (move) => {
 }
 
 // VENTAS
-export const getVenta = (id) => {
+export const getVenta = (folio) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/venta', id)
+                .get(url_client + decoded.database + '/venta/'+ folio)
                 .then( res => {
                     return res.data
                 })

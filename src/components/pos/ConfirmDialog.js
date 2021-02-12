@@ -106,17 +106,15 @@ export default function ConfirmaDialog(props) {
                             }
                         })} 
                     </TextField>
-                            
-                    {/* <Typography variant="caption" children="*Los cortes se envían automaticamente a ADMINISTRACIÓN" align="center" /> */}
                 </Grid>
             </DialogContent>
             <DialogActions>
                 <Button className={classess.botonSimplon} autoFocus onClick={handleCancel} >
                     Aún No
-        </Button>
+                </Button>
                 <Button className={classess.botonGenerico} onClick={handleOk} disabled={ enviarCorteA === '' ? true : false}>
                     ¡Listo!
-        </Button>
+                </Button>
             </DialogActions>
         </Dialog>
     )

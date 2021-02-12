@@ -4,7 +4,7 @@ import { Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgre
 } from '@material-ui/core';
 // import AddIcon from '@material-ui/icons/Add';
 import useCompras from '../hooks/useCompras';
-import {sumStock, sumEmpStock} from '../Tools'
+import {sumStock, sumEmpStock, formatNumber} from '../Tools'
 import VerCompra from './VerCompra'
 import CrearCompra from '../compras/CrearCompra'
 import { useSnackbar } from 'notistack';
@@ -61,7 +61,7 @@ export default function ComprasDash(){
                                 <Grid item xs={6} md>
                                     <Typography align="right" children={compra.status} />
                                     <Typography variant="body2" align="right" children="Unidades / Empaques" />
-                                    <Typography variant="h5" align="right" children={sumStock(compra.items) + " | " + sumEmpStock(compra.items)} />
+                                    <Typography variant="h5" align="right" children={formatNumber(sumStock(compra.items),2) + " | " + formatNumber(sumEmpStock(compra.items))} />
                                 </Grid>
                             </Grid>
                             </ListItem>

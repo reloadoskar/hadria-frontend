@@ -18,17 +18,22 @@ import useCompras from '../hooks/useCompras'
 import useStyles from '../hooks/useStyles'
 import useUbicacions from '../hooks/useUbicacions'
 import MenuIcon from '@material-ui/icons/Menu';
-import {formatNumber} from '../Tools'
 import moment from 'moment'
 
-import { Grid, Box, 
+import { Grid, 
     IconButton, 
-    Backdrop, Typography, CircularProgress, Card, CardContent, Divider, Menu, MenuItem } from '@material-ui/core';
+    Backdrop, 
+    Typography, 
+    CircularProgress, 
+    Menu, 
+    MenuItem, 
+} from '@material-ui/core';
 
 // import PaymentIcon from '@material-ui/icons/Payment';
 // import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 // import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import { useSnackbar } from 'notistack';
+import Disponible from './Disponible'
 
 export default function Dashboard() {
     const {
@@ -129,121 +134,91 @@ export default function Dashboard() {
                     </Backdrop>
                     :
                 <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Box display={user.level > 2 ? 'none' : 'inline'}>
-                            <Grid container spacing={2} justify="flex-end" alignItems="center">
-                                <Grid item md={11}>
-                                    <Typography variant="h6">{now.format("MMMM DD, YYYY")}</Typography>
-                                </Grid>
-                                <Grid item md>
-                                    <IconButton
-                                        edge="start"
-                                        color="inherit"
-                                        aria-label="menu"
-                                        onClick={openMenu}
-                                        >
-                                        <MenuIcon />
-                                    </IconButton>
-                                    <Menu
-                                        id="dashboard-menu"
-                                        anchorEl={anchorEl}
-                                        keepMounted
-                                        open={Boolean(anchorEl)}
-                                        onClose={closeMenu}
-                                    >
-                                        <MenuItem onClick={showCreateIngreso}>Ingreso</MenuItem>
-                                        <MenuItem onClick={showCreateEgreso}>Egreso</MenuItem>
-                                        <MenuItem onClick={showCobrar}>Cobrar</MenuItem>
-                                        <MenuItem onClick={showPagar}>Pagar</MenuItem>
-                                        <MenuItem onClick={closeMenu}>Traspasar</MenuItem>
-                                    </Menu>
-                                </Grid>
+                    { user.level > 2 ? null :
+                        <React.Fragment>
+                            <Grid item xs={10}>
+                                <Typography variant="h6">{now.format("MMMM DD, YYYY")}</Typography>
                             </Grid>
-                        </Box>
-                        <CrearIngreso 
-                            open={crearIngreso} 
-                            close={closeCreateIngreso} 
-                            crear={addIngreso} 
-                            ubicacions={ubicacions} 
-                            mensaje={showMessage}/>
-                        <CrearEgreso 
-                            open={crearEgreso} 
-                            close={closeCreateEgreso} 
-                            crear={addEgreso} 
-                            ubicacions={ubicacions} 
-                            compras={compras} 
-                            mensaje={showMessage}
-                            disponible={balance.disponible}
-                        />
-                    </Grid>
-                
-                    <Grid item xs={12}>
-                        <Box display={user.level > 1 ? 'none' : 'inline'}>
+                            <Grid item xs>
+                                <IconButton
+                                    edge="start"
+                                    color="inherit"
+                                    aria-label="menu"
+                                    onClick={openMenu}
+                                    >
+                                    <MenuIcon />
+                                </IconButton>
+                                <Menu
+                                    id="dashboard-menu"
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClose={closeMenu}
+                                >
+                                    <MenuItem onClick={showCreateIngreso}>Ingreso</MenuItem>
+                                    <MenuItem onClick={showCreateEgreso}>Egreso</MenuItem>
+                                    <MenuItem onClick={showCobrar}>Cobrar</MenuItem>
+                                    <MenuItem onClick={showPagar}>Pagar</MenuItem>
+                                    <MenuItem onClick={closeMenu}>Traspasar</MenuItem>
+                                </Menu>
+                            </Grid>
+                        </React.Fragment>
+                    }
+
+                    { user.level > 1 ? null :
+                        <Grid item xs={12}>
                             <Balance 
                                 balance={balance} 
-                                />
-                        </Box>
-                    </Grid>
-
-                    <Grid item xs={12} md={7}>
-                        <Grid container spacing={2}>
-                            {/* <Grid item xs={12}>
-                                <UltimosMovimientos 
-                                    ingresos={ingresos}
-                                    egresos={egresos}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Produccions 
-                                    showMessage={showMessage}/>
-                            </Grid> */}
-                            <Grid item xs={12}>
-                                <ComprasDash />
-                            </Grid>
+                            />
                         </Grid>
+                    }    
+
+                    <Grid item xs={12} md={6}>                        
+                        <ComprasDash />
                     </Grid> 
 
-                        <Grid item xs={12} md={5}>
-                            <Grid container spacing={3}>
-                                <Grid item xs={12}>
-                                    <Card>
-                                        <CardContent>
-                                            <Typography variant="h5">Disponible</Typography>
-                                            {
-                                                disp.map((ub,i)=>(
-                                                    <Grid container key={i}>
-                                                        <Grid item xs>
-                                                            <Typography variant="h6">{ub.ubicacion}</Typography>
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <Typography variant="h6" align="right">{formatNumber(ub.disponible)}</Typography>
-                                                        </Grid>
-                                                    </Grid>
-                                                ))
-                                            }
-                                            <Divider />
-                                            <Typography align="right" variant="h6">{formatNumber(balance.disponible)}</Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <CuentasxCobrar cuentas={cuentasxCobrar} total={totalCxc}/>
-                                    {/* <EstadoDeCuenta cuentas={cuentasxcCliente}/> */}
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <CuentasxPagar cuentas={cuentasxPagar} total={totalCxp}/>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Disponible disp={disp}/>                    
+                    </Grid>
 
+                    <Grid item xs={12} md={6}>
+                        <CuentasxCobrar cuentas={cuentasxCobrar} total={totalCxc}/>
+                        {/* <EstadoDeCuenta cuentas={cuentasxcCliente}/> */}
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <CuentasxPagar cuentas={cuentasxPagar} total={totalCxp}/>
+                    </Grid>
+                    {/* <Grid item xs={12}>
+                        <UltimosMovimientos 
+                            ingresos={ingresos}
+                            egresos={egresos}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Produccions 
+                            showMessage={showMessage}/>
+                    </Grid> */}
+                    <CrearIngreso 
+                        open={crearIngreso} 
+                        close={closeCreateIngreso} 
+                        crear={addIngreso} 
+                        ubicacions={ubicacions} 
+                        mensaje={showMessage}/>
+                    <CrearEgreso 
+                        open={crearEgreso} 
+                        close={closeCreateEgreso} 
+                        crear={addEgreso} 
+                        ubicacions={ubicacions} 
+                        compras={compras} 
+                        mensaje={showMessage}
+                        disponible={balance.disponible}/>
                     <Cobro 
                         open={cobrar} 
                         cuentas={cuentasxCobrar}
                         ubicacions={ubicacions}
                         close={closeCobrar} 
                         showMessage={showMessage} 
-                        save={addPagoCxc}
-                        />
+                        save={addPagoCxc}/>
                     <Pagar 
                         open={pagar} 
                         cuentas={cuentasxPagar} 
@@ -251,8 +226,7 @@ export default function Dashboard() {
                         close={closePagar} 
                         disponible={balance.disponible} 
                         showMessage={showMessage} 
-                        save={addPagoCxp}
-                        />
+                        save={addPagoCxp}/>
                 </Grid>
                 }
 

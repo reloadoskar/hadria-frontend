@@ -11,24 +11,21 @@ import MomentUtils from '@date-io/moment';
 
 import { useSnackbar } from 'notistack';
 import { Grid, Container, Card, CardContent, TextField, Button, Typography, } from '@material-ui/core';
-
-import { getVenta, } from '../api'
 import ConfirmDialog from './ConfirmDialog'
 import Venta from './Venta'
-import useVentasSemana from '../hooks/useVentasSemana'
+import useVentas from './useVentas'
+import useStyles from '../hooks/useStyles';
 
 const Ventas = () => {
-    const {ventasSemana, rango, setRango} = useVentasSemana()
-    // const { auth } = props
-    // let history = useHistory();
+    const classes = useStyles()
+    const {ventasSemana, rango, setRango, verVenta, delVenta} = useVentas()
     const { enqueueSnackbar } = useSnackbar()
-    // const classes = useStyles()
-    const [loadingSomething, setLoadingSomething] = useState(false)
+    
+    const [buscando, setBuscando] = useState(false)
     const [confirm, setConfirm] = useState(false)
     const [dialog, setDialog] = useState(false)
-    const [data, setData] = useState({ 
-        folio: '', 
-        venta: false })
+    const [folio, setFolio] = useState('')
+    const [venta, setVenta] = useState()
 
     const showMessage = (text, type) => {
         enqueueSnackbar(
@@ -46,7 +43,6 @@ const Ventas = () => {
         switch (field) {
             case "f1":
                 if(value.isBefore(rango.f2)){
-                    // console.log('ok, el rango es bueno.')
                     var valor = moment(value).format("YYYY-MM-DD")
                     return setRango({ ...rango, [field]: valor })
                 }
@@ -57,27 +53,19 @@ const Ventas = () => {
                 }
                 break
             case "folio":
-
-                return setData({ ...data, [field]: value })
-
-            default:
-                return setData({ ...data, [field]: value })
+                return setFolio(value)
         }
-        // setData({ ...data, [field]: value })
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        let dataSend = {
-            folio: data.folio
-        }
-        setLoadingSomething(true)
-        getVenta(dataSend).then(res => {
+        setBuscando(true)
+        verVenta(folio).then(res => {
             if (res.status === 'success') {
-                setData({ ...data, venta: res.venta })
+                setVenta(res.venta)
                 setDialog(true)
             }
-            setLoadingSomething(false)
+            setBuscando(false)
         })
 
     }
@@ -213,18 +201,18 @@ const Ventas = () => {
                                                 label="Buscar Folio:"
                                                 variant="outlined"
                                                 type="number"
-                                                value={data.folio}
+                                                value={folio}
                                                 onChange={(e) => handleChange('folio', e.target.value)}
                                                 />
                                         </Grid>
                                         <Grid item xs={12} md={6}>
-                                            <Button fullWidth color="primary" type="submit" variant="contained" disabled={loadingSomething}>Buscar</Button>
+                                            <Button fullWidth color="primary" type="submit" variant="contained" disabled={buscando}>Buscar</Button>
                                         </Grid>
                                     </Grid>
                                 </form>
 
                                 {
-                                    loadingSomething
+                                    buscando
                                     ?
                                     <Typography children="Buscando ... " />
                                     :
@@ -232,7 +220,8 @@ const Ventas = () => {
                                         <Card>
                                             <CardContent>
                                                 <Venta 
-                                                    data={data.venta} 
+                                                    venta={venta} 
+                                                    cancel={delVenta}
                                                     showMessage={showMessage} 
                                                     open={dialog} 
                                                     close={closeDialog}
@@ -246,7 +235,7 @@ const Ventas = () => {
                     </Grid> 
                 </Grid>
             </Container>
-            <ConfirmDialog open={confirm} cancel={cancelConfirm} ok={okConfirm} data={data.venta} />
+            {/* <ConfirmDialog open={confirm} cancel={cancelConfirm} ok={okConfirm} data={venta} /> */}
         </React.Fragment>                            
 
     )

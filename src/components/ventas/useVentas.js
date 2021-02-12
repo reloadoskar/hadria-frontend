@@ -1,16 +1,24 @@
 import { useState, useEffect } from 'react';
-import { getVentasSemana } from '../api'
+import useRangoFechas from './useRangoFechas'
+import { getVentas, cancelVenta, getVenta, getVentasSemana } from '../api'
 
 const formatearFecha = (fecha) => {
-	var reversed = fecha.split('-').reverse()
-
+	let reversed = fecha.split('-').reverse()
 	return reversed[1] + "/" + reversed[0]
 }
 
-const useVentasSemana = () => {
-    
-    const [ventasSemana, setVentasSemana] = useState()
+const useVentas = () => {
+	const [ventas, setVentas] = useState([])
+	const [ventasSemana, setVentasSemana] = useState(null)
     const {rango, setRango} = useRangoFechas()
+	useEffect(() => {
+		async function loadVentas() {
+			const res = await getVentas()
+			setVentas(res.ventas);
+		}
+		loadVentas()
+	}, [])
+	
 	useEffect(() => {
 		async function loadVentas() {
             if(rango != null){
@@ -30,12 +38,30 @@ const useVentasSemana = () => {
         }
     }, [rango])
     
-    
+    const addVenta = (venta) => {
+
+    }
+
+    const delVenta = (id) => {
+		return cancelVenta(id)
+	}
+	
+	const verVenta = (folio) => {
+		return getVenta(folio).then(res => {
+			return res
+		})
+	}
+
 	return {
-        ventasSemana,
+		ventas,
+		delVenta,
+		addVenta,
+		verVenta,
+
+		ventasSemana,
         rango,
         setRango
 	}
 };
 
-export default useVentasSemana;
+export default useVentas;
