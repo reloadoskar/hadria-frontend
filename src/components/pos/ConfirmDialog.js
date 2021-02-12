@@ -8,7 +8,7 @@ import Dialog from '@material-ui/core/Dialog';
 
 import { Grid, Typography, Divider, TextField, MenuItem } from '@material-ui/core';
 import useStyles from '../hooks/useStyles';
-
+import {formatNumber} from '../Tools'
 export default function ConfirmaDialog(props) {
     const classess = useStyles()    
     const { 
@@ -43,7 +43,7 @@ export default function ConfirmaDialog(props) {
                         <Typography align="left" variant="body1">Ventas</Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography align="right" variant="body1">$ {data.tventas}</Typography>
+                        <Typography align="right" variant="body1">$ {formatNumber(data.tventas,2)}</Typography>
                     </Grid>
                 </Grid>
                 <Grid container>
@@ -51,7 +51,7 @@ export default function ConfirmaDialog(props) {
                             <Typography align="left" variant="body1">Ingresos</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography align="right" variant="body1">+$ {data.tingresos}</Typography>
+                            <Typography align="right" variant="body1">+$ {formatNumber(data.tingresos,2)}</Typography>
                         </Grid>
                 </Grid>
                 <Grid container>
@@ -59,7 +59,7 @@ export default function ConfirmaDialog(props) {
                             <Typography align="left" variant="body1">Créditos</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography align="right" variant="body1" color="secondary">-$ {data.tcreditos}</Typography>
+                            <Typography align="right" variant="body1" color="secondary">-$ {formatNumber(data.tcreditos,2)}</Typography>
                         </Grid>
                 </Grid>
                 <Grid container>
@@ -67,7 +67,7 @@ export default function ConfirmaDialog(props) {
                             <Typography align="left" variant="body1">A cuenta</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography align="right" variant="body1">+$ {data.tacuenta}</Typography>
+                            <Typography align="right" variant="body1">+$ {formatNumber(data.tacuenta,2)}</Typography>
                         </Grid>
                 </Grid>
                 <Grid container>
@@ -75,12 +75,12 @@ export default function ConfirmaDialog(props) {
                             <Typography align="left" variant="body1">Egresos</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography align="right" variant="body1" color="secondary">-$ {data.tegresos}</Typography>
+                            <Typography align="right" variant="body1" color="secondary">-$ {formatNumber(data.tegresos,2)}</Typography>
                         </Grid>
                 </Grid>
                 <Divider />
                 <Grid container justify="flex-end">
-                    <Typography align="right" variant="h6">$ {data.total}</Typography>
+                    <Typography align="right" variant="h6">$ {formatNumber(data.total,2)}</Typography>
                 </Grid>
                 <Grid container >
 
