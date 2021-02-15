@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography, TextField, Button } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, Avatar, DialogTitle, Grid, Typography, TextField, Button, Chip } from '@material-ui/core'
 export default function Pesadas(props){
     const {open, close, addPesada, clearPesadas, pesadas, classes, totalcant, totalemp} = props
     const [peso, setPeso] = useState('')
+    const [verPesadas, setVerPesadas] = useState(false)
     const handleChange = (value) =>{
         setPeso(value)
     } 
@@ -13,6 +14,10 @@ export default function Pesadas(props){
     }
     const handleClose = () => {
         close()
+    }
+
+    function handleClick(){
+        setVerPesadas(true)
     }
     return (
         <Dialog maxWidth="sm" fullWidth open={open} onClose={close}>
@@ -36,25 +41,44 @@ export default function Pesadas(props){
                                 Agregar
                             </Button>
                         </Grid>
-                        {pesadas.length > 0 ?
-                            <Grid container spacing={2}>
-                                {pesadas.map((itm, i)=>(
-                                    <Grid item xs={2} key={i}>
-                                        {itm}
-                                    </Grid>
-                                ))}
-                                <Grid item xs={12}>
-                                <Typography>Total: {totalcant} - Pesadas: {totalemp}</Typography>
-                                </Grid>
+                        {pesadas.length <= 0 ? null :
+                            <Grid item xs={12}>
+                                <Chip
+                                    color="primary"
+                                    avatar={<Avatar>{pesadas.length}</Avatar>}
+                                    clickable
+                                    label=" Ver lista"
+                                    onClick={handleClick}
+                                />
+                                <Dialog open={verPesadas} onClose={()=>setVerPesadas(false)} maxWidth="sm" fullWidth>
+                                    <DialogContent>
+                                        <Grid container spacing={2}>
+                                            {pesadas.map((itm, i) => (
+                                                <Grid item xs={2} key={i}>
+                                                    <Typography>{i+1}: {itm}</Typography>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={()=>setVerPesadas(false)}>Salir</Button>
+                                    </DialogActions>
+                                </Dialog>
                             </Grid>
-                            :
-                            null
-                        }
+                            // <Grid container spacing={2}>
+                            //     {pesadas.map((itm, i)=>(
+
+                            //     ))}
+                            //     <Grid item xs={12}>
+                            //     <Typography>Total: {totalcant} - Pesadas: {totalemp}</Typography>
+                            //     </Grid>
+                            // </Grid>
+                        }                        
                     </Grid>
             </DialogContent>
             <DialogActions>
-                <Button className={classes.botonSimplon} onClick={clearPesadas}>reset</Button>
-                <Button className={classes.botonGenerico} onClick={handleClose}>Listo</Button>
+                <Button className={classes.botonSimplon} onClick={()=>clearPesadas()}>reset</Button>
+                <Button className={classes.botonGenerico} onClick={()=>handleClose}>Listo</Button>
             </DialogActions>
                 </form>
         </Dialog>

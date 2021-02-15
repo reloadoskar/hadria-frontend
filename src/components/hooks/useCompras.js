@@ -10,7 +10,7 @@ const useCompras = () => {
 		}
 		loadCompras()
 		return () => setCompras([])
-	}, [])
+	}, [updating])
 
 	const crear = (compra) => {
 		// setUpdating(true)
@@ -22,18 +22,18 @@ const useCompras = () => {
 		})
 	}
 	
-	const eliminar = (id, index) =>{
+	const cancelar = (id) =>{
 		return cancelCompra(id).then( res => {
-			// setUpdating(!updating)
-			const n = compras
-			n.splice(index, 1)
-			setCompras(n)
+			setUpdating(!updating)
+			// const n = compras
+			// n.splice(index, 1)
+			// setCompras(n)
 			return res
 		})
 
 	}
 
-	const cerrar = (id) => {
+	const cerrarCompra = (id) => {
 		setUpdating(true)
 		return closeCompra(id).then( res => {
 			setUpdating(false)
@@ -43,9 +43,11 @@ const useCompras = () => {
 
 	return {
 		compras,
-		cerrar,
+		// crearCompra,
 		crear,
-		eliminar,
+		// cancelarCompra,
+		cancelar,
+		cerrarCompra,
 		updating
 	}
 };

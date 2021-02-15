@@ -10,14 +10,14 @@ import {
 import useStyles from '../hooks/useStyles';
 const ConfirmDialog = (props) => {
     const classes = useStyles()
-    const { open, cancel, ok, data } = props
+    const { open, close, onConfirm } = props
 
-    const handleCancel = () => {
-        cancel()
+    function handleConfirm(){
+        onConfirm()
     }
 
-    const handleOk = () => {
-        ok(data)
+    function handleClose(){
+        close()
     }
     return (
         <Dialog
@@ -26,26 +26,20 @@ const ConfirmDialog = (props) => {
             maxWidth="sm"
             fullWidth
             open={open}
+            onClose={handleClose}
             classes={{paper: classes.suspended}}                
         >
             <DialogTitle>CANCELAR</DialogTitle>
-            {
-                data === null ?
-                    null
-                    :
-                    <DialogContent dividers>
-                        <Typography variant="h6" align="center" color="secondary" children="¿CANCELAR la compra?:" />
-                        <Typography variant="h4" align="center" children={data.folio + '-' + data.clave} />
-                    </DialogContent>
-
-            }
+                <DialogContent dividers>
+                    <Typography variant="h6" align="center" children="¿CANCELAR la compra?:" />
+                </DialogContent>
             <DialogActions>
-                <Button className={classes.botonSimplon} autoFocus onClick={handleCancel}>
+                <Button className={classes.botonSimplon} autoFocus onClick={handleClose}>
                     No, espera.
-        </Button>
-                <Button className={classes.botonGenerico} variant="contained" onClick={handleOk} color="primary">
+                </Button>
+                <Button className={classes.botonGenerico} variant="contained" onClick={() => handleConfirm()}>
                     Esta bien.
-        </Button>
+                </Button>
             </DialogActions>
         </Dialog>
     )

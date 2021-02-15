@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getInventario, getInventarioBy, getInventarioUbicacion, moveInventario } from '../api'
+import useCompras from './useCompras';
 // import { sumImporte, sumStock } from '../Tools'
 const useInventario = () => {
 	const [inventario, setInventario] = useState(null)

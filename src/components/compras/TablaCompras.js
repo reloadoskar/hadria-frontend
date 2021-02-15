@@ -7,7 +7,7 @@ import {
     CardContent,
     Grid
 } from '@material-ui/core';
-
+import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
 // import {formatNumber, sumImporte, sumSaldo} from '../Tools'
@@ -28,6 +28,11 @@ export default function TablaCompras( {compras, editCompra, openConfirm }){
                             </Grid>
                             <Grid item xs={12} md={4}>
                             <Typography align="right">
+                                <IconButton
+                                    size="small"
+                                >
+                                    <CompareArrowsIcon />
+                                </IconButton>
                                 <IconButton
                                     size="small"
                                     onClick={() => editCompra(compra)}

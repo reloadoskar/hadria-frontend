@@ -20,6 +20,7 @@ import useUser from './components/hooks/useUser'
 // import Error from './components/Error'
 
 import useStyles from './components/hooks/useStyles'
+// import useCompras from './components/hooks/useCompras';
 
 export default function Router({auth}){
     let { path, url } = useRouteMatch();
@@ -27,6 +28,7 @@ export default function Router({auth}){
     const classes = useStyles()
     const {user} = useUser()
     const [open, setOpen] = useState(false)
+    // const {compras, crearCompra, cancelarCompra, cerrarCompra} = useCompras()
     useEffect(()=> {
         if (!auth.isAuthenticated()){
             auth.logout(() => {
@@ -75,7 +77,14 @@ export default function Router({auth}){
                             <Route exact path={`${path}/clientes`} component={Clientes}></Route>
                             <Route exact path={`${path}/provedores`} component={Provedores}></Route>
                             <Route exact path={`${path}/ubicaciones`} component={Ubicaciones}></Route>
-                            <Route exact path={`${path}/compras`} component={Compras}></Route>
+                            <Route exact path={`${path}/compras`}>
+                                <Compras 
+                                // compras={compras} 
+                                // crear={crearCompra} 
+                                // cancelar={cancelarCompra} 
+                                // cerrar={cerrarCompra} 
+                                />
+                            </Route>
                             <Route exact path={`${path}/conceptos`} component={ConceptosTabs}></Route>
                             <Route exact path={`${path}/inventario`} component={Inventario}></Route>
                             <Route exact path={`${path}/pos`} component={Container}></Route>
