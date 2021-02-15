@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Grid, IconButton, Chip, Dialog, DialogContent, Typography, Divider, Avatar } from '@material-ui/core'
+import { Grid, IconButton, Chip, Dialog, DialogContent, Typography, Divider, Avatar, DialogActions, Button } from '@material-ui/core'
 import CancelIcon from '@material-ui/icons/Cancel';
 import {formatNumber} from '../Tools'
 export default function ListaItems(props) {
@@ -45,6 +45,9 @@ export default function ListaItems(props) {
                         ))}
                     </Grid>
                 </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClick}>Salir</Button>
+                </DialogActions>
             </Dialog>
             {/* <Grid item>
                 {
