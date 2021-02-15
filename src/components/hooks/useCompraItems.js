@@ -9,6 +9,7 @@ const useCompraItems = () => {
 			setItems(res.items);
 		}
 		loadItems()
+		return () => setItems(null)
 	}, [updating])
 
 	const restaStock = (id, cantidad) => {

@@ -21,7 +21,7 @@ import {
 } from '../api'
 import {formatNumber} from '../Tools'
 const Venta = (props) => {
-    const {open, close, venta, cancel} = props
+    const {open, close, venta, edit, cancel} = props
     const classes = useStyles()
     const showMessage = props.showMessage
         
@@ -45,6 +45,7 @@ const Venta = (props) => {
                 { !venta ? null :
                 <Grid container spacing={2}>            
                     <Grid item xs={12}>
+                        <Typography>{venta.ubicacion.nombre}</Typography>
                         <Typography variant="h6">#{venta.folio} | {venta.cliente.nombre}</Typography>
                         <Typography>{venta.tipoPago} - {venta.fecha}</Typography>
                     </Grid>

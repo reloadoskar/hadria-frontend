@@ -1,14 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useSnackbar } from 'notistack';
 import Card from '@material-ui/core/Paper';
-import { IconButton, Typography, CardContent, Grid, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { IconButton, Typography, CardContent, Grid, Table, TableHead, TableRow, TableCell, TableBody, Dialog, DialogContent, DialogActions, Button } from '@material-ui/core';
 import {sumImporte, formatNumber } from '../Tools'
 import {ticketVentasCorte} from "../api"
-import PrintIcon from '@material-ui/icons/Print';
+import PrintIcon from '@material-ui/icons/Print'
+import CancelIcon from '@material-ui/icons/Cancel'
+import useStyles from '../hooks/useStyles';
 
-
-export default function TablaVentas({ data }) {
-	
+export default function TablaVentas(props){
+	const classes = useStyles()
+	const {data, cancelar} = props
+	const [confirm, setConfirm] = useState(false)
+	const [venta, setVenta] = useState('')
 	const { enqueueSnackbar } = useSnackbar()
 	const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 	const handleClick = (data) => {
@@ -20,6 +24,18 @@ export default function TablaVentas({ data }) {
                 showMessage("Se imprimieron las ventas", "success")
             }
         })
+	}
+	const confirmDialog = (venta) => {
+		setConfirm(true)
+		setVenta(venta)
+	}
+
+	const cancelVenta = () => {
+		cancelar(venta._id).then(res=>{
+			console.log(res)
+			setConfirm(false)
+			setVenta('')
+		})
 	}
 	return (
 
@@ -81,8 +97,15 @@ export default function TablaVentas({ data }) {
 										</Table>
 									</TableCell>
 									<TableCell>
-									<Typography align="right" variant="body2" children={"$"+formatNumber(row.importe)} />
+										<Typography align="right" variant="body2" children={"$"+formatNumber(row.importe)} />
 									</TableCell>
+									{row.tipoPago === 'CANCELADO' ? null :
+										<TableCell align="right" >
+												<IconButton onClick={() => confirmDialog(row)}>
+													<CancelIcon />
+												</IconButton>
+										</TableCell>
+									}
 								</TableRow>
 							))}
 							<TableRow>
@@ -92,6 +115,18 @@ export default function TablaVentas({ data }) {
 						</TableBody>
 					</Table>
 				</CardContent>
+
+				<Dialog
+					classes={{paper: classes.suspended}}   
+					open={confirm} onClose={()=>setConfirm(false)}>
+					<DialogContent>
+						¿De verdad deseas cancelar la venta?
+					</DialogContent>
+					<DialogActions>
+						<Button color="inherit" onClick={() => setConfirm(false)}>no</Button>
+						<Button color="inherit" onClick={()=> cancelVenta(venta)}>si</Button>
+					</DialogActions>
+				</Dialog>
 
 			</Card>
 	);

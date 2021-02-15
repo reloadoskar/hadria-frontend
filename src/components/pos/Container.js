@@ -24,6 +24,7 @@ import useIngresos from '../ingresos/useIngresos'
 import useCuentasxPagar from '../cxp/useCuentasxPagar'
 import useCortes from '../hooks/useCortes'
 import useUbicacions from '../hooks/useUbicacions'
+import useVentas from '../ventas/useVentas'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';
 import useUser from '../hooks/useUser';
@@ -68,6 +69,7 @@ const initialState = {
 
 function PosContainer() {
     const {user} = useUser()
+    const {delVenta} = useVentas()
     const { enqueueSnackbar } = useSnackbar()
     const {
         // addIngreso, 
@@ -310,7 +312,7 @@ function PosContainer() {
                                 saldoDisponible={corte.total}
                                 subFromSaldo={subFromSaldo}/>
         
-                            <CobroDialog 
+                            <CobroDialog                                 
                                 fecha={fecha}
                                 cuentas={cuentasxCobrar}
                                 cobrar={addPagoCxc}
@@ -325,7 +327,6 @@ function PosContainer() {
                                 corte.length === 0 ?
                                     null
                                     :
-                                    // console.log(corte)
                                     <CorteDialog 
                                         fecha={fecha}
                                         ubicacions={ubicacions}
@@ -335,6 +336,7 @@ function PosContainer() {
                                         isOpen={values.corteDialog}
                                         close={closeDialog}
                                         showMessage={showMessage}
+                                        delVenta={delVenta}
                                     />
                             }
                         </div>    

@@ -17,10 +17,11 @@ const useVentas = () => {
 			setVentas(res.ventas);
 		}
 		loadVentas()
+		return () => setVentas([])
 	}, [])
 	
 	useEffect(() => {
-		async function loadVentas() {
+		async function loadVxs() {
             if(rango != null){
                 const res = await getVentasSemana(rango.f1, rango.f2)
                 let nvoArray = []
@@ -31,11 +32,9 @@ const useVentas = () => {
                 
             }
 		}
-        loadVentas()
+        loadVxs()
         
-        return () => {
-            setVentasSemana(null)
-        }
+        return () => setVentasSemana(null)
     }, [rango])
     
     const addVenta = (venta) => {

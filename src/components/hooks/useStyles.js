@@ -249,7 +249,8 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: "#EC4E20"
     },
     suspended: {
-        backgroundColor: "#F28969"
+        backgroundColor: "#c70039",
+        color: "#ffffff"
     },
     colored: {
         backgroundColor: 'linear-gradient(214deg, #1aa27f, #4381e0)',

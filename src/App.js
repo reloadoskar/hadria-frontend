@@ -16,11 +16,11 @@ function App() {
 
     const [isLoading, setIsLoading] = useState(false)
 
-    const openLoading = () => {
+    const openLoading = function(){
         setIsLoading(!isLoading)
     }
 
-    const closeLoading = () => {
+    const closeLoading = function(){
         setIsLoading(false)
     }
 

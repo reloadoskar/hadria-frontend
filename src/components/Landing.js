@@ -48,6 +48,7 @@ const Landing = (props) => {
 
         }catch (err) {
             // console.log(err)
+            showMessage(err, 'err')
         }
     }
 

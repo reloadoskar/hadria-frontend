@@ -10,6 +10,7 @@ const useCuentasPorCobrar = () => {
 			setCuentas(res.cuentas);
 		}
 		loadCuentas()
+		return () => setCuentas([])
 	}, [])
 
 	return {

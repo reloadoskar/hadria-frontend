@@ -8,9 +8,7 @@ const useUnidades = () => {
 			setUnidades(res.unidads);
 		}
 		loadUnidades()
-		return () => {
-			setUnidades([])
-		}
+		return () => setUnidades([])
     }, [])
     
     const addItem = (item) => {

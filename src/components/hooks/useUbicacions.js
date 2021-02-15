@@ -14,9 +14,7 @@ const useUbicacions = () => {
 		}
 		loadData()
 
-		return () => {
-			setUbicacions([])
-		}
+		return () => setUbicacions([])
 	}, [])
 
 	function add(ubicacion) {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getVentasSemana } from '../api'
+import useRangoFechas from '../ventas/useRangoFechas';
 
 const formatearFecha = (fecha) => {
 	var reversed = fecha.split('-').reverse()

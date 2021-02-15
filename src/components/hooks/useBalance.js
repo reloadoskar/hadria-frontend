@@ -62,13 +62,13 @@ const useBalance = () => {
 	}, [ingresos])
     
     useEffect(() => {
-		async function loadCuentas() {
+		async function loadCxc() {
 			const res = await getCuentasPorCobrar()
 			if(res !== undefined){
 				setCuentasxCobrar(res.clientes);
 			}
 		}
-        loadCuentas()        
+        loadCxc()        
         return () => setCuentasxCobrar([])
     }, [updatingCuentasxc])
     
@@ -79,7 +79,8 @@ const useBalance = () => {
                 return tt += sumSaldo(c.cuentas)
             })
             setTotalCxc(tt)
-        }
+		}
+		return () => { setTotalCxc(0) }
 	},[cuentasxCobrar])
 
     const cxcCliente = (id) => {
@@ -142,6 +143,7 @@ const useBalance = () => {
 		if(egresos!==[]){
 			setTotalEgresos(sumImporte(egresos))
 		}
+		return () => setTotalEgresos(0)
     }, [egresos])
     
 	useEffect(()=>{
@@ -158,11 +160,11 @@ const useBalance = () => {
     }, [updatingEgresos, updatingIngresos])
 
 	useEffect(() => {
-		async function loadCuentas() {
+		async function loadCxp() {
 			const res = await getCuentasPorPagar()
             setCuentas(res.cuentas);
 		}
-		loadCuentas()
+		loadCxp()
 		return () => setCuentas([])
     }, [updatingEgresos])
         
@@ -225,7 +227,6 @@ const useBalance = () => {
 			})
 			setTotalInventario(tti)
 		}
-
 		return () => {
 			setTotalInventario(0)
 		}

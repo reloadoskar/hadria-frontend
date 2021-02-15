@@ -9,9 +9,7 @@ const useCompras = () => {
 			setCompras(res.compras);
 		}
 		loadCompras()
-		return () => {
-            setCompras([])
-        }
+		return () => setCompras([])
 	}, [])
 
 	const crear = (compra) => {

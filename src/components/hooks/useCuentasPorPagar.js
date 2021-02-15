@@ -10,6 +10,7 @@ const useCuentasPorPagar = () => {
 			setCuentas(res.cuentas);
 		}
 		loadCuentas()
+		return () => setCuentas([])
 	}, [])
 
 	return {

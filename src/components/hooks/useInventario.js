@@ -13,9 +13,7 @@ const useInventario = () => {
 			setInventario(res.inventario);
 		}
 		loadInventario()
-		return () => {
-			setInventario([])
-		}
+		return () => setInventario([])
 	}, [updating])
 
 	useEffect(() => {
@@ -29,18 +27,14 @@ const useInventario = () => {
 			setTotalInventario(tti)
 		}
 
-		return () => {
-			setTotalInventario(0)
-		}
+		return () => setTotalInventario(0)
 	},[inventario])
 
 	useEffect(() => {
 		getInventarioUbicacion().then(res => {
 			setInvxubic(res.inventario)
 		})
-		return () => {
-			setInvxubic(null)
-		}
+		return () => setInvxubic(null)
 	}, [])
 
 	const getInvUbic = (ubic) => {

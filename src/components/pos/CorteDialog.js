@@ -47,7 +47,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CorteDialog({isOpen, close, corte, data, showMessage, ubicacions, fecha, ubicacion}){
+export default function CorteDialog({isOpen, close, corte, data, showMessage, ubicacions, fecha, ubicacion, delVenta}){
     const classess = useStyles()
     const [values, setValues] = useState({show: false, confirm: false, table: '', data: '', tabSelected: 0})
     
@@ -148,7 +148,7 @@ export default function CorteDialog({isOpen, close, corte, data, showMessage, ub
 
                     </Tabs>
                         <TabPanel  value={values.tabSelected} index={0}>
-                            <TablaVentas data={corte.ventas}/>
+                            <TablaVentas data={corte.ventas} cancelar={delVenta}/>
                         </TabPanel>
                         <TabPanel  value={values.tabSelected} index={1}>
                             <TablaIngresos data={corte.ingresos} />

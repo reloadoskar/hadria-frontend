@@ -12,14 +12,8 @@ const useClientes = () => {
 			setClientes(res.clientes);
 		}
 		loadClientes()
+		return () => setClientes([])
 	}, [])
-	// useEffect(() => {
-	// 	async function loadClientes() {
-	// 		const res = await getClientes()
-	// 		setClientes(res.clientes);
-	// 	}
-	// 	loadClientes()
-	// }, [])
 
 	function add(cliente) {
 		saveCliente(cliente).then(res => {

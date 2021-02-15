@@ -19,9 +19,7 @@ useEffect(() => {
         venceEnDias: diasVencimientoLicencia,
     })
 
-    return () => {
-        setUser(null)
-    }
+    return () => setUser(null)
 }, [])
 
 	const addUser = (user) => {

@@ -14,7 +14,6 @@ class Auth {
             this.authenticated = false
             console.log(res.message)
         })
-        // this.authenticated = false
         cb()
     }
 

@@ -10,9 +10,7 @@ const useTipoCompras = () => {
             setTipoCompras(res.tipoCompras);
         }
 		loadData()
-		return () => {
-            setTipoCompras([])
-        }
+		return () => setTipoCompras([])
 	}, [updating])
 	
 	function addTipoCompra(tipoCompra) {
