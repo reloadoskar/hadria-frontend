@@ -17,6 +17,8 @@ import useBalance from '../hooks/useBalance'
 import useCompras from '../hooks/useCompras'
 import useStyles from '../hooks/useStyles'
 import useUbicacions from '../hooks/useUbicacions'
+import useCortes from '../hooks/useCortes'
+
 import MenuIcon from '@material-ui/icons/Menu';
 import moment from 'moment'
 
@@ -34,6 +36,7 @@ import { Grid,
 // import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import { useSnackbar } from 'notistack';
 import Disponible from './Disponible'
+import Corte from '../cortes/Corte'
 
 export default function Dashboard() {
     const {
@@ -57,6 +60,8 @@ export default function Dashboard() {
         // totalInventario,
 
     } = useBalance()
+    const {getCorte} = useCortes()
+    const [corte, setCorte] = useState(null)
     const[bckdrpOpen, setBdopen] = useState(true)
     useEffect(()=> {
         if(balance === null){
@@ -65,7 +70,12 @@ export default function Dashboard() {
             setBdopen(false)
         }
     },[balance])
-    const now = moment()
+    const [fecha, setFecha] = useState(null)
+    useEffect(() => {
+        let now = moment()
+        setFecha(now)
+        return () => setFecha(null)
+    },[])
     const { enqueueSnackbar } = useSnackbar()
     
     const {compras} = useCompras()
@@ -78,6 +88,7 @@ export default function Dashboard() {
     const [crearIngreso, setCrearIngreso] = useState(false)
     const [crearEgreso, setCrearEgreso] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null);
+    const [corteDialog, setCorteDialog] = useState(false)
     
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
@@ -122,6 +133,34 @@ export default function Dashboard() {
         setAnchorEl(null)
     }
 
+    function verCorte(ub){
+        setCorteDialog(true)
+        getCorte(ub._id, fecha.format("YYYY-MM-DD")).then(res=>{
+            setCorte(res)
+        })
+    }
+
+    function nextCorte(ub){
+        setCorte(null)
+        setFecha(fecha.add(1, 'days'))
+        getCorte(ub._id, fecha.format("YYYY-MM-DD")).then(res=>{
+            setCorte(res)
+        })
+    }
+
+    function prevCorte(ub){
+        setCorte(null)
+        setFecha(fecha.subtract(1, 'days'))
+        getCorte(ub._id, fecha.format("YYYY-MM-DD")).then(res=>{
+            setCorte(res)
+        })
+    }
+
+    function closeCorteDialog(){
+        setCorte(null)
+        setCorteDialog(false)
+    }
+
     return (
         <div>
                 {balance === null || ubicacions === [] || compras === [] ?
@@ -137,7 +176,7 @@ export default function Dashboard() {
                     { user.level > 2 ? null :
                         <React.Fragment>
                             <Grid item xs={10}>
-                                <Typography variant="h6">{now.format("MMMM DD, YYYY")}</Typography>
+                                <Typography variant="h6">{fecha.format("MMMM DD, YYYY")}</Typography>
                             </Grid>
                             <Grid item xs>
                                 <IconButton
@@ -178,7 +217,14 @@ export default function Dashboard() {
                     </Grid> 
 
                     <Grid item xs={12} md={6}>
-                        <Disponible disp={disp}/>                    
+                        <Disponible disp={disp} verCorte={verCorte}/>   
+                        <Corte 
+                            open={corteDialog}
+                            close={closeCorteDialog}
+                            corte={corte}
+                            nextCorte={nextCorte}
+                            prevCorte={prevCorte}
+                        />                 
                     </Grid>
 
                     <Grid item xs={12} md={6}>

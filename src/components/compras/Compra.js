@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
 export default function Compra(props){
-    const {compra, openConfirm, editCompra, verCompra} = props
+    const {compra, openConfirm, editCompra} = props
     return (
         <Card>
             {compra === null ? null :

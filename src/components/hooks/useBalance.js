@@ -151,7 +151,11 @@ const useBalance = () => {
 			if(res !== undefined){
 				let disp = []
 				res.forEach(el => {
-					disp.push({ubicacion: el.nombre, disponible: (sumImporte(el.ingresos) - sumImporte(el.egresos))})
+					disp.push({ 
+						_id: el._id,
+						nombre: el.nombre,
+						disponible: (sumImporte(el.ingresos) - sumImporte(el.egresos))
+					})
 				})
 				setDisp(disp)
 			}

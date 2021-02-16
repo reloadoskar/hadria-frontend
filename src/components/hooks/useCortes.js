@@ -10,8 +10,8 @@ import {sumImporte,
 const useCortes = () => {
     const [corte, setCorte] = useState([])
     
-    const getCorte = (ubicacion, fecha) =>{
-        getDataFrom(ubicacion, fecha).then(res=>{
+    function getCorte(ubicacion, fecha){
+        return getDataFrom(ubicacion, fecha).then(res=>{
             var corte = res.corte
 
             var tven = sumImporte(corte.ventas)
@@ -27,13 +27,14 @@ const useCortes = () => {
             corte.tacuenta = tacu
             corte.tegresos = tegr
             corte.total = total
-            setCorte(corte)
+            // setCorte(corte)
+            return corte
         })
     }
 
     return {
         corte,
-        getCorte
+        getCorte,
     }
 }
 

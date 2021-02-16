@@ -76,7 +76,8 @@ function PosContainer() {
         addVenta, cuentasxCobrar, addPagoCxc} = useIngresos()
     const {invxubic} = useInventario();
     const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
-    const {corte, getCorte} = useCortes()
+    const {getCorte} = useCortes()
+    const [corte, setCorte] = useState([])
     const {ubicacions} = useUbicacions();
 
     const [ubicacion, setUbicacion] = useState('')
@@ -191,7 +192,9 @@ function PosContainer() {
     }
 
     const loadBalance = () => {
-        getCorte(ubicacion._id[0]._id, fecha)
+        getCorte(ubicacion._id[0]._id, fecha).then(res=>{
+            setCorte(res)
+        })
     }
 
     const checkCorte = () => {

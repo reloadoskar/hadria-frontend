@@ -38,6 +38,12 @@ const Venta = (props) => {
             }
         })
     }
+
+    function rePrint(venta){
+        ticketVenta(venta).then(res=>{
+            showMessage(res.message, res.status)
+        })
+    }
     return (
         <Dialog open={open} onClose={close}>
             <DialogTitle>Venta</DialogTitle>
@@ -101,6 +107,7 @@ const Venta = (props) => {
                     }
             </DialogContent>
             <DialogActions>
+                <Button className={classes.botonGenerico} onClick={()=>rePrint(venta)}>imprimir</Button>
                 <Button className={classes.botonMagico} onClick={()=>onDelete(venta)}>Eliminar</Button>
                 <Button className={classes.botonGenerico} onClick={close}>salir</Button>
             </DialogActions>
