@@ -22,7 +22,6 @@ const Ventas = () => {
     const { enqueueSnackbar } = useSnackbar()
     
     const [buscando, setBuscando] = useState(false)
-    const [confirm, setConfirm] = useState(false)
     const [dialog, setDialog] = useState(false)
     const [folio, setFolio] = useState('')
     const [venta, setVenta] = useState()
@@ -54,6 +53,8 @@ const Ventas = () => {
                 break
             case "folio":
                 return setFolio(value)
+            default:
+                return null
         }
     }
 
@@ -64,31 +65,12 @@ const Ventas = () => {
             if (res.status === 'success') {
                 setVenta(res.venta)
                 setDialog(true)
+            }else{
+                showMessage(res.message, res.status)
             }
             setBuscando(false)
         })
 
-    }
-
-    // const openConfirm = () => {
-    //     // setCompra(compra)
-    //     setConfirm(true)
-    // }
-
-    const cancelConfirm = () => {
-        setConfirm(false)
-        // setCompra(null)
-    }
-
-    const okConfirm = (data) => {
-
-        // del(data._id).then(res => {
-        //     if (res.status === 'error') {
-        //     } else {
-        //         showMessage(res.message, res.status)
-        //     }
-        //     cancelConfirm()
-        // })
     }
 
     const closeDialog = () => {
@@ -101,7 +83,7 @@ const Ventas = () => {
             <Container>
 
                 <Grid container >
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                         <Card>
                             <CardContent>
                                 {
@@ -187,7 +169,7 @@ const Ventas = () => {
 
                             </CardContent>
                         </Card>
-                    </Grid>                            
+                    </Grid>                             */}
                     <Grid item xs={12}>
                         <Card>
                             <CardContent>
@@ -235,7 +217,6 @@ const Ventas = () => {
                     </Grid> 
                 </Grid>
             </Container>
-            {/* <ConfirmDialog open={confirm} cancel={cancelConfirm} ok={okConfirm} data={venta} /> */}
         </React.Fragment>                            
 
     )

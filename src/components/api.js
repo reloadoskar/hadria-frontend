@@ -642,6 +642,20 @@ export const getCuentasPorCobrar = () => {
         console.log(err)
     }
 }
+export const getCxcPdv = () => {
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + '/cuentasporcobrar/pdv')
+                .then( res => {
+                    return res.data
+                })
+
+        }
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 export const savePagoACuentaPorCobrar = (pago) =>{
     try{

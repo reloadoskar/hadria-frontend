@@ -1,7 +1,8 @@
-import React from 'react'
-// import BlockIcon from '@material-ui/icons/Block';
+import React, {useState} from 'react'
+import BlockIcon from '@material-ui/icons/Block';
+import CloseIcon from '@material-ui/icons/Close';
 // import EditIcon from '@material-ui/icons/Edit';
-// import ReceiptIcon from '@material-ui/icons/Receipt';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 import useStyles from '../hooks/useStyles'
 import { 
     Dialog,
@@ -11,7 +12,8 @@ import {
     Typography,
     Divider,
     DialogActions,
-    Button, 
+    Button,
+    IconButton, 
     // IconButton, 
 } from '@material-ui/core';
 
@@ -19,34 +21,75 @@ import {
     existCorte, 
     ticketVenta 
 } from '../api'
-import {formatNumber} from '../Tools'
+import {formatNumber, sumImporte} from '../Tools'
+import ConfirmDialog from '../compras/ConfirmDialog';
 const Venta = (props) => {
     const {open, close, venta, edit, cancel} = props
     const classes = useStyles()
     const showMessage = props.showMessage
-        
-    const onDelete = (venta) => {
-        existCorte(venta.ubicacion._id, venta.fecha).then(res => {
-            if (res.corte.length > 0) {
-                showMessage('No se puede eliminar la venta, el corte de caja esta CERRADO', 'error')
-            }
-            else {
-                cancel(venta._id).then(res => {
-                    close()
-                    return showMessage(res.message, res.status)
-                })
-            }
-        })
-    }
+    const [confirm, setConfirm] = useState(false)
 
     function rePrint(venta){
         ticketVenta(venta).then(res=>{
             showMessage(res.message, res.status)
         })
     }
+
+    function openConfirm(){
+        setConfirm(true)
+    }
+    function closeConfirm(){
+        setConfirm(false)
+    }
+    function cancelarVenta(){
+        if(venta.pagos.length > 0 ){
+            showMessage('No se puede eliminar la venta, hay PAGOS registrados.', 'error')
+        }else{
+            close()
+            showMessage("Cancelando...", "info")
+            existCorte(venta.ubicacion._id, venta.fecha).then(res => {
+                if (res.corte.length > 0) {
+                    showMessage('No se puede eliminar la venta, el corte de caja esta CERRADO', 'error')
+                }
+                else {
+                    
+                    cancel(venta._id).then(res => {
+                        if(res.status === "error"){
+                            showMessage(res.message, res.status)
+                        }
+                        else{
+                            showMessage(res.message, res.status)
+                        }
+                    })
+                }
+            })
+        }
+    }
     return (
         <Dialog open={open} onClose={close}>
-            <DialogTitle>Venta</DialogTitle>
+            <DialogTitle disableTypography>
+                <Grid container>
+                    <Grid item xs={6}>
+                        <Typography variant="h6">Venta</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography align="right">
+                            <IconButton onClick={()=>rePrint(venta)}>
+                                <ReceiptIcon />
+                            </IconButton>
+                            {venta.tipoPago === "CANCELADO" ? null :
+                                <IconButton onClick={()=>openConfirm()}>
+                                    <BlockIcon />
+                                </IconButton>
+                            }
+                            <IconButton>
+                                <CloseIcon onClick={close}/>
+                            </IconButton>
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </DialogTitle>
+
             <DialogContent>
                 { !venta ? null :
                 <Grid container spacing={2}>            
@@ -54,13 +97,7 @@ const Venta = (props) => {
                         <Typography>{venta.ubicacion.nombre}</Typography>
                         <Typography variant="h6">#{venta.folio} | {venta.cliente.nombre}</Typography>
                         <Typography>{venta.tipoPago} - {venta.fecha}</Typography>
-                    </Grid>
-                                
-                    {/* <Grid item xs={12}>
-                        <Typography align="right">SALDO:</Typography>
-                        <Typography align="right">${formatNumber(venta.saldo,2)}</Typography>
-                    </Grid> */}
-                                
+                    </Grid>                                
                     {venta.items.length === 0 ? null :
                         <Grid item xs={12}>
                             <Typography variant="h6" align="center" >Items:</Typography>
@@ -80,37 +117,43 @@ const Venta = (props) => {
                                     <Divider />
                                 </Grid>
                             ))}
-                        </Grid>
-                            
-                            
-                            }
+                            <Divider />
+                            <Typography align="right">${formatNumber(venta.importe,2)}</Typography>
+                        </Grid>                        
+                    }
 
-                            <Grid item xs={12}>
-                                <Typography align="right">${formatNumber(venta.importe,2)}</Typography>
-                            </Grid>
-
-                            {venta.pagos.length === 0 ? null :
-                                <Grid container spacing={2}>
-                                    <Typography variant="h6" align="center" children="PAGOS:" />
-                                    {
-                                        venta.pagos.map((pago, i) => (
-                                            <Grid container kay={i}>
-                                                <Grid item xs={12}>
-                                                    {pago.fecha} - {pago.ubicacion.nombre} - ${formatNumber(pago.importe,2)}
-                                                </Grid>
-                                            </Grid>
-                                        ))
-                                    }                                        
+                    {venta.pagos.length === 0 ? null :
+                        <Grid item xs={12}>
+                            <Typography variant="h6" align="center" children="Pagos:" />
+                            {venta.pagos.map((pago, i) => (
+                                <Grid container kay={i}>
+                                    <Grid item xs={4}>
+                                        <Typography>{pago.fecha}</Typography>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Typography>{pago.ubicacion.nombre}</Typography>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Typography align="right">${formatNumber(pago.importe,2)}</Typography>                                                    
+                                    </Grid>
                                 </Grid>
-                            }
+                            ))}
+                            <Divider />
+                            <Typography align="right" >{formatNumber(sumImporte(venta.pagos),2)}</Typography>                                   
                         </Grid>                   
                     }
+
+                    <Grid item xs={12}>
+                        <Typography variant="h6" align="right">Saldo</Typography>
+                        <Typography align="right">{formatNumber((venta.importe - sumImporte(venta.pagos)),2)}</Typography>
+                    </Grid>
+                </Grid>
+                }
             </DialogContent>
             <DialogActions>
-                <Button className={classes.botonGenerico} onClick={()=>rePrint(venta)}>imprimir</Button>
-                <Button className={classes.botonMagico} onClick={()=>onDelete(venta)}>Eliminar</Button>
-                <Button className={classes.botonGenerico} onClick={close}>salir</Button>
+                <Button className={classes.botonSimplon} onClick={close}>salir</Button>
             </DialogActions>
+            <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelarVenta}/>
         </Dialog>
     )
 }

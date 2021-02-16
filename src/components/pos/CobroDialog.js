@@ -25,7 +25,7 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
 
     const handleChange = (type, value) => {
         if (type === 'importe') {
-            if (value > sumSaldo(values.cuenta.cuentas)) {
+            if (value > values.cuenta.saldo) {
                 showMessage("El importe es mayor al saldo de la cuenta.", "warning")
                 setValues({ ...values, importe: '' })
                 return false
@@ -44,7 +44,7 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
         setGuardando(true)
         e.preventDefault()
         var pago = {
-            ubicacion: ubicacion,
+            ubicacion: ubicacion._id[0]._id,
             cuenta: values.cuenta,
             tipoPago: values.tipoPago,
             importe: values.importe,
@@ -106,28 +106,22 @@ export default function CobroDialog({ cuentas, ubicacion, isOpen, close, showMes
                                 label="Selecciona una Cuenta por Cobrar"
                                 value={values.cuenta}
                                 onChange={(e) => handleChange('cuenta', e.target.value)}
-                            >
-                                {cuentas.map((cliente, index) => {
-                                    let scuentas = sumSaldo(cliente.cuentas)
-                                    if(scuentas>0){
-                                        return(
-                                            <MenuItem key={index} value={cliente}>
-                                                <Grid container >
-                                                    <Grid item xs={6}>
-                                                        <Typography>{cliente.nombre}</Typography>
-                                                    </Grid>
-                                                    <Grid item xs={6}>
-                                                        <Grid container justify="flex-end">
-                                                            <Typography>${formatNumber(sumSaldo(cliente.cuentas))}</Typography>
-                                                        </Grid>
-                                                    </Grid>
-                                                </Grid>
-                                            </MenuItem>
-                                        )
-                                    }else{
-                                        return false
-                                    }
-                                })}
+                                >
+                                {cuentas.map((cta, i) => (
+                                    <MenuItem key={i} value={cta}>
+                                        <Grid container >
+                                            <Grid item xs={4}>
+                                                <Typography>{cta.venta.cliente.nombre}</Typography>
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <Typography>#{cta.venta.folio}</Typography>
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <Typography align="right">${formatNumber(cta.saldo)}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </MenuItem>
+                                ))}
                             </TextField>
                         </Grid>
 

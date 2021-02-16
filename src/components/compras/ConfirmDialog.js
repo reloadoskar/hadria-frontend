@@ -31,13 +31,13 @@ const ConfirmDialog = (props) => {
         >
             <DialogTitle>CANCELAR</DialogTitle>
                 <DialogContent dividers>
-                    <Typography variant="h6" align="center" children="¿CANCELAR la compra?:" />
+                    <Typography variant="h6" align="center" children="¿Seguro quieres CANCELAR?:" />
                 </DialogContent>
             <DialogActions>
                 <Button className={classes.botonSimplon} autoFocus onClick={handleClose}>
                     No, espera.
                 </Button>
-                <Button className={classes.botonGenerico} variant="contained" onClick={() => handleConfirm()}>
+                <Button className={classes.botonCosmico} variant="contained" onClick={() => handleConfirm()}>
                     Esta bien.
                 </Button>
             </DialogActions>

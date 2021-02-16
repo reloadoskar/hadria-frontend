@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getIngresos, saveIngreso, getCuentasPorCobrar, getCxcCliente, savePagoACuentaPorCobrar, saveVenta } from '../api'
+import { getIngresos, saveIngreso, getCuentasPorCobrar, getCxcPdv, getCxcCliente, savePagoACuentaPorCobrar, saveVenta } from '../api'
 import { sumImporte, sumSaldo } from '../Tools'
 const useIngresos = () => {
 	const [updatingIngresos, setUpdIng] = useState(false)
@@ -38,6 +38,16 @@ const useIngresos = () => {
         loadCuentas()        
         return () => setCuentasxCobrar([])
 	}, [updatingCuentasxc])
+
+	const [cxcPdv, setCxcPdv] = useState([])
+	useEffect(()=> {
+		async function loadcxcpdv(){
+			const res = await getCxcPdv()
+			setCxcPdv(res.cuentas)
+		}
+		loadcxcpdv()
+		return () => setCxcPdv([])
+	},[updatingCuentasxc])
 	
 	
 	const [totalCxc, setTotalCxc] = useState(0)
@@ -98,6 +108,7 @@ const useIngresos = () => {
 		cuentasxcCliente,
 		totalCxc,
 		cxcCliente,
+		cxcPdv,
 		addPagoCxc
 	}
 };

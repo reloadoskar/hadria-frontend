@@ -17,7 +17,7 @@ export default function IngresoBasic(props){
                         <Typography>{ingreso.fecha}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                        <Typography>{ingreso.concepto}</Typography>
+                        <Typography>{ingreso.concepto} | {ingreso.descripcion}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <Typography align="right">{ingreso.importe}</Typography>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSnackbar } from 'notistack';
-import { Dialog, AppBar, Toolbar, IconButton, Typography, Card, CardHeader, Zoom, CardContent, Avatar, Grid, LinearProgress, Menu, MenuItem, Box, Divider } from '@material-ui/core';
+import { Dialog, AppBar, Toolbar, IconButton, Typography, Card, CardHeader, Zoom, CardContent, Avatar, Grid, LinearProgress, Menu, MenuItem, Box, Divider, Backdrop, CircularProgress } from '@material-ui/core';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -36,6 +36,7 @@ export default function VerCompra({ compraId, isOpen, handleClose, cerrar }) {
     const [data, setData] = useState({ compra: null, ventas: null })
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const [bckdrp, setBckdrp] = useState(true)
     useEffect(() => {
         if (compraId) {
             getCompra(compraId).then(res => {
@@ -56,10 +57,21 @@ export default function VerCompra({ compraId, isOpen, handleClose, cerrar }) {
                     costoInventario: calcCostoInventario(res.data.compra.items),
                     porCobrar:  calcTotalPorCobrar(res.data.ventas)
                 })
+                setBckdrp(false)
             })
+        }
+        return () => {
+            setData({ compra: null, ventas: null })
+            setBckdrp(true)
         }
     }, [compraId])
 
+    // function toggleBckdrp(){
+    //     setBckdrp(!bckdrp)
+    // }
+    // function closeBkdrp(){
+    //     setBckdrp(false)
+    // }
     const closeDialog = () => {
         setData({compra: null, ventas: null})
         handleClose()
@@ -100,33 +112,38 @@ export default function VerCompra({ compraId, isOpen, handleClose, cerrar }) {
             open={isOpen}
             TransitionComponent={Transition}
             onClose={closeDialog}>
+                <AppBar className={classes.compraBar}>
+                    <Toolbar >
+                        <IconButton edge="start" color="inherit" onClick={handleClose}>
+                            <CloseOutlinedIcon />
+                        </IconButton>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={4}>
+                                <Typography variant="h6">
+                                    {data.compra === null ? null :
+                                        data.compra.tipoCompra.tipo + "#" +data.compra.folio + " | " + data.compra.clave
+                                    }
+                                </Typography>
+                            </Grid>
+                            {/* <Grid item xs={12} sm={4}>
+                                <Typography variant="h6" align="center">
+                                    {data.compra === null ? null :
+                                        data.compra.status
+                                    }
+                                </Typography>
+                            </Grid> */}
+                        </Grid>
+                    </Toolbar>
+                </AppBar>
 
             {!data.compra || !data.ventas ?
-                <LinearProgress variant="query"
-                />
+                <Backdrop className={classes.backdrop} open={bckdrp}>
+                    <CircularProgress />
+                </Backdrop>
                 :
                 <React.Fragment>
                     <Box>
-                    <AppBar className={classes.compraBar}>
-                        <Toolbar >
-                            <IconButton edge="start" onClick={handleClose}>
-                                <CloseOutlinedIcon />
-                            </IconButton>
-                            <Grid container spacing={2}>
-                                <Grid item xs={4}>
-                                    <Typography variant="h6">
-                                        {data.compra.tipoCompra.tipo}:{data.compra.folio}:{data.compra.clave}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Typography variant="h6" align="center">
-                                        {data.compra.status}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={4}></Grid>
-                            </Grid>
-                        </Toolbar>
-                    </AppBar>
+                    
                     </Box>
                     <Card>
                         <CardHeader

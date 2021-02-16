@@ -73,7 +73,7 @@ function PosContainer() {
     const { enqueueSnackbar } = useSnackbar()
     const {
         // addIngreso, 
-        addVenta, cuentasxCobrar, addPagoCxc} = useIngresos()
+        addVenta, cuentasxCobrar, cxcPdv, addPagoCxc} = useIngresos()
     const {invxubic} = useInventario();
     const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
     const {getCorte} = useCortes()
@@ -317,7 +317,7 @@ function PosContainer() {
         
                             <CobroDialog                                 
                                 fecha={fecha}
-                                cuentas={cuentasxCobrar}
+                                cuentas={cxcPdv}
                                 cobrar={addPagoCxc}
                                 ubicacion={ubicacion}
                                 isOpen={values.cobroDialog}

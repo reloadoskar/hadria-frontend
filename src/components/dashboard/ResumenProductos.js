@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Table, TableHead, TableRow, TableCell, TableBody, Card, CardHeader, CardContent } from '@material-ui/core';
 
-
+const init = {
+    tcantidad: 0,
+    tempaques: 0,
+    tcosto: 0,
+    tcostoProm: 0,
+    tcantVendido: 0,
+    tempVendido: 0,
+    tprecioProm: 0,
+    tventa: 0,
+    tcantDsip: 0,
+    tempDsip: 0,
+}
 export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, formatNumber, sumCantidad, sumEmpaques, sumStock, sumEmpStock }) {
-    const [totales, setTotales] = useState({
-        tcantidad: 0,
-        tempaques: 0,
-        tcosto: 0,
-        tcostoProm: 0,
-        tcantVendido: 0,
-        tempVendido: 0,
-        tprecioProm: 0,
-        tventa: 0,
-        tcantDsip: 0,
-        tempDsip: 0,
-    })
+    const [totales, setTotales] = useState(init)
 
     useEffect(() => {
         if(data){
@@ -41,6 +41,7 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                 tempDsip: empDisp,
             })
         }
+        return () => setTotales(init)
     }, [data, sumCantidad, sumEmpStock, sumEmpaques, sumStock])
     return (
         <Card>
@@ -68,19 +69,12 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                 return (
                                     <TableRow key={index}>
                                         <TableCell>
-                                            <Typography children={
-                                                item.provedor 
-                                                ?
-                                                    data.compra.provedor.clave !== item.provedor.clave 
-                                                    ?
-                                                        item.producto.descripcion + " (" + item.provedor.clave + ")"                                                        
-                                                    :
-                                                        item.producto.descripcion
-                                                :                                                        
-                                                    item.producto.descripcion
-                                                } 
-                                                paragraph 
-                                            />
+                                            <Typography >
+                                                {item.producto.descripcion}
+                                            </Typography>
+                                            <Typography>
+                                                {item.ubicacion.nombre}
+                                            </Typography>
                                         </TableCell>
                                         <TableCell
                                             children={
