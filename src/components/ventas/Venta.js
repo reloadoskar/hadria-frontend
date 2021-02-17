@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import BlockIcon from '@material-ui/icons/Block';
 import CloseIcon from '@material-ui/icons/Close';
 // import EditIcon from '@material-ui/icons/Edit';
@@ -28,7 +28,13 @@ const Venta = (props) => {
     const classes = useStyles()
     const showMessage = props.showMessage
     const [confirm, setConfirm] = useState(false)
-
+    const [ventaLocal, setVentaLocal] = useState(null)
+    useEffect(() => {
+        setVentaLocal(venta)
+        return ()=>{
+            setVentaLocal(null)
+        }
+    },[venta])
     function rePrint(venta){
         ticketVenta(venta).then(res=>{
             showMessage(res.message, res.status)
@@ -67,41 +73,43 @@ const Venta = (props) => {
     }
     return (
         <Dialog open={open} onClose={close}>
-            <DialogTitle disableTypography>
-                <Grid container>
-                    <Grid item xs={6}>
-                        <Typography variant="h6">Venta</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography align="right">
-                            <IconButton onClick={()=>rePrint(venta)}>
-                                <ReceiptIcon />
-                            </IconButton>
-                            {venta.tipoPago === "CANCELADO" ? null :
-                                <IconButton onClick={()=>openConfirm()}>
-                                    <BlockIcon />
+            {ventaLocal === null ? null :
+                <DialogTitle disableTypography>
+                    <Grid container>
+                        <Grid item xs={6}>
+                            <Typography variant="h6">Venta</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography align="right">
+                                <IconButton onClick={()=>rePrint(ventaLocal)}>
+                                    <ReceiptIcon />
                                 </IconButton>
-                            }
-                            <IconButton>
-                                <CloseIcon onClick={close}/>
-                            </IconButton>
-                        </Typography>
+                                {ventaLocal.tipoPago === "CANCELADO" ? null :
+                                    <IconButton onClick={()=>openConfirm()}>
+                                        <BlockIcon />
+                                    </IconButton>
+                                }
+                                <IconButton>
+                                    <CloseIcon onClick={close}/>
+                                </IconButton>
+                            </Typography>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </DialogTitle>
+                </DialogTitle>
+            }
 
             <DialogContent>
-                { !venta ? null :
+                { ventaLocal === null ? null :
                 <Grid container spacing={2}>            
                     <Grid item xs={12}>
-                        <Typography>{venta.ubicacion.nombre}</Typography>
-                        <Typography variant="h6">#{venta.folio} | {venta.cliente.nombre}</Typography>
-                        <Typography>{venta.tipoPago} - {venta.fecha}</Typography>
+                        <Typography>{ventaLocal.ubicacion.nombre}</Typography>
+                        <Typography variant="h6">#{ventaLocal.folio} | {ventaLocal.cliente.nombre}</Typography>
+                        <Typography>{ventaLocal.tipoPago} - {ventaLocal.fecha}</Typography>
                     </Grid>                                
-                    {venta.items.length === 0 ? null :
+                    {ventaLocal.items.length === 0 ? null :
                         <Grid item xs={12}>
                             <Typography variant="h6" align="center" >Items:</Typography>
-                            {venta.items.map((item, index) => (
+                            {ventaLocal.items.map((item, index) => (
                                 <Grid container key={index}>
                                     <Grid item xs={12} sm={4}>
                                         <Typography>{item.producto.descripcion}</Typography>
@@ -118,14 +126,14 @@ const Venta = (props) => {
                                 </Grid>
                             ))}
                             <Divider />
-                            <Typography align="right">${formatNumber(venta.importe,2)}</Typography>
+                            <Typography align="right">${formatNumber(ventaLocal.importe,2)}</Typography>
                         </Grid>                        
                     }
 
-                    {venta.pagos.length === 0 ? null :
+                    {ventaLocal.pagos.length === 0 ? null :
                         <Grid item xs={12}>
                             <Typography variant="h6" align="center" children="Pagos:" />
-                            {venta.pagos.map((pago, i) => (
+                            {ventaLocal.pagos.map((pago, i) => (
                                 <Grid container kay={i}>
                                     <Grid item xs={4}>
                                         <Typography>{pago.fecha}</Typography>
@@ -139,13 +147,13 @@ const Venta = (props) => {
                                 </Grid>
                             ))}
                             <Divider />
-                            <Typography align="right" >{formatNumber(sumImporte(venta.pagos),2)}</Typography>                                   
+                            <Typography align="right" >{formatNumber(sumImporte(ventaLocal.pagos),2)}</Typography>                                   
                         </Grid>                   
                     }
 
                     <Grid item xs={12}>
                         <Typography variant="h6" align="right">Saldo</Typography>
-                        <Typography align="right">{formatNumber((venta.importe - sumImporte(venta.pagos)),2)}</Typography>
+                        <Typography align="right">{formatNumber((ventaLocal.importe - sumImporte(ventaLocal.pagos)),2)}</Typography>
                     </Grid>
                 </Grid>
                 }

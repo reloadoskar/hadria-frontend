@@ -24,7 +24,7 @@ const Ventas = () => {
     const [buscando, setBuscando] = useState(false)
     const [dialog, setDialog] = useState(false)
     const [folio, setFolio] = useState('')
-    const [venta, setVenta] = useState()
+    const [venta, setVenta] = useState(null)
 
     const showMessage = (text, type) => {
         enqueueSnackbar(
