@@ -1,5 +1,5 @@
-import React from 'react'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, Typography } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, TextField, Typography } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import VentaBasic from '../ventas/VentaBasic'
@@ -9,8 +9,14 @@ import CxcBasic from '../cxc/CxcBasic'
 import { formatNumber } from '../Tools'
 
 export default function Corte(props){
-    
-    const {open, close, corte, prevCorte, nextCorte} = props
+    const {open, close, corte, fecha, onChangeFecha} = props
+    const [elcorte, setElcorte] = useState(null)
+    useEffect(()=>{
+        if(corte){
+            setElcorte(corte)
+        }
+        return ()=>setElcorte(null)
+    },[corte])
     return(
         <Dialog
             open={open}
@@ -18,76 +24,72 @@ export default function Corte(props){
             maxWidth="lg"
             fullWidth
         >
-            {corte === null ? null :
+            {elcorte === null ? null :
             <React.Fragment>
                 <DialogTitle disableTypography>
                     <Grid container >
                         <Grid item xs={4}>
-                            <Typography variant="h6">{corte.ubicacion.nombre}</Typography>
+                            <Typography variant="h6">{elcorte.ubicacion.nombre}</Typography>
                         </Grid>
                         <Grid item xs={4}>         
-                            <Typography variant="h6" align="center">
-                                <IconButton 
-                                onClick={() => prevCorte(corte.ubicacion)}
-                                >
-                                    <NavigateBeforeIcon />
-                                </IconButton>                   
-                                {corte.fecha}
-                                <IconButton 
-                                onClick={() => nextCorte(corte.ubicacion)}
-                                >
-                                    <NavigateNextIcon />
-                                </IconButton>
+                            <Typography variant="h6" align="center">               
+                                    <TextField 
+                                        id="date"
+                                        label="Fecha de Corte"
+                                        type="date"
+                                        value={fecha}
+                                        onChange={(e)=>onChangeFecha(e.target.value)}
+                                    />
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography variant="h6" align="right">Total: ${formatNumber(corte.total,2)}</Typography>
+                            <Typography variant="h6" align="right">Total: ${formatNumber(elcorte.total,2)}</Typography>
                         </Grid>
                     </Grid>
                 </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2}>
-                        {corte.ventas === [] ? null :
+                        {elcorte.ventas === [] ? null :
                             <Grid item xs={12}>
                                 <Typography variant="h6" align="right">VENTAS</Typography>
                                 
                                 <Divider />
-                                {corte.ventas.map((venta, i) => (
+                                {elcorte.ventas.map((venta, i) => (
                                         <VentaBasic venta={venta} key={i}/>
                                 ))}
                                 <Divider />
-                                <Typography align="right">${formatNumber(corte.tventas,2)}</Typography>
+                                <Typography align="right">${formatNumber(elcorte.tventas,2)}</Typography>
                             </Grid>
                         }
 
-                        {corte.ingresos === [] ? null :
+                        {elcorte.ingresos === [] ? null :
                             <Grid item xs={12}>
                                 <Typography variant="h6">Ingresos:</Typography>
-                                {corte.ingresos.map((ingreso, i) => (
+                                {elcorte.ingresos.map((ingreso, i) => (
                                         <IngresoBasic ingreso={ingreso} key={i} />
                                 ))}
                                 <Divider />
-                                <Typography align="right">${formatNumber(corte.tingresos,2)}</Typography>
+                                <Typography align="right">${formatNumber(elcorte.tingresos,2)}</Typography>
                             </Grid>
                         }
-                        {corte.egresos === [] ? null :
+                        {elcorte.egresos === [] ? null :
                             <Grid item xs={12}>
                                 <Typography variant="h6">Egresos:</Typography>
-                                {corte.egresos.map((egreso, i) => (
+                                {elcorte.egresos.map((egreso, i) => (
                                         <EgresoBasic egreso={egreso} key={i}/>
                                 ))}
                                 <Divider />
-                                <Typography align="right">${formatNumber(corte.tegresos,2)}</Typography>
+                                <Typography align="right">${formatNumber(elcorte.tegresos,2)}</Typography>
                             </Grid>
                         }
-                        {corte.creditos === [] ? null :
+                        {elcorte.creditos === [] ? null :
                             <Grid item xs={12}>
                                 <Typography variant="h6">Créditos:</Typography>
-                                {corte.creditos.map((credito, i) => (
+                                {elcorte.creditos.map((credito, i) => (
                                         <CxcBasic cxc={credito} key={i} />
                                 ))}
                                 <Divider />
-                                <Typography align="right">${formatNumber(corte.tcreditos,2)}</Typography>
+                                <Typography align="right">${formatNumber(elcorte.tcreditos,2)}</Typography>
                             </Grid>
                         }
                     </Grid>

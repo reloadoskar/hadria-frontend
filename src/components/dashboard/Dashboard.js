@@ -71,9 +71,10 @@ export default function Dashboard() {
         }
     },[balance])
     const [fecha, setFecha] = useState(null)
+    const now = moment()
     useEffect(() => {
-        let now = moment()
-        setFecha(now)
+        let hoy = moment().format("YYYY-MM-DD")
+        setFecha(hoy)
         return () => setFecha(null)
     },[])
     const { enqueueSnackbar } = useSnackbar()
@@ -135,23 +136,7 @@ export default function Dashboard() {
 
     function verCorte(ub){
         setCorteDialog(true)
-        getCorte(ub._id, fecha.format("YYYY-MM-DD")).then(res=>{
-            setCorte(res)
-        })
-    }
-
-    function nextCorte(ub){
-        setCorte(null)
-        setFecha(fecha.add(1, 'days'))
-        getCorte(ub._id, fecha.format("YYYY-MM-DD")).then(res=>{
-            setCorte(res)
-        })
-    }
-
-    function prevCorte(ub){
-        setCorte(null)
-        setFecha(fecha.subtract(1, 'days'))
-        getCorte(ub._id, fecha.format("YYYY-MM-DD")).then(res=>{
+        getCorte(ub._id, fecha).then(res=>{
             setCorte(res)
         })
     }
@@ -159,6 +144,17 @@ export default function Dashboard() {
     function closeCorteDialog(){
         setCorte(null)
         setCorteDialog(false)
+    }
+
+    function onChangeFecha(fecha){
+        setCorte(null)
+        muestrameEsteCorte(corte.ubicacion._id, fecha)
+        setFecha(fecha)
+    }
+
+    async function muestrameEsteCorte(ubicacion, fecha){
+        const res = await getCorte(ubicacion, fecha)
+        setCorte(res)
     }
 
     return (
@@ -176,7 +172,7 @@ export default function Dashboard() {
                     { user.level > 2 ? null :
                         <React.Fragment>
                             <Grid item xs={10}>
-                                <Typography variant="h6">{fecha.format("MMMM DD, YYYY")}</Typography>
+                                <Typography variant="h6">{now.format("MMMM DD, YYYY")}</Typography>
                             </Grid>
                             <Grid item xs>
                                 <IconButton
@@ -219,11 +215,11 @@ export default function Dashboard() {
                     <Grid item xs={12} md={6}>
                         <Disponible disp={disp} verCorte={verCorte}/>   
                         <Corte 
+                            fecha={fecha}
                             open={corteDialog}
                             close={closeCorteDialog}
                             corte={corte}
-                            nextCorte={nextCorte}
-                            prevCorte={prevCorte}
+                            onChangeFecha={onChangeFecha}
                         />                 
                     </Grid>
 
