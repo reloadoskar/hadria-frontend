@@ -85,7 +85,7 @@ export default function PosDialog({
                         <Button 
                             size="large"
                             fullWidth
-                            disabled={values.total > 0 ? false : true}
+                            disabled={values.itemsToSave.length > 0 ? false : true}
                             className={ values.total === 0 ? classes.botonGenerico : classes.botonCosmico}
                             onClick={() => openDialog('cobrarDialog')}
                             variant="contained"
