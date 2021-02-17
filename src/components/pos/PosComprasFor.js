@@ -61,7 +61,7 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 						 </Grid>
 					 </Grid>
 					{inventario.map( (item, i) =>   {
-						if(item.stock > 0){
+						if(item.stock > 0 ){
 							return(
 					 			<ListItem button key={i} onClick={()=> iWantThisItem(item, i, item.compra[0]._id)}>
 									<Grid container spacing={2}>

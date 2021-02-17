@@ -3,8 +3,9 @@ import { useSnackbar } from 'notistack';
 import Card from '@material-ui/core/Paper';
 import { IconButton, Typography, CardContent, Grid, Table, TableHead, TableRow, TableCell, TableBody, Dialog, DialogContent, DialogActions, Button } from '@material-ui/core';
 import {sumImporte, formatNumber } from '../Tools'
-import {ticketVentasCorte} from "../api"
+import {ticketVentasCorte, ticketVenta } from "../api"
 import PrintIcon from '@material-ui/icons/Print'
+import ReceiptIcon from '@material-ui/icons/Receipt';
 import CancelIcon from '@material-ui/icons/Cancel'
 import useStyles from '../hooks/useStyles';
 
@@ -35,6 +36,17 @@ export default function TablaVentas(props){
 			console.log(res)
 			setConfirm(false)
 			setVenta('')
+		})
+	}
+
+	function printTicket(venta){
+		ticketVenta(venta).then(res=>{
+			if(res.status === 'warning'){
+                showMessage(res.message, res.status)
+            }
+            else{
+                showMessage("Se imprimió la venta.", "success")
+            }
 		})
 	}
 	return (
@@ -99,13 +111,16 @@ export default function TablaVentas(props){
 									<TableCell>
 										<Typography align="right" variant="body2" children={"$"+formatNumber(row.importe)} />
 									</TableCell>
-									{row.tipoPago === 'CANCELADO' ? null :
+										{row.tipoPago === 'CANCELADO' ? null :
 										<TableCell align="right" >
-												<IconButton onClick={() => confirmDialog(row)}>
-													<CancelIcon />
-												</IconButton>
+											<IconButton onClick={() => confirmDialog(row)}>
+												<CancelIcon />
+											</IconButton>
+											<IconButton onClick={() => printTicket(row)}>
+												<ReceiptIcon />
+											</IconButton>
 										</TableCell>
-									}
+										}
 								</TableRow>
 							))}
 							<TableRow>
