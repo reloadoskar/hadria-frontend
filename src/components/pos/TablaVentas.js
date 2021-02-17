@@ -8,9 +8,10 @@ import PrintIcon from '@material-ui/icons/Print'
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import CancelIcon from '@material-ui/icons/Cancel'
 import useStyles from '../hooks/useStyles';
-
+import useUser from '../hooks/useUser'
 export default function TablaVentas(props){
 	const classes = useStyles()
+	const {user} = useUser()
 	const {data, cancelar} = props
 	const [confirm, setConfirm] = useState(false)
 	const [venta, setVenta] = useState('')
@@ -113,9 +114,11 @@ export default function TablaVentas(props){
 									</TableCell>
 										{row.tipoPago === 'CANCELADO' ? null :
 										<TableCell align="right" >
-											<IconButton onClick={() => confirmDialog(row)}>
-												<CancelIcon />
-											</IconButton>
+											{user.level>1 ? null :
+												<IconButton onClick={() => confirmDialog(row)}>
+													<CancelIcon />
+												</IconButton>
+											}
 											<IconButton onClick={() => printTicket(row)}>
 												<ReceiptIcon />
 											</IconButton>
