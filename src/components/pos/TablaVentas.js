@@ -1,16 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { useSnackbar } from 'notistack';
 import Card from '@material-ui/core/Paper';
-import { IconButton, Typography, CardContent, Grid, Table, TableHead, TableRow, TableCell, TableBody, Dialog, DialogContent, DialogActions, Button } from '@material-ui/core';
+import { IconButton, Typography, CardContent, Grid, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import {sumImporte, formatNumber } from '../Tools'
 import {ticketVentasCorte, ticketVenta } from "../api"
 import PrintIcon from '@material-ui/icons/Print'
 import ReceiptIcon from '@material-ui/icons/Receipt';
-import useStyles from '../hooks/useStyles';
+// import useStyles from '../hooks/useStyles';
 export default function TablaVentas(props){
-	const classes = useStyles()
 	const {data} = props
-	const [confirm, setConfirm] = useState(false)
 	const { enqueueSnackbar } = useSnackbar()
 	const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 	const handleClick = (data) => {
