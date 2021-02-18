@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ConfirmDialog from './ConfirmDialog'
 import {saveCorte} from '../api'
 
-import { Dialog, Slide, DialogTitle, DialogContent, Grid, Typography, DialogActions, Button, Tabs, Tab } from '@material-ui/core'
+import { Dialog, Slide, DialogTitle, DialogContent, Backdrop, Grid, Typography, DialogActions, Button, Tabs, Tab, CircularProgress } from '@material-ui/core'
 
 import {
     // sumImporte, 
@@ -47,14 +47,21 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CorteDialog({isOpen, close, corte, data, showMessage, ubicacions, fecha, ubicacion, delVenta}){
-    const classess = useStyles()
+export default function CorteDialog({isOpen, close, corteData, data, showMessage, ubicacions, fecha, ubicacion, delVenta}){
+    const classes = useStyles()
     const [values, setValues] = useState({show: false, confirm: false, table: '', data: '', tabSelected: 0})
-    
+    const [corte, setCorte] = useState(null)
+    useEffect(()=>{
+        if(corteData){
+            setCorte(corteData)
+        }
+        return () => setCorte(null)
+    }, [corteData])
     const handleClose = (dialog) => {
         if(dialog === 'confirm'){
             setValues({...values, confirm: false})
         }
+        setCorte(null)
         close(dialog)
     }
 
@@ -76,6 +83,10 @@ export default function CorteDialog({isOpen, close, corte, data, showMessage, ub
     const handleChange = (event, newValue) => {
         setValues({...values, tabSelected: newValue});
     }
+
+    function closeConfirm(){
+        setValues({...values, confirm: false})
+    }
     
     return (
         <div>
@@ -84,26 +95,34 @@ export default function CorteDialog({isOpen, close, corte, data, showMessage, ub
             open={isOpen} 
             onClose={() => handleClose('corteDialog')} 
             TransitionComponent={Transition}
-        >
-            <DialogTitle>
-                <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <Typography variant="h6" >{ubicacion._id[0].nombre} </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Grid container justify="flex-end">
-                            <Typography variant="h6" >{data.fecha}</Typography>
+            >
+            {corte === null ? 
+                <Backdrop className={classes.backdrop} open={true}>
+                    <Grid container alignItems="center" direction="column">
+                        <Grid item>
+                            <CircularProgress color="inherit"/>
+                        </Grid>
+                        <Grid item>
+                            <Typography>Cargando...</Typography>
                         </Grid>
                     </Grid>
-                </Grid>
-            </DialogTitle>
-            <DialogContent>
-                { corte === [] ?
-                    <Typography align="center" variant="h3" children="No se encontraron datos." />
-                    :
-                    <div>
-
-                    <Tabs
+                </Backdrop>
+            :
+                <div>
+                <DialogTitle>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <Typography variant="h6" >{ubicacion._id[0].nombre} </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Grid container justify="flex-end">
+                                <Typography variant="h6" >{data.fecha}</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </DialogTitle>
+                <DialogContent>
+                <Tabs
                         value={values.tabSelected}
                         onChange={handleChange}
                         centered
@@ -147,42 +166,39 @@ export default function CorteDialog({isOpen, close, corte, data, showMessage, ub
                         } {...a11yProps(4)}></Tab>
 
                     </Tabs>
-                        <TabPanel  value={values.tabSelected} index={0}>
-                            <TablaVentas data={corte.ventas} cancelar={delVenta}/>
-                        </TabPanel>
-                        <TabPanel  value={values.tabSelected} index={1}>
-                            <TablaIngresos data={corte.ingresos} />
-                        </TabPanel>
-                        <TabPanel  value={values.tabSelected} index={2}>
-                            <TablaCreditos data={corte.creditos} />
-                        </TabPanel>
-                        <TabPanel  value={values.tabSelected} index={3}>
-                            <TablaEgresos data={corte.egresos} />
-                        </TabPanel>
-                    
+                    <TabPanel  value={values.tabSelected} index={0}>
+                        <TablaVentas data={corte.ventas} cancelar={delVenta}/>
+                    </TabPanel>
+                    <TabPanel  value={values.tabSelected} index={1}>
+                        <TablaIngresos data={corte.ingresos} />
+                    </TabPanel>
+                    <TabPanel  value={values.tabSelected} index={2}>
+                        <TablaCreditos data={corte.creditos} />
+                    </TabPanel>
+                    <TabPanel  value={values.tabSelected} index={3}>
+                        <TablaEgresos data={corte.egresos} />
+                    </TabPanel>
+                </DialogContent>
+                <DialogActions>
+                    <Button className={classes.botonSimplon} onClick={() => handleClose('corteDialog')} >
+                        Salir
+                    </Button>
+                    <Button className={classes.botonGenerico} type="button" onClick={() => confirm()} >
+                        Cerrar corte
+                    </Button>
+                </DialogActions>
+                <ConfirmDialog 
+                    ubicacions={ubicacions}
+                    id="confirma cierre de corte"
+                    keepMounted
+                    open={values.confirm}
+                    onClose={closeConfirm}
+                    data={corte}
+                    cierraCorte={cierraCorte}
+                />
                 </div>
-                
             }
-
-            </DialogContent>
-            <DialogActions>
-                <Button className={classess.botonSimplon} onClick={() => handleClose('corteDialog')} >
-                    Salir
-                </Button>
-                <Button className={classess.botonGenerico} type="button" onClick={() => confirm()} >
-                    Cerrar corte
-                </Button>
-            </DialogActions>
         </Dialog>
-        <ConfirmDialog 
-            ubicacions={ubicacions}
-            id="confirma cierre de corte"
-            keepMounted
-            open={values.confirm}
-            onClose={handleClose}
-            data={corte}
-            cierraCorte={cierraCorte}
-        />
         </div>
     )
 }

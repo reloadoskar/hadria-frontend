@@ -15,7 +15,7 @@ import CorteDialog from './CorteDialog'
 import RetiroDialog from './RetiroDialog'
 // import Loading from '../Loading'
 
-import { Container, } from '@material-ui/core'
+import { Backdrop, CircularProgress, Container, Typography, } from '@material-ui/core'
 
 import reducer from './PosReducer'
 
@@ -28,6 +28,7 @@ import useVentas from '../ventas/useVentas'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';
 import useUser from '../hooks/useUser';
+import useStyles from '../hooks/useStyles';
 const initialState = {
     saldoEnUbicacion: 0, 
     // POS DIALOG
@@ -69,6 +70,7 @@ const initialState = {
 
 function PosContainer() {
     const {user} = useUser()
+    const classes = useStyles()
     const {delVenta} = useVentas()
     const { enqueueSnackbar } = useSnackbar()
     const {
@@ -77,7 +79,7 @@ function PosContainer() {
     const {invxubic} = useInventario();
     const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
     const {getCorte} = useCortes()
-    const [corte, setCorte] = useState([])
+    const [corte, setCorte] = useState(null)
     const {ubicacions} = useUbicacions();
 
     const [ubicacion, setUbicacion] = useState('')
@@ -170,7 +172,7 @@ function PosContainer() {
             var f = moment(value).format('YYYY-MM-DD')
             return setFecha(f)
         }
-        dispatch({type: type, value: value}) 
+        // dispatch({type: type, value: value}) 
     }
 
     const startPos = () =>{
@@ -222,7 +224,6 @@ function PosContainer() {
 
     return (
         <Container>
-
             {
                 user !== null  ?
                 <div>
@@ -234,7 +235,7 @@ function PosContainer() {
                         checkCorte={checkCorte} 
                         invUbic={invSelected}
                         handleChange={handleChange}/>
-                    {ubicacion === '' ?
+                    {ubicacion === '' || corte === null ?
                         null
                         :
                         <div>
@@ -326,21 +327,18 @@ function PosContainer() {
                                 showMessage={showMessage}
                                 addToSaldo={addToSaldo}
                             />
-                            {
-                                corte.length === 0 ?
-                                    null
-                                    :
-                                    <CorteDialog 
-                                        fecha={fecha}
-                                        ubicacions={ubicacions}
-                                        ubicacion={ubicacion}
-                                        data={values}
-                                        corte={corte}
-                                        isOpen={values.corteDialog}
-                                        close={closeDialog}
-                                        showMessage={showMessage}
-                                        delVenta={delVenta}
-                                    />
+                            {corte === [] ? null : 
+                                <CorteDialog 
+                                    fecha={fecha}
+                                    ubicacions={ubicacions}
+                                    ubicacion={ubicacion}
+                                    data={values}
+                                    corteData={corte}
+                                    isOpen={values.corteDialog}
+                                    close={closeDialog}
+                                    showMessage={showMessage}
+                                    delVenta={delVenta}
+                                />
                             }
                         </div>    
                     }

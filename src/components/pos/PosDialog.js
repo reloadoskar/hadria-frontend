@@ -5,7 +5,7 @@ import PosMenu from './PosMenu'
 import PosComprasFor from './PosComprasFor'
 import PosListaDeVenta from './PosListaDeVenta'
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import { Typography, IconButton, Dialog, Slide, Toolbar, Grid, Button, DialogContent, DialogActions } from '@material-ui/core';
+import { Typography, IconButton, Dialog, Slide, Toolbar, Grid, Button, DialogContent, DialogActions, CircularProgress } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import {formatNumber} from '../Tools'
 import useStyles from '../hooks/useStyles'
@@ -51,7 +51,7 @@ export default function PosDialog({
             open={isOpen} 
             onEnter={resetVenta}
             onClose={() => closeDialog('posDialog')} 
-            TransitionComponent={Transition}>
+            TransitionComponent={Transition}>            
             <Toolbar>
                 <IconButton edge="start" color="inherit" onClick={ (e) => handleClick('menuDialog', e) } aria-label="close">
                     <MenuIcon />

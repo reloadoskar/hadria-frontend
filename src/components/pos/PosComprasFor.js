@@ -56,9 +56,6 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 						 <Grid item xs>
 						 	<Typography>Cantidad</Typography>
 						 </Grid>
-						 <Grid item xs>
-						 	<Typography>Emp. Vacíos</Typography>
-						 </Grid>
 					 </Grid>
 					{inventario.map( (item, i) =>   {
 						if(item.stock > 0 ){
@@ -76,9 +73,6 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 										</Grid>
 										<Grid item xs>
 											<Typography align="right">{formatNumber(item.stock,2)}</Typography>
-										</Grid>
-										<Grid item xs>
-											<Typography align="right">{item.empaques - item.empaquesStock}</Typography>
 										</Grid>
 									</Grid>
 								</ListItem>

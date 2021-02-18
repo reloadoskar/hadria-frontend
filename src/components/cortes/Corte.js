@@ -28,10 +28,10 @@ export default function Corte(props){
             <React.Fragment>
                 <DialogTitle disableTypography>
                     <Grid container >
-                        <Grid item xs={4}>
+                        <Grid item xs={12} sm={4}>
                             <Typography variant="h6">{elcorte.ubicacion.nombre}</Typography>
                         </Grid>
-                        <Grid item xs={4}>         
+                        <Grid item xs={12} sm={4}>         
                             <Typography variant="h6" align="center">               
                                     <TextField 
                                         id="date"
@@ -42,7 +42,7 @@ export default function Corte(props){
                                     />
                             </Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} sm={4}>
                             <Typography variant="h6" align="right">Total: ${formatNumber(elcorte.total,2)}</Typography>
                         </Grid>
                     </Grid>

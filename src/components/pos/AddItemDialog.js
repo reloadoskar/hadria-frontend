@@ -21,18 +21,9 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
         close(dialog)
     }
 
-    // const calculaEmpaques = (emp, stock, cant) => {
-    //     let unit = 0
-    //     let calc = 0
-
-    //     unit = parseFloat(stock) / parseFloat(emp) 
-
-    //     calc = parseFloat(cant) / unit
-    //     return calc
-    // }
-
     const handleChange = (field, value) => {
-        const stock = item.item.stock
+        let stock = item.item.stock
+        let empStock = item.item.empaquesStock
         let imp = 0
         // let emp = 0
         switch(field){
@@ -41,14 +32,23 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                     return setValues({...values, [field]: ''})
                 }
                 if(value > stock){
-                    var message = "Solo hay " +stock + " disponibles."
+                    let message = "Solo hay " +stock + " disponibles."
                     showMessage(message, 'warning' )
                     return setValues({...values, [field]: '', empaques: '', importe: ''})
                 }
                 imp = calclulaImporte(value, values.precio)
                 // emp = calculaEmpaques(item.item.empaquesStock, stock, value)
                 return setValues({ ...values, [field]: value, importe: imp})
-            
+            case 'empaques':
+                if(value <= 0){
+                    return setValues({...values, [field]: ''})                    
+                }
+                if(value > empStock){
+                    let message = "Solo hay " +empStock + " disponibles."
+                    showMessage(message, 'warning' )
+                    return setValues({...values, [field]: '', empaques: '', importe: ''})
+                }
+                return setValues({...values, [field]: value})
             case 'precio':
                 imp = calclulaImporte(values.cantidad, value)
                 return setValues({ ...values, [field]: value, importe: imp })
@@ -95,7 +95,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Typography variant="h6" >{item.item.producto.descripcion}</Typography>
-                        <Typography variant="subtitle2" >Disponible: {formatNumber(item.item.stock,2)} 
+    <Typography variant="subtitle2" >Disponible: {formatNumber(item.item.empaquesStock)}/{formatNumber(item.item.stock,2)} 
                         {/* {item.item.producto.unidad.abr} */}
                         </Typography>                        
                     </Grid>

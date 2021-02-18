@@ -6,15 +6,11 @@ import {sumImporte, formatNumber } from '../Tools'
 import {ticketVentasCorte, ticketVenta } from "../api"
 import PrintIcon from '@material-ui/icons/Print'
 import ReceiptIcon from '@material-ui/icons/Receipt';
-import CancelIcon from '@material-ui/icons/Cancel'
 import useStyles from '../hooks/useStyles';
-import useUser from '../hooks/useUser'
 export default function TablaVentas(props){
 	const classes = useStyles()
-	const {user} = useUser()
-	const {data, cancelar} = props
+	const {data} = props
 	const [confirm, setConfirm] = useState(false)
-	const [venta, setVenta] = useState('')
 	const { enqueueSnackbar } = useSnackbar()
 	const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 	const handleClick = (data) => {
@@ -26,18 +22,6 @@ export default function TablaVentas(props){
                 showMessage("Se imprimieron las ventas", "success")
             }
         })
-	}
-	const confirmDialog = (venta) => {
-		setConfirm(true)
-		setVenta(venta)
-	}
-
-	const cancelVenta = () => {
-		cancelar(venta._id).then(res=>{
-			console.log(res)
-			setConfirm(false)
-			setVenta('')
-		})
 	}
 
 	function printTicket(venta){
@@ -114,11 +98,6 @@ export default function TablaVentas(props){
 									</TableCell>
 										{row.tipoPago === 'CANCELADO' ? null :
 										<TableCell align="right" >
-											{user.level>1 ? null :
-												<IconButton onClick={() => confirmDialog(row)}>
-													<CancelIcon />
-												</IconButton>
-											}
 											<IconButton onClick={() => printTicket(row)}>
 												<ReceiptIcon />
 											</IconButton>
@@ -133,18 +112,6 @@ export default function TablaVentas(props){
 						</TableBody>
 					</Table>
 				</CardContent>
-
-				<Dialog
-					classes={{paper: classes.suspended}}   
-					open={confirm} onClose={()=>setConfirm(false)}>
-					<DialogContent>
-						¿De verdad deseas cancelar la venta?
-					</DialogContent>
-					<DialogActions>
-						<Button color="inherit" onClick={() => setConfirm(false)}>no</Button>
-						<Button color="inherit" onClick={()=> cancelVenta(venta)}>si</Button>
-					</DialogActions>
-				</Dialog>
 
 			</Card>
 	);
