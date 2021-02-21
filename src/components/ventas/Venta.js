@@ -24,7 +24,7 @@ import {
 import {formatNumber, sumImporte} from '../Tools'
 import ConfirmDialog from '../compras/ConfirmDialog';
 const Venta = (props) => {
-    const {open, close, venta, edit, cancel} = props
+    const {open, close, venta, cancel} = props
     const classes = useStyles()
     const showMessage = props.showMessage
     const [confirm, setConfirm] = useState(false)
@@ -89,8 +89,8 @@ const Venta = (props) => {
                                         <BlockIcon />
                                     </IconButton>
                                 }
-                                <IconButton>
-                                    <CloseIcon onClick={close}/>
+                                <IconButton onClick={close}>
+                                    <CloseIcon />
                                 </IconButton>
                             </Typography>
                         </Grid>

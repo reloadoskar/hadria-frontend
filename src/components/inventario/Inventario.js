@@ -107,6 +107,7 @@ function Inventario() {
                             <Typography variant="h6" align="center" gutterBottom>No se encontró información.</Typography>
                             :
                             inventario.map((compra, index) => (
+                                sumStock(compra.items) === 0 ? null :
                                 <Grid item xs={12} key={index}>
                                     <Card>
                                         <CardHeader 
@@ -114,10 +115,8 @@ function Inventario() {
                                         />
                                         <CardContent>
                                             <Grid container spacing={3}>
-                                                {compra.items.map((item, i) => (//{
-                                                    // if(item.stock > 0){
-                                                    //     return(
-                                                    item.stock > 0 ? 
+                                                {compra.items.map((item, i) => (
+                                                    item.stock === 0 ? null : 
                                                         <Grid item xs={12} key={i}>
                                                             <Grid container spacing={1} alignItems="flex-end">
                                                                 <Grid item xs={12}>
@@ -139,7 +138,7 @@ function Inventario() {
                                                                         />
                                                                     <Typography
                                                                         align="right"                                                                        
-                                                                        children={formatNumber(item.empaquesStock)}
+                                                                        children={formatNumber(item.empaquesStock,1)}
                                                                         />
                                                                 </Grid>
                                                                 <Grid item xs={6} md={3}>
@@ -150,20 +149,13 @@ function Inventario() {
                                                                         />
                                                                     <Typography
                                                                         align="right"
-                                                                        children={formatNumber(item.stock,2)}
+                                                                        children={formatNumber(item.stock,1)}
                                                                         />
                                                                 </Grid>
                                                             </Grid>
                                                             <Divider />
-                                                        </Grid>
-                                                    :
-                                                    null
-                                                        //)
-                                                    //} 
-                                                    
-                                                )//}
-
-                                                )}
+                                                        </Grid>                                                    
+                                                ))}
                                                 <Grid item xs={12} md={6}>
                                                     <Typography align="center"
                                                         variant="h6"
@@ -174,7 +166,7 @@ function Inventario() {
                                                     <Typography className={classes.sobreTexto} variant="body2" align="right" children="Empaques" />
                                                     <Typography variant="h6"
                                                         align="right"
-                                                        children={sumEmpStock(compra.items)}
+                                                        children={formatNumber(sumEmpStock(compra.items),1)}
                                                         />
                                                 </Grid>
                                                 <Grid item xs={6} md={3}>

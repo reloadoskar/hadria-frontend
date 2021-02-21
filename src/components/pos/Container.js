@@ -15,7 +15,7 @@ import CorteDialog from './CorteDialog'
 import RetiroDialog from './RetiroDialog'
 // import Loading from '../Loading'
 
-import { Backdrop, CircularProgress, Container, Typography, } from '@material-ui/core'
+import { Container, } from '@material-ui/core'
 
 import reducer from './PosReducer'
 
@@ -28,7 +28,7 @@ import useVentas from '../ventas/useVentas'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';
 import useUser from '../hooks/useUser';
-import useStyles from '../hooks/useStyles';
+// import useStyles from '../hooks/useStyles';
 const initialState = {
     saldoEnUbicacion: 0, 
     // POS DIALOG
@@ -70,12 +70,12 @@ const initialState = {
 
 function PosContainer() {
     const {user} = useUser()
-    const classes = useStyles()
+    // const classes = useStyles()
     const {delVenta} = useVentas()
     const { enqueueSnackbar } = useSnackbar()
     const {
         // addIngreso, 
-        addVenta, cuentasxCobrar, cxcPdv, addPagoCxc} = useIngresos()
+        addVenta, cxcPdv, addPagoCxc} = useIngresos()
     const {invxubic} = useInventario();
     const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
     const {getCorte} = useCortes()
@@ -195,7 +195,12 @@ function PosContainer() {
 
     const loadBalance = () => {
         getCorte(ubicacion._id[0]._id, fecha).then(res=>{
-            setCorte(res)
+            if(res.status === 'error'){
+                showMessage(res.message, res.status)
+                closeDialog('corteDialog')
+            }else{
+                setCorte(res)
+            }
         })
     }
 

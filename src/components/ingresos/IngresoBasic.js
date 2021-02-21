@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+import { formatNumber } from '../Tools'
 
 export default function IngresoBasic(props){
     const [ingreso, setIngreso] = useState(null)
@@ -20,7 +21,7 @@ export default function IngresoBasic(props){
                         <Typography>{ingreso.concepto} | {ingreso.descripcion}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                        <Typography align="right">{ingreso.importe}</Typography>
+                        <Typography align="right">{formatNumber(ingreso.importe,2)}</Typography>
                     </Grid>
                 </Grid>
             }

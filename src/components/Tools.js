@@ -1,7 +1,6 @@
 export const objectIsNull = (obj) => {
     let isNull = true
     for (const prop in obj){
-        // console.log("a ver: "+prop+"="+obj[prop])
         if (obj[prop] === "" || obj[prop] === [] || obj[prop] === null){
             isNull = true;
         }else{
@@ -10,7 +9,6 @@ export const objectIsNull = (obj) => {
 
         
     }
-    // console.log("faltan datos? "+isNull)
     return isNull
 }
 
@@ -27,7 +25,6 @@ export const sumImporte = (list) => {
     list.forEach(function(item){
         suma += parseFloat(item.importe)
     })
-    // console.log(suma)
     return suma
 }
 
@@ -45,20 +42,16 @@ export const sumSaldo = (list) => {
     let suma = 0
 
     list.forEach(function(item){
-        // if(item.tipoPago === 'CRÉDITO'){
-            suma += parseFloat(item.saldo)
-        // }
+        suma += parseFloat(item.saldo)
     })
 
     return suma
 }
 export const sumSaldoList = (list) => {
     let suma = 0
-
     list.forEach(function(item){
         suma += parseFloat(item.saldo)
     })
-
     return suma
 }
 
@@ -205,4 +198,12 @@ export const searchBy = (field, search, array) => {
         }
     }
     return found
+}
+
+export function esEntero(n){
+    return Number(n) === n && n % 1 === 0;
+}
+
+export function esDecimal(n){
+    return Number(n) === n && n % 1 !== 0;
 }

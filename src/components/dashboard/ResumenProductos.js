@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Table, TableHead, TableRow, TableCell, TableBody, Card, CardHeader, CardContent } from '@material-ui/core';
+import useStyles from '../hooks/useStyles';
 
 const init = {
     tcantidad: 0,
@@ -15,7 +16,7 @@ const init = {
 }
 export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, formatNumber, sumCantidad, sumEmpaques, sumStock, sumEmpStock }) {
     const [totales, setTotales] = useState(init)
-
+    const classes = useStyles()
     useEffect(() => {
         if(data){
             let cantidad = sumCantidad(data.compra.items)
@@ -70,9 +71,6 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                     <TableRow key={index}>
                                         <TableCell>
                                             <Typography >
-                                                {item.producto.descripcion}
-                                            </Typography>
-                                            <Typography>
                                                 {item.ubicacion.nombre}
                                             </Typography>
                                         </TableCell>
@@ -145,6 +143,7 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                             return (
                                 <TableRow key={index}>
                                     <TableCell>
+                                        <Typography className={classes.sobreTexto} children={item.ubicacion.nombre} />
                                         <Typography children={item.producto.descripcion} />
                                     </TableCell>
                                     <TableCell

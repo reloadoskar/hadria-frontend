@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Dialog, DialogActions, DialogContent, Avatar, DialogTitle, Grid, Typography, TextField, Button, Chip } from '@material-ui/core'
 export default function Pesadas(props){
-    const {open, close, addPesada, clearPesadas, pesadas, classes, totalcant, totalemp} = props
+    const {open, close, addPesada, clearPesadas, pesadas, classes} = props
     const [peso, setPeso] = useState('')
     const [verPesadas, setVerPesadas] = useState(false)
     const handleChange = (value) =>{
@@ -65,14 +65,6 @@ export default function Pesadas(props){
                                     </DialogActions>
                                 </Dialog>
                             </Grid>
-                            // <Grid container spacing={2}>
-                            //     {pesadas.map((itm, i)=>(
-
-                            //     ))}
-                            //     <Grid item xs={12}>
-                            //     <Typography>Total: {totalcant} - Pesadas: {totalemp}</Typography>
-                            //     </Grid>
-                            // </Grid>
                         }                        
                     </Grid>
             </DialogContent>

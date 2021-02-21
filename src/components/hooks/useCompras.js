@@ -12,7 +12,7 @@ const useCompras = () => {
 		return () => setCompras([])
 	}, [updating])
 
-	const crear = (compra) => {
+	const crearCompra = (compra) => {
 		// setUpdating(true)
 		return saveCompra(compra).then(res => {
 			const newCompra = [...compras, res.compra]
@@ -22,7 +22,7 @@ const useCompras = () => {
 		})
 	}
 	
-	const cancelar = (id) =>{
+	const cancelarCompra = (id) =>{
 		return cancelCompra(id).then( res => {
 			setUpdating(!updating)
 			// const n = compras
@@ -30,7 +30,6 @@ const useCompras = () => {
 			// setCompras(n)
 			return res
 		})
-
 	}
 
 	const cerrarCompra = (id) => {
@@ -43,10 +42,8 @@ const useCompras = () => {
 
 	return {
 		compras,
-		// crearCompra,
-		crear,
-		// cancelarCompra,
-		cancelar,
+		crearCompra,
+		cancelarCompra,
 		cerrarCompra,
 		updating
 	}

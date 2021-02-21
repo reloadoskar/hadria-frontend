@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSnackbar } from 'notistack';
-import { Dialog, AppBar, Toolbar, IconButton, Typography, Card, CardHeader, Zoom, CardContent, Avatar, Grid, LinearProgress, Menu, MenuItem, Box, Divider, Backdrop, CircularProgress } from '@material-ui/core';
+import { Dialog, AppBar, Toolbar, IconButton, Typography, Card, CardHeader, Zoom, CardContent, Avatar, Grid,  Menu, MenuItem, Box, Divider, Backdrop, CircularProgress } from '@material-ui/core';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -40,7 +40,6 @@ export default function VerCompra({ compraId, isOpen, handleClose, cerrar }) {
     useEffect(() => {
         if (compraId) {
             getCompra(compraId).then(res => {
-                // console.log(res)
                 setData({
                     compra: res.data.compra,
                     ventas: res.data.ventas,
@@ -66,12 +65,6 @@ export default function VerCompra({ compraId, isOpen, handleClose, cerrar }) {
         }
     }, [compraId])
 
-    // function toggleBckdrp(){
-    //     setBckdrp(!bckdrp)
-    // }
-    // function closeBkdrp(){
-    //     setBckdrp(false)
-    // }
     const closeDialog = () => {
         setData({compra: null, ventas: null})
         handleClose()

@@ -1,24 +1,26 @@
 import React, { useState } from 'react'
 // import { useHistory } from 'react-router-dom';
 
-import { VictoryBar, VictoryChart, VictoryLabel, VictoryAxis } from 'victory';
-import {
-    MuiPickersUtilsProvider,
-    DatePicker
-} from '@material-ui/pickers';
+// import { VictoryBar, VictoryChart, VictoryLabel, VictoryAxis } from 'victory';
+// import {
+//     MuiPickersUtilsProvider,
+//     DatePicker
+// } from '@material-ui/pickers';
 import moment from 'moment'
-import MomentUtils from '@date-io/moment';
+// import MomentUtils from '@date-io/moment';
 
 import { useSnackbar } from 'notistack';
 import { Grid, Container, Card, CardContent, TextField, Button, Typography, } from '@material-ui/core';
-import ConfirmDialog from './ConfirmDialog'
+// import ConfirmDialog from './ConfirmDialog'
 import Venta from './Venta'
 import useVentas from './useVentas'
-import useStyles from '../hooks/useStyles';
+// import useStyles from '../hooks/useStyles';
 
 const Ventas = () => {
-    const classes = useStyles()
-    const {ventasSemana, rango, setRango, verVenta, delVenta} = useVentas()
+    // const classes = useStyles()
+    const {
+        // ventasSemana, 
+        rango, setRango, verVenta, delVenta} = useVentas()
     const { enqueueSnackbar } = useSnackbar()
     
     const [buscando, setBuscando] = useState(false)

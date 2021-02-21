@@ -27,7 +27,7 @@ const useCortes = () => {
             corte.tacuenta = tacu
             corte.tegresos = tegr
             corte.total = total
-            // setCorte(corte)
+            setCorte(corte)
             return corte
         })
     }

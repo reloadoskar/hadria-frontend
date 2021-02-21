@@ -11,34 +11,34 @@ export default function Balance({balance}) {
 
                 <Grid container spacing={2}>
             
-                    <Grid item xs={12} md>                                        
+                    <Grid item xs={12} sm>                                        
                         <Typography align="center" variant="body1" children="Disponible" />
-                        <Typography align="right" variant="h5" children={"$" + formatNumber(balance.disponible)} />                        
+                        <Typography align="center" variant="h5" children={"$" + formatNumber(balance.disponible)} />                        
                     </Grid>
 
-                    <Grid item xs={12} md>
+                    <Grid item xs={12} sm>
                         <Typography align="center" variant="body1" children="Inventario" />
-                        <Typography align="right" variant="h5" children={"+$" + formatNumber(balance.inventario)} />
+                        <Typography align="center" variant="h5" children={"+$" + formatNumber(balance.inventario)} />
                     </Grid>
 
-                    <Grid item xs={12} md>
+                    <Grid item xs={12} sm>
                         <Typography align="center" variant="body1" children="Por Cobrar" />
-                        <Typography align="right" variant="h5" children={"+$" + formatNumber(balance.porCobrar)} />
+                        <Typography align="center" variant="h5" children={"+$" + formatNumber(balance.porCobrar)} />
                     </Grid>
 
-                    <Grid item xs={12} md>
+                    <Grid item xs={12} sm>
                         <Typography align="center" variant="body1" children="Por Pagar" />
                         <Typography 
                             className={classes.textoSangron}
-                            align="right"  variant="h5" children={"-$" + formatNumber(balance.porPagar)} />
+                            align="center"  variant="h5" children={"-$" + formatNumber(balance.porPagar)} />
                     </Grid>
 
-                    <Grid item xs={12} md>
+                    <Grid item xs={12} sm>
                         <Typography align="center" variant="body1" children="Balance" />
                         <Divider />
                         <Typography
                             className={ balance.total > 0 ? classes.textoGroovie : classes.textoSangron}
-                            align="right"
+                            align="center"
                             variant="h5"
                             color={balance.total < 0 ? 'error' : 'inherit'}
                             children={"$" + formatNumber(balance.total)} 

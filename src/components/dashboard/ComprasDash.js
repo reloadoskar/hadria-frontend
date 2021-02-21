@@ -8,8 +8,9 @@ import {sumStock, sumEmpStock, formatNumber} from '../Tools'
 import VerCompra from './VerCompra'
 import CrearCompra from '../compras/CrearCompra'
 import { useSnackbar } from 'notistack';
-export default function ComprasDash(){
-    const {compras, addCompra, cerrar, updating} = useCompras();
+export default function ComprasDash(props){
+    // const {compras, crearCompra, cancelarCompra} = props
+    const {compras, crearCompra, cancelarCompra} = useCompras();
     const [compraSelected, setCompraSelected] = useState(null)
     const [verCompra, setVerCompra] = React.useState(false);
     const [showDialog, setShowDialog] = useState(false)
@@ -49,9 +50,6 @@ export default function ComprasDash(){
                     : 
                         // null
                         compras.map( (compra, index) => (
-                            updating === true ?
-                                <LinearProgress key={index} variant="query" />
-                            :
                             <ListItem button key={index} onClick={()=> handleMenu('ver', compra._id)}>
                             <Grid key={index} container >
                                 <Grid item xs={6} md={6}>
@@ -68,13 +66,13 @@ export default function ComprasDash(){
                         ))
                 }
             </CardContent>
-            <VerCompra compraId={compraSelected} isOpen={verCompra} handleClose={handleClose} cerrar={cerrar}/>
+            <VerCompra compraId={compraSelected} isOpen={verCompra} handleClose={handleClose} cerrar={cancelarCompra}/>
             <CrearCompra
                 fullWidth
                 open={showDialog}
                 close={closeDialog}
                 showMessage={showMessage}
-                addCompra={addCompra}
+                addCompra={crearCompra}
             />
         </Card>
     )

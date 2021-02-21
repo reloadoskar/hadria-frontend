@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     },
 
     sobreTexto: {
-        fontSize: '15px',
+        fontSize: '11px',
         color: '#3d3d3d'
     },
     textoGroovie: {

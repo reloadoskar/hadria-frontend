@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import TablaCompras from './TablaCompras';
 import Compra from './Compra'
 import { useSnackbar } from 'notistack';
 import {
@@ -8,7 +7,6 @@ import {
     Grid} from '@material-ui/core';
 
 import DetalleCompra from './DetalleCompra'
-// import ConfirmDialog from './ConfirmDialog'
 import Buscador from './Buscador'
 
 import useCompras from '../hooks/useCompras';
@@ -24,7 +22,8 @@ import ConfirmDialog from './ConfirmDialog'
 
 
 function Compras(props) {
-    const {compras, crear, cancelar} = useCompras()
+    // const {compras, crearCompra, cancelarCompra} = props
+    const {compras, crearCompra, cancelarCompra} = useCompras()
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
     const {products, addProduct } = useProducts()
@@ -38,8 +37,8 @@ function Compras(props) {
     const [compra, setCompra] = useState(null)
     const [confirm, setConfirm] = useState(false)
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
-    const crearCompra = (compra) => {
-        return crear(compra).then(res => {
+    const crear = (compra) => {
+        return crearCompra(compra).then(res => {
             closeDialog()
             return res
         })
@@ -70,8 +69,8 @@ function Compras(props) {
     }
 
 
-    function cancelarCompra(){
-        cancelar(compra._id).then(res => {
+    function cancelar(){
+        cancelarCompra(compra._id).then(res => {
             closeConfirm()
             if (res.status === 'error') {
             } else {
@@ -104,7 +103,7 @@ function Compras(props) {
                         openP={openDialogP}
                         closeP={closeDialogP}
                         showMessage={showMessage}
-                        crear={crearCompra}
+                        crear={crear}
                         products={products}
                         addProducto={addProduct}
                         provedors={provedors}
@@ -121,13 +120,9 @@ function Compras(props) {
                         </Grid>
                     ))
                 }
-                {/* <TablaCompras compras={compras} editCompra={editCompra} openConfirm={openConfirm}/> */}
             </Grid>
-         
-                    
-                <DetalleCompra compra={compra} open={detCompra} close={closeCompra} showMessage={showMessage} />
-                {/* <ConfirmDialog open={confirm} cancel={cancelConfirm} ok={okConfirm} data={compra} /> */}
-                <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelarCompra}/>
+            <DetalleCompra compra={compra} open={detCompra} close={closeCompra} showMessage={showMessage} />
+            <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelar}/>
         </Container>
     )
 }

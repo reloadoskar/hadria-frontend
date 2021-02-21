@@ -23,7 +23,7 @@ export default function VentaBasic(props){
                     <Grid item xs={12} sm={7}>
                         {venta.items.length <= 0 ? null :
                             venta.items.map((item, i) =>(
-                            <Grid container spacing={1}>
+                            <Grid container spacing={1} key={i}>
 
                                     <Grid item xs={1}>
                                         <Typography variant="body2" align="right">
@@ -46,7 +46,7 @@ export default function VentaBasic(props){
                     </Grid>
                     <Grid item xs={12}>
                         <Typography align="right">
-                            Total: {sumEmpaques(venta.items)} x {formatNumber(sumCantidad(venta.items),2)} = {formatNumber(venta.importe,2)}
+                            Total: {sumEmpaques(venta.items)}/{formatNumber(sumCantidad(venta.items),2)} = {formatNumber(venta.importe,2)}
                         </Typography>
                     <Divider />
                     </Grid>
