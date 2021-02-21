@@ -40,9 +40,6 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                 // emp = calculaEmpaques(item.item.empaquesStock, stock, value)
                 return setValues({ ...values, [field]: value, importe: imp})
             case 'empaques':
-                if(value <= 0){
-                    return setValues({...values, [field]: ''})                    
-                }
                 if(value > empStock){
                     let message = "Solo hay " +empStock + " disponibles."
                     showMessage(message, 'warning' )
