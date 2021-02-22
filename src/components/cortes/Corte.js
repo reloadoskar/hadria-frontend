@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton } from '@material-ui/core'
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
+import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import VentaBasic from '../ventas/VentaBasic'
 import EgresoBasic from '../egresos/EgresoBasic'
 import IngresoBasic from '../ingresos/IngresoBasic'
 import CxcBasic from '../cxc/CxcBasic'
 import { formatNumber, sumCantidad, sumEmpaques, sumImporte } from '../Tools'
-
+import moment from 'moment'
+import VentaItem from '../ventas/VentaItem'
 export default function Corte(props){
     const {open, close, corte, fecha, onChangeFecha} = props
     const [elcorte, setElcorte] = useState(null)
+    const [lafecha, setLafecha] = useState("")
     const [mediasCajasCount, setMediasCajasCount] = useState(0)
     useEffect(()=>{
         if(corte){
@@ -30,6 +34,30 @@ export default function Corte(props){
         }
         return () => setMediasCajasCount(0)
     },[elcorte])
+
+    useEffect(()=>{
+        if(fecha){
+            setLafecha(fecha)
+        }
+        return () => setLafecha("")
+    }, [fecha])
+
+    function handleChange(value){
+        setLafecha(value)
+        onChangeFecha(value)
+    }
+
+    function fechaSig(){
+        let sig = moment(lafecha)
+        sig.add(1, "days")
+        handleChange(sig.format("YYYY-MM-DD"))
+    }
+
+    function fechaAnt(){
+        let ant = moment(lafecha)
+        ant.subtract(1,"days")
+        handleChange(ant.format("YYYY-MM-DD"))
+    }
     return(
         <Dialog
             open={open}
@@ -46,15 +74,19 @@ export default function Corte(props){
                         </Grid>
                         <Grid item xs={12} sm={4}>         
                             <Typography variant="h6" align="center">               
-                                    {/* <Button >anterior</Button> */}
+                                    <IconButton onClick={fechaAnt}>
+                                        <NavigateBeforeIcon />
+                                    </IconButton>
                                     <TextField 
                                         id="date"
-                                        label="Fecha de Corte"
+                                        // label="Fecha de Corte"
                                         type="date"
-                                        value={fecha}
-                                        onChange={(e)=>onChangeFecha(e.target.value)}
-                                    />
-                                    {/* <Button >siguiente</Button> */}
+                                        value={lafecha}
+                                        onChange={(e)=>handleChange(e.target.value)}
+                                        />
+                                    <IconButton onClick={fechaSig}>
+                                        <NavigateNextIcon />
+                                    </IconButton>                                    
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -93,23 +125,32 @@ export default function Corte(props){
                                 </Grid>
                                 <Divider />
                                 <Grid item xs={12}>
-                                    <Typography align="right" variant="body2" >medias cajas: {formatNumber(mediasCajasCount)}</Typography>
+                                    <Typography align="right" variant="body2" >Cajas vacías: {formatNumber((mediasCajasCount/2),1)}</Typography>
                                 </Grid>
                             </Grid>
                         }
 
                         {elcorte.ventas.length === 0 ? null :
                             <Grid item xs={12}>
-                                <Typography variant="h6" align="center">VENTAS</Typography>
-                                
+                                <Typography variant="h6" align="center">DETALLE DE VENTAS</Typography>                                
                                 <Divider />
                                 <Grid container spacing={1}>
-                                    {elcorte.ventas.map((venta, i) => (
-                                        <VentaBasic venta={venta} key={i}/>
+                                    {elcorte.items.map((item, i) => (
+                                        <VentaItem item={item} key={i}/>
                                     ))}
+                                    <Grid item xs={8}>
+                                        <Typography align="right">{formatNumber(sumEmpaques(elcorte.items),1)}</Typography>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Typography align="right">{formatNumber(sumCantidad(elcorte.items),2)}</Typography>
+                                    </Grid>
+                                    <Grid item xs={1}> 
+                                        <Typography align="center"> -- </Typography>
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        <Typography align="right">${formatNumber(elcorte.tventas,2)}</Typography>
+                                    </Grid>
                                 </Grid>
-                                <Divider />
-                                <Typography align="right">${formatNumber(elcorte.tventas,2)}</Typography>
                             </Grid>
                         }
 

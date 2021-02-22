@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Grid, Typography, Divider, Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core'
 import { formatNumber, sumCantidad, sumEmpaques } from '../Tools'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import VentaItem from './VentaItem';
 export default function VentaBasic(props){
     const [venta, setVenta] = useState(null)
     useEffect(()=>{
@@ -35,24 +36,7 @@ export default function VentaBasic(props){
                         <Grid container>                    
                             {venta.items.length <= 0 ? null :
                                 venta.items.map((item, i) =>(
-                                    <React.Fragment key={i}>
-                                        <Grid item xs={1}>
-                                            <Typography variant="body2">
-                                                {item.compra.folio}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={11}>{item.producto.descripcion}
-                                        <Divider />
-                                        </Grid>
-                                        <Grid item xs={3}>{item.empaques}</Grid>
-                                        <Grid item xs={3}>{item.cantidad}</Grid>
-                                        <Grid item xs={3}>{item.precio}</Grid>
-                                        <Grid item xs={3}>
-                                            <Typography variant="body2" align="right">
-                                                {formatNumber(item.importe,2)}
-                                            </Typography>
-                                        </Grid>
-                                    </React.Fragment>
+                                    <VentaItem item={item} index={i}/>                                                                         
                                 ))
                             }
                             <Grid item xs={12}>
