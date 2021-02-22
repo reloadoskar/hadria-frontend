@@ -1,29 +1,42 @@
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, TextField, Typography } from '@material-ui/core'
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography } from '@material-ui/core'
 import VentaBasic from '../ventas/VentaBasic'
 import EgresoBasic from '../egresos/EgresoBasic'
 import IngresoBasic from '../ingresos/IngresoBasic'
 import CxcBasic from '../cxc/CxcBasic'
-import { formatNumber } from '../Tools'
+import { formatNumber, sumCantidad, sumEmpaques, sumImporte, esDecimal } from '../Tools'
 
 export default function Corte(props){
     const {open, close, corte, fecha, onChangeFecha} = props
     const [elcorte, setElcorte] = useState(null)
+    const [mediasCajasCount, setMediasCajasCount] = useState(0)
     useEffect(()=>{
         if(corte){
             setElcorte(corte)
         }
         return ()=>setElcorte(null)
     },[corte])
+
+    useEffect(()=>{
+        if(elcorte !== null){
+            let cuenta = 0
+            elcorte.items.map((el)=>{
+                if(el.empaques > 0 && el.empaques < 1){
+                    return cuenta++
+                }
+                return false
+            })
+            setMediasCajasCount(cuenta)
+        }
+        return () => setMediasCajasCount(0)
+    },[elcorte])
     return(
         <Dialog
             open={open}
             onClose={close}
             maxWidth="lg"
             fullWidth
-        >
+        >   
             {elcorte === null ? null :
             <React.Fragment>
                 <DialogTitle disableTypography>
@@ -49,6 +62,35 @@ export default function Corte(props){
                 </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2}>
+                        {elcorte.resumenVentas === [] ? null :
+                            <Grid item xs={12}>
+                                <Typography variant="h6" align="center">RESUMEN VENTAS</Typography>
+                                <Divider />
+                                {elcorte.resumenVentas.map((el, i)=>(
+                                        <Grid container key={i}>
+                                            <Grid item xs={1}><Typography variant="body2" >{el.compra.folio}</Typography></Grid>
+                                            <Grid item xs={3}><Typography variant="body2" >{el.producto.descripcion}</Typography></Grid>
+                                            <Grid item xs={2}><Typography align="right" variant="body2" >{formatNumber(el.empaques,2)}</Typography></Grid>
+                                            <Grid item xs={2}><Typography align="right" variant="body2" >{formatNumber(el.cantidad,2)}</Typography></Grid>
+                                            <Grid item xs={2}><Typography align="right" variant="body2" >{formatNumber((el.importe / el.cantidad),2)}</Typography></Grid>
+                                            <Grid item xs={2}><Typography align="right" variant="body2" >{formatNumber(el.importe,2)}</Typography></Grid>
+                                        </Grid>
+                                ))}
+                                <Divider />
+                                <Grid container>
+                                    <Grid item xs={4}></Grid>
+                                    <Grid item xs={2}>
+                                        <Typography align="right" variant="body2" >Total cajas: {formatNumber(sumEmpaques(elcorte.resumenVentas),1)}</Typography>
+                                        <Divider />
+                                        <Typography align="right" variant="body2" >medias cajas: {formatNumber(mediasCajasCount)}</Typography>
+                                    </Grid>
+                                    <Grid item xs={2}><Typography align="right" variant="body2" >Total kilos:{formatNumber(sumCantidad(elcorte.resumenVentas),2)}</Typography></Grid>
+                                    <Grid item xs={2}><Typography variant="body2" > </Typography></Grid>
+                                <Grid item xs={2}><Typography align="right" variant="body2" >{formatNumber(sumImporte(elcorte.resumenVentas),2)}</Typography></Grid>
+                                </Grid>
+                            </Grid>
+                        }
+
                         {elcorte.ventas === [] ? null :
                             <Grid item xs={12}>
                                 <Typography variant="h6" align="right">VENTAS</Typography>
@@ -95,8 +137,8 @@ export default function Corte(props){
                     </Grid>
 
                 </DialogContent>
-                <DialogActions>
-
+                <DialogActions>                        
+                    
                 </DialogActions>
             </React.Fragment>
             }
