@@ -37,7 +37,7 @@ export default function Corte(props){
             maxWidth="lg"
             fullWidth
         >   
-            {elcorte === null ? null :
+            {elcorte === null ? <Typography align="center" >Cargando...</Typography> :
             <React.Fragment>
                 <DialogTitle disableTypography>
                     <Grid container >
@@ -64,7 +64,7 @@ export default function Corte(props){
                 </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2}>
-                        {elcorte.resumenVentas === [] ? null :
+                        {elcorte.resumenVentas.length === 0 ? null :
                             <Grid item xs={12}>
                                 <Typography variant="h6" align="center">RESUMEN VENTAS</Typography>
                                 <Divider />
@@ -98,20 +98,22 @@ export default function Corte(props){
                             </Grid>
                         }
 
-                        {elcorte.ventas === [] ? null :
+                        {elcorte.ventas.length === 0 ? null :
                             <Grid item xs={12}>
                                 <Typography variant="h6" align="center">VENTAS</Typography>
                                 
                                 <Divider />
-                                {elcorte.ventas.map((venta, i) => (
+                                <Grid container spacing={1}>
+                                    {elcorte.ventas.map((venta, i) => (
                                         <VentaBasic venta={venta} key={i}/>
-                                ))}
+                                    ))}
+                                </Grid>
                                 <Divider />
                                 <Typography align="right">${formatNumber(elcorte.tventas,2)}</Typography>
                             </Grid>
                         }
 
-                        {elcorte.ingresos === [] ? null :
+                        {elcorte.ingresos.length === 0 ? null :
                             <Grid item xs={12}>
                                 <Typography variant="h6" align="center">INGRESOS</Typography>
                                 {elcorte.ingresos.map((ingreso, i) => (
@@ -121,9 +123,9 @@ export default function Corte(props){
                                 <Typography align="right">${formatNumber(elcorte.tingresos,2)}</Typography>
                             </Grid>
                         }
-                        {elcorte.egresos === [] ? null :
+                        {elcorte.egresos.length === 0 ? null :
                             <Grid item xs={12}>
-                                <Typography variant="h6">Egresos:</Typography>
+                                <Typography variant="h6" align="center">EGRESOS</Typography>
                                 {elcorte.egresos.map((egreso, i) => (
                                         <EgresoBasic egreso={egreso} key={i}/>
                                 ))}
@@ -131,9 +133,9 @@ export default function Corte(props){
                                 <Typography align="right">${formatNumber(elcorte.tegresos,2)}</Typography>
                             </Grid>
                         }
-                        {elcorte.creditos === [] ? null :
+                        {elcorte.creditos.length === 0 ? null :
                             <Grid item xs={12}>
-                                <Typography variant="h6">Créditos:</Typography>
+                                <Typography variant="h6" align="center">CRÉDITOS</Typography>
                                 {elcorte.creditos.map((credito, i) => (
                                         <CxcBasic cxc={credito} key={i} />
                                 ))}
@@ -145,7 +147,7 @@ export default function Corte(props){
 
                 </DialogContent>
                 <DialogActions>                        
-                    
+                    <Button onClick={close}>salir</Button>
                 </DialogActions>
             </React.Fragment>
             }

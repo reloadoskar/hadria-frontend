@@ -11,7 +11,7 @@ export default function VentaBasic(props){
         }
     }, [props])
     return (
-        <div>
+        <Grid item xs ={12}>
             {venta === null ? null :
                 <Accordion>
                     <AccordionSummary
@@ -32,7 +32,7 @@ export default function VentaBasic(props){
                         </Grid>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Grid container spacing={1} >                    
+                        <Grid container>                    
                             {venta.items.length <= 0 ? null :
                                 venta.items.map((item, i) =>(
                                     <React.Fragment key={i}>
@@ -71,6 +71,6 @@ export default function VentaBasic(props){
                     </AccordionDetails>
                 </Accordion>
             }
-        </div>
+        </Grid>
     )
 }

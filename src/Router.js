@@ -15,20 +15,33 @@ import Header from './components/Header';
 import Container from './components/pos/Container';
 import ConceptosTabs from './components/conceptos/ConceptosTabs';
 import Ventas from './components/ventas/Ventas';
-import useUser from './components/hooks/useUser'
 // import {PrivateRoute} from './privateRoute' 
 // import Error from './components/Error'
 
+import useUser from './components/hooks/useUser'
+import useCompras from './components/hooks/useCompras'
+import useUbicacions from './components/hooks/useUbicacions'
+import useCortes from './components/hooks/useCortes'
+import useBalance from './components/hooks/useBalance'
+
 import useStyles from './components/hooks/useStyles'
-// import useCompras from './components/hooks/useCompras';
+
 
 export default function Router({auth}){
     let { path, url } = useRouteMatch();
     let history = useHistory();
     const classes = useStyles()
+    
     const {user} = useUser()
+    const {compras, crearCompra, cancelarCompra, cerrarCompra} = useCompras()
+    const {ubicacions} = useUbicacions()
+    const {getCorte} = useCortes()
+    const {balance, disp, totalCxc, addPagoCxc, cuentasxCobrar, addIngreso, addEgreso, 
+        cuentasxPagar, 
+        totalCxp, 
+        addPagoCxp,} = useBalance()
+
     const [open, setOpen] = useState(false)
-    // const {compras, crearCompra, cancelarCompra, cerrarCompra} = useCompras()
     useEffect(()=> {
         if (!auth.isAuthenticated()){
             auth.logout(() => {
@@ -68,7 +81,25 @@ export default function Router({auth}){
                                 path={path} 
                                 render={
                                     (props) => ( 
-                                        <Dashboard auth={auth} /> 
+                                        <Dashboard auth={auth}  
+                                            user={user}
+                                            ubicacions={ubicacions}
+                                            crearCompra={crearCompra} 
+                                            cancelarCompra={cancelarCompra} 
+                                            cerrarCompra={cerrarCompra} 
+                                            compras={compras}
+                                            getCorte={getCorte}
+                                            balance={balance}
+                                            disp={disp}
+                                            addIngreso={addIngreso}
+                                            cuentasxCobrar={cuentasxCobrar} 
+                                            addPagoCxc={addPagoCxc} 
+                                            totalCxc={totalCxc} 
+                                            addEgreso={addEgreso}
+                                            cuentasxPagar={cuentasxPagar} 
+                                            totalCxp={totalCxp} 
+                                            addPagoCxp={addPagoCxp}
+                                        /> 
                                     )
                                 }
                             />
@@ -79,10 +110,10 @@ export default function Router({auth}){
                             <Route exact path={`${path}/ubicaciones`} component={Ubicaciones}></Route>
                             <Route exact path={`${path}/compras`}>
                                 <Compras 
-                                // compras={compras} 
-                                // crear={crearCompra} 
-                                // cancelar={cancelarCompra} 
-                                // cerrar={cerrarCompra} 
+                                    crearCompra={crearCompra} 
+                                    cancelarCompra={cancelarCompra} 
+                                    cerrarCompra={cerrarCompra} 
+                                    compras={compras} 
                                 />
                             </Route>
                             <Route exact path={`${path}/conceptos`} component={ConceptosTabs}></Route>
