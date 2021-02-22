@@ -19,10 +19,10 @@ export default function Disponible(props){
                 {disp.map((ub,i)=>(
                     <MenuItem key={i} onClick={()=> handleClick(ub)}>
                         <Grid container key={i}>
-                            <Grid item xs>
+                            <Grid item xs={12} sm={6}>
                                 <Typography variant="h6">{ub.nombre}</Typography>
                             </Grid>
-                            <Grid item xs>
+                            <Grid item xs={12} sm={6}>
                                 <Typography variant="h6" align="right">{formatNumber(ub.disponible)}</Typography>
                             </Grid>
                         </Grid>

@@ -52,11 +52,11 @@ export default function ComprasDash(props){
                         compras.map( (compra, index) => (
                             <ListItem button key={index} onClick={()=> handleMenu('ver', compra._id)}>
                             <Grid key={index} container >
-                                <Grid item xs={6} md={6}>
+                                <Grid item xs={12} sm={6}>
                                     <Typography variant="h5">{compra.folio + ":" +compra.clave}</Typography>
                                     <Typography variant="body2">{compra.ubicacion.nombre} | {compra.tipoCompra.tipo}</Typography>
                                 </Grid>
-                                <Grid item xs={6} md>
+                                <Grid item xs={12} sm={6}>
                                     <Typography align="right" children={compra.status} />
                                     <Typography variant="body2" align="right" children="Unidades / Empaques" />
                                     <Typography variant="h5" align="right" children={formatNumber(sumStock(compra.items),2) + " | " + formatNumber(sumEmpStock(compra.items))} />

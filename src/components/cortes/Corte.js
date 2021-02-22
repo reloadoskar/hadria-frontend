@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button } from '@material-ui/core'
 import VentaBasic from '../ventas/VentaBasic'
 import EgresoBasic from '../egresos/EgresoBasic'
 import IngresoBasic from '../ingresos/IngresoBasic'
 import CxcBasic from '../cxc/CxcBasic'
-import { formatNumber, sumCantidad, sumEmpaques, sumImporte, esDecimal } from '../Tools'
+import { formatNumber, sumCantidad, sumEmpaques, sumImporte } from '../Tools'
 
 export default function Corte(props){
     const {open, close, corte, fecha, onChangeFecha} = props
@@ -46,6 +46,7 @@ export default function Corte(props){
                         </Grid>
                         <Grid item xs={12} sm={4}>         
                             <Typography variant="h6" align="center">               
+                                    {/* <Button >anterior</Button> */}
                                     <TextField 
                                         id="date"
                                         label="Fecha de Corte"
@@ -53,6 +54,7 @@ export default function Corte(props){
                                         value={fecha}
                                         onChange={(e)=>onChangeFecha(e.target.value)}
                                     />
+                                    {/* <Button >siguiente</Button> */}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -67,33 +69,38 @@ export default function Corte(props){
                                 <Typography variant="h6" align="center">RESUMEN VENTAS</Typography>
                                 <Divider />
                                 {elcorte.resumenVentas.map((el, i)=>(
-                                        <Grid container key={i}>
-                                            <Grid item xs={1}><Typography variant="body2" >{el.compra.folio}</Typography></Grid>
-                                            <Grid item xs={3}><Typography variant="body2" >{el.producto.descripcion}</Typography></Grid>
-                                            <Grid item xs={2}><Typography align="right" variant="body2" >{formatNumber(el.empaques,2)}</Typography></Grid>
-                                            <Grid item xs={2}><Typography align="right" variant="body2" >{formatNumber(el.cantidad,2)}</Typography></Grid>
-                                            <Grid item xs={2}><Typography align="right" variant="body2" >{formatNumber((el.importe / el.cantidad),2)}</Typography></Grid>
-                                            <Grid item xs={2}><Typography align="right" variant="body2" >{formatNumber(el.importe,2)}</Typography></Grid>
-                                        </Grid>
+                                    <React.Fragment key={i}>
+                                    <Grid container >
+                                        <Grid item xs={1}><Typography variant="body2" >{el.compra.folio}</Typography></Grid>
+                                        <Grid item xs={11} sm={3}>
+                                            <Typography variant="body2" >{el.producto.descripcion}</Typography></Grid>
+                                        <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(el.empaques,2)}</Typography></Grid>
+                                        <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(el.cantidad,2)}</Typography></Grid>
+                                        <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber((el.importe / el.cantidad),2)}</Typography></Grid>
+                                        <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(el.importe,2)}</Typography></Grid>
+                                    </Grid>
+                                    <Divider />
+                                    </React.Fragment>
                                 ))}
                                 <Divider />
                                 <Grid container>
-                                    <Grid item xs={4}></Grid>
-                                    <Grid item xs={2}>
-                                        <Typography align="right" variant="body2" >Total cajas: {formatNumber(sumEmpaques(elcorte.resumenVentas),1)}</Typography>
-                                        <Divider />
-                                        <Typography align="right" variant="body2" >medias cajas: {formatNumber(mediasCajasCount)}</Typography>
+                                    <Grid item xs={3} sm={6}>
+                                        <Typography align="right" variant="body2" >{formatNumber(sumEmpaques(elcorte.resumenVentas),1)}</Typography>
                                     </Grid>
-                                    <Grid item xs={2}><Typography align="right" variant="body2" >Total kilos:{formatNumber(sumCantidad(elcorte.resumenVentas),2)}</Typography></Grid>
-                                    <Grid item xs={2}><Typography variant="body2" > </Typography></Grid>
-                                <Grid item xs={2}><Typography align="right" variant="body2" >{formatNumber(sumImporte(elcorte.resumenVentas),2)}</Typography></Grid>
+                                    <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(sumCantidad(elcorte.resumenVentas),2)}</Typography></Grid>
+                                    <Grid item xs={3} sm={2}><Typography variant="body2" > </Typography></Grid>
+                                    <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(sumImporte(elcorte.resumenVentas),2)}</Typography></Grid>
+                                </Grid>
+                                <Divider />
+                                <Grid item xs={12}>
+                                    <Typography align="right" variant="body2" >medias cajas: {formatNumber(mediasCajasCount)}</Typography>
                                 </Grid>
                             </Grid>
                         }
 
                         {elcorte.ventas === [] ? null :
                             <Grid item xs={12}>
-                                <Typography variant="h6" align="right">VENTAS</Typography>
+                                <Typography variant="h6" align="center">VENTAS</Typography>
                                 
                                 <Divider />
                                 {elcorte.ventas.map((venta, i) => (
@@ -106,7 +113,7 @@ export default function Corte(props){
 
                         {elcorte.ingresos === [] ? null :
                             <Grid item xs={12}>
-                                <Typography variant="h6">Ingresos:</Typography>
+                                <Typography variant="h6" align="center">INGRESOS</Typography>
                                 {elcorte.ingresos.map((ingreso, i) => (
                                         <IngresoBasic ingreso={ingreso} key={i} />
                                 ))}

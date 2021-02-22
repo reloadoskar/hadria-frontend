@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Balance from './Balance'
-// import Produccions from '../produccions/Produccions'
-
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
 import CuentasxPagar from '../cxp/CuentasxPagar'
+// import Produccions from '../produccions/Produccions'
+
 // import EstadoDeCuenta from '../cxc/EstadoDeCuenta'
 // import UltimosMovimientos from './UltimosMovimientos'
 import ComprasDash from './ComprasDash'
@@ -12,12 +12,13 @@ import Cobro from '../creators/Cobro'
 import CrearIngreso from '../ingresos/CrearIngreso'
 import CrearEgreso from '../egresos/CrearEgreso'
 
-import useUser from '../hooks/useUser'
-import useBalance from '../hooks/useBalance'
-import useCompras from '../hooks/useCompras'
+// import useUser from '../hooks/useUser'
+// import useCompras from '../hooks/useCompras'
+// import useUbicacions from '../hooks/useUbicacions'
+// import useCortes from '../hooks/useCortes'
+// import useBalance from '../hooks/useBalance'
 import useStyles from '../hooks/useStyles'
-import useUbicacions from '../hooks/useUbicacions'
-import useCortes from '../hooks/useCortes'
+import { useSnackbar } from 'notistack';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import moment from 'moment'
@@ -34,12 +35,19 @@ import { Grid,
 // import PaymentIcon from '@material-ui/icons/Payment';
 // import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 // import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
-import { useSnackbar } from 'notistack';
 import Disponible from './Disponible'
 import Corte from '../cortes/Corte'
 
-export default function Dashboard() {
+export default function Dashboard(props) {
     const {
+        user,
+        ubicacions,
+
+        compras, 
+        crearCompra, 
+        cancelarCompra,
+        getCorte,
+
         balance,
         disp,
         // ingresos, 
@@ -48,19 +56,20 @@ export default function Dashboard() {
         cuentasxCobrar, 
         addPagoCxc, 
         totalCxc, 
-
+    
         // egresos,
         // totalEgresos, 
         addEgreso, 
         cuentasxPagar, 
         totalCxp, 
         addPagoCxp,
+    } = props
+    // const {
 
-        // inventario, 
-        // totalInventario,
+    //     // inventario, 
+    //     // totalInventario,
 
-    } = useBalance()
-    const {getCorte} = useCortes()
+    // } = useBalance()
     const [corte, setCorte] = useState(null)
     const[bckdrpOpen, setBdopen] = useState(true)
     useEffect(()=> {
@@ -79,11 +88,12 @@ export default function Dashboard() {
     },[])
     const { enqueueSnackbar } = useSnackbar()
     
-    const {compras} = useCompras()
+    // const { user } = useUser()
+    // const {compras} = useCompras()
+    // const{ubicacions} = useUbicacions()
+    // const {getCorte} = useCortes()
     
-    const{ubicacions} = useUbicacions()
     const classes = useStyles();
-    const { user } = useUser()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
     const [crearIngreso, setCrearIngreso] = useState(false)
@@ -209,7 +219,7 @@ export default function Dashboard() {
                     }    
 
                     <Grid item xs={12} md={6}>                        
-                        <ComprasDash />
+                        <ComprasDash compras={compras} crearCompra={crearCompra} cancelarCompra={cancelarCompra}/>
                     </Grid> 
 
                     <Grid item xs={12} md={6}>

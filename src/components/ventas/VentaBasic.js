@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, Typography, Divider } from '@material-ui/core'
+import { Grid, Typography, Divider, Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core'
 import { formatNumber, sumCantidad, sumEmpaques } from '../Tools'
-
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 export default function VentaBasic(props){
     const [venta, setVenta] = useState(null)
     useEffect(()=>{
@@ -13,44 +13,63 @@ export default function VentaBasic(props){
     return (
         <div>
             {venta === null ? null :
-                <Grid container spacing={1}>
-                    <Grid item xs={12} sm={2}>
-                        <Typography>{venta.folio} : {venta.tipoPago}</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={3}>
-                        <Typography>{venta.cliente.nombre}</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={7}>
-                        {venta.items.length <= 0 ? null :
-                            venta.items.map((item, i) =>(
-                            <Grid container spacing={1} key={i}>
-
-                                    <Grid item xs={1}>
-                                        <Typography variant="body2" align="right">
-                                            {item.compra.folio}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs>{item.producto.descripcion}</Grid>
-                                    <Grid item xs={1}>{item.empaques}</Grid>
-                                    <Grid item xs={1}>{item.cantidad}</Grid>
-                                    <Grid item xs={1}>{item.precio}</Grid>
-                                    <Grid item xs={2}>
-                                        <Typography variant="body2" align="right">
-                                            {formatNumber(item.importe,2)}
-                                        </Typography>
-                                    </Grid>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}                        
+                    >
+                        <Grid container spacing={1}>
+                            <Grid item xs={12} sm={4}>
+                                <Typography>{venta.folio} : {venta.tipoPago}</Typography>
                             </Grid>
-
-                            ))
-                        }
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Typography align="right">
-                            Total: {sumEmpaques(venta.items)}/{formatNumber(sumCantidad(venta.items),2)} = {formatNumber(venta.importe,2)}
-                        </Typography>
-                    <Divider />
-                    </Grid>
-                </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <Typography>{venta.cliente.nombre}</Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <Typography align="right">
+                                    ${formatNumber(venta.importe,2)}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Grid container spacing={1} >                    
+                            {venta.items.length <= 0 ? null :
+                                venta.items.map((item, i) =>(
+                                    <React.Fragment key={i}>
+                                        <Grid item xs={1}>
+                                            <Typography variant="body2">
+                                                {item.compra.folio}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={11}>{item.producto.descripcion}
+                                        <Divider />
+                                        </Grid>
+                                        <Grid item xs={3}>{item.empaques}</Grid>
+                                        <Grid item xs={3}>{item.cantidad}</Grid>
+                                        <Grid item xs={3}>{item.precio}</Grid>
+                                        <Grid item xs={3}>
+                                            <Typography variant="body2" align="right">
+                                                {formatNumber(item.importe,2)}
+                                            </Typography>
+                                        </Grid>
+                                    </React.Fragment>
+                                ))
+                            }
+                            <Grid item xs={12}>
+                                <Typography variant ="body1" align="center">TOTALES</Typography>
+                                <Divider />
+                            </Grid>
+                            <Grid item xs={3}>{formatNumber(sumEmpaques(venta.items),1)}</Grid>
+                            <Grid item xs={3}>{formatNumber(sumCantidad(venta.items),1)}</Grid>
+                            <Grid item xs={3} align="center"> -- </Grid>
+                            <Grid item xs={3}>
+                                <Typography variant="body2" align="right">
+                                    {formatNumber(venta.importe,2)}
+                                </Typography>
+                            </Grid>                        
+                        </Grid>                    
+                    </AccordionDetails>
+                </Accordion>
             }
         </div>
     )
