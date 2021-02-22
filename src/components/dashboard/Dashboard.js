@@ -147,7 +147,12 @@ export default function Dashboard(props) {
     function verCorte(ub){
         setCorteDialog(true)
         getCorte(ub._id, fecha).then(res=>{
-            setCorte(res)
+            if(res.status === "error"){
+                showMessage(res.message, res.status)
+                setCorteDialog(false)
+            }else{
+                setCorte(res)
+            }
         })
     }
 
