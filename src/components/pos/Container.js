@@ -12,6 +12,7 @@ import IngresoDialog from './IngresoDialog'
 import AddItemDialog from './AddItemDialog'
 import CobroDialog from './CobroDialog'
 import CorteDialog from './CorteDialog'
+import Corte from '../cortes/Corte'
 import RetiroDialog from './RetiroDialog'
 // import Loading from '../Loading'
 
@@ -80,6 +81,7 @@ function PosContainer() {
     const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
     const {getCorte} = useCortes()
     const [corte, setCorte] = useState(null)
+    const [corteDialog, setCorteDialog] = useState(false)
     const {ubicacions} = useUbicacions();
 
     const [ubicacion, setUbicacion] = useState('')
@@ -219,13 +221,20 @@ function PosContainer() {
     const showCorte = () => {
         closeDialog('menuDialog')
         loadBalance()
-        openDialog('corteDialog')
+        setCorteDialog(true)
     }
 
-    // const accesar = (ubicacion, fecha) => {
-    //     getCorte(ubicacion._id, fecha)
-    // }
+    const closeDialogCorte = () => {
+        setCorteDialog(false)
+    }
 
+    function onChangeFecha(fecha){
+        setCorte(null)
+        getCorte(corte.ubicacion._id, fecha).then(res => {
+            setCorte(res)
+        })
+        setFecha(fecha)
+    }
 
     return (
         <Container>
@@ -333,17 +342,24 @@ function PosContainer() {
                                 addToSaldo={addToSaldo}
                             />
                             {corte === [] ? null : 
-                                <CorteDialog 
+                                <Corte 
                                     fecha={fecha}
-                                    ubicacions={ubicacions}
-                                    ubicacion={ubicacion}
-                                    data={values}
-                                    corteData={corte}
-                                    isOpen={values.corteDialog}
-                                    close={closeDialog}
-                                    showMessage={showMessage}
-                                    delVenta={delVenta}
+                                    open={corteDialog}
+                                    close={closeDialogCorte}
+                                    corte={corte}
+                                    onChangeFecha={onChangeFecha}
                                 />
+                                // <CorteDialog 
+                                //     fecha={fecha}
+                                //     ubicacions={ubicacions}
+                                //     ubicacion={ubicacion}
+                                //     data={values}
+                                //     corteData={corte}
+                                //     isOpen={values.corteDialog}
+                                //     close={closeDialog}
+                                //     showMessage={showMessage}
+                                //     delVenta={delVenta}
+                                // />
                             }
                         </div>    
                     }
