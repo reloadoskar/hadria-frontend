@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Pesadas from './Pesadas'
 import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, Typography, TextField, Button } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
+import { formatNumber } from '../Tools'
 const init = {
     origen: '',
     origensel: '',
@@ -112,10 +113,10 @@ export default function Mover(props){
                                 >
                                     <MenuItem value=""></MenuItem>
                                 {inventario.map((option, index) =>{ 
-                                    if(option._id[0].tipo === 'SUCURSAL'){
+                                    if(option._id.tipo === 'SUCURSAL'){
                                         return (
                                             <MenuItem key={index} value={option}>
-                                                {option._id[0].nombre}
+                                                {option._id.nombre}
                                             </MenuItem>
                                         )
                                     }else{
@@ -155,11 +156,27 @@ export default function Mover(props){
                                     value={movimiento.itemsel}
                                     onChange={(e) => handleChange('itemsel', e.target.value)}
                                 >
-                                    {movimiento.origensel.items.map((itm,i)=>(
-                                        <MenuItem key={i} value={itm}>                                                            
-                                            {itm.compra[0].folio + "-" + itm.compra[0].clave + " " + itm.producto[0].descripcion + " " + itm.stock +"/" +itm.empaquesStock}
-                                        </MenuItem>          
-                                    ))}
+                                    {movimiento.origensel.items.map((itm,i)=>{
+                                        return itm.stock < 1 ? null :
+                                            <MenuItem key={i} value={itm}>  
+                                                <Grid container >
+                                                    <Grid item xs={12} sm={6}>
+                                                        #{itm.compra.folio} - {itm.producto.descripcion}
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={3}>
+                                                        <Typography variant="body2" align="right">
+                                                            cajas: {formatNumber(itm.empaquesStock,2)}
+                                                        </Typography> 
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={3}>
+                                                        <Typography variant="body2" align="right">
+                                                            kilos: {formatNumber(itm.stock,2)}
+                                                        </Typography> 
+                                                    </Grid>
+                                                </Grid>                                                          
+                                            </MenuItem>
+                                        })
+                                    }
                                 </TextField>                                
                             </Grid>
                         }
@@ -182,25 +199,25 @@ export default function Mover(props){
                                 </Grid>
                                 <Grid item xs={6} md={4}>
                                     <TextField
-                                        id="itemselcantidad"
-                                        label="Cantidad"
-                                        fullWidth
-                                        required
-                                        variant="outlined"
-                                        value={movimiento.itemselcantidad}
-                                        onChange={(e) => handleChange('itemselcantidad', e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item xs={6} md={4}>
-                                    <TextField
                                         id="itemselempaques"
-                                        label="Empaques"
+                                        label="Cajas"
                                         type="number"
                                         fullWidth
                                         required
                                         variant="outlined"
                                         value={movimiento.itemselempaques}
                                         onChange={(e) => handleChange('itemselempaques', e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={6} md={4}>
+                                    <TextField
+                                        id="itemselcantidad"
+                                        label="Kilos"
+                                        fullWidth
+                                        required
+                                        variant="outlined"
+                                        value={movimiento.itemselcantidad}
+                                        onChange={(e) => handleChange('itemselcantidad', e.target.value)}
                                     />
                                 </Grid>
                         </React.Fragment>
