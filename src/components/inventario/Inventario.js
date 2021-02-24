@@ -107,7 +107,7 @@ function Inventario() {
                             <Typography variant="h6" align="center" gutterBottom>No se encontró información.</Typography>
                             :
                             inventario.map((compra, index) => (
-                                sumStock(compra.items) === 0 ? null :
+                                sumStock(compra.items) < 1 ? null :
                                 <Grid item xs={12} key={index}>
                                     <Card>
                                         <CardHeader 
@@ -116,7 +116,7 @@ function Inventario() {
                                         <CardContent>
                                             <Grid container spacing={3}>
                                                 {compra.items.map((item, i) => (
-                                                    item.stock === 0 ? null : 
+                                                    item.stock < 1 ? null : 
                                                         <Grid item xs={12} key={i}>
                                                             <Grid container spacing={1} alignItems="flex-end">
                                                                 <Grid item xs={12}>
@@ -181,7 +181,6 @@ function Inventario() {
                                     </Card>
                                 </Grid>
                             ))
-
                 }
             </Grid>
         </Container>
