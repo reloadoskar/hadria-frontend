@@ -44,10 +44,10 @@ export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, han
                                             :
                                             
                                                 ubicacions.map((option, index) =>{ 
-                                                    if(option._id[0].tipo=== 'SUCURSAL'){
+                                                    if(option._id.tipo=== 'SUCURSAL'){
                                                         return (
                                                             <MenuItem key={index} value={option}>
-                                                                {option._id[0].nombre}
+                                                                {option._id.nombre}
                                                             </MenuItem>
                                                         )
                                                     }else{

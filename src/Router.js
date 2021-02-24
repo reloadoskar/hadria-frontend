@@ -25,6 +25,7 @@ import useCortes from './components/hooks/useCortes'
 import useBalance from './components/hooks/useBalance'
 
 import useStyles from './components/hooks/useStyles'
+import useInventario from './components/hooks/useInventario';
 
 
 export default function Router({auth}){
@@ -35,6 +36,7 @@ export default function Router({auth}){
     const {user} = useUser()
     const {compras, crearCompra, cancelarCompra, cerrarCompra} = useCompras()
     const {ubicacions} = useUbicacions()
+    const { invxubic, inventario, mover } = useInventario()
     const {getCorte} = useCortes()
     const {balance, disp, totalCxc, addPagoCxc, cuentasxCobrar, addIngreso, addEgreso, 
         cuentasxPagar, 
@@ -117,7 +119,14 @@ export default function Router({auth}){
                                 />
                             </Route>
                             <Route exact path={`${path}/conceptos`} component={ConceptosTabs}></Route>
-                            <Route exact path={`${path}/inventario`} component={Inventario}></Route>
+                            <Route exact path={`${path}/inventario`}>
+                                <Inventario 
+                                    ubicacions={ubicacions}
+                                    invxubic={invxubic}
+                                    inventario={inventario}
+                                    mover={mover}
+                                    />
+                            </Route>
                             <Route exact path={`${path}/pos`} component={Container}></Route>
                             <Route exact path={`${path}/ventas`} component={Ventas}></Route>
                             <Route exact path={`${path}/empleados`} component={Empleados}></Route>

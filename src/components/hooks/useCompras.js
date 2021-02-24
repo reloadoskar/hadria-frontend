@@ -12,14 +12,16 @@ const useCompras = () => {
 		return () => setCompras([])
 	}, [updating])
 
-	const crearCompra = (compra) => {
-		// setUpdating(true)
-		return saveCompra(compra).then(res => {
-			const newCompra = [...compras, res.compra]
+	const crearCompra = async (compra) => {
+		const res = await saveCompra(compra)
+			let newCompra = [...compras, res.compra]
 			setCompras(newCompra)	
-			// setUpdating(!updating)
 			return res
-		})
+			// setUpdating(true)
+				// return saveCompra(compra).then(res => {
+			// setUpdating(!updating)
+		// 	return res
+		// })
 	}
 	
 	const cancelarCompra = (id) =>{

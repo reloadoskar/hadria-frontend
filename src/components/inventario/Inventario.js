@@ -2,20 +2,21 @@ import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { Divider, Typography, Container, Grid, Card, CardHeader, CardContent, LinearProgress, Button, TextField, MenuItem } from '@material-ui/core';
 
-import useInventario from '../hooks/useInventario';
+// import useInventario from '../hooks/useInventario';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import {sumStock, sumEmpStock, formatNumber} from "../Tools"
 import useStyles from '../hooks/useStyles'
 import {ticketInventario} from "../api"
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import Mover from './Mover'
-import useUbicacions from '../hooks/useUbicacions';
-function Inventario() {
+// import useUbicacions from '../hooks/useUbicacions';
+function Inventario(props) {
+    const {ubicacions, invxubic, inventario, mover} = props
     const classes = useStyles()
     const select = ["FOLIO","PRODUCTOR","UBICACION"]
     const { enqueueSnackbar } = useSnackbar()
-    const { invxubic, inventario, mover } = useInventario()
-    const {ubicacions } = useUbicacions()
+    // const { invxubic, inventario, mover } = useInventario()
+    // const {ubicacions } = useUbicacions()
     const [orderBy, setOrderby] = useState('FOLIO')
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 

@@ -94,7 +94,7 @@ function PosContainer() {
         if(invxubic !== null ){
             // console.log(invxubic)
             invxubic.forEach(el => {
-                if(user.ubicacion._id === el._id[0]._id){
+                if(user.ubicacion._id === el._id._id){
                     return handleChange('ubicacion', el)
                 }
             });
@@ -196,7 +196,7 @@ function PosContainer() {
     }
 
     const loadBalance = () => {
-        getCorte(ubicacion._id[0]._id, fecha).then(res=>{
+        getCorte(ubicacion._id._id, fecha).then(res=>{
             if(res.status === 'error'){
                 showMessage(res.message, res.status)
                 closeDialog('corteDialog')
@@ -207,7 +207,7 @@ function PosContainer() {
     }
 
     const checkCorte = () => {
-        existCorte(ubicacion._id[0]._id, fecha).then( res =>{
+        existCorte(ubicacion._id._id, fecha).then( res =>{
             if(res.corte.length === 0){
                 // dispatch({type: 'corteExist', value: false})                
                 startPos()

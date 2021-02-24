@@ -57,7 +57,7 @@ export default function PosDialog({
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" className={classes.title}>
-                    {ubicacion._id[0].nombre} | {moment(fecha).format("DD MMMM [de] YYYY")}
+                    {ubicacion._id.nombre} | {moment(fecha).format("DD MMMM [de] YYYY")}
                 </Typography>
             </Toolbar>
 

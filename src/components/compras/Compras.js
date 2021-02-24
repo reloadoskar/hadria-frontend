@@ -9,7 +9,7 @@ import {
 import DetalleCompra from './DetalleCompra'
 import Buscador from './Buscador'
 
-import useCompras from '../hooks/useCompras';
+// import useCompras from '../hooks/useCompras';
 import useProducts from '../hooks/useProducts'
 import useProvedors from '../hooks/useProvedors';
 import useTipoCompras from '../hooks/useTipoCompras';
@@ -22,8 +22,8 @@ import ConfirmDialog from './ConfirmDialog'
 
 
 function Compras(props) {
-    // const {compras, crearCompra, cancelarCompra} = props
-    const {compras, crearCompra, cancelarCompra} = useCompras()
+    const {compras, crearCompra, cancelarCompra} = props
+    // const {compras, crearCompra, cancelarCompra} = useCompras()
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
     const {products, addProduct } = useProducts()

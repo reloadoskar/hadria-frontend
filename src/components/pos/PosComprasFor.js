@@ -60,13 +60,13 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 					{inventario.map( (item, i) =>   {
 						if(item.stock >= 1 ){
 							return(
-					 			<ListItem button key={i} onClick={()=> iWantThisItem(item, i, item.compra[0]._id)}>
+					 			<ListItem button key={i} onClick={()=> iWantThisItem(item, i, item.compra._id)}>
 									<Grid container spacing={2}>
 										<Grid item xs>
-											<Typography>{item.compra[0].folio}</Typography>
+											<Typography>{item.compra.folio}</Typography>
 										</Grid>
 										<Grid item xs>
-											<Typography>{item.producto[0].descripcion}</Typography>
+											<Typography>{item.producto.descripcion}</Typography>
 										</Grid>
 										<Grid item xs>
 											<Typography align="right">{formatNumber(item.empaquesStock,2)}</Typography>
