@@ -9,7 +9,9 @@ import CxcBasic from '../cxc/CxcBasic'
 import { formatNumber, sumCantidad, sumEmpaques, sumImporte } from '../Tools'
 import moment from 'moment'
 import VentaItem from '../ventas/VentaItem'
+import useStyles from '../hooks/useStyles'
 export default function Corte(props){
+    const classes = useStyles()
     const {open, close, corte, fecha, onChangeFecha} = props
     const [elcorte, setElcorte] = useState(null)
     const [lafecha, setLafecha] = useState("")
@@ -117,15 +119,54 @@ export default function Corte(props){
                                 <Divider />
                                 <Grid container>
                                     <Grid item xs={3} sm={6}>
-                                        <Typography align="right" variant="body2" >{formatNumber(sumEmpaques(elcorte.resumenVentas),1)}</Typography>
+                                        <Typography align="right" className={classes.textoMiniFacheron}>
+                                            Total cajas
+                                        </Typography>
+                                        <Typography 
+                                            className={classes.textoMirame}
+                                            align="right" 
+                                            variant="body2" >
+                                                {formatNumber(sumEmpaques(elcorte.resumenVentas),1)}
+                                        </Typography>
                                     </Grid>
-                                    <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(sumCantidad(elcorte.resumenVentas),2)}</Typography></Grid>
+                                    <Grid item xs={3} sm={2}>
+                                        <Typography align="right" className={classes.textoMiniFacheron}>
+                                            Total kilos
+                                        </Typography>
+                                        <Typography 
+                                            className={classes.textoMirame}
+                                            align="right" 
+                                            variant="body2" >
+                                                {formatNumber(sumCantidad(elcorte.resumenVentas),2)}
+                                        </Typography>
+                                    </Grid>
                                     <Grid item xs={3} sm={2}><Typography variant="body2" > </Typography></Grid>
-                                    <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(sumImporte(elcorte.resumenVentas),2)}</Typography></Grid>
+                                    <Grid item xs={3} sm={2}>
+                                        <Typography align="right" className={classes.textoMiniFacheron}>
+                                            Total ventas
+                                        </Typography>
+                                        <Typography 
+                                            className={classes.textoMirame}
+                                            align="right" 
+                                            variant="body2" >
+                                                {formatNumber(sumImporte(elcorte.resumenVentas),2)}
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
                                 <Divider />
                                 <Grid item xs={12}>
-                                    <Typography align="right" variant="body2" >Cajas vacías: {formatNumber((mediasCajasCount/2),1)}</Typography>
+                                    <Typography 
+                                        className={classes.textoMiniFacheron}
+                                        align="right" 
+                                        variant="body2" >
+                                            Cajas vacías 
+                                    </Typography>
+                                    <Typography 
+                                        className={classes.textoMirame}
+                                        align="right" 
+                                        variant="body2" >
+                                            {formatNumber((mediasCajasCount/2),1)}
+                                    </Typography>
                                 </Grid>
                             </Grid>
                         }
@@ -138,17 +179,20 @@ export default function Corte(props){
                                     {elcorte.items.map((item, i) => (
                                         <VentaItem item={item} key={i}/>
                                     ))}
-                                    <Grid item xs={8}>
+                                    <Grid item xs={3} sm={7}>
                                         <Typography align="right">{formatNumber(sumEmpaques(elcorte.items),1)}</Typography>
                                     </Grid>
-                                    <Grid item xs={2}>
+                                    <Grid item xs={3} sm={2}>
                                         <Typography align="right">{formatNumber(sumCantidad(elcorte.items),2)}</Typography>
                                     </Grid>
-                                    <Grid item xs={1}> 
+                                    <Grid item xs={3} sm={1}> 
                                         <Typography align="center"> -- </Typography>
                                     </Grid>
-                                    <Grid item xs={1}>
+                                    <Grid item xs={3} sm={1}>
                                         <Typography align="right">${formatNumber(elcorte.tventas,2)}</Typography>
+                                    </Grid>
+                                    <Grid item xs={1} sm={1}>
+                                        
                                     </Grid>
                                 </Grid>
                             </Grid>

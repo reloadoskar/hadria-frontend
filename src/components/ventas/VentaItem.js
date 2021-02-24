@@ -51,7 +51,7 @@ export default function VentaItem(props){
                         </Typography>
                     </Grid>
                     <Grid item xs={3} sm={1}>
-                        <Typography variant="body2" align="center" >
+                        <Typography variant="body2" align="right" >
                             x {item.precio}
                         </Typography>
                     </Grid>

@@ -25,7 +25,13 @@ const useStyles = makeStyles(theme => ({
     textoSangron: {
         color: '#c70039',
     },
-
+    textoMiniFacheron: {
+        fontSize: '11px',
+        fontWeight: 'bold'
+    },
+    textoMirame: {
+        fontWeight: 'bolder'
+    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
