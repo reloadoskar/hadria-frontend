@@ -45,6 +45,7 @@ const useInventario = () => {
 	}
 
 	const mover = (movimiento) => {
+		setUpdating(!updating)
 		return moveInventario(movimiento).then(res=>{
 			setUpdating(!updating)
 			return res
