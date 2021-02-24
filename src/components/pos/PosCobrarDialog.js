@@ -134,7 +134,7 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
         e.preventDefault()
         setLoading(true)
         const nventa = {
-            ubicacion: ubicacion._id[0],
+            ubicacion: ubicacion._id,
             fecha: fecha,
             cliente: values.cliente,
             tipoPago: values.tipoPago,
@@ -164,6 +164,12 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
                 })
                 // rePrintTicket()
                 setLoading(false)
+            })
+            .catch(err => {
+                close('cobrarDialog')
+                setLoading(false)
+                console.log(err)
+
             })
     }
 
@@ -336,8 +342,6 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
                                 </React.Fragment>
                                 }
                             </Grid>
-
-                            
                         </DialogContent>
                 }
                 <DialogActions>
@@ -357,6 +361,5 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
         </Dialog>
         <ReprintDialog open={reprintDialog} cancel={cancelReprint} ok={printTicket} />
         </React.Fragment>
-        
-    );
+    )
 }
