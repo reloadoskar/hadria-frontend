@@ -13,7 +13,7 @@ const useProvedors = () => {
 		return () => setProvedors([])
 	}, [])
 
-	function add(provedor) {
+	function addProvedor(provedor) {
 		saveProvedor(provedor).then(res => {
 			if (res.status === 'success') {
 				const newProvedor = [res.provedor, ...provedors];  
@@ -36,7 +36,7 @@ const useProvedors = () => {
 
 	return {
 		provedors,
-		add,
+		addProvedor,
 		del
 	}
 };

@@ -23,7 +23,8 @@ import useCompras from './components/hooks/useCompras'
 import useUbicacions from './components/hooks/useUbicacions'
 import useCortes from './components/hooks/useCortes'
 import useBalance from './components/hooks/useBalance'
-
+import useProducts from './components/hooks/useProducts'
+import useProvedors from './components/hooks/useProvedors';
 import useStyles from './components/hooks/useStyles'
 import useInventario from './components/hooks/useInventario';
 
@@ -36,6 +37,8 @@ export default function Router({auth}){
     const {user} = useUser()
     const {compras, crearCompra, cancelarCompra, cerrarCompra} = useCompras()
     const {ubicacions} = useUbicacions()
+    const {products, addProduct } = useProducts()
+    const {provedors, addProvedor} = useProvedors()
     const { invxubic, inventario, mover } = useInventario()
     const {getCorte} = useCortes()
     const {balance, disp, totalCxc, addPagoCxc, cuentasxCobrar, addIngreso, addEgreso, 
@@ -116,6 +119,10 @@ export default function Router({auth}){
                                     cancelarCompra={cancelarCompra} 
                                     cerrarCompra={cerrarCompra} 
                                     compras={compras} 
+                                    provedors={provedors}
+                                    products={products}
+                                    addProduct={addProduct}
+                                    addProvedor={addProvedor}
                                 />
                             </Route>
                             <Route exact path={`${path}/conceptos`} component={ConceptosTabs}></Route>
@@ -127,7 +134,12 @@ export default function Router({auth}){
                                     mover={mover}
                                     />
                             </Route>
-                            <Route exact path={`${path}/pos`} component={Container}></Route>
+                            <Route exact path={`${path}/pos`}>
+                                <Container 
+                                    invxubic={invxubic}
+                                    user={user}
+                                />
+                            </Route>
                             <Route exact path={`${path}/ventas`} component={Ventas}></Route>
                             <Route exact path={`${path}/empleados`} component={Empleados}></Route>
                         </Switch>

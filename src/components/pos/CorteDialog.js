@@ -71,7 +71,7 @@ export default function CorteDialog({isOpen, close, corteData, data, showMessage
 
     const cierraCorte = (corteConfirmed) => {
         corteConfirmed.fecha = fecha
-        corteConfirmed.ubicacion = ubicacion._id[0]
+        corteConfirmed.ubicacion = ubicacion._id
         // console.log(corteConfirmed)
         saveCorte(corteConfirmed).then( res => {
             showMessage(res.message, res.status)
@@ -112,7 +112,7 @@ export default function CorteDialog({isOpen, close, corteData, data, showMessage
                 <DialogTitle>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
-                            <Typography variant="h6" >{ubicacion._id[0].nombre} </Typography>
+                            <Typography variant="h6" >{ubicacion._id.nombre} </Typography>
                         </Grid>
                         <Grid item xs={6}>
                             <Grid container justify="flex-end">

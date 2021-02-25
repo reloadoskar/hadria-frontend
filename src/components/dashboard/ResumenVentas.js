@@ -45,7 +45,7 @@ const ResumenVentas = ({data}) => {
 							{
 								data.map((el, index) => (
 									<TableRow key={index}>
-										<TableCell>{el.producto[0].descripcion}</TableCell>
+										<TableCell>{el.producto.descripcion}</TableCell>
 										<TableCell align="right">{el._id.precio}</TableCell>
 										<TableCell align="right">{el.cantidad}</TableCell>
 										<TableCell align="right">{el.empaques}</TableCell>

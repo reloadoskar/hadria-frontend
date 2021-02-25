@@ -10,8 +10,8 @@ import DetalleCompra from './DetalleCompra'
 import Buscador from './Buscador'
 
 // import useCompras from '../hooks/useCompras';
-import useProducts from '../hooks/useProducts'
-import useProvedors from '../hooks/useProvedors';
+// import useProducts from '../hooks/useProducts'
+// import useProvedors from '../hooks/useProvedors';
 import useTipoCompras from '../hooks/useTipoCompras';
 import useUbicacions from '../hooks/useUbicacions';
 
@@ -22,12 +22,22 @@ import ConfirmDialog from './ConfirmDialog'
 
 
 function Compras(props) {
-    const {compras, crearCompra, cancelarCompra} = props
+    const {
+        compras, 
+        crearCompra, 
+        cancelarCompra, 
+        
+        products, 
+        addProduct,
+
+        provedors,
+        addProvedor
+    } = props
     // const {compras, crearCompra, cancelarCompra} = useCompras()
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
-    const {products, addProduct } = useProducts()
-    const {provedors, add} = useProvedors();
+    // const {products, addProduct } = useProducts()
+    // const {provedors, add} = useProvedors()
     const {tipoCompras, addTipoCompra} = useTipoCompras();
     const {ubicacions} = useUbicacions();
 
@@ -110,7 +120,7 @@ function Compras(props) {
                         tipoCompras={tipoCompras}
                         ubicacions={ubicacions}
                         addTipoCompra={addTipoCompra}
-                        add={add}
+                        add={addProvedor}
                     />
                 </Grid>
                 {compras === null ? null :

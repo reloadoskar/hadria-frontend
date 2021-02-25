@@ -65,8 +65,8 @@ const initialState = {
 
 function PosContainer(props) {
     const {invxubic, user} = props
-    // const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
+    // const classes = useStyles()
     const {
         // addIngreso, 
         addVenta, cxcPdv, addPagoCxc} = useIngresos()

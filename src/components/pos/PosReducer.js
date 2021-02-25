@@ -3,7 +3,7 @@ import {calcTotal} from '../Tools'
 const filtrarInventario = (inv, ubic) => {
     const inventario = {}
         inventario.compras= inv.compras.filter( item => {        
-        if(item.ubicacion[0] === ubic.nombre){
+        if(item.ubicacion === ubic.nombre){
             return item
         }
         return null
