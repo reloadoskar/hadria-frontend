@@ -20,13 +20,14 @@ import Ventas from './components/ventas/Ventas';
 
 import useUser from './components/hooks/useUser'
 import useCompras from './components/hooks/useCompras'
+import useTipoCompras from './components/hooks/useTipoCompras'
 import useUbicacions from './components/hooks/useUbicacions'
 import useCortes from './components/hooks/useCortes'
 import useBalance from './components/hooks/useBalance'
 import useProducts from './components/hooks/useProducts'
-import useProvedors from './components/hooks/useProvedors';
+import useProvedors from './components/hooks/useProvedors'
 import useStyles from './components/hooks/useStyles'
-import useInventario from './components/hooks/useInventario';
+import useInventario from './components/hooks/useInventario'
 
 
 export default function Router({auth}){
@@ -36,6 +37,7 @@ export default function Router({auth}){
     
     const {user} = useUser()
     const {compras, crearCompra, cancelarCompra, cerrarCompra} = useCompras()
+    const {tipoCompras, addTipoCompra} = useTipoCompras();
     const {ubicacions} = useUbicacions()
     const {products, addProduct } = useProducts()
     const {provedors, addProvedor} = useProvedors()
@@ -123,6 +125,9 @@ export default function Router({auth}){
                                     products={products}
                                     addProduct={addProduct}
                                     addProvedor={addProvedor}
+                                    ubicacions={ubicacions}
+                                    tipoCompras={tipoCompras}
+                                    addTipoCompra={addTipoCompra}
                                 />
                             </Route>
                             <Route exact path={`${path}/conceptos`} component={ConceptosTabs}></Route>

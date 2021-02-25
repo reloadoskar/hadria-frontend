@@ -35,7 +35,7 @@ export default function AgregarItem(props){
                 return setValues({...values, producto: value, costo: value.costo})
             case 'cantidad':
                 imp = value * values.costo
-                return setValues({...values, cantidad: value, empaques: value, importe: imp})
+                return setValues({...values, cantidad: value, importe: imp})
             case 'costo':
                 imp = value * values.cantidad
                 return setValues({...values, costo: value, importe: imp})
@@ -97,11 +97,24 @@ export default function AgregarItem(props){
                                 <MenuItem onClick={(e) => openDialogProducto(e)} value="">Nuevo...</MenuItem>
                             </TextField>
                         </Grid>
+                        <Grid item xs={6} sm={2}>
+                            <TextField
+                                id="empaques"
+                                label="Cajas"
+                                margin="normal"
+                                type="number"
+                                required
+                                value={values.empaques}
+                                onChange={(e) => handleChange('empaques', e.target.value )}
+                                fullWidth
+                                variant="outlined"
+                            />
+                        </Grid>
                         
                         <Grid item xs={6} sm={2}>
                             <TextField
                                 id="cantidad"
-                                label="Cantidad"
+                                label="Kilos"
                                 margin="normal"
                                 type="number"
                                 required
@@ -112,19 +125,6 @@ export default function AgregarItem(props){
                             />
                         </Grid>
                         
-                        <Grid item xs={6} sm={2}>
-                            <TextField
-                                id="empaques"
-                                label="Empaques"
-                                margin="normal"
-                                type="number"
-                                required
-                                value={values.empaques}
-                                onChange={(e) => handleChange('empaques', e.target.value )}
-                                fullWidth
-                                variant="outlined"
-                            />
-                        </Grid>
 
                         <Grid item xs={6} sm={2}>
                             <TextField

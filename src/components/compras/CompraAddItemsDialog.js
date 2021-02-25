@@ -2,16 +2,17 @@ import React, { useState } from 'react'
 import { Dialog, DialogTitle, Button, DialogContent, DialogActions, Grid, TextField, MenuItem } from '@material-ui/core';
 // import SaveIcon from '@material-ui/icons/Save';
 
-import useProducts from '../hooks/useProducts'
-import useProvedors from '../hooks/useProvedors'
+// import useProducts from '../hooks/useProducts'
+// import useProvedors from '../hooks/useProvedors'
 import {objectIsNull} from '../Tools'
 // import CrearProducto from '../productos/CrearProducto';
 
-export default function CompraAddItemsDialog({ open, handleClose, addItemToList, showMessage }) {
-    const {products, 
-        // add
-    } = useProducts()
-    const {provedors} = useProvedors()
+export default function CompraAddItemsDialog(props){
+    const { open, handleClose, addItemToList, showMessage , products, provedors } = props
+    // const {products, 
+    //     // add
+    // } = useProducts()
+    // const {provedors} = useProvedors()
     // const [dialogProducto, setDialogProducto] = useState(false)
     const [values, setValues] = useState({
         producto: '',

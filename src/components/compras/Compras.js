@@ -12,8 +12,8 @@ import Buscador from './Buscador'
 // import useCompras from '../hooks/useCompras';
 // import useProducts from '../hooks/useProducts'
 // import useProvedors from '../hooks/useProvedors';
-import useTipoCompras from '../hooks/useTipoCompras';
-import useUbicacions from '../hooks/useUbicacions';
+// import useUbicacions from '../hooks/useUbicacions';
+// import useTipoCompras from '../hooks/useTipoCompras';
 
 import AddIcon from '@material-ui/icons/Add';
 import useStyles from '../hooks/useStyles'
@@ -22,6 +22,11 @@ import ConfirmDialog from './ConfirmDialog'
 
 
 function Compras(props) {
+    // const {compras, crearCompra, cancelarCompra} = useCompras()
+    // const {products, addProduct } = useProducts()
+    // const {provedors, add} = useProvedors()
+    // const {ubicacions} = useUbicacions();
+    // const {tipoCompras, addTipoCompra} = useTipoCompras();
     const {
         compras, 
         crearCompra, 
@@ -31,15 +36,15 @@ function Compras(props) {
         addProduct,
 
         provedors,
-        addProvedor
+        addProvedor,
+
+        ubicacions,
+
+        tipoCompras, 
+        addTipoCompra
     } = props
-    // const {compras, crearCompra, cancelarCompra} = useCompras()
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
-    // const {products, addProduct } = useProducts()
-    // const {provedors, add} = useProvedors()
-    const {tipoCompras, addTipoCompra} = useTipoCompras();
-    const {ubicacions} = useUbicacions();
 
     const [showDialog, setShowDialog] = useState(false)
     const [showDialogP, setShowDialogP] = useState(false)
@@ -131,7 +136,15 @@ function Compras(props) {
                     ))
                 }
             </Grid>
-            <DetalleCompra compra={compra} open={detCompra} close={closeCompra} showMessage={showMessage} />
+            <DetalleCompra 
+                compra={compra} 
+                open={detCompra} 
+                close={closeCompra} 
+                showMessage={showMessage} 
+                ubicacions={ubicacions}
+                products={products}
+                provedors={provedors}
+            />
             <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelar}/>
         </Container>
     )

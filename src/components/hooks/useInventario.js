@@ -35,7 +35,7 @@ const useInventario = () => {
 			setInvxubic(res.inventario)
 		})
 		return () => setInvxubic(null)
-	}, [])
+	}, [inventario])
 
 	const getInvUbic = (ubic) => {
 		return getInventarioBy(ubic).then(res => {
@@ -45,7 +45,7 @@ const useInventario = () => {
 	}
 
 	const mover = (movimiento) => {
-		setUpdating(!updating)
+		// setUpdating(!updating)
 		return moveInventario(movimiento).then(res=>{
 			setUpdating(!updating)
 			return res

@@ -17,11 +17,6 @@ const useCompras = () => {
 			let newCompra = [...compras, res.compra]
 			setCompras(newCompra)	
 			return res
-			// setUpdating(true)
-				// return saveCompra(compra).then(res => {
-			// setUpdating(!updating)
-		// 	return res
-		// })
 	}
 	
 	const cancelarCompra = (id) =>{

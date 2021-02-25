@@ -8,7 +8,7 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
 
-import useUbicacions from '../hooks/useUbicacions';
+// import useUbicacions from '../hooks/useUbicacions';
 import CompraAddItemsDialog from './CompraAddItemsDialog'
 
 import { formatNumber, sumImporte } from '../Tools'
@@ -17,9 +17,9 @@ import { updateCompra, updateCompraItem, addCompraItem, ticketNuevoItem } from '
 import useStyles from '../hooks/useStyles';
 import moment from 'moment'
 export default function DetalleCompra(props) {
+    const { compra, open, close, showMessage, ubicacions, products, provedors } = props
     const classes = useStyles()
-    const { ubicacions } = useUbicacions();
-    const { compra, open, close, showMessage } = props
+    // const { ubicacions } = useUbicacions();
     const [addItem, setAdditem] = useState(false)
     const [edit, setEdit] = useState({
         item: null,
@@ -413,6 +413,8 @@ export default function DetalleCompra(props) {
             handleClose={closeAddItem}
             showMessage={showMessage}
             addItemToList={saveNewItem}
+            products={products}
+            provedors={provedors}
         />
         </div>
     )
