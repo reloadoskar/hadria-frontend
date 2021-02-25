@@ -11,7 +11,6 @@ import EgresoDialog from './EgresoDialog'
 import IngresoDialog from './IngresoDialog'
 import AddItemDialog from './AddItemDialog'
 import CobroDialog from './CobroDialog'
-import CorteDialog from './CorteDialog'
 import Corte from '../cortes/Corte'
 import RetiroDialog from './RetiroDialog'
 // import Loading from '../Loading'
@@ -19,16 +18,11 @@ import RetiroDialog from './RetiroDialog'
 import { Container, } from '@material-ui/core'
 
 import reducer from './PosReducer'
-
-import useInventario from '../hooks/useInventario'
 import useIngresos from '../ingresos/useIngresos'
 import useCuentasxPagar from '../cxp/useCuentasxPagar'
 import useCortes from '../hooks/useCortes'
-import useUbicacions from '../hooks/useUbicacions'
-import useVentas from '../ventas/useVentas'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';
-import useUser from '../hooks/useUser';
 // import useStyles from '../hooks/useStyles';
 const initialState = {
     saldoEnUbicacion: 0, 
@@ -69,20 +63,17 @@ const initialState = {
     cuentasPorCobrar: [],
 }
 
-function PosContainer() {
-    const {user} = useUser()
+function PosContainer(props) {
+    const {invxubic, user} = props
     // const classes = useStyles()
-    const {delVenta} = useVentas()
     const { enqueueSnackbar } = useSnackbar()
     const {
         // addIngreso, 
         addVenta, cxcPdv, addPagoCxc} = useIngresos()
-    const {invxubic} = useInventario();
     const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
     const {getCorte} = useCortes()
     const [corte, setCorte] = useState(null)
     const [corteDialog, setCorteDialog] = useState(false)
-    const {ubicacions} = useUbicacions();
 
     const [ubicacion, setUbicacion] = useState('')
     const [invSelected, setInvSelected] = useState(null)
@@ -188,11 +179,9 @@ function PosContainer() {
                     horizontal: 'center',
                 },
             } ) 
-            openDialog('posDialog')
-            
-        }else{
-            openDialog('posDialog')
         }
+        openDialog('posDialog')
+            
     }
 
     const loadBalance = () => {
@@ -349,17 +338,6 @@ function PosContainer() {
                                     corte={corte}
                                     onChangeFecha={onChangeFecha}
                                 />
-                                // <CorteDialog 
-                                //     fecha={fecha}
-                                //     ubicacions={ubicacions}
-                                //     ubicacion={ubicacion}
-                                //     data={values}
-                                //     corteData={corte}
-                                //     isOpen={values.corteDialog}
-                                //     close={closeDialog}
-                                //     showMessage={showMessage}
-                                //     delVenta={delVenta}
-                                // />
                             }
                         </div>    
                     }

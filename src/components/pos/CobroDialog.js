@@ -49,7 +49,7 @@ export default function CobroDialog(props) {
         setGuardando(true)
         e.preventDefault()
         var pago = {
-            ubicacion: ubicacion._id[0]._id,
+            ubicacion: ubicacion._id._id,
             cuenta: values.cuenta,
             tipoPago: values.tipoPago,
             importe: values.importe,

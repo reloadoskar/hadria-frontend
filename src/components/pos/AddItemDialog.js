@@ -92,7 +92,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Typography variant="h6" >{item.item.producto.descripcion}</Typography>
-    <Typography variant="subtitle2" >Disponible: {formatNumber(item.item.empaquesStock)}/{formatNumber(item.item.stock,2)} 
+    <Typography variant="subtitle2" >Disponible: {formatNumber(item.item.empaquesStock,1)}/{formatNumber(item.item.stock,2)} 
                         {/* {item.item.producto.unidad.abr} */}
                         </Typography>                        
                     </Grid>

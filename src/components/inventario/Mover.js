@@ -23,7 +23,7 @@ export default function Mover(props){
     const handleChange = (field, value) =>{
         switch (field) {
             case "origen":
-                setMovimiento({...movimiento, origen: value._id[0], origensel: value})
+                setMovimiento({...movimiento, origen: value._id, origensel: value})
                 break;
             case "itemselcantidad":
                 // console.log("cambiando cant: "+value)
