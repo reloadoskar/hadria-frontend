@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getCompras, cancelCompra, closeCompra, saveCompra } from '../api'
 const useCompras = () => {
 	const [compras, setCompras] = useState(null)
-	const [updating, setUpdating] = useState(false)
+	const [upCompras, setUpCompras] = useState(false)
 	useEffect(() => {
 		async function loadCompras() {
 			const res = await getCompras()
@@ -10,7 +10,7 @@ const useCompras = () => {
 		}
 		loadCompras()
 		return () => setCompras([])
-	}, [updating])
+	}, [upCompras])
 
 	const crearCompra = async (compra) => {
 		const res = await saveCompra(compra)
@@ -21,7 +21,7 @@ const useCompras = () => {
 	
 	const cancelarCompra = (id) =>{
 		return cancelCompra(id).then( res => {
-			setUpdating(!updating)
+			setUpCompras(!upCompras)
 			// const n = compras
 			// n.splice(index, 1)
 			// setCompras(n)
@@ -30,9 +30,9 @@ const useCompras = () => {
 	}
 
 	const cerrarCompra = (id) => {
-		setUpdating(true)
+		setUpCompras(true)
 		return closeCompra(id).then( res => {
-			setUpdating(false)
+			setUpCompras(false)
 			return res
 		})
 	}
@@ -42,7 +42,8 @@ const useCompras = () => {
 		crearCompra,
 		cancelarCompra,
 		cerrarCompra,
-		updating
+		upCompras,
+		setUpCompras
 	}
 };
 

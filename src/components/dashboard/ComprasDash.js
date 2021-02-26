@@ -3,14 +3,14 @@ import { Card, CardHeader, CardContent, Typography, Grid, ListItem, LinearProgre
     // IconButton 
 } from '@material-ui/core';
 // import AddIcon from '@material-ui/icons/Add';
-import useCompras from '../hooks/useCompras';
+// import useCompras from '../hooks/useCompras';
 import {sumStock, sumEmpStock, formatNumber} from '../Tools'
 import VerCompra from './VerCompra'
 import CrearCompra from '../compras/CrearCompra'
 import { useSnackbar } from 'notistack';
 export default function ComprasDash(props){
-    // const {compras, crearCompra, cancelarCompra} = props
-    const {compras, crearCompra, cancelarCompra} = useCompras();
+    // const {compras, crearCompra, cancelarCompra} = useCompras();
+    const {compras, crearCompra, cancelarCompra} = props
     const [compraSelected, setCompraSelected] = useState(null)
     const [verCompra, setVerCompra] = React.useState(false);
     const [showDialog, setShowDialog] = useState(false)

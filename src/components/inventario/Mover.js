@@ -16,7 +16,7 @@ const init = {
 
 export default function Mover(props){
     const classes = useStyles()
-    const {open, close, inventario, ubicacions, mover} = props
+    const {open, close, inventario, ubicacions, mover, update} = props
     const [guardando, setGuardando] = useState(false)
     const [movimiento, setMovimiento] = useState(init)
     const [pesadas, setPesadas] = useState(false)
@@ -82,9 +82,9 @@ export default function Mover(props){
         setGuardando(true)
         if(validar(movimiento)){
             mover(movimiento).then(res => {
-                console.log(res)
                 handleClose()
                 setGuardando(false)
+                update(res)
             })
         }else{
             console.log("invalido")

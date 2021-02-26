@@ -36,12 +36,12 @@ export default function Router({auth}){
     const classes = useStyles()
     
     const {user} = useUser()
-    const {compras, crearCompra, cancelarCompra, cerrarCompra} = useCompras()
+    const {compras, crearCompra, cancelarCompra, cerrarCompra, setUpCompras} = useCompras()
     const {tipoCompras, addTipoCompra} = useTipoCompras();
     const {ubicacions} = useUbicacions()
     const {products, addProduct } = useProducts()
     const {provedors, addProvedor} = useProvedors()
-    const { invxubic, inventario, mover } = useInventario()
+    const { invxubic, inventario, mover, setUpdating } = useInventario()
     const {getCorte} = useCortes()
     const {balance, disp, totalCxc, addPagoCxc, cuentasxCobrar, addIngreso, addEgreso, 
         cuentasxPagar, 
@@ -128,6 +128,7 @@ export default function Router({auth}){
                                     ubicacions={ubicacions}
                                     tipoCompras={tipoCompras}
                                     addTipoCompra={addTipoCompra}
+                                    update={setUpdating}
                                 />
                             </Route>
                             <Route exact path={`${path}/conceptos`} component={ConceptosTabs}></Route>
@@ -137,6 +138,7 @@ export default function Router({auth}){
                                     invxubic={invxubic}
                                     inventario={inventario}
                                     mover={mover}
+                                    update={setUpCompras}
                                     />
                             </Route>
                             <Route exact path={`${path}/pos`}>

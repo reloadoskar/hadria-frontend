@@ -15,7 +15,8 @@ function Inventario(props) {
         ubicacions, 
         invxubic, 
         inventario, 
-        mover
+        mover,
+        update
     } = props
     const classes = useStyles()
     const select = ["FOLIO","PRODUCTOR","UBICACION"]
@@ -88,6 +89,7 @@ function Inventario(props) {
                                 inventario={invxubic} 
                                 ubicacions={ubicacions}
                                 mover={mover}
+                                update={update}
                             />
                         </Grid>
                         <Grid item xs={6}>

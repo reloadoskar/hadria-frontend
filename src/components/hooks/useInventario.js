@@ -58,7 +58,9 @@ const useInventario = () => {
 		invxubic,
 		getInvUbic,
 		totalInventario,
-		mover
+		mover, 
+		updating,
+		setUpdating
 	}
 };
 

@@ -41,7 +41,9 @@ function Compras(props) {
         ubicacions,
 
         tipoCompras, 
-        addTipoCompra
+        addTipoCompra,
+        
+        update
     } = props
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
@@ -55,6 +57,7 @@ function Compras(props) {
     const crear = (compra) => {
         return crearCompra(compra).then(res => {
             closeDialog()
+            update(res)
             return res
         })
     }
