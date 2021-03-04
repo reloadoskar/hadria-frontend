@@ -11,11 +11,11 @@ import useModal from './hooks/useModal';
 import useProvedors from './hooks/useProvedors'
 
 function Provedors() {
-    const {provedors, add, del} = useProvedors([])
+    const {provedors, addProvedor, del} = useProvedors([])
     const { isShowing, toggle } = useModal();
 
-    function addProvedor(provedor) {
-        add(provedor)
+    function add(provedor) {
+        addProvedor(provedor)
         toggle()
     }
 
@@ -27,7 +27,7 @@ function Provedors() {
         <Paper>
             <Container maxWidth="lg">
                 <Grid container justify="flex-end">
-                    <ProvedorsDialog addProvedor={addProvedor} isShowing={isShowing} toggle={toggle} />
+                    <ProvedorsDialog addProvedor={add} isShowing={isShowing} toggle={toggle} />
                 </Grid>
 
                 <Grid container>
