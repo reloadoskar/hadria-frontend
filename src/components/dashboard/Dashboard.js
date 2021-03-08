@@ -248,7 +248,7 @@ export default function Dashboard(props) {
                             corte={corte}
                             onChangeFecha={onChangeFecha}
                             guardarCorte={guardarCorte}
-                            {...props}
+                            ubicacions={ubicacions}
                         />                 
                     </Grid>
 
