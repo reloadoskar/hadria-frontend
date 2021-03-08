@@ -3,6 +3,7 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextF
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import VentaBasic from '../ventas/VentaBasic'
+import ConfirmDialog from './ConfirmDialog'
 import EgresoBasic from '../egresos/EgresoBasic'
 import IngresoBasic from '../ingresos/IngresoBasic'
 import CxcBasic from '../cxc/CxcBasic'
@@ -12,10 +13,12 @@ import VentaItem from '../ventas/VentaItem'
 import useStyles from '../hooks/useStyles'
 export default function Corte(props){
     const classes = useStyles()
-    const {open, close, corte, fecha, onChangeFecha} = props
+    const {open, close, corte, fecha, onChangeFecha, guardarCorte} = props
     const [elcorte, setElcorte] = useState(null)
     const [lafecha, setLafecha] = useState("")
     const [mediasCajasCount, setMediasCajasCount] = useState(0)
+    const [verVentas, setVerVentas] = useState(true)
+    const [confirm, setConfirm] = useState(false)
     useEffect(()=>{
         if(corte){
             setElcorte(corte)
@@ -59,6 +62,17 @@ export default function Corte(props){
         let ant = moment(lafecha)
         ant.subtract(1,"days")
         handleChange(ant.format("YYYY-MM-DD"))
+    }
+
+    function closeConfirm(){
+        setConfirm(false)
+    }
+
+    function cierraCorte (){
+        guardarCorte(elcorte).then( res => {
+            console.log('guardado')
+            close()
+        })
     }
     return(
         <Dialog
@@ -125,7 +139,7 @@ export default function Corte(props){
                                         <Typography 
                                             className={classes.textoMirame}
                                             align="right" 
-                                            variant="body2" >
+                                            >
                                                 {formatNumber(sumEmpaques(elcorte.resumenVentas),1)}
                                         </Typography>
                                     </Grid>
@@ -136,11 +150,11 @@ export default function Corte(props){
                                         <Typography 
                                             className={classes.textoMirame}
                                             align="right" 
-                                            variant="body2" >
+                                            >
                                                 {formatNumber(sumCantidad(elcorte.resumenVentas),2)}
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={3} sm={2}><Typography variant="body2" > </Typography></Grid>
+                                    <Grid item xs={3} sm={2}><Typography> </Typography></Grid>
                                     <Grid item xs={3} sm={2}>
                                         <Typography align="right" className={classes.textoMiniFacheron}>
                                             Total ventas
@@ -148,8 +162,8 @@ export default function Corte(props){
                                         <Typography 
                                             className={classes.textoMirame}
                                             align="right" 
-                                            variant="body2" >
-                                                {formatNumber(sumImporte(elcorte.resumenVentas),2)}
+                                            >
+                                                ${formatNumber(sumImporte(elcorte.resumenVentas),2)}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -158,20 +172,20 @@ export default function Corte(props){
                                     <Typography 
                                         className={classes.textoMiniFacheron}
                                         align="right" 
-                                        variant="body2" >
+                                        >
                                             Cajas vacías 
                                     </Typography>
                                     <Typography 
                                         className={classes.textoMirame}
                                         align="right" 
-                                        variant="body2" >
+                                        >
                                             {formatNumber((mediasCajasCount/2),1)}
                                     </Typography>
                                 </Grid>
                             </Grid>
                         }
 
-                        {elcorte.ventas.length === 0 ? null :
+                        {verVentas === false ? null :
                             <Grid item xs={12}>
                                 <Typography variant="h6" align="center">DETALLE DE VENTAS</Typography>                                
                                 <Divider />
@@ -205,7 +219,7 @@ export default function Corte(props){
                                         <IngresoBasic ingreso={ingreso} key={i} />
                                 ))}
                                 <Divider />
-                                <Typography align="right">${formatNumber(elcorte.tingresos,2)}</Typography>
+                                <Typography className={classes.textoMirame} align="right">${formatNumber(elcorte.tingresos,2)}</Typography>
                             </Grid>
                         }
                         {elcorte.egresos.length === 0 ? null :
@@ -225,15 +239,38 @@ export default function Corte(props){
                                         <CxcBasic cxc={credito} key={i} />
                                 ))}
                                 <Divider />
-                                <Typography align="right">${formatNumber(elcorte.tcreditos,2)}</Typography>
+                                <Typography  
+                                    className={classes.textoMirame}
+                                    align="right" color="secondary">- ${formatNumber(elcorte.tcreditos,2)}</Typography>
                             </Grid>
                         }
-                    </Grid>
 
+                        <Grid item xs={12} >
+                            <Divider />
+                            <Typography className={classes.textoMiniFacheron} align="right">Total Corte:</Typography>
+                            <Typography variant="h6" align="right">${formatNumber(elcorte.total,2)}</Typography>
+                        </Grid>
+                    </Grid>
                 </DialogContent>
-                <DialogActions>                        
+
+                <DialogActions>       
                     <Button onClick={close}>salir</Button>
+                    <Button 
+                        className={classes.botonMagico}
+                        onClick={() => setConfirm(true)}
+                        >Cerrar
+                    </Button>               
+                    <ConfirmDialog 
+                        ubicacions={props.ubicacions}
+                        id="confirma cierre de corte"
+                        keepMounted
+                        open={confirm}
+                        onClose={closeConfirm}
+                        corte={elcorte}
+                        cierraCorte={cierraCorte}
+                    />
                 </DialogActions>
+
             </React.Fragment>
             }
         </Dialog>
