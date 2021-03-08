@@ -37,6 +37,7 @@ import { Grid,
 // import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import Disponible from './Disponible'
 import Corte from '../cortes/Corte'
+import CrearCompra from '../compras/CrearCompra'
 
 export default function Dashboard(props) {
     const {
@@ -46,7 +47,9 @@ export default function Dashboard(props) {
         compras, 
         crearCompra, 
         cancelarCompra,
+
         getCorte,
+        guardarCorte,
 
         balance,
         disp,
@@ -100,6 +103,7 @@ export default function Dashboard(props) {
     const [crearEgreso, setCrearEgreso] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null);
     const [corteDialog, setCorteDialog] = useState(false)
+    const [dCrearCompra, setDCrearCompra] = useState(false)
     
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
@@ -172,6 +176,10 @@ export default function Dashboard(props) {
         setCorte(res)
     }
 
+    function closedCrearCompra(){
+        setDCrearCompra(false)
+    }
+
     return (
         <div>
                 {balance === null || ubicacions === [] || compras === [] ?
@@ -224,7 +232,11 @@ export default function Dashboard(props) {
                     }    
 
                     <Grid item xs={12} md={6}>                        
-                        <ComprasDash compras={compras} crearCompra={crearCompra} cancelarCompra={cancelarCompra}/>
+                        <ComprasDash 
+                            compras={compras} 
+                            crearCompra={crearCompra} 
+                            cancelarCompra={cancelarCompra}
+                        />
                     </Grid> 
 
                     <Grid item xs={12} md={6}>
@@ -235,6 +247,8 @@ export default function Dashboard(props) {
                             close={closeCorteDialog}
                             corte={corte}
                             onChangeFecha={onChangeFecha}
+                            guardarCorte={guardarCorte}
+                            {...props}
                         />                 
                     </Grid>
 
