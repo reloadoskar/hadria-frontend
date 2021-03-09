@@ -23,8 +23,8 @@ import useCuentasxPagar from '../cxp/useCuentasxPagar'
 import useCortes from '../hooks/useCortes'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';
-import Pesadas from '../inventario/Pesadas';
-import CrearVenta from '../ventas/CrearVenta';
+// import Pesadas from '../inventario/Pesadas';
+// import CrearVenta from '../ventas/CrearVenta';
 // import useStyles from '../hooks/useStyles';
 const initialState = {
     saldoEnUbicacion: 0, 
@@ -81,7 +81,7 @@ function PosContainer(props) {
     const [invSelected, setInvSelected] = useState(null)
     const [fecha, setFecha] = useState( moment().format('YYYY-MM-DD') )
     // const [itemSelected, setItemSelected] = useState()
-    const [pesadas, setPesadas] = useState(false)
+    // const [pesadas, setPesadas] = useState(false)
     const [values, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
@@ -229,22 +229,22 @@ function PosContainer(props) {
         setFecha(fecha)
     }
 
-    function openPesadas(){
-        setPesadas(true)
-    }
-    const closePesadas = () => {
-        setPesadas(false)
-    }
-    const addPesada = (pesada) => {
-        var lista = values.pesadas
-        lista.push(pesada)
-        // var emps = lista.length
-        // var cant = parseFloat(movimiento.itemselcantidad) + parseFloat(pesada)
-        // setMovimiento({...movimiento, pesadas: lista, itemselcantidad: cant, itemselempaques: emps })
-    }
-    const clearPesadas = () => {
-        // setMovimiento({...movimiento, pesadas: [], itemselcantidad: 0, itemselempaques:0})
-    }
+    // function openPesadas(){
+    //     setPesadas(true)
+    // }
+    // const closePesadas = () => {
+    //     setPesadas(false)
+    // }
+    // const addPesada = (pesada) => {
+    //     var lista = values.pesadas
+    //     lista.push(pesada)
+    //     // var emps = lista.length
+    //     // var cant = parseFloat(movimiento.itemselcantidad) + parseFloat(pesada)
+    //     // setMovimiento({...movimiento, pesadas: lista, itemselcantidad: cant, itemselempaques: emps })
+    // }
+    // const clearPesadas = () => {
+    //     // setMovimiento({...movimiento, pesadas: [], itemselcantidad: 0, itemselempaques:0})
+    // }
 
     return (
         <Container>
