@@ -20,9 +20,9 @@ import Ventas from './components/ventas/Ventas';
 
 import useUser from './components/hooks/useUser'
 import useCompras from './components/hooks/useCompras'
+import useCortes from './components/hooks/useCortes'
 import useTipoCompras from './components/hooks/useTipoCompras'
 import useUbicacions from './components/hooks/useUbicacions'
-import useCortes from './components/hooks/useCortes'
 import useBalance from './components/hooks/useBalance'
 import useProducts from './components/hooks/useProducts'
 import useProvedors from './components/hooks/useProvedors'
@@ -41,8 +41,8 @@ export default function Router({auth}){
     const {ubicacions} = useUbicacions()
     const {products, addProduct } = useProducts()
     const {provedors, addProvedor} = useProvedors()
-    const { invxubic, inventario, mover, setUpdating } = useInventario()
-    const {getCorte} = useCortes()
+    const {invxubic, inventario, mover, setUpdating } = useInventario()
+    const {getCorte, guardarCorte} = useCortes()
     const {balance, disp, totalCxc, addPagoCxc, cuentasxCobrar, addIngreso, addEgreso, 
         cuentasxPagar, 
         totalCxp, 
@@ -95,7 +95,10 @@ export default function Router({auth}){
                                             cancelarCompra={cancelarCompra} 
                                             cerrarCompra={cerrarCompra} 
                                             compras={compras}
+
                                             getCorte={getCorte}
+                                            guardarCorte={guardarCorte}
+
                                             balance={balance}
                                             disp={disp}
                                             addIngreso={addIngreso}
@@ -144,6 +147,7 @@ export default function Router({auth}){
                             <Route exact path={`${path}/pos`}>
                                 <Container 
                                     invxubic={invxubic}
+                                    ubicacions={ubicacions}
                                     user={user}
                                 />
                             </Route>
