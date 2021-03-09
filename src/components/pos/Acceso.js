@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import moment from 'moment'
 import useStyles from '../hooks/useStyles'
 
@@ -6,9 +6,13 @@ import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextF
 
 export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, handleChange, invUbic, user}){
     const classes = useStyles();
+    const [accesando, setAccesando] = useState(false)
     const handleSubmit = (e) => {
         e.preventDefault()
-        checkCorte()
+        setAccesando(true)
+        checkCorte().then(res => {
+            setAccesando(false)
+        })
     }
 
     return (
@@ -21,7 +25,9 @@ export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, han
                         )}
                 />
                 <CardContent>
-                    
+                    {accesando ?
+                        <Typography variant="h6" align="center"> Accesando... </Typography>
+                        :
                         <form onSubmit={(e) => handleSubmit(e)}>
                             {
                                 user.level < 3 ?
@@ -85,6 +91,8 @@ export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, han
                         </Grid>
 
                         </form>
+                    }
+                    
                     
                 </CardContent>
             </Card>

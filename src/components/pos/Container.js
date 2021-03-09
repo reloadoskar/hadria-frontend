@@ -23,6 +23,8 @@ import useCuentasxPagar from '../cxp/useCuentasxPagar'
 import useCortes from '../hooks/useCortes'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';
+import Pesadas from '../inventario/Pesadas';
+import CrearVenta from '../ventas/CrearVenta';
 // import useStyles from '../hooks/useStyles';
 const initialState = {
     saldoEnUbicacion: 0, 
@@ -79,6 +81,7 @@ function PosContainer(props) {
     const [invSelected, setInvSelected] = useState(null)
     const [fecha, setFecha] = useState( moment().format('YYYY-MM-DD') )
     // const [itemSelected, setItemSelected] = useState()
+    const [pesadas, setPesadas] = useState(false)
     const [values, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
@@ -196,7 +199,7 @@ function PosContainer(props) {
     }
 
     const checkCorte = () => {
-        existCorte(ubicacion._id._id, fecha).then( res =>{
+        return existCorte(ubicacion._id._id, fecha).then( res =>{
             if(res.corte.length === 0){
                 // dispatch({type: 'corteExist', value: false})                
                 startPos()
@@ -204,6 +207,7 @@ function PosContainer(props) {
                 dispatch({type: 'corteExist', value: true})
                 showMessage('Fecha cerrada, para esta ubicación', 'error')
             }
+            return res
         })
     }
 
@@ -225,6 +229,23 @@ function PosContainer(props) {
         setFecha(fecha)
     }
 
+    function openPesadas(){
+        setPesadas(true)
+    }
+    const closePesadas = () => {
+        setPesadas(false)
+    }
+    const addPesada = (pesada) => {
+        var lista = values.pesadas
+        lista.push(pesada)
+        // var emps = lista.length
+        // var cant = parseFloat(movimiento.itemselcantidad) + parseFloat(pesada)
+        // setMovimiento({...movimiento, pesadas: lista, itemselcantidad: cant, itemselempaques: emps })
+    }
+    const clearPesadas = () => {
+        // setMovimiento({...movimiento, pesadas: [], itemselcantidad: 0, itemselempaques:0})
+    }
+
     return (
         <Container>
             {
@@ -242,6 +263,11 @@ function PosContainer(props) {
                         null
                         :
                         <div>
+                            {/* <CrearVenta 
+                                elinventario={invSelected}
+                                laubicacion={ubicacion}
+                                lafecha={fecha}
+                            /> */}
                             <PosDialog 
                                 values={values}
                                 inventario={invSelected}
@@ -332,6 +358,7 @@ function PosContainer(props) {
                             />
                             {corte === [] ? null : 
                                 <Corte 
+                                    ubicacions={props.ubicacions}
                                     fecha={fecha}
                                     open={corteDialog}
                                     close={closeDialogCorte}
@@ -339,6 +366,13 @@ function PosContainer(props) {
                                     onChangeFecha={onChangeFecha}
                                 />
                             }
+                            {/* <Pesadas 
+                                open={pesadas} 
+                                close={closePesadas} 
+                                addPesada={addPesada} 
+                                clearPesadas={clearPesadas} 
+                                pesadas={values.pesadas} 
+                            /> */}
                         </div>    
                     }
                 </div>
