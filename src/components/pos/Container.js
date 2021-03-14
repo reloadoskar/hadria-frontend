@@ -73,7 +73,7 @@ function PosContainer(props) {
         // addIngreso, 
         addVenta, cxcPdv, addPagoCxc} = useIngresos()
     const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
-    const {getCorte} = useCortes()
+    const {getCorte, guardarCorte} = useCortes()
     const [corte, setCorte] = useState(null)
     const [corteDialog, setCorteDialog] = useState(false)
 
@@ -358,12 +358,15 @@ function PosContainer(props) {
                             />
                             {corte === [] ? null : 
                                 <Corte 
+                                    user={user}
                                     ubicacions={props.ubicacions}
                                     fecha={fecha}
                                     open={corteDialog}
                                     close={closeDialogCorte}
                                     corte={corte}
                                     onChangeFecha={onChangeFecha}
+                                    guardar={guardarCorte}
+                                    message={showMessage}
                                 />
                             }
                             {/* <Pesadas 
