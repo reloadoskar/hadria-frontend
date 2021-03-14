@@ -50,6 +50,7 @@ export default function Dashboard(props) {
 
         getCorte,
         guardarCorte,
+        reabrirCorte,
 
         balance,
         disp,
@@ -247,8 +248,11 @@ export default function Dashboard(props) {
                             close={closeCorteDialog}
                             corte={corte}
                             onChangeFecha={onChangeFecha}
-                            guardarCorte={guardarCorte}
+                            guardar={guardarCorte}
+                            reabrir={reabrirCorte}
                             ubicacions={ubicacions}
+                            user={user}
+                            message={showMessage}
                         />                 
                     </Grid>
 
