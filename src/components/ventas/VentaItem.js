@@ -12,7 +12,6 @@ export default function VentaItem(props){
     const [item, setItem] = useState(null)
     useEffect(() => {
         if(props.item !== null){
-            console.log(props)
             setItem(props.item)
         }
         return () => setItem(null)
@@ -45,17 +44,17 @@ export default function VentaItem(props){
                             </Typography>
                         </Grid>                                        
                     }
-                    <Grid item xs={12} sm={basic ? 6 : 3}>
+                    <Grid item xs={12} sm={basic ? 6 : 5}>
                         <Typography variant="body2">
                             #{item.compra.folio} - {item.producto.descripcion}
                         </Typography>
                     </Grid>                                        
-                    <Grid item xs={3} sm={basic ? 1 : 2}>
+                    <Grid item xs={3} sm={basic ? 1 : 1}>
                         <Typography variant="body2" align="right" >
                             {item.empaques}
                         </Typography>
                     </Grid>
-                    <Grid item xs={3} sm={basic ? 1 : 2}>
+                    <Grid item xs={3} sm={basic ? 1 : 1}>
                         <Typography variant="body2" align="right" >
                             {item.cantidad}
                         </Typography>

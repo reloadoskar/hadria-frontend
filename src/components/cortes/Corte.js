@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton, Switch } from '@material-ui/core'
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import VentaBasic from '../ventas/VentaBasic'
@@ -12,12 +12,13 @@ import moment from 'moment'
 import VentaItem from '../ventas/VentaItem'
 import useStyles from '../hooks/useStyles'
 export default function Corte(props){
+    const {user, open, close, corte, fecha, onChangeFecha, guardar, reabrir} = props
     const classes = useStyles()
-    const {open, close, corte, fecha, onChangeFecha, guardarCorte} = props
     const [elcorte, setElcorte] = useState(null)
     const [lafecha, setLafecha] = useState("")
     const [mediasCajasCount, setMediasCajasCount] = useState(0)
-    const [verVentas, setVerVentas] = useState(true)
+    const [verFolios, setVerFolios] = useState(false)
+    const [verDetalle, setVerDetalle] = useState(false)
     const [confirm, setConfirm] = useState(false)
     useEffect(()=>{
         if(corte){
@@ -69,10 +70,17 @@ export default function Corte(props){
     }
 
     function cierraCorte (){
-        guardarCorte(elcorte).then( res => {
-            console.log('guardado')
+        guardar(elcorte).then( res => {
+            props.message(res.message, res.status)
             close()
         })
+    }
+
+    function toggleVerDetalle(){
+        setVerDetalle(!verDetalle)
+    }
+    function toggleVerFolios(){
+        setVerFolios(!verFolios)
     }
     return(
         <Dialog
@@ -87,6 +95,9 @@ export default function Corte(props){
                     <Grid container >
                         <Grid item xs={12} sm={4}>
                             <Typography variant="h6">{elcorte.ubicacion.nombre}</Typography>
+                            <Typography className={classes.textoMiniFacheron} color={ elcorte.status === "CERRADO" ? "secondary" : "primary"} >
+                                {elcorte.status}
+                            </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>         
                             <Typography variant="h6" align="center">               
@@ -119,20 +130,20 @@ export default function Corte(props){
                                 {elcorte.resumenVentas.map((el, i)=>(
                                     <React.Fragment key={i}>
                                     <Grid container >
-                                        <Grid item xs={1}><Typography variant="body2" >{el.compra.folio}</Typography></Grid>
-                                        <Grid item xs={11} sm={3}>
+                                        <Grid item xs={2} sm={2}><Typography variant="body2" className={classes.textoMirame} >#{el.compra.folio} | {moment(el.item.createdAt).format("DD/MM")}</Typography></Grid>
+                                        <Grid item xs={10} sm={3}>
                                             <Typography variant="body2" >{el.producto.descripcion}</Typography></Grid>
                                         <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(el.empaques,2)}</Typography></Grid>
                                         <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(el.cantidad,2)}</Typography></Grid>
-                                        <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber((el.importe / el.cantidad),2)}</Typography></Grid>
-                                        <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(el.importe,2)}</Typography></Grid>
+                                        <Grid item xs={3} sm={1}><Typography align="right" variant="body2" >${formatNumber((el.importe / el.cantidad),2)}</Typography></Grid>
+                                        <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >${formatNumber(el.importe,2)}</Typography></Grid>
                                     </Grid>
                                     <Divider />
                                     </React.Fragment>
                                 ))}
                                 <Divider />
                                 <Grid container>
-                                    <Grid item xs={3} sm={6}>
+                                    <Grid item xs={3} sm={7}>
                                         <Typography align="right" className={classes.textoMiniFacheron}>
                                             Total cajas
                                         </Typography>
@@ -154,7 +165,7 @@ export default function Corte(props){
                                                 {formatNumber(sumCantidad(elcorte.resumenVentas),2)}
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={3} sm={2}><Typography> </Typography></Grid>
+                                    <Grid item xs={3} sm={1}><Typography> </Typography></Grid>
                                     <Grid item xs={3} sm={2}>
                                         <Typography align="right" className={classes.textoMiniFacheron}>
                                             Total ventas
@@ -185,7 +196,38 @@ export default function Corte(props){
                             </Grid>
                         }
 
-                        {verVentas === false ? null :
+                        <Grid item xs={12}>
+                            <Typography component="div" align="center">
+                                Ver ventas
+                                <Switch 
+                                    checked={verFolios}
+                                    onChange={toggleVerFolios}
+                                />
+                                Ver detalle
+                                <Switch 
+                                    checked={verDetalle}
+                                    onChange={toggleVerDetalle}
+                                />
+                            </Typography>
+                        </Grid>
+
+                        {verFolios === false ? null :
+                            <Grid item xs={12}>
+                                <Typography variant="h6" align="center">VENTAS</Typography>
+                                <Divider />
+                                <Grid container spacing={1}>
+                                    {elcorte.ventas.map((item, i) => (
+                                        <VentaBasic venta={item} key={i}/>
+                                    ))}                                    
+                                    <Grid item xs={12}>
+                                        <Divider />
+                                        <Typography className={classes.textoMirame} align="right">${formatNumber(elcorte.tventas,2)}</Typography>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        }
+
+                        {verDetalle === false ? null :
                             <Grid item xs={12}>
                                 <Typography variant="h6" align="center">DETALLE DE VENTAS</Typography>                                
                                 <Divider />
@@ -193,10 +235,10 @@ export default function Corte(props){
                                     {elcorte.items.map((item, i) => (
                                         <VentaItem item={item} key={i}/>
                                     ))}
-                                    <Grid item xs={3} sm={7}>
+                                    <Grid item xs={3} sm={8}>
                                         <Typography align="right">{formatNumber(sumEmpaques(elcorte.items),1)}</Typography>
                                     </Grid>
-                                    <Grid item xs={3} sm={2}>
+                                    <Grid item xs={3} sm={1}>
                                         <Typography align="right">{formatNumber(sumCantidad(elcorte.items),2)}</Typography>
                                     </Grid>
                                     <Grid item xs={3} sm={1}> 
@@ -229,7 +271,7 @@ export default function Corte(props){
                                         <EgresoBasic egreso={egreso} key={i}/>
                                 ))}
                                 <Divider />
-                                <Typography align="right">${formatNumber(elcorte.tegresos,2)}</Typography>
+                                <Typography className={classes.textoMirame} color="secondary" align="right">-${formatNumber(elcorte.tegresos,2)}</Typography>
                             </Grid>
                         }
                         {elcorte.creditos.length === 0 ? null :
@@ -255,11 +297,22 @@ export default function Corte(props){
 
                 <DialogActions>       
                     <Button onClick={close}>salir</Button>
-                    <Button 
-                        className={classes.botonMagico}
-                        onClick={() => setConfirm(true)}
-                        >Cerrar
-                    </Button>               
+                    {
+                        elcorte.status === "ABIERTO" ? 
+                            <Button 
+                                className={classes.botonMagico}
+                                onClick={() => setConfirm(true)}
+                                >Cerrar
+                            </Button>
+                            :
+                            user.level > 2 ? null :
+                            <Button
+                                className={classes.botonCosmico}
+                                onClick={() => reabrir(elcorte.ubicacion._id, lafecha)}
+                            >
+                                Reabrir
+                            </Button>
+                    }
                     <ConfirmDialog 
                         ubicacions={props.ubicacions}
                         id="confirma cierre de corte"
