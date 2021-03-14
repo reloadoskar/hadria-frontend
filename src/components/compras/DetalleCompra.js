@@ -96,7 +96,7 @@ export default function DetalleCompra(props) {
         switch (field) {
             case 'cantidad':
                 importe = value * edit.costo
-                return setEdit({ ...edit, [field]: value, empaques: value, importe: importe })
+                return setEdit({ ...edit, [field]: value, importe: importe })
             case 'costo':
                 importe = value * edit.cantidad
                 return setEdit({ ...edit, [field]: value, importe: importe })

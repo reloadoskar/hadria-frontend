@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import Compra from './Compra'
-import { useSnackbar } from 'notistack';
+import React, { useState } from 'react'
+import CompraBasic from './CompraBasic'
+import { useSnackbar } from 'notistack'
 import {
     Button,
     Container,
@@ -134,7 +134,7 @@ function Compras(props) {
                 {compras === null ? null :
                     compras.map((compra, index) => (
                         <Grid item xs={12} key={index}>                    
-                            <Compra compra={compra}  openConfirm={openConfirm} editCompra={editCompra}/>
+                            <CompraBasic compra={compra}  openConfirm={openConfirm} editCompra={editCompra}/>
                         </Grid>
                     ))
                 }
