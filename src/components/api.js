@@ -791,6 +791,21 @@ export const existCorte = (ubicacion, fecha) => {
     }
 }
 
+export const openCorte = (ubicacion, fecha) => {
+    try{
+        if(decoded){
+            return axios
+                .get(url_client + decoded.database + `/corte/open/${ubicacion}/${fecha}`)
+                .then( res => {
+                    return res.data
+                })
+        
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
 export const getBalance = () => {
     try{
         if (decoded){
