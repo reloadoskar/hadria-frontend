@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { 
     // saveCorte, 
-    getDataFrom } from '../api'
+    getDataFrom, saveCorte, existCorte, openCorte } from '../api'
 import {sumImporte, 
     sumAcuenta,
     // calcTotal, 
@@ -9,32 +9,58 @@ import {sumImporte,
 } from '../Tools'
 const useCortes = () => {
     const [corte, setCorte] = useState([])
-    
-    function getCorte(ubicacion, fecha){
-        return getDataFrom(ubicacion, fecha).then(res=>{
-            var corte = res.corte
 
-            var tven = sumImporte(corte.ventas)
-            var ting = sumImporte(corte.ingresos)
-            var tcre = sumImporte(corte.creditos)
-            var tacu = sumAcuenta(corte.creditos)
-            var tegr = sumImporte(corte.egresos)
-            var total = (tven + ting + tacu - tcre - tegr)
+    async function getCorte(ubicacion, fecha){
+        let elcorte = []
+        const crte = await getDataFrom(ubicacion, fecha)
+        const existe = await existCorte(ubicacion, fecha)
+        elcorte = crte.corte
+        if (existe.corte.length === 0){
+            elcorte.status = "ABIERTO"
+        }else{
+            elcorte.status = "CERRADO"
+        }
 
-            corte.tventas = tven
-            corte.tingresos = ting
-            corte.tcreditos = tcre
-            corte.tacuenta = tacu
-            corte.tegresos = tegr
-            corte.total = total
-            setCorte(corte)
-            return corte
-        })
+        var tven = sumImporte(crte.corte.ventas)
+        var ting = sumImporte(crte.corte.ingresos)
+        var tcre = sumImporte(crte.corte.creditos)
+        var tacu = sumAcuenta(crte.corte.creditos)
+        var tegr = sumImporte(crte.corte.egresos)
+        var total = (tven + ting + tacu - tcre - tegr)
+
+        elcorte.tventas = tven
+        elcorte.tingresos = ting
+        elcorte.tcreditos = tcre
+        elcorte.tacuenta = tacu
+        elcorte.tegresos = tegr
+        elcorte.total = total
+
+        setCorte(elcorte)
+        return elcorte
+        
+    }
+
+    async function existeCorte(ubicacion, fecha){
+        const res = await existCorte(ubicacion, fecha)
+            return res
+    }
+
+    async function guardarCorte(corte){
+        const res = await saveCorte(corte)
+            return res
+    }
+
+    async function reOpen(ubicacion, fecha){
+        const res = await openCorte(ubicacion, fecha)
+        return res
     }
 
     return {
         corte,
         getCorte,
+        guardarCorte, 
+        existeCorte,
+        reOpen
     }
 }
 
