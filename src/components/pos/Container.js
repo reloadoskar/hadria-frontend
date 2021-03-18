@@ -246,6 +246,13 @@ function PosContainer(props) {
     //     // setMovimiento({...movimiento, pesadas: [], itemselcantidad: 0, itemselempaques:0})
     // }
 
+    function saveCorte(corte){
+        guardarCorte(corte).then( res => {
+            showMessage(res.message, res.status)
+            closeDialogCorte()
+            closeDialog('posDialog')
+        })
+    }
     return (
         <Container>
             {
@@ -365,7 +372,7 @@ function PosContainer(props) {
                                     close={closeDialogCorte}
                                     corte={corte}
                                     onChangeFecha={onChangeFecha}
-                                    guardar={guardarCorte}
+                                    guardar={saveCorte}
                                     message={showMessage}
                                 />
                             }

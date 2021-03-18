@@ -187,15 +187,13 @@ export default function Mover(props){
                             <React.Fragment>
                                 <Grid item xs={12} md={4}>
                                     <Button fullWidth className={classes.botonGenerico} onClick={openPesadas}>Agrega Pesadas</Button>
-                                    <Pesadas 
+                                    <Pesadas
                                         open={pesadas} 
                                         close={closePesadas} 
                                         pesadas={movimiento.pesadas} 
-                                        addPesada={addPesada} 
-                                        totalcant={movimiento.itemselcantidad}
-                                        totalemp={movimiento.itemselempaques}
+                                        addPesada={addPesada}
                                         clearPesadas={clearPesadas} 
-                                        classes={classes}/>
+                                    />
                                 </Grid>
                                 <Grid item xs={6} md={4}>
                                     <TextField
@@ -234,6 +232,7 @@ export default function Mover(props){
             <DialogActions>
                 <Button className={classes.botonSimplon} onClick={handleReset}>Empezar de nuevo</Button>
                 <Button 
+                    disabled={ guardando === true ? true : false}
                     onClick={handleSubmit}
                     // type="submit"
                     className={classes.botonCosmico} 

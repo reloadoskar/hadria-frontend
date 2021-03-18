@@ -70,10 +70,7 @@ export default function Corte(props){
     }
 
     function cierraCorte (){
-        guardar(elcorte).then( res => {
-            props.message(res.message, res.status)
-            close()
-        })
+        guardar(elcorte)
     }
 
     function toggleVerDetalle(){
@@ -100,10 +97,12 @@ export default function Corte(props){
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>         
-                            <Typography variant="h6" align="center">               
+                            <Typography variant="h6" align="center">   
+                                {user.level > 2 ? null :
                                     <IconButton onClick={fechaAnt}>
                                         <NavigateBeforeIcon />
                                     </IconButton>
+                                }            
                                     <TextField 
                                         id="date"
                                         // label="Fecha de Corte"
@@ -111,9 +110,11 @@ export default function Corte(props){
                                         value={lafecha}
                                         onChange={(e)=>handleChange(e.target.value)}
                                         />
+                                {user.level > 2 ? null :
                                     <IconButton onClick={fechaSig}>
                                         <NavigateNextIcon />
                                     </IconButton>                                    
+                                }
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
