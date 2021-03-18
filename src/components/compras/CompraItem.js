@@ -21,17 +21,17 @@ export default function CompraItem(props){
                 <Grid item xs={12} sm={12}>
                     <MenuItem onClick={()=> selectItem(item)} >
                         <Grid container spacing={2} alignItems="flex-end">
-                            <Grid item xs={1} sm>
+                            <Grid item xs={1} sm={1}>
                                 <Typography>{item.compra.folio}</Typography>
                             </Grid>
-                            <Grid item xs={11} sm>
-                                <Typography>{item.producto.descripcion}</Typography>
+                            <Grid item xs={11} sm={7}>
+                                <Typography align="left">{item.producto.descripcion}</Typography>
                             </Grid>
-                            <Grid item xs={6} sm>
+                            <Grid item xs={6} sm={2}>
                                 <Typography align="right" className={classes.textoMiniFacheron} >Cajas:</Typography>
                                 <Typography align="right">{formatNumber(item.empaquesStock,2)}</Typography>
                             </Grid>
-                            <Grid item xs={6} sm>
+                            <Grid item xs={6} sm={2}>
                                 <Typography align="right" className={classes.textoMiniFacheron} >Kilos:</Typography>
                                 <Typography align="right">{formatNumber(item.stock,2)}</Typography>
                             </Grid>

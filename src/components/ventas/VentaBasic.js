@@ -36,7 +36,7 @@ export default function VentaBasic(props){
                         <Grid container>                    
                             {venta.items.length <= 0 ? null :
                                 venta.items.map((item, i) =>(
-                                    <VentaItem item={item} index={i}/>                                                                         
+                                    <VentaItem item={item} index={i} key={i}/>                                                                         
                                 ))
                             }
                             <Grid item xs={12}>
