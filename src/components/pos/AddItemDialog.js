@@ -67,7 +67,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
         // e.preventDefault()
         let newItem = {
             selected: item,
-            compra: item.compraId,
+            compra: item.item.compra._id,
             item: item.item._id,
             producto: item.item.producto,
             cantidad: values.cantidad,

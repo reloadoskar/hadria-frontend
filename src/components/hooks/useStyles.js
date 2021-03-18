@@ -295,6 +295,10 @@ const useStyles = makeStyles(theme => ({
     },
     media: {
         height: 190,
+    },
+
+    pesadasList: {
+        height: 400,
     }
 
 }));

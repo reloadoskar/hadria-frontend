@@ -285,7 +285,9 @@ const useBalance = () => {
         inventario,
 		invUbic,
 		getInvUbic,
-		totalInventario
+		totalInventario,
+
+		setUpdIng
     }
 }
 
