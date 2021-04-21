@@ -10,7 +10,9 @@ const useInventario = () => {
 	useEffect(() => {
 		async function loadInventario() {
 			const res = await getInventario()
-			setInventario(res.inventario);
+			if( res !== undefined){
+				setInventario(res.inventario)
+			}
 		}
 		loadInventario()
 		return () => setInventario([])
@@ -31,9 +33,11 @@ const useInventario = () => {
 	},[inventario])
 
 	useEffect(() => {
-		getInventarioUbicacion().then(res => {
-			setInvxubic(res.inventario)
-		})
+		if(inventario !== null){
+			getInventarioUbicacion().then(res => {
+				setInvxubic(res.inventario)
+			})
+		}
 		return () => setInvxubic(null)
 	}, [inventario])
 

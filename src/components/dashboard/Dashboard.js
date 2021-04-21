@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import Balance from './Balance'
+// import Balance from './Balance'
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
 import CuentasxPagar from '../cxp/CuentasxPagar'
 // import Produccions from '../produccions/Produccions'
 
 // import EstadoDeCuenta from '../cxc/EstadoDeCuenta'
 // import UltimosMovimientos from './UltimosMovimientos'
-import ComprasDash from './ComprasDash'
-import Pagar from './Pagar'
-import Cobro from '../creators/Cobro'
-import CrearIngreso from '../ingresos/CrearIngreso'
-import CrearEgreso from '../egresos/CrearEgreso'
+// import ComprasDash from './ComprasDash'
+// import Pagar from './Pagar'
+// import Cobro from '../creators/Cobro'
+// import CrearIngreso from '../ingresos/CrearIngreso'
+// import CrearEgreso from '../egresos/CrearEgreso'
 
 // import useUser from '../hooks/useUser'
 // import useCompras from '../hooks/useCompras'
 // import useUbicacions from '../hooks/useUbicacions'
-// import useCortes from '../hooks/useCortes'
-// import useBalance from '../hooks/useBalance'
+import useCortes from '../hooks/useCortes'
+import useBalance from '../balance/useBalance'
 import useStyles from '../hooks/useStyles'
 import { useSnackbar } from 'notistack';
 
@@ -37,43 +37,34 @@ import { Grid,
 // import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import Disponible from './Disponible'
 import Corte from '../cortes/Corte'
-import CrearCompra from '../compras/CrearCompra'
+// import CrearCompra from '../compras/CrearCompra'
 
 export default function Dashboard(props) {
     const {
         user,
         ubicacions,
-
-        compras, 
-        crearCompra, 
-        cancelarCompra,
-
-        getCorte,
-        guardarCorte,
-        reabrirCorte,
-
+    } = props
+    const {
         balance,
         disp,
         // ingresos, 
         // totalIngresos, 
-        addIngreso,
+        // addIngreso,
         cuentasxCobrar, 
-        addPagoCxc, 
+        // addPagoCxc, 
         totalCxc, 
     
         // egresos,
         // totalEgresos, 
-        addEgreso, 
+        // addEgreso, 
         cuentasxPagar, 
         totalCxp, 
-        addPagoCxp,
-    } = props
-    // const {
+        // addPagoCxp,
 
-    //     // inventario, 
-    //     // totalInventario,
+        // inventario, 
+        // totalInventario,
 
-    // } = useBalance()
+    } = useBalance()
     const [corte, setCorte] = useState(null)
     const[bckdrpOpen, setBdopen] = useState(true)
     useEffect(()=> {
@@ -93,53 +84,53 @@ export default function Dashboard(props) {
     const { enqueueSnackbar } = useSnackbar()
     
     // const { user } = useUser()
-    // const {compras} = useCompras()
+    // const {compras, crearCompra, cancelarCompra} = useCompras()
     // const{ubicacions} = useUbicacions()
-    // const {getCorte} = useCortes()
+    const { guardarCorte, reabrirCorte, getCorte} = useCortes()
     
     const classes = useStyles();
-    const [cobrar, setCobrar] = useState(false)
-    const [pagar, setPagar] = useState(false)
-    const [crearIngreso, setCrearIngreso] = useState(false)
-    const [crearEgreso, setCrearEgreso] = useState(false)
+    // const [cobrar, setCobrar] = useState(false)
+    // const [pagar, setPagar] = useState(false)
+    // const [crearIngreso, setCrearIngreso] = useState(false)
+    // const [crearEgreso, setCrearEgreso] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null);
     const [corteDialog, setCorteDialog] = useState(false)
-    const [dCrearCompra, setDCrearCompra] = useState(false)
+    // const [dCrearCompra, setDCrearCompra] = useState(false)
     
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
-    const showPagar = () => {
-        setPagar(true)
-    }
+    // const showPagar = () => {
+    //     setPagar(true)
+    // }
 
-    const closePagar = () => {
-        setPagar(false)
-    }
+    // const closePagar = () => {
+    //     setPagar(false)
+    // }
 
-    const showCobrar = () => {
-        setCobrar(true)
-    }
+    // const showCobrar = () => {
+    //     setCobrar(true)
+    // }
 
-    const closeCobrar = () => {
-        setCobrar(false)
-    }
+    // const closeCobrar = () => {
+    //     setCobrar(false)
+    // }
 
-    const showCreateIngreso = () =>{
-        setCrearIngreso(true)
-    }
+    // const showCreateIngreso = () =>{
+    //     setCrearIngreso(true)
+    // }
     // const createIngreso = () => {
 
     // }
-    const closeCreateIngreso = () =>{
-        setCrearIngreso(false)
-    }
+    // const closeCreateIngreso = () =>{
+    //     setCrearIngreso(false)
+    // }
 
-    const showCreateEgreso = () => {
-        setCrearEgreso(true)
-    }
-    const closeCreateEgreso = () => {
-        setCrearEgreso(false)
-    }
+    // const showCreateEgreso = () => {
+    //     setCrearEgreso(true)
+    // }
+    // const closeCreateEgreso = () => {
+    //     setCrearEgreso(false)
+    // }
 
     const openMenu = (e) => {
         setAnchorEl(e.currentTarget);
@@ -177,13 +168,13 @@ export default function Dashboard(props) {
         setCorte(res)
     }
 
-    function closedCrearCompra(){
-        setDCrearCompra(false)
-    }
+    // function closedCrearCompra(){
+    //     setDCrearCompra(false)
+    // }
 
     return (
         <div>
-                {balance === null || ubicacions === [] || compras === [] ?
+                {balance === null || ubicacions === []  ?
                     
                     <Backdrop className={classes.backdrop} open={bckdrpOpen}>
                         <div>
@@ -214,31 +205,31 @@ export default function Dashboard(props) {
                                     open={Boolean(anchorEl)}
                                     onClose={closeMenu}
                                 >
-                                    <MenuItem onClick={showCreateIngreso}>Ingreso</MenuItem>
+                                    {/* <MenuItem onClick={showCreateIngreso}>Ingreso</MenuItem>
                                     <MenuItem onClick={showCreateEgreso}>Egreso</MenuItem>
                                     <MenuItem onClick={showCobrar}>Cobrar</MenuItem>
-                                    <MenuItem onClick={showPagar}>Pagar</MenuItem>
+                                    <MenuItem onClick={showPagar}>Pagar</MenuItem> */}
                                     <MenuItem onClick={closeMenu}>Traspasar</MenuItem>
                                 </Menu>
                             </Grid>
                         </React.Fragment>
                     }
 
-                    { user.level > 1 ? null :
+                    {/* { user.level > 1 ? null :
                         <Grid item xs={12}>
                             <Balance 
                                 balance={balance} 
                             />
                         </Grid>
-                    }    
+                    }     */}
 
-                    <Grid item xs={12} md={6}>                        
+                    {/* <Grid item xs={12} md={6}>                        
                         <ComprasDash 
                             compras={compras} 
                             crearCompra={crearCompra} 
                             cancelarCompra={cancelarCompra}
                         />
-                    </Grid> 
+                    </Grid>  */}
 
                     <Grid item xs={12} md={6}>
                         <Disponible disp={disp} verCorte={verCorte}/>   
@@ -273,7 +264,7 @@ export default function Dashboard(props) {
                         <Produccions 
                             showMessage={showMessage}/>
                     </Grid> */}
-                    <CrearIngreso 
+                    {/* <CrearIngreso 
                         open={crearIngreso} 
                         close={closeCreateIngreso} 
                         crear={addIngreso} 
@@ -286,22 +277,22 @@ export default function Dashboard(props) {
                         ubicacions={ubicacions} 
                         compras={compras} 
                         mensaje={showMessage}
-                        disponible={balance.disponible}/>
-                    <Cobro 
+                        disponible={balance.disponible}/> */}
+                    {/* <Cobro 
                         open={cobrar} 
                         cuentas={cuentasxCobrar}
                         ubicacions={ubicacions}
                         close={closeCobrar} 
                         showMessage={showMessage} 
-                        save={addPagoCxc}/>
-                    <Pagar 
+                        save={addPagoCxc}/> */}
+                    {/* <Pagar 
                         open={pagar} 
                         cuentas={cuentasxPagar} 
                         ubicacions={ubicacions}
                         close={closePagar} 
                         disponible={balance.disponible} 
                         showMessage={showMessage} 
-                        save={addPagoCxp}/>
+                        save={addPagoCxp}/> */}
                 </Grid>
                 }
 

@@ -9,11 +9,11 @@ import {
 import DetalleCompra from './DetalleCompra'
 import Buscador from './Buscador'
 
-// import useCompras from '../hooks/useCompras';
-// import useProducts from '../hooks/useProducts'
-// import useProvedors from '../hooks/useProvedors';
-// import useUbicacions from '../hooks/useUbicacions';
-// import useTipoCompras from '../hooks/useTipoCompras';
+import useCompras from '../hooks/useCompras';
+import useProducts from '../hooks/useProducts'
+import useProvedors from '../hooks/useProvedors';
+import useUbicacions from '../hooks/useUbicacions';
+import useTipoCompras from '../hooks/useTipoCompras';
 
 import AddIcon from '@material-ui/icons/Add';
 import useStyles from '../hooks/useStyles'
@@ -22,29 +22,11 @@ import ConfirmDialog from './ConfirmDialog'
 
 
 function Compras(props) {
-    // const {compras, crearCompra, cancelarCompra} = useCompras()
-    // const {products, addProduct } = useProducts()
-    // const {provedors, add} = useProvedors()
-    // const {ubicacions} = useUbicacions();
-    // const {tipoCompras, addTipoCompra} = useTipoCompras();
-    const {
-        compras, 
-        crearCompra, 
-        cancelarCompra, 
-        
-        products, 
-        addProduct,
-
-        provedors,
-        addProvedor,
-
-        ubicacions,
-
-        tipoCompras, 
-        addTipoCompra,
-        
-        update
-    } = props
+    const {compras, crearCompra, cancelarCompra} = useCompras()
+    const {products, addProduct } = useProducts()
+    const {provedors, add} = useProvedors()
+    const {ubicacions} = useUbicacions();
+    const {tipoCompras, addTipoCompra} = useTipoCompras();
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
 
@@ -57,7 +39,6 @@ function Compras(props) {
     const crear = (compra) => {
         return crearCompra(compra).then(res => {
             closeDialog()
-            update(res)
             return res
         })
     }
@@ -128,7 +109,7 @@ function Compras(props) {
                         tipoCompras={tipoCompras}
                         ubicacions={ubicacions}
                         addTipoCompra={addTipoCompra}
-                        add={addProvedor}
+                        add={add}
                     />
                 </Grid>
                 {compras === null ? null :

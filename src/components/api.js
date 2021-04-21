@@ -1,13 +1,24 @@
 import axios from 'axios';
-import Global from '../Global';
-import jwt_decode from 'jwt-decode'
-var decoded = false
+import jwt from 'jsonwebtoken'
+// import jwt_decode from 'jwt-decode'
+const URL = process.env.REACT_APP_API_URL
+let token = false
+let decoded = false
 if(localStorage.usertoken){
-    const token = localStorage.usertoken
-    decoded = jwt_decode(token)
+    token = localStorage.usertoken
 }
-
-const url = Global.url;
+if(token !== undefined){
+    try{
+        decoded = jwt.verify(token, "muffintop")
+    }catch(err){
+        // return {
+        //     message: "Error de token.",
+        //     status: "error",
+        //     err
+        // }
+    }
+}
+const url = URL;
 const url_client = url
 
 // USUARIOS
@@ -20,7 +31,7 @@ export const register = (newClient) => {
         })
 }
 
-export const login = user => {
+export const logIn = user => {
     try{
         return axios
             .post(url + 'user/login' , user)
@@ -829,7 +840,11 @@ export const getDisponiblexUbicacion = () => {
                 })
         }
     }catch (err) {
-        console.log(err+ ' Desconectado?')
+        return {
+            status: 'error',
+            message: 'error de algo',
+            err
+        }
     }
 }
 

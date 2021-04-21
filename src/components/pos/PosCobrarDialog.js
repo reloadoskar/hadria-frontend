@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
-import useClientes from '../hooks/useClientes'
+import useClientes from '../clientes/useClientes'
 import useStyles from '../hooks/useStyles';
 
 function ReprintDialog(props) {

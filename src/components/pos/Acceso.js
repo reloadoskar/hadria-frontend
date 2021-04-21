@@ -4,14 +4,14 @@ import useStyles from '../hooks/useStyles'
 
 import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, Typography, } from '@material-ui/core';
 
-export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, handleChange, invUbic, user}){
+export default function PosAcceso({accesando, ubicacions, ubicacion, fecha, checkCorte, handleChange, invUbic, user}){
     const classes = useStyles();
-    const [accesando, setAccesando] = useState(false)
+    // const [accesando, setAccesando] = useState(false)
     const handleSubmit = (e) => {
         e.preventDefault()
-        setAccesando(true)
+        // setAccesando(true)
         checkCorte().then(res => {
-            setAccesando(false)
+            // setAccesando(false)
         })
     }
 
@@ -63,7 +63,7 @@ export default function PosAcceso({ubicacions, ubicacion, fecha, checkCorte, han
                                         }
                                     </TextField>
                                 :
-                                    <Typography variant="h5" >{ubicacion.nombre}</Typography>
+                                    <Typography variant="h5" align="center" >{ubicacion === '' ? null : ubicacion._id.nombre}</Typography>
 
                             }
 

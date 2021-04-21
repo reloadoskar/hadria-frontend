@@ -20,7 +20,7 @@ export default function Disponible(props){
                     <MenuItem key={i} onClick={()=> handleClick(ub)}>
                         <Grid container key={i}>
                             <Grid item xs={12} sm={6}>
-                                <Typography variant="h6">{ub.nombre}</Typography>
+                                <Typography variant="h6">{ub.ubicacion}</Typography>
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <Typography variant="h6" align="right">{formatNumber(ub.disponible)}</Typography>

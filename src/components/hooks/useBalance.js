@@ -7,12 +7,12 @@ import {
 import { 
     // getBalance, 
     
-    getIngresos, 
-    saveIngreso, 
+    // getIngresos, 
+    // saveIngreso, 
     
-    getCuentasPorCobrar, 
-    getCxcCliente, 
-    savePagoACuentaPorCobrar, 
+    // getCuentasPorCobrar, 
+    // getCxcCliente, 
+    // savePagoACuentaPorCobrar, 
 
     getEgresos, 
     saveEgreso, 
@@ -20,104 +20,106 @@ import {
     savePagoACuentaPorPagar, 
     getDisponiblexUbicacion,
     
-    saveVenta, 
+    // saveVenta, 
     
     getInventario, 
     getInventarioBy,
 } from '../api'
+
+import useIngresos from '../ingresos/useIngresos'
 
 const useBalance = () => {
     const [balance, setBalance] = useState(null)
     const [disp, setDisp] = useState([])
     
     //INGRESOS
-    const [ingresos, setIngresos] = useState([])
-    const [totalIngresos, setTotalIngresos] = useState(0)
-    const [updatingIngresos, setUpdIng] = useState(false)
-    const [updatingCuentasxc, setUpdCxc] = useState(false)
+    const {ingresos, totalIngresos, cuentasxCobrar, cuentasxcCliente, totalCxc} = useIngresos()
+    // const [totalIngresos, setTotalIngresos] = useState(0)
+    // const [updatingIngresos, setUpdIng] = useState(false)
+    // const [updatingCuentasxc, setUpdCxc] = useState(false)
     
-    const [cuentasxCobrar, setCuentasxCobrar] = useState([])
-    const [cuentasxcCliente , setCuentasxcCliente] = useState(null)
-    const [totalCxc, setTotalCxc] = useState(0)
-    useEffect(() => {
-		async function loadIngresos() {
-			const res = await getIngresos()
-			if(res !== undefined){
-				setIngresos(res.ingresos)
-			}
-		}
-        loadIngresos()
-        return () => {
-            setIngresos([])
-        }
-	}, [updatingIngresos])
+    // const [cuentasxCobrar, setCuentasxCobrar] = useState([])
+    // const [cuentasxcCliente , setCuentasxcCliente] = useState(null)
+    // const [totalCxc, setTotalCxc] = useState(0)
+    // useEffect(() => {
+	// 	async function loadIngresos() {
+	// 		const res = await getIngresos()
+	// 		if(res !== undefined){
+	// 			setIngresos(res.ingresos)
+	// 		}
+	// 	}
+    //     loadIngresos()
+    //     return () => {
+    //         setIngresos([])
+    //     }
+	// }, [updatingIngresos])
     
-    useEffect(()=> {
-		if (ingresos !== []){
-			setTotalIngresos(sumImporte(ingresos))
-		}
-		return () => {
-			setTotalIngresos(0)
-		}
-	}, [ingresos])
+    // useEffect(()=> {
+	// 	if (ingresos !== []){
+	// 		setTotalIngresos(sumImporte(ingresos))
+	// 	}
+	// 	return () => {
+	// 		setTotalIngresos(0)
+	// 	}
+	// }, [ingresos])
     
-    useEffect(() => {
-		async function loadCxc() {
-			const res = await getCuentasPorCobrar()
-			if(res !== undefined){
-				setCuentasxCobrar(res.clientes);
-			}
-		}
-        loadCxc()        
-        return () => setCuentasxCobrar([])
-    }, [updatingCuentasxc])
+    // useEffect(() => {
+	// 	async function loadCxc() {
+	// 		const res = await getCuentasPorCobrar()
+	// 		if(res !== undefined){
+	// 			setCuentasxCobrar(res.clientes);
+	// 		}
+	// 	}
+    //     loadCxc()        
+    //     return () => setCuentasxCobrar([])
+    // }, [updatingCuentasxc])
     
-    useEffect(() => {
-        var tt = 0
-        if(cuentasxCobrar!== null){
-            cuentasxCobrar.map((c)=>{
-                return tt += sumSaldo(c.cuentas)
-            })
-            setTotalCxc(tt)
-		}
-		return () => { setTotalCxc(0) }
-	},[cuentasxCobrar])
+    // useEffect(() => {
+    //     var tt = 0
+    //     if(cuentasxCobrar!== null){
+    //         cuentasxCobrar.map((c)=>{
+    //             return tt += sumSaldo(c.cuentas)
+    //         })
+    //         setTotalCxc(tt)
+	// 	}
+	// 	return () => { setTotalCxc(0) }
+	// },[cuentasxCobrar])
 
-    const cxcCliente = (id) => {
-        return getCxcCliente(id).then(res => {
-			setCuentasxcCliente(res.cuentas)
-			return res
-        })
-    }
+    // const cxcCliente = (id) => {
+    //     return getCxcCliente(id).then(res => {
+	// 		setCuentasxcCliente(res.cuentas)
+	// 		return res
+    //     })
+    // }
 
-    const addPagoCxc = (pago) => {
-		return savePagoACuentaPorCobrar(pago).then(res=>{
-            setUpdCxc(!updatingCuentasxc)
-            setUpdIng(!updatingIngresos)
-            return res
-        })
-    }
+    // const addPagoCxc = (pago) => {
+	// 	return savePagoACuentaPorCobrar(pago).then(res=>{
+    //         setUpdCxc(!updatingCuentasxc)
+    //         setUpdIng(!updatingIngresos)
+    //         return res
+    //     })
+    // }
 
-	const addIngreso = (ingreso) => {
-		return saveIngreso(ingreso).then(res=>{
-			setUpdIng(!updatingIngresos)
-			return res
-		})
-	}
+	// const addIngreso = (ingreso) => {
+	// 	return saveIngreso(ingreso).then(res=>{
+	// 		setUpdIng(!updatingIngresos)
+	// 		return res
+	// 	})
+	// }
 
-	const addVenta = (venta) =>{
-		return saveVenta(venta).then(res=>{
-			setUpdIng(!updatingIngresos)
-			if(venta.tipoPago === "CRÉDITO"){
-				setUpdCxc(!updatingCuentasxc)
-			}
-			return res
-		})
-	}
+	// const addVenta = (venta) =>{
+	// 	return saveVenta(venta).then(res=>{
+	// 		setUpdIng(!updatingIngresos)
+	// 		if(venta.tipoPago === "CRÉDITO"){
+	// 			setUpdCxc(!updatingCuentasxc)
+	// 		}
+	// 		return res
+	// 	})
+	// }
 
-	const delIngreso = ()=>{
+	// const delIngreso = ()=>{
 
-	}
+	// }
 
     const [egresos, setEgresos] = useState([])
 	const [totalEgresos, setTotalEgresos] = useState(0)
@@ -161,7 +163,7 @@ const useBalance = () => {
 			}
         })
         return () => setDisp([])
-    }, [updatingEgresos, updatingIngresos])
+    }, [updatingEgresos])
 
 	useEffect(() => {
 		async function loadCxp() {
@@ -264,15 +266,15 @@ const useBalance = () => {
 
         ingresos,
 		totalIngresos,
-		addIngreso,
-		delIngreso,
-		addVenta,
+		// addIngreso,
+		// delIngreso,
+		// addVenta,
 
 		cuentasxCobrar,
 		cuentasxcCliente,
 		totalCxc,
-		cxcCliente,
-        addPagoCxc,
+		// cxcCliente,
+        // addPagoCxc,
         
         egresos,
 		totalEgresos,
@@ -287,7 +289,7 @@ const useBalance = () => {
 		getInvUbic,
 		totalInventario,
 
-		setUpdIng
+		// setUpdIng
     }
 }
 

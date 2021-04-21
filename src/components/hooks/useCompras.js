@@ -6,7 +6,9 @@ const useCompras = () => {
 	useEffect(() => {
 		async function loadCompras() {
 			const res = await getCompras()
-			setCompras(res.compras);
+			if (res !== undefined){
+				setCompras(res.compras);
+			}
 		}
 		loadCompras()
 		return () => setCompras([])

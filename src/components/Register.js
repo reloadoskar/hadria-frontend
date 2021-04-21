@@ -8,7 +8,7 @@ import {register} from './api'
 
 
 const Register = (props) => {
-    const {isLoading, openLoading, closeLoading} = props
+    const {isLoading,} = props
     let history = useHistory();
     const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
@@ -39,9 +39,9 @@ const Register = (props) => {
     
     const handleSubmit = (e) => { 
         e.preventDefault()
-        openLoading()
+        // openLoading()
         register(data).then(res => {
-            closeLoading()
+            // closeLoading()
             if(res.status === 'success'){
                 showMessage(res.message, res.status)
                 history.push("/");

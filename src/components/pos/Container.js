@@ -21,6 +21,7 @@ import reducer from './PosReducer'
 import useIngresos from '../ingresos/useIngresos'
 import useCuentasxPagar from '../cxp/useCuentasxPagar'
 import useCortes from '../hooks/useCortes'
+import useInventario from '../hooks/useInventario'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';
 // import Pesadas from '../inventario/Pesadas';
@@ -66,7 +67,8 @@ const initialState = {
 }
 
 function PosContainer(props) {
-    const {invxubic, user} = props
+    const {user} = props
+    const {invxubic} = useInventario()
     const { enqueueSnackbar } = useSnackbar()
     // const classes = useStyles()
     const {
@@ -83,6 +85,7 @@ function PosContainer(props) {
     // const [itemSelected, setItemSelected] = useState()
     // const [pesadas, setPesadas] = useState(false)
     const [values, dispatch] = useReducer(reducer, initialState)
+    const [accesando, setAccesando] = useState(false)
 
     useEffect(() => {
         if(invxubic !== null ){
@@ -173,17 +176,8 @@ function PosContainer(props) {
 
     const startPos = () =>{
         // e.preventDefault()
-        loadBalance()
-        if(invxubic.length <= 0){
-            enqueueSnackbar(" No se encontró inventario en "+values.ubicacion.nombre, {
-                variant: 'info',
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                },
-            } ) 
-        }
         openDialog('posDialog')
+        loadBalance()
             
     }
 
@@ -199,6 +193,7 @@ function PosContainer(props) {
     }
 
     const checkCorte = () => {
+        setAccesando(true)
         return existCorte(ubicacion._id._id, fecha).then( res =>{
             if(res.corte.length === 0){
                 // dispatch({type: 'corteExist', value: false})                
@@ -207,6 +202,7 @@ function PosContainer(props) {
                 dispatch({type: 'corteExist', value: true})
                 showMessage('Fecha cerrada, para esta ubicación', 'error')
             }
+            setAccesando(false)
             return res
         })
     }
@@ -259,6 +255,7 @@ function PosContainer(props) {
                 user !== null  ?
                 <div>
                     <Acceso 
+                        accesando={accesando}
                         user={user}
                         ubicacions={invxubic}
                         ubicacion={ubicacion} 

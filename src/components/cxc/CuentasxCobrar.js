@@ -8,11 +8,11 @@ import PersonIcon from '@material-ui/icons/Person';
 import {formatNumber, sumSaldo} from '../Tools'
 import EstadoDeCuenta from './EstadoDeCuenta'
 export default function CuentasxCobrar(props) {
-    const {cuentas=null, total} = props
+    const {cuentas, total} = props
     return (
         <Card>
             <CardHeader title="Créditos" />
-                {cuentas === null ?
+                {cuentas === undefined ?
                     <LinearProgress variant="query" />
                     :
                     <CardContent>

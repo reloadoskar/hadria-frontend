@@ -5,9 +5,10 @@ import { useHistory } from 'react-router-dom'
 import StatusDialog from './StatusDialog'
 import {restartApp} from './api'
 import useStyles from './hooks/useStyles'
+import { useAuth } from './auth/use_auth'
 
-const UserFunctions = (props) => {
-    const {auth, user} = props
+const UserFunctions = () => {
+    const auth= useAuth()
     const classes = useStyles()
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl)
@@ -16,22 +17,22 @@ const UserFunctions = (props) => {
     let history = useHistory();
 
     useEffect(()=>{
-        if(user){
-            if(user.venceEnDias <= 0){
+        if(auth.user){
+            if(auth.user.venceEnDias <= 0){
                 setStatus({
                     message: "Cuenta Suspendida, favor realizar su pago inmediatamente.",
                     type: "danger"
                 })
                 return setStatusCheck(true)
             }
-            if(user.venceEnDias <= 15){
+            if(auth.user.venceEnDias <= 15){
                 setStatusCheck(true)
                 return setStatus({
-                    message: "Su licencia vence en "+user.venceEnDias+" días.", 
+                    message: "Su licencia vence en "+auth.user.venceEnDias+" días.", 
                     type: "warning"}
                     )
             }
-            if(user.venceEnDias > 15 && user.venceEnDias <= 20){
+            if(auth.user.venceEnDias > 15 && auth.user.venceEnDias <= 20){
                 setStatusCheck(true)
                 return setStatus({
                     message: "Su licencia vencerá pronto.", 
@@ -41,23 +42,18 @@ const UserFunctions = (props) => {
         }else{
             return false
         }
-    },[user])
+    },[auth])
 
-    const logout = () => {
+    const salir = () => {
         
         auth.logout(() => {
-            localStorage.clear()
             history.push("/")
         })
     }
 
-    // const sendToPOS = () => {
-    //     history.push("/app/pos")
-    // }
-
     const restart = () => {
         restartApp().then(res=>{
-            logout()
+            salir()
         })
     }
 
@@ -81,7 +77,7 @@ const UserFunctions = (props) => {
                         onClick={handleMenu}
                         className={classes.botonUserFuncions}
                         endIcon={<AccountCircle />}>
-                            {user.nombre}
+                            {auth.user.nombre}
                     </Button>
                     <Menu
                         id="menu-usuario"
@@ -100,16 +96,16 @@ const UserFunctions = (props) => {
                     >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                         {
-                            user.level === 0 ?
+                            auth.user.level === 0 ?
                             <MenuItem onClick={restart}>Restart</MenuItem>
                             : null
                         }
                         <Divider />
-                        <MenuItem onClick={logout}>Salir</MenuItem>
+                        <MenuItem onClick={salir}>Salir</MenuItem>
                     </Menu>
 
                 </Grid>
-                <StatusDialog open = {statusCheck} status={status} logout={logout} close={close}/>
+                <StatusDialog open = {statusCheck} status={status} logout={auth.logout} close={close}/>
             </Grid>
         </div>
     )

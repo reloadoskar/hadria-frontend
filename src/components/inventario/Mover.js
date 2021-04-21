@@ -84,7 +84,7 @@ export default function Mover(props){
             mover(movimiento).then(res => {
                 handleClose()
                 setGuardando(false)
-                update(res)
+                // update(res)
             })
         }else{
             console.log("invalido")
@@ -112,17 +112,12 @@ export default function Mover(props){
                                 onChange={(e) => handleChange('origen', e.target.value)}
                                 >
                                     <MenuItem value=""></MenuItem>
-                                {inventario.map((option, index) =>{ 
-                                    if(option._id.tipo === 'SUCURSAL'){
-                                        return (
+                                {inventario.map((option, index) =>(
+
                                             <MenuItem key={index} value={option}>
                                                 {option._id.nombre}
                                             </MenuItem>
-                                        )
-                                    }else{
-                                        return false
-                                    }
-                                })}
+                                ))}
                             </TextField>
                         </Grid>
                         <Grid item xs={12} md={6}>

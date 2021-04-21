@@ -8,8 +8,10 @@ import {sumStock, sumEmpStock, formatNumber} from '../Tools'
 import VerCompra from './VerCompra'
 import CrearCompra from '../compras/CrearCompra'
 import { useSnackbar } from 'notistack';
+import useStyles from '../hooks/useStyles';
 export default function ComprasDash(props){
     // const {compras, crearCompra, cancelarCompra} = useCompras();
+    const classes = useStyles()
     const {compras, crearCompra, cancelarCompra} = props
     const [compraSelected, setCompraSelected] = useState(null)
     const [verCompra, setVerCompra] = React.useState(false);
@@ -36,7 +38,7 @@ export default function ComprasDash(props){
     //     setShowDialog(true)
     // }
     return (
-        <Card>
+        <Card className={classes.cardScrollable}>
             <CardHeader title="Compras" 
             />
             <CardContent>                

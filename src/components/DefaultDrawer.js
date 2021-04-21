@@ -63,100 +63,106 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                     </NavLink>
                 }
 
+                { user.level > 2 ? null :
+                    <React.Fragment>
+                        <ListItem button onClick={handleCollapse}>
+                            <ListItemIcon>
+                                <FolderIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Catálogos" className={classes.link} />
+                            {expanded ? <ExpandLess /> : <ExpandMore />}
+                        </ListItem>
 
-                <ListItem button onClick={handleCollapse}>
-                    <ListItemIcon>
-                        <FolderIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Catálogos" className={classes.link} />
-                    {expanded ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
-
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        {user.level > 2 ? null :
-                            <NavLink 
-                                className={classes.link} 
-                                activeClassName={classes.active} 
-                                exact to={`${url}/empleados`}>
+                        <Collapse in={expanded} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                                {user.level > 2 ? null :
+                                    <NavLink 
+                                        className={classes.link} 
+                                        activeClassName={classes.active} 
+                                        exact to={`${url}/empleados`}>
+                                            <ListItem button onClick={toggle} className={classes.nested}>
+                                                <ListItemIcon>
+                                                    <GroupIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Empleados" />
+                                            </ListItem>                                    
+                                    </NavLink>
+                                }
+                                
+                                <NavLink exact to={`${url}/productos`} 
+                                    className={classes.link} 
+                                    activeClassName={classes.active} 
+                                >
                                     <ListItem button onClick={toggle} className={classes.nested}>
                                         <ListItemIcon>
-                                            <GroupIcon />
+                                            <TocIcon />
                                         </ListItemIcon>
-                                        <ListItemText primary="Empleados" />
-                                    </ListItem>                                    
-                            </NavLink>
-                        }
-                        
-                        <NavLink exact to={`${url}/productos`} 
-                            className={classes.link} 
-                            activeClassName={classes.active} 
-                        >
-                            <ListItem button onClick={toggle} className={classes.nested}>
-                                <ListItemIcon>
-                                    <TocIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Productos" />
-                            </ListItem>
-                                
-                        </NavLink>
-                        {user.level > 2 ? null :
-                            <NavLink exact to={`${url}/clientes`} 
-                                className={classes.link} 
-                                activeClassName={classes.active} 
-                                >
-                                <ListItem button onClick={toggle} className={classes.nested}>
-                                    <ListItemIcon>
-                                        <AssignmentIndIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Clientes" />
-                                </ListItem>
-                                    
-                            </NavLink>
-                        }
+                                        <ListItemText primary="Productos" />
+                                    </ListItem>
+                                        
+                                </NavLink>
+                                {user.level > 2 ? null :
+                                    <NavLink exact to={`${url}/clientes`} 
+                                        className={classes.link} 
+                                        activeClassName={classes.active} 
+                                        >
+                                        <ListItem button onClick={toggle} className={classes.nested}>
+                                            <ListItemIcon>
+                                                <AssignmentIndIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Clientes" />
+                                        </ListItem>
+                                            
+                                    </NavLink>
+                                }
 
-                        {user.level > 2 ? null :
-                            <NavLink exact to={`${url}/provedores`} 
-                                className={classes.link} 
-                                activeClassName={classes.active} 
-                                >
-                                <ListItem button onClick={toggle} className={classes.nested}>
-                                    <ListItemIcon>
-                                        <GroupIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Proveedores" />
-                                </ListItem>                                
-                            </NavLink>
-                        }
+                                {user.level > 2 ? null :
+                                    <NavLink exact to={`${url}/provedores`} 
+                                        className={classes.link} 
+                                        activeClassName={classes.active} 
+                                        >
+                                        <ListItem button onClick={toggle} className={classes.nested}>
+                                            <ListItemIcon>
+                                                <GroupIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Proveedores" />
+                                        </ListItem>                                
+                                    </NavLink>
+                                }
 
-                        { user.level > 2 ? null :
-                            <NavLink exact to={`${url}/ubicaciones`}
-                            className={classes.link} 
-                            activeClassName={classes.active} 
-                            >
-                                <ListItem button onClick={toggle} className={classes.nested}>
-                                    <ListItemIcon>
-                                        <HomeWorkIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Ubicaciones" />
-                                </ListItem>                                    
-                            </NavLink>
-                        }
+                                { user.level > 2 ? null :
+                                    <NavLink exact to={`${url}/ubicaciones`}
+                                    className={classes.link} 
+                                    activeClassName={classes.active} 
+                                    >
+                                        <ListItem button onClick={toggle} className={classes.nested}>
+                                            <ListItemIcon>
+                                                <HomeWorkIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Ubicaciones" />
+                                        </ListItem>                                    
+                                    </NavLink>
+                                }
 
-                        <NavLink exact to={`${url}/conceptos`}
-                            className={classes.link} 
-                            activeClassName={classes.active} 
-                            >
-                            <ListItem button onClick={toggle} className={classes.nested}>
-                                <ListItemIcon>
-                                    <ForumIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Conceptos" />
-                            </ListItem>
-                        </NavLink>
+                                { user.level > 3 ? null : 
+                                    <NavLink exact to={`${url}/conceptos`}
+                                        className={classes.link} 
+                                        activeClassName={classes.active} 
+                                        >
+                                        <ListItem button onClick={toggle} className={classes.nested}>
+                                            <ListItemIcon>
+                                                <ForumIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Conceptos" />
+                                        </ListItem>
+                                    </NavLink>
+                                }
 
-                    </List>
-                </Collapse>
+                            </List>
+                        </Collapse>
+                    </React.Fragment>
+                }
+
                 
                 {user.level > 2 ? null :
                     <NavLink exact to={`${url}/compras`}
@@ -186,20 +192,27 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                     </NavLink>
                 }
 
-                <NavLink exact to={`${url}/inventario`}
-                    className={classes.link} 
-                    activeClassName={classes.active} 
-                >
+                { user.level > 3 ? null :
 
-                        <ListItem button onClick={toggle}>
-                            <ListItemIcon>
-                                <AssignmentIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Inventario" />
-                        </ListItem>
-                        
-                </NavLink>
-                <Divider />
+                <React.Fragment>
+                    <NavLink exact to={`${url}/inventario`}
+                        className={classes.link} 
+                        activeClassName={classes.active} 
+                    >
+
+                            <ListItem button onClick={toggle}>
+                                <ListItemIcon>
+                                    <AssignmentIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Inventario" />
+                            </ListItem>
+                            
+                    </NavLink>
+                    <Divider />
+
+                </React.Fragment>
+                }
+
 
                 <NavLink exact to={`${url}/pos`} 
                     className={classes.link} 

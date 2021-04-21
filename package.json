@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "bcrypt": "5.0.0",
     "bootstrap": "^4.5.2",
+    "fontsource-roboto": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.0.0",
     "moment": "^2.29.1",
@@ -29,7 +30,7 @@
     "victory": "^35.1.1"
   },
   "scripts": {
-    "dev": "react-scripts start",
+    "dev": "react-scripts start .env",
     "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",

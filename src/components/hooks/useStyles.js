@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
     },
     container: {
-        marginTop: theme.spacing(9),
+        marginTop: theme.spacing(15),
         marginBottom: 0,
         display: 'flex',
         flexDirection: 'column',
@@ -88,8 +88,8 @@ const useStyles = makeStyles(theme => ({
         color: '#fff',
     },
     backgroundCustom: {
-        background: 'linear-gradient(30deg,'+ getRandomColor()+','+getRandomColor()+')',
-        // background: 'linear-gradient(45deg, #ffffff 30%, #FDF6EC 90%)',
+        // background: 'linear-gradient(30deg,'+ getRandomColor()+','+getRandomColor()+')',
+        background: 'linear-gradient(45deg, #2CF6B3 30%, #2DEFF6 90%)',
         backgroundPosition: 'center',
         position: 'absolute',
         left: 0,
@@ -299,6 +299,23 @@ const useStyles = makeStyles(theme => ({
 
     pesadasList: {
         height: 400,
+    },
+
+    cajaBonita: {
+        height: 300,
+        width: 350,
+    },
+
+    cardScrollable: {
+        maxHeight: 350,
+        overflow: 'auto'
+    },
+
+    error404: {
+        marginTop: "25%",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
     }
 
 }));

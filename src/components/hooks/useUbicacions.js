@@ -8,7 +8,9 @@ const useUbicacions = () => {
 	useEffect(() => {
 		async function loadData() {
 			const res = await getUbicacions()
-			setUbicacions(res.ubicacions)
+			if (res){
+				setUbicacions(res.ubicacions)
+			}
 			// const saldo = await getUbicacionsSaldo()
 			// setUbicacionsSaldo(saldo.data)
 		}

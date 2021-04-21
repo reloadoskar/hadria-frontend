@@ -15,7 +15,7 @@ const useClientes = () => {
 		return () => setClientes([])
 	}, [])
 
-	function add(cliente) {
+	function crearCliente(cliente) {
 		saveCliente(cliente).then(res => {
 			if (res.status === 'success') {
 				const newCliente = [res.cliente, ...clientes];  
@@ -25,7 +25,7 @@ const useClientes = () => {
 		})
 	}
 
-	function del(index, clienteId) {
+	function eliminarCliente(index, clienteId) {
 		deleteCliente(clienteId).then(res => {
 			if(res.status === 'success'){
 				const newClientes = [...clientes];
@@ -39,8 +39,8 @@ const useClientes = () => {
 
 	return {
 		clientes,
-		add,
-		del,
+		crearCliente,
+		eliminarCliente,
 
 	}
 };

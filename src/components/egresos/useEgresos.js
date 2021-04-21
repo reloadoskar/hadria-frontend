@@ -8,7 +8,9 @@ const useEgresos = () => {
 	useEffect(() => {
 		async function loadEgresos() {
 			const res = await getEgresos()
-			setEgresos(res.egresos);
+			if(res !== undefined){
+				setEgresos(res.egresos)
+			}
 		}
         loadEgresos()
         return () => {
@@ -21,23 +23,25 @@ const useEgresos = () => {
 			setTotalEgresos(sumImporte(egresos))
 		}
 	}, [egresos])
-	const [disp, setDisp] = useState([])
-	useEffect(()=>{
-        getDisponiblexUbicacion().then(res=>{
-            let disp = []
-            res.forEach(el => {
-                disp.push({ubicacion: el.nombre, disponible: (sumImporte(el.ingresos) - sumImporte(el.egresos))})
-            })
-            setDisp(disp)
-        })
-        return () => setDisp([])
-    }, [updating])
+
+	// useEffect(()=>{
+    //     getDisponiblexUbicacion().then(res=>{
+    //         let disp = []
+    //         res.forEach(el => {
+    //             disp.push({ubicacion: el.nombre, disponible: (sumImporte(el.ingresos) - sumImporte(el.egresos))})
+    //         })
+    //         setDisp(disp)
+    //     })
+    //     return () => setDisp([])
+    // }, [updating])
 	
 	const [cuentasxPagar, setCuentas] = useState([])
 	useEffect(() => {
 		async function loadCuentas() {
 			const res = await getCuentasPorPagar()
-            setCuentas(res.cuentas);
+			if(res !== undefined){
+				setCuentas(res.cuentas)
+			}
 		}
 		loadCuentas()
 		return () => setCuentas([])
@@ -82,8 +86,6 @@ const useEgresos = () => {
 		cuentasxPagar,
 		totalCxp,
 		addPagoCxp,
-
-		disp
 	}
 };
 

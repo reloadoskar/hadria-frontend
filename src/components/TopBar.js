@@ -10,7 +10,7 @@ import useStyles from './hooks/useStyles'
 export default function TopBar(props) {
     const classes = useStyles();
     
-    const { toggle, open, auth, user } = props
+    const { toggle, open, auth, logout, user } = props
     
     return (
 
@@ -40,7 +40,7 @@ export default function TopBar(props) {
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <UserFunctions auth={auth} user={user}/>
+                            <UserFunctions logout={logout} user={user}/>
                         </Grid>
                     </Grid>
                 :

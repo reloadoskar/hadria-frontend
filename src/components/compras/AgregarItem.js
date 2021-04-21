@@ -13,9 +13,11 @@ import useStyles from '../hooks/useStyles'
 export default function AgregarItem(props){
     const { crearItem, showMessage, products, openP, items } = props 
     const classes = useStyles();
+
+    const [producto, setProducto] = useState("")
     
     const [values, setValues] = useState({
-        producto: '',
+        // producto: '',
         provedor: '',
         cantidad: '',
         empaques: '',
@@ -32,7 +34,8 @@ export default function AgregarItem(props){
         var imp = 0
         switch(field){
             case 'producto':
-                return setValues({...values, producto: value, costo: value.costo})
+                return setProducto(value)
+                // return setValues({...values, producto: value, costo: value.costo})
             case 'cantidad':
                 imp = value * values.costo
                 return setValues({...values, cantidad: value, importe: imp})
@@ -47,7 +50,7 @@ export default function AgregarItem(props){
     const handleSubmit = (e) => {
         e.preventDefault()
         let item = {
-            producto: values.producto,
+            producto: producto,
             cantidad: values.cantidad,
             stock: values.cantidad,
             empaques: values.empaques,
@@ -82,7 +85,7 @@ export default function AgregarItem(props){
                                 required
                                 fullWidth
                                 autoFocus
-                                value={values.producto}
+                                value={producto}
                                 onChange={(e) => handleChange('producto', e.target.value )}
                                 margin="normal"
                                 variant="outlined"
@@ -100,7 +103,7 @@ export default function AgregarItem(props){
                         <Grid item xs={6} sm={2}>
                             <TextField
                                 id="empaques"
-                                label="Cajas"
+                                label={ producto.empaque !== undefined ? producto.empaque.empaque : "Empaques"}
                                 margin="normal"
                                 type="number"
                                 required
@@ -114,7 +117,7 @@ export default function AgregarItem(props){
                         <Grid item xs={6} sm={2}>
                             <TextField
                                 id="cantidad"
-                                label="Kilos"
+                                label={ producto.unidad !== undefined ? producto.unidad.unidad : "Unidad"}
                                 margin="normal"
                                 type="number"
                                 required
@@ -169,6 +172,7 @@ export default function AgregarItem(props){
                             }
                         </Grid>                 
                     </Grid>
+                    
                     <CrearProducto {...props} open={props.dialogP} close={props.closeP}  />
             </form>
 

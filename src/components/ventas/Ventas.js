@@ -68,6 +68,7 @@ const Ventas = () => {
                 setVenta(res.venta)
                 setDialog(true)
             }else{
+                setBuscando(false)
                 showMessage(res.message, res.status)
             }
             setBuscando(false)
