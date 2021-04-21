@@ -5,7 +5,7 @@ import useInventario from '../hooks/useInventario'
 import { getDisponiblexUbicacion } from '../api'
 import { 
     sumImporte, 
-    sumSaldo, 
+    // sumSaldo, 
     // calcCostoInventario 
 } from '../Tools'
 

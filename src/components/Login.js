@@ -13,15 +13,12 @@ export default function Login(){
     const { enqueueSnackbar } = useSnackbar()
     
     const classes = useStyles()
-    
-    const [elAuth, setElAuth] = useState(null)
     const [usuario, setUsuario] = useState('')
     const [password, setPassword] = useState('')
     const [cargando, setCargando] = useState(false)
 
     useEffect(()=> {
         if(auth.autenticado){
-            setElAuth(auth)
             if(auth.user !== null){
                 if(auth.user.level <=2){
                     history.replace(from)
@@ -34,15 +31,8 @@ export default function Login(){
                 }
             }
         }
-        return () => {
-            setElAuth(null)
-            // clearFields()
-        }
+        return () => clearFields
     },[auth, history, from])
-
-    useEffect(()=> {
-        return () => clearFields()
-    }, [])
     
     const clearFields = () => {
         setUsuario('')

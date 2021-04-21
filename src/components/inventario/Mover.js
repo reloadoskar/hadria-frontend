@@ -16,7 +16,7 @@ const init = {
 
 export default function Mover(props){
     const classes = useStyles()
-    const {open, close, inventario, ubicacions, mover, update} = props
+    const {open, close, inventario, ubicacions, mover} = props
     const [guardando, setGuardando] = useState(false)
     const [movimiento, setMovimiento] = useState(init)
     const [pesadas, setPesadas] = useState(false)

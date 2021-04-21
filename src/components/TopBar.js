@@ -10,7 +10,7 @@ import useStyles from './hooks/useStyles'
 export default function TopBar(props) {
     const classes = useStyles();
     
-    const { toggle, open, auth, logout, user } = props
+    const { toggle, open, logout, user } = props
     
     return (
 

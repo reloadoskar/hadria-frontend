@@ -18,13 +18,10 @@ export default function PosComprasFor({inventario, wantThisItem, showMessage}) {
 				inventario.length === 0 ?
 					<Typography variant="h6" children="No se encontraron productos." align="center" />
 				:
-				inventario.map( (item, i) => {
-					if(item.stock >= 1){
-						return(
-							<CompraItem elitem={item} key={i} action={iWantThisItem}/>
-						)
-					}
-				}) 				
+				inventario.filter(item => item.stock >= 1).map( (item, i) => (
+					<CompraItem elitem={item} key={i} action={iWantThisItem}/>
+					)
+				) 				
 			}
 		</div>
 	);

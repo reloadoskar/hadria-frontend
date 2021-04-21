@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { getEgresos, saveEgreso, getCuentasPorPagar, savePagoACuentaPorPagar, getDisponiblexUbicacion } from '../api'
+import { getEgresos, saveEgreso, getCuentasPorPagar, savePagoACuentaPorPagar, 
+	// getDisponiblexUbicacion 
+	} from '../api'
 import { sumImporte, sumSaldo } from '../Tools'
 const useEgresos = () => {
 	const [egresos, setEgresos] = useState([])
