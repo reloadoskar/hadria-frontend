@@ -7,7 +7,7 @@ import Router from './Router';
 import Home from './components/Home'
 import Register from './components/Register'
 import NotFound from './components/404'
-import {PrivateRoute} from './PrivateRoute'
+import {PrivateRoute} from './privateRoute'
 import { ProvideAuth } from "./components/auth/use_auth"
 
 function App() {
