@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField } from '@material-ui/core'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@material-ui/core'
 import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import useStyles from '../hooks/useStyles'
-import useUbicacions from '../hooks/useUbicacions';
 const ncliente = {
     nombre: "",
     rfc: "",
@@ -19,7 +18,6 @@ const ncliente = {
 const CrearCliente = (props) =>{
     const {open, close, crear} = props
     const classes = useStyles()
-    const {ubicacions} = useUbicacions()
     const [cliente, setCliente] = useState(ncliente)
     
     const handleSubmit = (e) =>{

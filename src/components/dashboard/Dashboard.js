@@ -29,7 +29,8 @@ import { Grid,
     Typography, 
     CircularProgress, 
     Menu, 
-    MenuItem, 
+    MenuItem,
+    Container, 
 } from '@material-ui/core';
 
 // import PaymentIcon from '@material-ui/icons/Payment';
@@ -173,7 +174,7 @@ export default function Dashboard(props) {
     // }
 
     return (
-        <div>
+        <Container maxWidth="md">
                 {balance === null || ubicacions === []  ?
                     
                     <Backdrop className={classes.backdrop} open={bckdrpOpen}>
@@ -296,14 +297,6 @@ export default function Dashboard(props) {
                 </Grid>
                 }
 
-        </div>
-                    
-
-
-
-
-
-
-    
+        </Container>
     )
 }
