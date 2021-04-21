@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import clsx from 'clsx';
 import Produccions from './components/Produccions'

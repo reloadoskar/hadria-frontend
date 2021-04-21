@@ -316,32 +316,8 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-<<<<<<< HEAD
         justifyContent: 'center',
     },
-
-    basic: {
-        backgroundColor: "#FFE873"
-    },
-    pro: {
-        backgroundColor: "#5CB9CC"
-    },
-    master: {
-        backgroundColor: "#EC4E20"
-    },
-    suspended: {
-        backgroundColor: "#F28969"
-    },
-    colored: {
-        backgroundColor: 'linear-gradient(214deg, #1aa27f, #4381e0)',
-    },
-    backdrop: {
-        zIndex: theme.zIndex.drawer + 1,
-        color: '#fff',
-    },
-=======
-    }
->>>>>>> multiple_users
 
 }));
 
