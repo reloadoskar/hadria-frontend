@@ -64,14 +64,11 @@ const PaymentDetails = () => {
     )
 }
 const StatusDialog = (props) => {
-    const {open=true, status, logout, close} = props
+    const {open, status, logout, close} = props
     const classes = useStyles();
     const handleClose = () =>{
         return close()
     }
-    // const pagar = () =>{
-    //     return null
-    // }
     return (
         <Dialog
             open={open}
@@ -106,22 +103,17 @@ const StatusDialog = (props) => {
             <DialogActions>
                 {
                     status.type === "danger" ?
-                    <div>
-
-                        <Button onClick={logout} color="primary">
-                            Salir
-                        </Button>
-                        {/* <Button onClick={handleClose} color="primary">
-                            Pagar con CODI
-                        </Button> */}
-                    </div>
-                        :
                         <div>
-                            <Button onClick={handleClose} color="primary">
-                                Entendido
+                            <Button onClick={logout} color="primary">
+                                Salir
                             </Button>
                         </div>
-
+                    :
+                    <div>
+                        <Button onClick={handleClose} color="primary">
+                            Ok
+                        </Button>
+                    </div>
                 }
             </DialogActions>
         </Dialog>

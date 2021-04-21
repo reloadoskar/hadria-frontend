@@ -1,98 +1,47 @@
-import React, { useState } from 'react';
-import ComprasDialog from './ComprasDialog';
-
-import { useSnackbar } from 'notistack';
+import React, { useState } from 'react'
+import CompraBasic from './CompraBasic'
+import { useSnackbar } from 'notistack'
 import {
-    IconButton,
-    Typography,
-    Table,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    LinearProgress,
     Button,
     Container,
-    Grid,
-    Paper
-} from '@material-ui/core';
+    Grid} from '@material-ui/core';
 
 import DetalleCompra from './DetalleCompra'
-import ConfirmDialog from './ConfirmDialog'
 import Buscador from './Buscador'
 
 import useCompras from '../hooks/useCompras';
-import useStyles from '../hooks/useStyles'
+import useProducts from '../hooks/useProducts'
+import useProvedors from '../hooks/useProvedors';
+import useUbicacions from '../hooks/useUbicacions';
+import useTipoCompras from '../hooks/useTipoCompras';
 
-import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import useStyles from '../hooks/useStyles'
+import CrearCompra from './CrearCompra';
+import ConfirmDialog from './ConfirmDialog'
 
 
-const TablaCompras = ({ compras, editCompra, openConfirm }) => {
+function Compras(props) {
+    const {compras, crearCompra, cancelarCompra} = useCompras()
+    const {products, addProduct } = useProducts()
+    const {provedors, add} = useProvedors()
+    const {ubicacions} = useUbicacions();
+    const {tipoCompras, addTipoCompra} = useTipoCompras();
     const classes = useStyles();
-    return (
-        <TableContainer component={Paper}>
-            <Table size="small" className={classes.table}>
-
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Folio</TableCell>
-                        <TableCell>Clave</TableCell>
-                        <TableCell>Remisión</TableCell>
-                        <TableCell>Proveedor</TableCell>
-                        <TableCell>Ubicación</TableCell>
-                        <TableCell>Tipo</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Acciones</TableCell>
-                    </TableRow>
-                </TableHead>
-
-                <TableBody>
-                    {
-                        compras.map((compra) => (
-                            <TableRow key={compra._id}>
-                                <TableCell >{compra.folio}</TableCell>
-                                <TableCell >{compra.clave}</TableCell>
-                                <TableCell >{compra.remision}</TableCell>
-                                <TableCell >{compra.provedor.nombre}</TableCell>
-                                <TableCell >{compra.ubicacion.nombre}</TableCell>
-                                <TableCell >{compra.tipoCompra.tipo}</TableCell>
-                                <TableCell >{compra.status}</TableCell>
-                                <TableCell align="right">
-                                    <IconButton
-                                        onClick={() => editCompra(compra)}
-                                    >
-                                        <VisibilityIcon />
-                                    </IconButton>
-                                    <IconButton
-                                        disabled={compra.status === "CANCELADO" ? true : false}
-                                        aria-label="delete"
-                                        onClick={() => openConfirm(compra)}
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    }
-                </TableBody>
-            </Table>
-        </TableContainer>
-    )
-}
-
-function Compras() {
     const { enqueueSnackbar } = useSnackbar()
-    const { compras, addCompra, del, } = useCompras();
+
     const [showDialog, setShowDialog] = useState(false)
+    const [showDialogP, setShowDialogP] = useState(false)
     const [detCompra, setDetCompra] = useState(false)
     const [compra, setCompra] = useState(null)
     const [confirm, setConfirm] = useState(false)
-
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
-
+    const crear = (compra) => {
+        return crearCompra(compra).then(res => {
+            closeDialog()
+            return res
+        })
+    }
     const openDialog = () => {
         setShowDialog(true)
     }
@@ -100,10 +49,17 @@ function Compras() {
     const closeDialog = () => {
         setShowDialog(false)
     }
+    const openDialogP = () => {
+        setShowDialogP(true)
+    }
+
+    const closeDialogP = () => {
+        setShowDialogP(false)
+    }
 
     const editCompra = (compra) => {
-        setDetCompra(true)
         setCompra(compra)
+        setDetCompra(true)
     }
 
     const closeCompra = () => {
@@ -111,65 +67,69 @@ function Compras() {
         setCompra(null)
     }
 
-    const openConfirm = (compra) => {
-        setCompra(compra)
-        setConfirm(true)
-    }
 
-    const cancelConfirm = () => {
-        setConfirm(false)
-        setCompra(null)
-    }
-
-    const okConfirm = (data) => {
-
-        del(data._id).then(res => {
+    function cancelar(){
+        cancelarCompra(compra._id).then(res => {
+            closeConfirm()
             if (res.status === 'error') {
             } else {
                 showMessage(res.message, res.status)
             }
-            cancelConfirm()
         })
     }
-
+    function openConfirm(compra){
+        setCompra(compra)
+        setConfirm(true)
+    }
+    function closeConfirm(){
+        setCompra(null)
+        setConfirm(false)
+    }
     return (
         <Container maxWidth="xl">
             <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                     <Buscador />
                 </Grid>
-                <Grid item xs={6}>
-                    <Button fullWidth margin="normal" variant="contained" color="secondary" onClick={() => openDialog('comprasDialog')}>
+                <Grid item xs={12} sm={6}>
+                    <Button className={classes.botonGenerico} fullWidth onClick={() => openDialog('comprasDialog')}>
                         <AddIcon /> Crear Compra
       		        </Button>
-                    <ComprasDialog
-                        fullWidth
+                    <CrearCompra
                         open={showDialog}
+                        dialogP={showDialogP}
                         close={closeDialog}
+                        openP={openDialogP}
+                        closeP={closeDialogP}
                         showMessage={showMessage}
-                        addCompra={addCompra}
+                        crear={crear}
+                        products={products}
+                        addProducto={addProduct}
+                        provedors={provedors}
+                        tipoCompras={tipoCompras}
+                        ubicacions={ubicacions}
+                        addTipoCompra={addTipoCompra}
+                        add={add}
                     />
                 </Grid>
+                {compras === null ? null :
+                    compras.map((compra, index) => (
+                        <Grid item xs={12} key={index}>                    
+                            <CompraBasic compra={compra}  openConfirm={openConfirm} editCompra={editCompra}/>
+                        </Grid>
+                    ))
+                }
             </Grid>
-
-
-
-
-                    {
-                        compras === null ?
-                            <LinearProgress variant="query" />
-                            :
-                            compras.length === 0 ?
-                                <Typography variant="h6" align="center" gutterBottom>No hay Compras registradas.</Typography>
-                                :
-                                <TablaCompras compras={compras} editCompra={editCompra} openConfirm={openConfirm}/>
-
-                    }
-
-
-                <DetalleCompra compra={compra} open={detCompra} close={closeCompra} showMessage={showMessage} />
-                <ConfirmDialog open={confirm} cancel={cancelConfirm} ok={okConfirm} data={compra} />
-
+            <DetalleCompra 
+                compra={compra} 
+                open={detCompra} 
+                close={closeCompra} 
+                showMessage={showMessage} 
+                ubicacions={ubicacions}
+                products={products}
+                provedors={provedors}
+            />
+            <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelar}/>
         </Container>
     )
 }

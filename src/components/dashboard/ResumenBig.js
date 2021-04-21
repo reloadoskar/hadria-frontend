@@ -1,7 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid, Typography, Paper, Tooltip } from '@material-ui/core';
 
 const ResumenBig = ({ tipoCompra, data, formatNumber }) => {
+    const [resultado, setResultado] = useState(0)
+    useEffect(()=> {
+        if(data){
+            
+            setResultado(data.costoInventario + data.totalVenta - data.compra.importe - data.totalEgresos )
+        }
+        return () => {
+            setResultado(0)
+        }
+    }, [data])
     return (
         <Paper>
         <Grid container spacing={2}>
@@ -76,10 +86,10 @@ const ResumenBig = ({ tipoCompra, data, formatNumber }) => {
                                 <Typography align="center" variant="body1" children="Resultado:" />
                                 <Typography align="center" variant="h4"
                                     children={
-                                        "$"+formatNumber((data.totalVenta - data.compra.importe -data.totalEgresos))
+                                        "$"+formatNumber(resultado)
                                     }
                                     color={
-                                        (data.totalVenta - data.compra.importe) < 0 ? 'secondary' : 'inherit'
+                                        resultado < 0 ? 'secondary' : 'inherit'
                                     } paragraph />
                             </Grid>
                         </Tooltip>

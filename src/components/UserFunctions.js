@@ -1,14 +1,15 @@
 import React, {useState, useEffect} from 'react'
-import { Grid, IconButton, Typography, Menu, MenuItem, Divider } from '@material-ui/core';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import { useHistory } from 'react-router-dom';
-// import { useSnackbar } from 'notistack';
-import StatusDialog from './StatusDialog';
-import useUser from './hooks/useUser'
+import { Grid, Menu, MenuItem, Divider, Button } from '@material-ui/core'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import { useHistory } from 'react-router-dom'
+import StatusDialog from './StatusDialog'
+import {restartApp} from './api'
+import useStyles from './hooks/useStyles'
+import { useAuth } from './auth/use_auth'
 
-const UserFunctions = (props) => {
-    const {auth} = props
-    const {user} = useUser()
+const UserFunctions = () => {
+    const auth= useAuth()
+    const classes = useStyles()
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl)
     const [statusCheck, setStatusCheck] = useState(false)
@@ -18,22 +19,22 @@ const UserFunctions = (props) => {
     // const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
     useEffect(()=>{
-        if(user){
-            if(user.venceEnDias === 0){
+        if(auth.user){
+            if(auth.user.venceEnDias <= 0){
                 setStatus({
                     message: "Cuenta Suspendida, favor realizar su pago inmediatamente.",
                     type: "danger"
                 })
                 return setStatusCheck(true)
             }
-            if(user.venceEnDias <= 15){
+            if(auth.user.venceEnDias <= 15){
                 setStatusCheck(true)
                 return setStatus({
-                    message: "Su licencia vence en "+user.venceEnDias+" días.", 
+                    message: "Su licencia vence en "+auth.user.venceEnDias+" días.", 
                     type: "warning"}
                     )
             }
-            if(user.venceEnDias > 15 && user.venceEnDias < 30){
+            if(auth.user.venceEnDias > 15 && auth.user.venceEnDias <= 20){
                 setStatusCheck(true)
                 return setStatus({
                     message: "Su licencia vencerá pronto.", 
@@ -43,16 +44,18 @@ const UserFunctions = (props) => {
         }else{
             return false
         }
-    },[user])
+    },[auth])
 
-    const logout = () => {
-        
-        localStorage.clear()
+    const salir = () => {
         auth.logout(() => {
             history.push("/")
         })
     }
-
+    const restart = () => {
+        restartApp().then(res=>{
+            salir()
+        })
+    }
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget)
     }
@@ -66,16 +69,15 @@ const UserFunctions = (props) => {
     }
     return (
         <div>
-            <Grid container spacing={2} alignItems="center">
-                <Grid item xs >
-                    <Typography variant="h6" children={user.nombre} />
-                </Grid>
-                <Grid item xs >
-                    <IconButton
+            <Grid container spacing={2} alignItems="center" justify="flex-end">
+                <Grid item >
+                    <Button
+                        color="inherit"
                         onClick={handleMenu}
-                        color="inherit">
-                        <AccountCircle />
-                    </IconButton>
+                        className={classes.botonUserFuncions}
+                        endIcon={<AccountCircle />}>
+                            {auth.user.nombre}
+                    </Button>
                     <Menu
                         id="menu-usuario"
                         anchorEl={anchorEl}
@@ -92,13 +94,17 @@ const UserFunctions = (props) => {
                         onClose={handleClose}
                     >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
+                        {
+                            auth.user.level === 0 ?
+                            <MenuItem onClick={restart}>Restart</MenuItem>
+                            : null
+                        }
                         <Divider />
-                        <MenuItem onClick={logout}>Salir</MenuItem>
+                        <MenuItem onClick={salir}>Salir</MenuItem>
                     </Menu>
 
                 </Grid>
-                <StatusDialog open = {statusCheck} status={status} logout={logout} close={close}/>
+                <StatusDialog open = {statusCheck} status={status} logout={auth.logout} close={close}/>
             </Grid>
         </div>
     )

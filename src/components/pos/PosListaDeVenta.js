@@ -1,13 +1,13 @@
 import React from 'react'
-import { Button, List, ListItem, ListItemAvatar, Avatar, ListItemText, ListItemSecondaryAction, Divider, IconButton, Grid, Typography } from '@material-ui/core';
+import { List, ListItem, ListItemAvatar, Avatar, ListItemText, ListItemSecondaryAction, Divider, IconButton, Grid, Typography } from '@material-ui/core';
 
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 // import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 
 import DeleteIcon from '@material-ui/icons/Delete';
-import ReceiptIcon from '@material-ui/icons/Receipt';
-import {sumImporte, sumCantidad, sumEmpaques} from '../Tools'
+// import ReceiptIcon from '@material-ui/icons/Receipt';
+import {sumImporte, sumCantidad, sumEmpaques, formatNumber} from '../Tools'
 
 export default function PosListaDeVenta({items, openDialog, removeItem, total}) {
 
@@ -32,129 +32,80 @@ export default function PosListaDeVenta({items, openDialog, removeItem, total}) 
     }
     return (
         <div>
-        <List>
+        {
+            items.length > 0 ?
 
-            <ListItem>
-                <ListItemAvatar>
-                    <Avatar>
-                        <ShoppingCartIcon />
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                    primary="Items"
-                />
-                <ListItemSecondaryAction>
-                <ListItemText
-                    primary={items.length}
-                />
-                </ListItemSecondaryAction>
-            </ListItem>
+                <List>
 
-            <Divider />
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <ShoppingCartIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary="Items"
+                        />
+                        <ListItemSecondaryAction>
+                        <ListItemText
+                            primary={items.length}
+                        />
+                        </ListItemSecondaryAction>
+                    </ListItem>
 
-            { items.map( (item, index) => (
-                    <ListItem key={index}>
-                        <Grid container >
-                            <Grid item xs={1}>
-                                <ListItemText
-                                    primary={item.empaques}
-                                    secondary="emp"
-                                />
+                    <Divider />
+
+                    { items.map( (item, index) => (
+                            <ListItem key={index}>
+                                <Grid container  alignItems="center">
+                                    <Grid item xs={6}>
+                                        <Typography>{item.producto.descripcion}</Typography>
+                                        <Typography>
+                                            {item.empaques}-{item.cantidad} x {item.precio}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Typography variant="h6" children={ "$" +
+                                            formatNumber(item.importe,2)
+                                        }/>
+                                    </Grid>
+            
+                                    <ListItemSecondaryAction>
+                                        <IconButton edge="end" onClick={()=>deleteMe(index, item)}>
+                                            <DeleteIcon fontSize="small" />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </Grid>
+                            </ListItem>                      
+                        ))
+                    }
+
+                    <Divider />
+                    
+                    <ListItem>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <Typography children={ sumEmpaques(items) +"-"+sumCantidad(items) } />
                             </Grid>
                             <Grid item xs={6}>
-                                <ListItemText 
-                                    primary={item.producto.descripcion}
-                                />
+                                <Typography variant="h6">
+                                    {"$ " + formatNumber(sumImporte(items),2) }
+                                </Typography>                                    
                             </Grid>
-                            <Grid item xs={1}>
-                                <ListItemText 
-                                    primary={item.cantidad}
-                                    secondary="uni"
-                                />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <ListItemText 
-                                    primary={"$ "+item.precio}
-                                    secondary="x"
-                                />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <ListItemText 
-                                    primaryTypographyProps={{align: "right"}}
-                                    primary={"$ "+ item.importe}    
-                                    secondary="="
-                                />
-                            </Grid>
-                            <ListItemSecondaryAction>
-                                <IconButton edge="end" onClick={()=>deleteMe(index, item)}>
-                                    <DeleteIcon fontSize="small" />
-                                </IconButton>
-                            </ListItemSecondaryAction>
+                            
                         </Grid>
-                    </ListItem>                      
-                ))
+                        <ListItemSecondaryAction>
+                            <IconButton disabled edge="end">
+                                <LocalOfferIcon fontSize="small" />
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+
+                    <Divider />                    
+                </List>
+                :
+                null
             }
-
-            <Divider />
-            
-            <ListItem>
-                <Grid container spacing={2}>
-                    <Grid item xs={1}>
-                        <ListItemText primary={sumEmpaques(items)} />
-                    </Grid>
-                    <Grid item xs={6}>
-                        
-                    </Grid>
-                    <Grid item xs={1}>
-                        <ListItemText primary={sumCantidad(items)} />
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Grid container justify="flex-end">
-                            <Typography>
-                                Total: 
-                            </Typography> 
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={2}>
-
-                            <ListItemText 
-                                primaryTypographyProps={{align: "right"}}
-                                primary={"$ " + sumImporte(items) }
-                                >
-                                {/* $ {total} */}
-                            </ListItemText>
-
-                    </Grid>
-                </Grid>
-                <ListItemSecondaryAction>
-                    <IconButton disabled edge="end">
-                        <LocalOfferIcon fontSize="small" />
-                    </IconButton>
-                </ListItemSecondaryAction>
-            </ListItem>
-
-            <Divider />
-            
-            <ListItem>
-                
-                
-            </ListItem>
-
-        </List>
-                    <Grid container alignItems="flex-end">
-                        <Grid item xs>
-                            <Button
-                                disabled={items.length === 0 ? true : false }
-                                variant="contained"
-                                color="primary"
-                                endIcon={<ReceiptIcon />}
-                                onClick={() => openDialog('cobrarDialog')}
-                            >
-                                Cobrar (x)
-                            </Button>
-                        </Grid>
-                    </Grid>
-
         </div>
     )
 }

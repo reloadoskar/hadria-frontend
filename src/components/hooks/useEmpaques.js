@@ -8,6 +8,7 @@ const useEmpaques = () => {
 			setEmpaques(res.empaques);
 		}
 		loadEmpaques()
+		return () => setEmpaques([])
     }, [])
     
     const addItem = (item) => {

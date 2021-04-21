@@ -1,22 +1,22 @@
-import React  from 'react'
+import React, { useState } from 'react'
 import moment from 'moment'
-
 import useStyles from '../hooks/useStyles'
+import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, Typography, } from '@material-ui/core';
 
-import { MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, CardActions, } from '@material-ui/core';
-
-import useUbicacions from '../hooks/useUbicacions'
-
-export default function PosAcceso({values, checkCorte, handleChange}){
+export default function PosAcceso({accesando, ubicacions, ubicacion, fecha, checkCorte, handleChange, invUbic, user}){
     const classes = useStyles();
-    const {ubicacions} = useUbicacions();
+    // const [accesando, setAccesando] = useState(false)
     const handleSubmit = (e) => {
         e.preventDefault()
-        checkCorte()
+        // setAccesando(true)
+        checkCorte().then(res => {
+            // setAccesando(false)
+        })
     }
+
     return (
-        <Card className={classes.posCard}>
-            <form onSubmit={(e) => handleSubmit(e)}>
+        <Container maxWidth="sm">
+            <Card className={classes.posCard}>
                 <CardHeader 
                     title="Selección de Ubicación"
                     subheader={"fecha del sistema: " + (
@@ -24,53 +24,71 @@ export default function PosAcceso({values, checkCorte, handleChange}){
                         )}
                 />
                 <CardContent>
+                    {accesando ?
+                        <Typography variant="h6" align="center"> Accesando... </Typography>
+                        :
+                        <form onSubmit={(e) => handleSubmit(e)}>
+                            {user.level < 3 ?
+                                <TextField
+                                    id="ubicacion"
+                                    label="Selecciona una ubicación"
+                                    autoFocus
+                                    select
+                                    required
+                                    fullWidth
+                                    margin="normal"
+                                    variant="outlined"
+                                    value={ubicacion}
+                                    // onChange={(e) => setUbicacion(e.target.value)}
+                                    onChange={(e) => handleChange('ubicacion',e.target.value)}
+                                    >
+                                    {
+                                        ubicacions === null ?
+                                            <MenuItem>Cargando...</MenuItem>
+                                        :
+                                        
+                                            ubicacions.map((option, index) =>{ 
+                                                if(option._id.tipo=== 'SUCURSAL'){
+                                                    return (
+                                                        <MenuItem key={index} value={option}>
+                                                            {option._id.nombre}
+                                                        </MenuItem>
+                                                    )
+                                                }else{
+                                                    return false
+                                                }
+                                            })
+                                    }
+                                </TextField>
+                                :
+                                <Typography variant="h5" align="center" >{ubicacion === '' ? null : ubicacion._id.nombre}</Typography>
+                            }
 
-                    <TextField
-                        id="ubicacion"
-                        label="Selecciona una ubicación"
-                        autoFocus
-                        select
-                        required
-                        fullWidth
-                        margin="normal"
-                        variant="outlined"
-                        value={values.ubicacion}
-                        // onChange={(e) => setUbicacion(e.target.value)}
-                        onChange={(e) => handleChange('ubicacion',e.target.value)}
-                        >
-                        {ubicacions.map((option, index) => (
-                            <MenuItem key={index} value={option}>
-                                {option.nombre}
-                            </MenuItem>
-                        ))}
-                    </TextField>
+                            <TextField
+                                    id="fecha"
+                                    type="date"
+                                    value={fecha}
+                                    fullWidth
+                                    margin="normal"
+                                    variant="outlined"                             
+                                    onChange={e => handleChange('fecha', e.target.value)}
+                            />
+                            <Grid container justify="flex-end">
+                                <Button 
+                                    fullWidth
+                                    className={ invUbic === null  ? classes.botonGenerico : classes.botonCosmico}
+                                    disabled={invUbic === null || ubicacion === null ? true : false }
+                                    type="button" 
+                                    variant="contained" 
+                                    color="primary" 
+                                    size="large" 
+                                    onClick={(e) => handleSubmit(e)}>Acceder</Button>
+                            </Grid>
 
-                    <TextField
-                        id="fecha"
-                        label="fecha"
-                        type="date"
-                        fullWidth
-                        value={values.fecha}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        onChange={e => handleChange('fecha', e.target.value)}
-
-                    />
-
+                        </form>
+                    }
                 </CardContent>
-                <CardActions>
-                    <Grid container justify="flex-end">
-                        <Button 
-                            disabled={!values.ubicacion || !values.fecha ? true : false }
-                            type="button" 
-                            variant="contained" 
-                            color="primary" 
-                            size="large" 
-                            onClick={(e) => handleSubmit(e)}>Acceder</Button>
-                    </Grid>
-                </CardActions>
-            </form>
-        </Card>
+            </Card>
+        </Container>
     )
 }

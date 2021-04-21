@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {saveIngreso} from '../api'
-import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, MenuItem, TextField } from '@material-ui/core';
+import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, MenuItem, TextField, Zoom } from '@material-ui/core';
+import useStyles from '../hooks/useStyles';
 
 export default function IngresoDialog({ubicacion, fecha, isOpen, close, showMessage, addToSaldo}){
 const initialData = {
@@ -8,11 +9,20 @@ const initialData = {
     descripcion: '',
     importe: 0
 }
+const classes = useStyles()
 const conceptos = ["INGRESO A CAJA", "OTRO"]
 const [values, setValues] = useState(initialData) 
-
+const [loading, setLoading] = useState(false)
 const handleChange = (field, value) => {
-    setValues({...values, [field]: value})
+    switch (field) {
+        case 'descripcion':
+            setValues({...values, [field]: value.toUpperCase()})
+            break;
+    
+        default:
+            setValues({...values, [field]: value})
+            break;
+    }
 }
 
 const handleClose = (dialog) => {
@@ -25,6 +35,7 @@ const clearFields = () => {
 }
 
 const handleSubmit = (e) => {
+    setLoading(true)
     e.preventDefault()
     let ingreso = {
         fecha: fecha,
@@ -33,9 +44,9 @@ const handleSubmit = (e) => {
         descripcion: values.descripcion,
         importe: values.importe,
     }
-
     saveIngreso(ingreso).then(res => {
         showMessage(res.message, res.status)
+        setLoading(false)
         addToSaldo(ingreso.importe)
         clearFields()
         close('ingresoDialog')
@@ -61,6 +72,12 @@ return (
                 </Grid>
         </DialogTitle>
         <form onSubmit={handleSubmit}>
+            {
+                loading === true ?
+                <Zoom in={loading}>
+                    <Typography align="center" variant="h5">Guardando...</Typography>
+                </Zoom>
+                :
             <DialogContent>
                 <Grid container spacing={2}>
 
@@ -94,14 +111,14 @@ return (
                             onChange={(e) => handleChange('descripcion', e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <TextField 
                             id="importe"
+                            fullWidth
                             label="Importe"
                             variant="outlined"
                             type="number"
                             required
-                            fullWidth
                             value={values.importe}
                             onChange={(e) => handleChange('importe', e.target.value)}
                         />
@@ -109,9 +126,10 @@ return (
 
                 </Grid>
             </DialogContent>
+            }
             <DialogActions>
-                <Button onClick={() => handleClose('ingresoDialog')} color="secondary">Cancelar</Button>
-                <Button type="submit" variant="contained" color="primary" disabled={values.importe > 0 ? false : true }>Registrar</Button>
+                <Button className={classes.botonSimplon} onClick={() => handleClose('ingresoDialog')} >Cancelar</Button>
+                <Button className={classes.botonGenerico} type="submit" disabled={values.importe > 0 && loading !== true   ? false : true }>Registrar</Button>
             </DialogActions>
         </form>
     </Dialog>

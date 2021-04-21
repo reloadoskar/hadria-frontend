@@ -8,6 +8,7 @@ const useConceptos = () => {
 			setConceptos(res.conceptos);
 		}
 		loadConceptos()
+		return () => setConceptos([])
     }, [])
     
     const addItem = (item) => {

@@ -1,41 +1,37 @@
 import { useState, useEffect } from 'react';
-import { useSnackbar } from 'notistack';
 import { getProducts, saveProduct, deleteProduct } from '../api'
 const useProducts = () => {
-	const [products, setProducts] = useState(null)
-	const { enqueueSnackbar } = useSnackbar()
+	const [products, setProducts] = useState([])
+	const [updating, setUpdating] = useState(false)
+
 	useEffect(() => {
-		async function loadProvedors() {
+		async function loadProducts() {
 			const res = await getProducts()
 			setProducts(res.products);
 		}
-		loadProvedors()
-	}, [])
+		loadProducts()
+		return () => setProducts([])
+	}, [updating])
 
-	function add(producto) {
-		saveProduct(producto).then(res => {
-			if (res.status === 'success') {
-				const newProduct = [res.producto, ...products];  
-				setProducts(newProduct)
-			}
-			enqueueSnackbar(res.message, { variant: res.status })
-		})
+	async function addProduct(producto) {
+		const res = await saveProduct(producto);
+		setUpdating(!updating)
+		return res;
 	}
 
-	function del(index, productoId) {
-		deleteProduct(productoId).then(res => {
+	function del(productoId) {
+		setUpdating(true)
+		return deleteProduct(productoId).then(res => {
 			if(res.status === 'success'){
-				const newProducts = [...products];
-                newProducts.splice(index,1);
-                setProducts(newProducts);
+				setUpdating(false)
+				return res
 			}
-			enqueueSnackbar(res.message, { variant: res.status });
 		})
 	}
 
 	return {
 		products,
-		add,
+		addProduct,
 		del
 	}
 };

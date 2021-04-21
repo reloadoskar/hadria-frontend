@@ -1,115 +1,52 @@
 import React from 'react'
-import { formatNumber, sumImporte, } from '../Tools'
-import { Typography, Grid, Card, CardHeader, CardContent, CardActions, Tooltip, LinearProgress } from '@material-ui/core';
+import { formatNumber } from '../Tools'
+import { Typography, Grid, Card, Divider, CardContent } from '@material-ui/core';
+import useStyles from '../hooks/useStyles';
 
 export default function Balance({balance}) {
-
-    
-
+    const classes = useStyles()
     return (
-        <Grid container direction="row" alignItems="center" justify="space-around" spacing={2}>
+        <Card elevation={3}>
+            <CardContent>
 
-            {
-                balance === null ?
-                    <Grid item xs={12}>
-                        <LinearProgress variant="query" />
+                <Grid container spacing={2}>
+            
+                    <Grid item xs={12} sm>                                        
+                        <Typography align="center" variant="body1" children="Disponible" />
+                        <Typography align="center" variant="h5" children={"$" + formatNumber(balance.disponible)} />                        
                     </Grid>
-                    :
 
-                    // balance.length === 0 ?
-                    //     <Typography align="center">No hay datos</Typography>
-                    //     :
+                    <Grid item xs={12} sm>
+                        <Typography align="center" variant="body1" children="Inventario" />
+                        <Typography align="center" variant="h5" children={"+$" + formatNumber(balance.inventario)} />
+                    </Grid>
 
-                        <React.Fragment>
+                    <Grid item xs={12} sm>
+                        <Typography align="center" variant="body1" children="Por Cobrar" />
+                        <Typography align="center" variant="h5" children={"+$" + formatNumber(balance.porCobrar)} />
+                    </Grid>
 
-                            <Grid item xs={12} md>
-                                <Card>
-                                    <CardHeader>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <Typography align="right" variant="body1" children="Balance" />
-                                        <Typography
-                                            align="right"
-                                            variant="h4"
-                                            color={balance.total < 0 ? 'error' : 'inherit'}
+                    <Grid item xs={12} sm>
+                        <Typography align="center" variant="body1" children="Por Pagar" />
+                        <Typography 
+                            className={classes.textoSangron}
+                            align="center"  variant="h5" children={"-$" + formatNumber(balance.porPagar)} />
+                    </Grid>
 
-                                            children={"$" + formatNumber(balance.total)} />
-                                    </CardContent>
-                                    <CardActions>
+                    <Grid item xs={12} sm>
+                        <Typography align="center" variant="body1" children="Balance" />
+                        <Divider />
+                        <Typography
+                            className={ balance.total > 0 ? classes.textoGroovie : classes.textoSangron}
+                            align="center"
+                            variant="h5"
+                            color={balance.total < 0 ? 'error' : 'inherit'}
+                            children={"$" + formatNumber(balance.total)} 
+                        />
+                    </Grid>
 
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12} md>
-                                <Card>
-                                    <CardHeader>
-                                    </CardHeader>
-                                    <Tooltip title={
-                                        <React.Fragment>
-                                            {
-                                                !balance.dispPorUbic ?
-                                                    null
-                                                    :
-                                                    balance.dispPorUbic.map((el, index) => {
-                                                        let disponible = sumImporte(el.ingresos) - sumImporte(el.egresos)
-                                                        return (
-                                                            <Typography children={el.nombre + ": " + formatNumber(disponible)} key={index} />
-                                                        )
-                                                    })
-                                            }
-                                        </React.Fragment>
-                                    } placement="right">
-                                        <CardContent>
-                                            <Typography align="right" variant="body1" children="Disponible" />
-                                            <Typography align="right" variant="h4" children={"$" + formatNumber(balance.disponible)} />
-                                        </CardContent>
-                                    </Tooltip>
-                                    <CardActions>
-
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12} md>
-                                <Card>
-                                    <CardHeader>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <Typography align="right" variant="body1" children="Inventario" />
-                                        <Typography align="right" variant="h4" children={"+$" + formatNumber(balance.inventario)} />
-                                    </CardContent>
-                                    <CardActions>
-
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12} md>
-                                <Card>
-                                    <CardHeader>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <Typography align="right" variant="body1" children="Por Cobrar" />
-                                        <Typography align="right" variant="h4" children={"+$" + formatNumber(balance.porCobrar)} />
-                                    </CardContent>
-                                    <CardActions>
-
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12} md>
-                                <Card>
-                                    <CardHeader>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <Typography align="right" variant="body1" children="Por Pagar" />
-                                        <Typography align="right" color="secondary" variant="h4" children={"-$" + formatNumber(balance.porPagar)} />
-                                    </CardContent>
-                                    <CardActions>
-
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                        </React.Fragment>
-            }
-        </Grid>
+                </Grid>
+            </CardContent>
+        </Card>
     )
 }

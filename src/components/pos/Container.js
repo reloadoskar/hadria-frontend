@@ -1,9 +1,7 @@
-import React, {useReducer, useState } from 'react';
+import React, {useEffect, useReducer, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import moment from 'moment'
-import KeyHandler, { KEYPRESS, } from 'react-key-handler';
-import {getDataFrom, getCuentasPorCobrar, getCuentasPorPagar, existCorte} from '../api'
-
+import {getCuentasPorCobrar, getCuentasPorPagar, existCorte} from '../api'
 import Acceso from './Acceso'
 import PosDialog from './PosDialog'
 import PosCobrarDialog from './PosCobrarDialog'
@@ -13,16 +11,22 @@ import EgresoDialog from './EgresoDialog'
 import IngresoDialog from './IngresoDialog'
 import AddItemDialog from './AddItemDialog'
 import CobroDialog from './CobroDialog'
-import CorteDialog from './CorteDialog'
+import Corte from '../cortes/Corte'
 import RetiroDialog from './RetiroDialog'
-import Loading from '../Loading'
+// import Loading from '../Loading'
 
-import { Container, } from '@material-ui/core';
+import { Container, } from '@material-ui/core'
 
 import reducer from './PosReducer'
-
-import useInventario from '../hooks/useInventario';
-
+import useIngresos from '../ingresos/useIngresos'
+import useCuentasxPagar from '../cxp/useCuentasxPagar'
+import useCortes from '../hooks/useCortes'
+import useInventario from '../hooks/useInventario'
+// import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
+import 'moment/locale/es-mx';
+// import Pesadas from '../inventario/Pesadas';
+// import CrearVenta from '../ventas/CrearVenta';
+// import useStyles from '../hooks/useStyles';
 const initialState = {
     saldoEnUbicacion: 0, 
     // POS DIALOG
@@ -37,36 +41,68 @@ const initialState = {
     egresoDialog: false,
     // INGRESO DIALOG
     ingresoDialog: false,
-
+    
     retiroDialog: false,
     // COBRO DIALOG
     cobroDialog: false,
     menuDialog: false,
     corteDialog: false,
-
+    
     inventarioFiltrado: [],
     ubicacion: '', 
     fecha: moment().format("YYYY-MM-DD"), 
     itemToAdd: null,
     itemsToSave: [],
     total: 0,
-
+    
     // CORTE
     corteExist: false,
     ventasCorte: [],
     egresosCorte: [],
     ingresosCorte: [],
     creditosCorte: [],
-
+    
     cuentasPorPagar: [],
     cuentasPorCobrar: [],
 }
 
-function PosContainer() {
-    const [loading] = useState(true)
+function PosContainer(props) {
+    const {user} = props
+    const {invxubic} = useInventario()
     const { enqueueSnackbar } = useSnackbar()
-    const {inventario} = useInventario();
+    // const classes = useStyles()
+    const {
+        // addIngreso, 
+        addVenta, cxcPdv, addPagoCxc} = useIngresos()
+    const {cuentasxPagar, addPagoCxp} = useCuentasxPagar()
+    const {getCorte, guardarCorte} = useCortes()
+    const [corte, setCorte] = useState(null)
+    const [corteDialog, setCorteDialog] = useState(false)
+
+    const [ubicacion, setUbicacion] = useState('')
+    const [invSelected, setInvSelected] = useState(null)
+    const [fecha, setFecha] = useState( moment().format('YYYY-MM-DD') )
+    // const [itemSelected, setItemSelected] = useState()
+    // const [pesadas, setPesadas] = useState(false)
     const [values, dispatch] = useReducer(reducer, initialState)
+    const [accesando, setAccesando] = useState(false)
+
+    useEffect(() => {
+        if(invxubic !== null ){
+            // console.log(invxubic)
+            invxubic.forEach(el => {
+                if(user.ubicacion._id === el._id._id){
+                    return handleChange('ubicacion', el)
+                }
+            });
+        }
+    },[user, invxubic])
+    // const [loading] = useState(true)
+    
+
+    const savePagoCxp = (pago) => {
+        return addPagoCxp(pago)
+    }
     
     const openDialog = dialog =>{ 
         if( dialog === 'pagarDialog'){
@@ -101,6 +137,7 @@ function PosContainer() {
             compraId: compraId
         }
         dispatch({type: 'itemWanted', value: wantThisItem})
+        // setItemSelected(wantThisItem)
         openDialog('addItemDialog')
     }
 
@@ -126,47 +163,38 @@ function PosContainer() {
 
     const handleChange = (type, value) => { 
         if(type === 'ubicacion'){
-            dispatch({type: 'ubicacion', value: value, inv: inventario})
-            // getDataFrom(value._id, values.fecha).then(res => {
-            //     dispatch({type: 'setCorte', value: res.corte})
-            // })
-            return
+            setUbicacion(value)
+            setInvSelected(value.items)
+            return 
         }
         if(type === 'fecha'){
-            var f = moment(value, "YYYY-MM-DD").format('YYYY-MM-DD')
-            return dispatch({type: type, value: f}) 
+            var f = moment(value).format('YYYY-MM-DD')
+            return setFecha(f)
         }
-        dispatch({type: type, value: value}) 
+        // dispatch({type: type, value: value}) 
     }
 
     const startPos = () =>{
         // e.preventDefault()
+        openDialog('posDialog')
         loadBalance()
-        if(values.inventarioFiltrado.length <= 0){
-            enqueueSnackbar(" No se encontró inventario en "+values.ubicacion.nombre, {
-                variant: 'info',
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                },
-            } ) 
-            openDialog('posDialog')
             
-        }else{
-            openDialog('posDialog')
-        }
     }
 
     const loadBalance = () => {
-
-        getDataFrom(values.ubicacion._id, values.fecha).then(res => {
-            dispatch({type: 'setCorte', value: res.corte})
+        getCorte(ubicacion._id._id, fecha).then(res=>{
+            if(res.status === 'error'){
+                showMessage(res.message, res.status)
+                closeDialog('corteDialog')
+            }else{
+                setCorte(res)
+            }
         })
-
     }
 
     const checkCorte = () => {
-        existCorte(values.ubicacion._id, values.fecha).then( res =>{
+        setAccesando(true)
+        return existCorte(ubicacion._id._id, fecha).then( res =>{
             if(res.corte.length === 0){
                 // dispatch({type: 'corteExist', value: false})                
                 startPos()
@@ -174,125 +202,190 @@ function PosContainer() {
                 dispatch({type: 'corteExist', value: true})
                 showMessage('Fecha cerrada, para esta ubicación', 'error')
             }
+            setAccesando(false)
+            return res
         })
     }
 
     const showCorte = () => {
         closeDialog('menuDialog')
         loadBalance()
-        openDialog('corteDialog')
+        setCorteDialog(true)
     }
 
+    const closeDialogCorte = () => {
+        setCorteDialog(false)
+    }
 
+    function onChangeFecha(fecha){
+        setCorte(null)
+        getCorte(corte.ubicacion._id, fecha).then(res => {
+            setCorte(res)
+        })
+        setFecha(fecha)
+    }
+
+    // function openPesadas(){
+    //     setPesadas(true)
+    // }
+    // const closePesadas = () => {
+    //     setPesadas(false)
+    // }
+    // const addPesada = (pesada) => {
+    //     var lista = values.pesadas
+    //     lista.push(pesada)
+    //     // var emps = lista.length
+    //     // var cant = parseFloat(movimiento.itemselcantidad) + parseFloat(pesada)
+    //     // setMovimiento({...movimiento, pesadas: lista, itemselcantidad: cant, itemselempaques: emps })
+    // }
+    // const clearPesadas = () => {
+    //     // setMovimiento({...movimiento, pesadas: [], itemselcantidad: 0, itemselempaques:0})
+    // }
+
+    function saveCorte(corte){
+        guardarCorte(corte).then( res => {
+            showMessage(res.message, res.status)
+            closeDialogCorte()
+            closeDialog('posDialog')
+        })
+    }
     return (
-        <React.Fragment>
-        <KeyHandler
-          keyEventName={KEYPRESS}
-          keyValue="x"
-          onKeyHandle={(e) => (openDialog("cobrarDialog") )}
-        />
-        <Container maxWidth="sm">
-
-            {
-                inventario === null ?
-                    // <LinearProgress variant="query" />
-                    <Loading loading={loading}/>
-                :
+        <Container>
+            {user !== null  ?
+                <div>
                     <Acceso 
-                        values={values} 
+                        accesando={accesando}
+                        user={user}
+                        ubicacions={invxubic}
+                        ubicacion={ubicacion} 
+                        fecha={fecha} 
                         checkCorte={checkCorte} 
+                        invUbic={invSelected}
                         handleChange={handleChange}/>
+                    {ubicacion === '' || corte === null ?
+                        null
+                        :
+                        <div>
+                            {/* <CrearVenta 
+                                elinventario={invSelected}
+                                laubicacion={ubicacion}
+                                lafecha={fecha}
+                            /> */}
+                            <PosDialog 
+                                values={values}
+                                inventario={invSelected}
+                                ubicacion={ubicacion}
+                                fecha={fecha}
+                                wantThisItem={wantThisItem}
+                                menuDialog={values.menuDialog}
+                                showMessage={showMessage}
+                                isOpen={values.posDialog}
+                                openDialog={openDialog}
+                                removeItem={removeItem}
+                                showCorte={showCorte}
+                                resetVenta={resetVenta}
+                                closeDialog={closeDialog}/>
+                            
+                            {values.itemToAdd &&
+                                <AddItemDialog 
+                                    isOpen={values.addItemDialog}
+                                    close={closeDialog}
+                                    item={values.itemToAdd}
+                                    add={add}
+                                    showMessage={showMessage}
+                                />
+                            }
+        
+                            <PosCobrarDialog
+                                valuesToSave={values}
+                                ubicacion={ubicacion}
+                                fecha={fecha}
+                                isOpen={values.cobrarDialog}
+                                crearVenta={addVenta}
+                                crearPago={addPagoCxc}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                addToSaldo={addToSaldo}
+                                resetVenta={resetVenta}
+                                />
+                            <PagarDialog 
+                                fecha={fecha}
+                                cuentas={cuentasxPagar}
+                                pagar={savePagoCxp}
+                                ubicacion={ubicacion}
+                                isOpen={values.pagarDialog}
+                                saldoDisponible={corte.total}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                subFromSaldo={subFromSaldo}
+                            />
+        
+                            <EgresoDialog 
+                                fecha={fecha}
+                                ubicacion={ubicacion}
+                                isOpen={values.egresoDialog}
+                                saldoDisponible={corte.total}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                subFromSaldo={subFromSaldo}
+                            />
+        
+                            <IngresoDialog 
+                                fecha={fecha}
+                                ubicacion={ubicacion}
+                                isOpen={values.ingresoDialog}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                addToSaldo={addToSaldo}
+                            />
+        
+                            <RetiroDialog
+                                fecha={fecha}
+                                ubicacion={ubicacion}
+                                isOpen={values.retiroDialog}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                saldoDisponible={corte.total}
+                                subFromSaldo={subFromSaldo}/>
+        
+                            <CobroDialog                                 
+                                fecha={fecha}
+                                cuentas={cxcPdv}
+                                cobrar={addPagoCxc}
+                                ubicacion={ubicacion}
+                                isOpen={values.cobroDialog}
+                                saldoDisponible={corte.total}
+                                close={closeDialog}
+                                showMessage={showMessage}
+                                addToSaldo={addToSaldo}
+                            />
+                            {corte === [] ? null : 
+                                <Corte 
+                                    user={user}
+                                    ubicacions={props.ubicacions}
+                                    fecha={fecha}
+                                    open={corteDialog}
+                                    close={closeDialogCorte}
+                                    corte={corte}
+                                    onChangeFecha={onChangeFecha}
+                                    guardar={saveCorte}
+                                    message={showMessage}
+                                />
+                            }
+                            {/* <Pesadas 
+                                open={pesadas} 
+                                close={closePesadas} 
+                                addPesada={addPesada} 
+                                clearPesadas={clearPesadas} 
+                                pesadas={values.pesadas} 
+                            /> */}
+                        </div>    
+                    }
+                </div>
+                    :
+                    null
             }
-
-
-            <PosDialog 
-                values={values}
-                wantThisItem={wantThisItem}
-                menuDialog={values.menuDialog}
-                showMessage={showMessage}
-                isOpen={values.posDialog}
-                openDialog={openDialog}
-                removeItem={removeItem}
-                showCorte={showCorte}
-                resetVenta={resetVenta}
-                closeDialog={closeDialog}/>
-            
-            {values.itemToAdd &&
-                <AddItemDialog 
-                    isOpen={values.addItemDialog}
-                    close={closeDialog}
-                    item={values.itemToAdd}
-                    add={add}
-                    showMessage={showMessage}
-                />
-            }
-
-            <PosCobrarDialog
-                valuesToSave={values}
-                isOpen={values.cobrarDialog}
-                close={closeDialog}
-                showMessage={showMessage}
-                addToSaldo={addToSaldo}
-                resetVenta={resetVenta}
-                />
-            <PagarDialog 
-                fecha={values.fecha}
-                cuentas={values.cuentasPorPagar}
-                ubicacion={values.ubicacion}
-                isOpen={values.pagarDialog}
-                saldoDisponible={values.saldoEnUbicacion}
-                close={closeDialog}
-                showMessage={showMessage}
-                subFromSaldo={subFromSaldo}
-            />
-
-            <EgresoDialog 
-                fecha={values.fecha}
-                ubicacion={values.ubicacion}
-                isOpen={values.egresoDialog}
-                saldoDisponible={values.saldoEnUbicacion}
-                close={closeDialog}
-                showMessage={showMessage}
-                subFromSaldo={subFromSaldo}
-            />
-
-            <IngresoDialog 
-                fecha={values.fecha}
-                ubicacion={values.ubicacion}
-                isOpen={values.ingresoDialog}
-                close={closeDialog}
-                showMessage={showMessage}
-                addToSaldo={addToSaldo}
-            />
-
-            <RetiroDialog
-                fecha={values.fecha}
-                ubicacion={values.ubicacion}
-                isOpen={values.retiroDialog}
-                close={closeDialog}
-                showMessage={showMessage}
-                subFromSaldo={subFromSaldo}
-            />
-
-            <CobroDialog 
-                fecha={values.fecha}
-                cuentas={values.cuentasPorCobrar}
-                ubicacion={values.ubicacion}
-                isOpen={values.cobroDialog}
-                saldoDisponible={values.saldoEnUbicacion}
-                close={closeDialog}
-                showMessage={showMessage}
-                addToSaldo={addToSaldo}
-            />
-
-            <CorteDialog 
-                data={values}
-                isOpen={values.corteDialog}
-                close={closeDialog}
-                showMessage={showMessage}
-            />
         </Container>
-            </React.Fragment>
     )
 }
 

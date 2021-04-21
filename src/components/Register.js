@@ -7,8 +7,8 @@ import useStyles from './hooks/useStyles'
 import {register} from './api'
 
 
-const Landing = (props) => {
-    const {isLoading, openLoading, closeLoading} = props
+const Register = (props) => {
+    const {isLoading,} = props
     let history = useHistory();
     const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
@@ -39,9 +39,9 @@ const Landing = (props) => {
     
     const handleSubmit = (e) => { 
         e.preventDefault()
-        openLoading()
+        // openLoading()
         register(data).then(res => {
-            closeLoading()
+            // closeLoading()
             if(res.status === 'success'){
                 showMessage(res.message, res.status)
                 history.push("/");
@@ -139,4 +139,4 @@ const Landing = (props) => {
     )
 }
 
-export default Landing
+export default Register

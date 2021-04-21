@@ -1,46 +1,51 @@
 import { useState, useEffect } from 'react';
-import { getCompras, cancelCompra, closeCompra } from '../api'
+import { getCompras, cancelCompra, closeCompra, saveCompra } from '../api'
 const useCompras = () => {
 	const [compras, setCompras] = useState(null)
-	const [updating, setUpdating] = useState(false)
+	const [upCompras, setUpCompras] = useState(false)
 	useEffect(() => {
 		async function loadCompras() {
 			const res = await getCompras()
-			setCompras(res.compras);
+			if (res !== undefined){
+				setCompras(res.compras);
+			}
 		}
 		loadCompras()
-	}, [updating])
+		return () => setCompras([])
+	}, [upCompras])
 
-	const addCompra = (compra) => {
-		setUpdating(true)
-		const newCompra = [compra, ...compras]
-		setCompras(newCompra)	
+	const crearCompra = async (compra) => {
+		const res = await saveCompra(compra)
+			let newCompra = [...compras, res.compra]
+			setCompras(newCompra)	
+			return res
 	}
 	
-
-	const del = (id) =>{
-		setUpdating(true)
+	const cancelarCompra = (id) =>{
 		return cancelCompra(id).then( res => {
-			setUpdating(false)
+			setUpCompras(!upCompras)
+			// const n = compras
+			// n.splice(index, 1)
+			// setCompras(n)
 			return res
 		})
-
 	}
 
-	const cerrar = (id) => {
-		setUpdating(true)
+	const cerrarCompra = (id) => {
+		setUpCompras(true)
 		return closeCompra(id).then( res => {
-			setUpdating(false)
+			setUpCompras(false)
 			return res
 		})
 	}
 
 	return {
 		compras,
-		cerrar,
-		addCompra,
-		del,
-		updating
+		crearCompra,
+		cancelarCompra,
+		cerrarCompra,
+		upCompras,
+		setUpCompras
 	}
 };
 

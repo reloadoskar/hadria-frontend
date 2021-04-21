@@ -8,16 +8,18 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
 
-import useUbicacions from '../hooks/useUbicacions';
+// import useUbicacions from '../hooks/useUbicacions';
 import CompraAddItemsDialog from './CompraAddItemsDialog'
 
 import { formatNumber, sumImporte } from '../Tools'
 
 import { updateCompra, updateCompraItem, addCompraItem, ticketNuevoItem } from '../api'
-
+import useStyles from '../hooks/useStyles';
+import moment from 'moment'
 export default function DetalleCompra(props) {
-    const { ubicacions } = useUbicacions();
-    const { compra, open, close, showMessage } = props
+    const { compra, open, close, showMessage, ubicacions, products, provedors } = props
+    const classes = useStyles()
+    // const { ubicacions } = useUbicacions();
     const [addItem, setAdditem] = useState(false)
     const [edit, setEdit] = useState({
         item: null,
@@ -94,7 +96,7 @@ export default function DetalleCompra(props) {
         switch (field) {
             case 'cantidad':
                 importe = value * edit.costo
-                return setEdit({ ...edit, [field]: value, empaques: value, importe: importe })
+                return setEdit({ ...edit, [field]: value, importe: importe })
             case 'costo':
                 importe = value * edit.cantidad
                 return setEdit({ ...edit, [field]: value, importe: importe })
@@ -350,11 +352,14 @@ export default function DetalleCompra(props) {
                                                                         </React.Fragment>
                                                                         :
                                                                         <React.Fragment>
-                                                                            <TableCell>{item.producto.descripcion}</TableCell>
-                                                                            <TableCell align="right">{item.cantidad + '|' + item.stock}</TableCell>
+                                                                            <TableCell>
+                                                                        <Typography className={classes.sobreTexto}>{item.ubicacion.nombre} - {moment(item.createdAt).format("YYYY-MM-DD")}</Typography>
+                                                                                <Typography>{item.producto.descripcion}</Typography>
+                                                                            </TableCell>
+                                                                            <TableCell align="right">{formatNumber(item.cantidad,1) + '|' + formatNumber(item.stock,2)}</TableCell>
                                                                             <TableCell align="right">{item.empaques + '|' + item.empaquesStock}</TableCell>
                                                                             <TableCell align="right">{item.costo}</TableCell>
-                                                                            <TableCell align="right">{item.importe}</TableCell>
+                                                                            <TableCell align="right">{formatNumber(item.importe,2)}</TableCell>
                                                                             {
                                                                                 compra.status !== 'ACTIVO' ?
                                                                                     null
@@ -408,6 +413,8 @@ export default function DetalleCompra(props) {
             handleClose={closeAddItem}
             showMessage={showMessage}
             addItemToList={saveNewItem}
+            products={products}
+            provedors={provedors}
         />
         </div>
     )

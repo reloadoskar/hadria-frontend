@@ -1,118 +1,116 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 import Card from '@material-ui/core/Paper';
-import { Typography, CardHeader, CardContent, Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { IconButton, Typography, CardContent, Grid, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import {sumImporte, formatNumber } from '../Tools'
+import {ticketVentasCorte, ticketVenta } from "../api"
+import PrintIcon from '@material-ui/icons/Print'
+import ReceiptIcon from '@material-ui/icons/Receipt';
+// import useStyles from '../hooks/useStyles';
+export default function TablaVentas(props){
+	const {data} = props
+	const { enqueueSnackbar } = useSnackbar()
+	const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+	const handleClick = (data) => {
+		ticketVentasCorte(data).then(res =>{
+            if(res.status === 'error'){
+                showMessage(res.message, res.status)
+            }
+            else{
+                showMessage("Se imprimieron las ventas", "success")
+            }
+        })
+	}
 
-const useStyles = makeStyles(theme => ({
-	root: {
-		width: '100%',
-	},
-	paper: {
-		marginTop: theme.spacing(3),
-		width: '100%',
-		overflowX: 'auto',
-		marginBottom: theme.spacing(2),
-	},
-	table: {
-		minWidth: 650,
-	},
-}));
-
-export default function TablaVentas({ table, data }) {
-	const classes = useStyles();
+	function printTicket(venta){
+		ticketVenta(venta).then(res=>{
+			if(res.status === 'warning'){
+                showMessage(res.message, res.status)
+            }
+            else{
+                showMessage("Se imprimió la venta.", "success")
+            }
+		})
+	}
 	return (
-		<div className={classes.root}>
-			<Card className={classes.paper}>
-				<CardHeader 
-					title={data.length + " "+ table}
-					titleTypographyProps={{
-						align: "right",
-						
-					}} 
-					subheader={"$"+ sumImporte(data)} 
-					subheaderTypographyProps={{
-						align: "right",
-						variant: "h4"
-					}}/>
+
+			<Card >
+				
 				<CardContent>
-					<Grid container spacing={2} >
-						<Grid item xs>Folio</Grid>
-						<Grid item xs>Ubicación</Grid>
-						<Grid item xs>Cliente</Grid>
-						<Grid item xs>Tipo</Grid>
-						<Grid item xs>Importe</Grid>
+					<Grid container direction="row-reverse">
+						<Grid item >
+						<IconButton onClick={() => handleClick(data)}>
+							<PrintIcon />
+						</IconButton>
+						</Grid>
 					</Grid>
 
-					<Grid container>
-						{data.map((row, index) => (
-							<Grid item xs={12} key={index}>
-								<ExpansionPanel>
-									<ExpansionPanelSummary>
-										<Grid container spacing={2}>
-											
-											<Grid item md  >
-												<Typography variant="body2" children={row.folio} />
-											</Grid>
-													
-											<Grid item md  >
-												<Typography variant="body2" children={row.ubicacion.nombre} />
-											</Grid>
-										
-                                        	<Grid item md >
-												<Typography variant="body2" children={row.cliente.nombre} />
-											</Grid>
-												
-											<Grid item md >
-												<Typography align="right" variant="body2" children={row.tipoPago} />
-											</Grid>
-											
-                                            <Grid item md  >
-												<Typography align="right" variant="body2" children={"$"+formatNumber(row.importe)} />
-											</Grid>
-
-													
-
-										</Grid>
-									</ExpansionPanelSummary>
-										{!row.items ? '' 
-											:
-											<ExpansionPanelDetails>
-                                                <Table>
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell>Clave</TableCell>
-                                                            <TableCell>Descripción</TableCell>
-                                                            <TableCell>Cantidad</TableCell>
-                                                            <TableCell>Empaques</TableCell>
-                                                            <TableCell>Precio</TableCell>
-                                                            <TableCell>Importe</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {row.items.map((item, index) => (
-                                                            <TableRow key={index}>
-                                                                <TableCell><Typography children={item.compra.folio+":"+item.compra.clave} /></TableCell>
-                                                                <TableCell><Typography children={item.producto.descripcion} /></TableCell>
-                                                                <TableCell><Typography children={item.cantidad} /></TableCell>
-                                                                <TableCell><Typography children={item.empaques} /></TableCell>
-                                                                <TableCell><Typography children={item.precio} /></TableCell>
-                                                                <TableCell><Typography children={item.importe} /></TableCell>
-                                                            </TableRow>
-                                                        ))}
-                                                    </TableBody>    
-
-                                                </Table>					
-											</ExpansionPanelDetails>
+					<Table size="small">
+						<TableHead>
+							<TableRow>
+								<TableCell>Folio</TableCell>
+								<TableCell>Tipo</TableCell>
+								<TableCell>Cliente</TableCell>
+								<TableCell>Detalle</TableCell>
+								<TableCell align="right">Importe</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>							
+							{data.map((row, index) => (
+								<TableRow key={index}>
+									<TableCell>
+										<Typography variant="body2">
+											#{row.folio}
+										</Typography>
+									</TableCell>
+								
+									<TableCell>
+										<Typography variant="body2">
+											{row.tipoPago}
+										</Typography>
+									</TableCell>
+								
+									<TableCell>
+										<Typography variant="body2">
+											{row.cliente.nombre}
+										</Typography>
+									</TableCell>
+									<TableCell>
+										<Table size="small">
+											<TableBody>
+											{ !row.items ? '' :
+												row.items.map((item, i) => (
+													<TableRow key={i}>
+														<TableCell>{item.compra.folio+":"+item.compra.clave}</TableCell>
+														<TableCell>{item.producto.descripcion}</TableCell>
+														<TableCell>{item.empaques}/{item.cantidad} x {item.precio}</TableCell>
+														<TableCell>$ {formatNumber(item.importe)}</TableCell>
+													</TableRow>
+												))
+											}
+											</TableBody>
+										</Table>
+									</TableCell>
+									<TableCell>
+										<Typography align="right" variant="body2" children={"$"+formatNumber(row.importe)} />
+									</TableCell>
+										{row.tipoPago === 'CANCELADO' ? null :
+										<TableCell align="right" >
+											<IconButton onClick={() => printTicket(row)}>
+												<ReceiptIcon />
+											</IconButton>
+										</TableCell>
 										}
-									</ExpansionPanel>							
-								</Grid> 
+								</TableRow>
 							))}
-						</Grid>
-
+							<TableRow>
+								<TableCell align="right" colSpan={4} >TOTAL</TableCell>
+								<TableCell align="right" >$ {formatNumber(sumImporte(data))}</TableCell>
+							</TableRow>
+						</TableBody>
+					</Table>
 				</CardContent>
 
 			</Card>
-		</div>
 	);
 }

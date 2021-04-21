@@ -1,72 +1,67 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ConfirmDialog from './ConfirmDialog'
 import {saveCorte} from '../api'
 
-import { Dialog, Slide, DialogTitle, DialogContent, Grid, Typography, Divider, ListItem, DialogActions, Button } from '@material-ui/core'
+import { Dialog, Slide, DialogTitle, DialogContent, Backdrop, Grid, Typography, DialogActions, Button, Tabs, Tab, CircularProgress } from '@material-ui/core'
 
-import {sumImporte, sumAcuenta, calcTotal} from '../Tools'
+import {
+    // sumImporte, 
+    // sumAcuenta, 
+    // calcTotal, 
+    formatNumber} from '../Tools'
 
-import ContenedorTabla from './ContenedorTabla'
 import TablaVentas from './TablaVentas'
 import TablaIngresos from './TablaIngresos'
 import TablaEgresos from './TablaEgresos'
+import TablaCreditos from './TablaCreditos'
+import useStyles from '../hooks/useStyles'
 
-const ShowTable = ({show, table, data}) => (
-    
-    show
-        ?
-        <ContenedorTabla table={table} data={data} />
-        :
-        null
+function a11yProps(index) {
+    return {
+      id: `scrollable-auto-tab-${index}`,
+      'aria-controls': `scrollable-auto-tabpanel-${index}`,
+    };
+}
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
   
-)
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`scrollable-auto-tabpanel-${index}`}
+        aria-labelledby={`scrollable-auto-tab-${index}`}
+        {...other}
+      >
+        {value === index && 
+          
+          children
+          
+        }
+      </div>
+    );
+  }
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CorteDialog({isOpen, close, data, showMessage}){
-
-    const [values, setValues] = useState({show: false, confirm: false, table: '', data: ''})
-    const [corteData, setCorteData] = useState({
-        ventas: [],
-        ingresos: [],
-        creditos: [],
-        egresos: [],
-        total: 0,
-        totalVentas:0,
-        totalIngresos:0,
-        totalCreditos:0,
-        totalEgresos:0,
-    })
-
-    React.useEffect(() => {
-        if (isOpen) {
-            setCorteData({
-                fecha: data.fecha,
-                ubicacion: data.ubicacion,
-                ventas: data.ventasCorte,
-                ingresos: data.ingresosCorte,
-                creditos: data.creditosCorte,
-                egresos: data.egresosCorte,
-                totalVentas: sumImporte(data.ventasCorte),
-                totalIngresos: sumImporte(data.ingresosCorte),
-                totalCreditos: sumImporte(data.creditosCorte),
-                totalAcuenta: sumAcuenta(data.creditosCorte),
-                totalEgresos: sumImporte(data.egresosCorte),
-                total: calcTotal( sumImporte(data.ventasCorte), sumImporte(data.creditosCorte), sumAcuenta(data.creditosCorte), sumImporte(data.ingresosCorte), sumImporte(data.egresosCorte) ),
-            });
+export default function CorteDialog({isOpen, close, corteData, data, showMessage, ubicacions, fecha, ubicacion, delVenta}){
+    const classes = useStyles()
+    const [values, setValues] = useState({show: false, confirm: false, table: '', data: '', tabSelected: 0})
+    const [corte, setCorte] = useState(null)
+    useEffect(()=>{
+        if(corteData){
+            setCorte(corteData)
         }
-    }, [data, isOpen]);
-
-    const handleClick = (table, data) => {
-        setValues({...values, show: true, table: table, data: data})
-    }
-    
+        return () => setCorte(null)
+    }, [corteData])
     const handleClose = (dialog) => {
         if(dialog === 'confirm'){
             setValues({...values, confirm: false})
         }
+        setCorte(null)
         close(dialog)
     }
 
@@ -75,13 +70,22 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
     }
 
     const cierraCorte = (corteConfirmed) => {
-        // console.log("cerrando...")
+        corteConfirmed.fecha = fecha
+        corteConfirmed.ubicacion = ubicacion._id
         // console.log(corteConfirmed)
         saveCorte(corteConfirmed).then( res => {
             showMessage(res.message, res.status)
             close('corteDialog')
             close('posDialog')
         })
+    }
+
+    const handleChange = (event, newValue) => {
+        setValues({...values, tabSelected: newValue});
+    }
+
+    function closeConfirm(){
+        setValues({...values, confirm: false})
     }
     
     return (
@@ -91,116 +95,110 @@ export default function CorteDialog({isOpen, close, data, showMessage}){
             open={isOpen} 
             onClose={() => handleClose('corteDialog')} 
             TransitionComponent={Transition}
-        >
-            <DialogTitle>
-                <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <Typography variant="h6" >{data.ubicacion.nombre} </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Grid container justify="flex-end">
-                            <Typography variant="h6" >{data.fecha}</Typography>
+            >
+            {corte === null ? 
+                <Backdrop className={classes.backdrop} open={true}>
+                    <Grid container alignItems="center" direction="column">
+                        <Grid item>
+                            <CircularProgress color="inherit"/>
+                        </Grid>
+                        <Grid item>
+                            <Typography>Cargando...</Typography>
                         </Grid>
                     </Grid>
-                </Grid>
-            </DialogTitle>
-            <DialogContent>
-                {data.ventasCorte.length > 0 ?
-                    <div>
-                    <Grid container>
-                        <Grid item xs>
-                            <ListItem 
-                                button
-                                children={
-                                    <Grid container justify="flex-end" direction="column">
-
-                                        <Typography align="right" variant="h5">{corteData.ventas.length} Ventas</Typography>
-                                        <Typography align="right" variant="h4">$ {corteData.totalVentas}</Typography>
-                                        <Typography align="right" variant="body2" children="Bruto" color="textSecondary" paragraph/>
-
-                                    </Grid>
-                                }
-                                onClick={() => handleClick('Ventas', corteData.ventas)}
-                            />
+                </Backdrop>
+            :
+                <div>
+                <DialogTitle>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <Typography variant="h6" >{ubicacion._id.nombre} </Typography>
                         </Grid>
-                        <Grid item xs>
-                            <ListItem
-                                button
-                                children={
-                                    <Grid container justify="flex-end" direction="column">
-                                        <Typography align="right" variant="h5">{corteData.ingresos.length} Ingresos</Typography>
-                                        <Typography align="right" variant="h4" >+ ${corteData.totalIngresos}</Typography>
-                                        <Typography align="right" variant="body2" children="Cobranza / Otros" color="textSecondary" paragraph/>
-                                    </Grid>
-                                }
-                                onClick={() => handleClick('Ingresos', corteData.ingresos)}
-                            />
-                        </Grid>
-                        <Grid item xs>
-                            <ListItem
-                                button
-                                children={
-                                    <Grid container justify="flex-end" direction="column">
-                                        <Typography align="right" variant="h5">{corteData.creditos.length} Créditos</Typography>
-                                        <Typography align="right" variant="h4" color="secondary">- ${corteData.totalCreditos}</Typography>
-                                        <Typography align="right" variant="h6" children={"+ $"+corteData.totalAcuenta}/>
-                                        <Typography align="right" variant="body2" children="a cuenta" color="textSecondary"  paragraph/>
-                                    </Grid>
-                                }
-                                onClick={() => handleClick('Créditos', corteData.creditos)}
-                                />
-                        </Grid>
-                        <Grid item xs>
-                            <ListItem 
-                                button
-                                children={
-                                    <Grid container justify="flex-end" direction="column">
-                                        <Typography align="right" variant="h5">{corteData.egresos.length} Egresos</Typography>
-                                        <Typography align="right" variant="h4" color="secondary">- ${corteData.totalEgresos}</Typography>
-                                        <Typography align="right" variant="body2" children="Egresos / Gastos / Pagos" color="textSecondary" paragraph/>
-                                    </Grid>
-                                }
-                                onClick={() => handleClick('Egresos', corteData.egresos)}
-                            />
-                        </Grid>
-                        <Grid item xs>
-                            <Typography align="right" variant="h5">Total</Typography>
-                            <Typography align="right" variant="h4" >= ${corteData.total}</Typography>
-                            <Typography align="right" variant="body2" children="Saldo en caja" color="textSecondary" paragraph/>
+                        <Grid item xs={6}>
+                            <Grid container justify="flex-end">
+                                <Typography variant="h6" >{data.fecha}</Typography>
+                            </Grid>
                         </Grid>
                     </Grid>
+                </DialogTitle>
+                <DialogContent>
+                <Tabs
+                        value={values.tabSelected}
+                        onChange={handleChange}
+                        centered
+                    >
+                        <Tab label={
+                            <div>
+                                <Typography align="right" variant="body1">{corte.ventas.length} Ventas</Typography>
+                                <Typography align="right" variant="h4">$ {formatNumber(corte.tventas)}</Typography>
+                                <Typography align="right" variant="body2" children="Bruto" color="textSecondary" paragraph/>
+                            </div>
 
-                    <Divider />
-                    <TablaVentas table="Ventas" data={corteData.ventas }/>
-                    <TablaIngresos table="Ingresos" data={corteData.ingresos} />
-                    <TablaEgresos table="Egresos" data={corteData.egresos} />
-                    <ShowTable show={values.show} table={values.table} data={values.data} />
+                        } {...a11yProps(0)}></Tab>
+                        <Tab label={
+                            <div>
+                                <Typography align="right" variant="body1">{corte.ingresos.length} Ingresos</Typography>
+                                <Typography align="right" variant="h4" >+ ${formatNumber(corte.tingresos)}</Typography>
+                                <Typography align="right" variant="body2" children="Cobranza / Otros" color="textSecondary" paragraph/>
+                            </div>
+                        } {...a11yProps(1)}></Tab>
+                        <Tab label={
+                            <div>
+                                <Typography align="right" variant="body1">{corte.creditos.length} Créditos</Typography>
+                                <Typography align="right" variant="h4" color="secondary">- ${formatNumber(corte.tcreditos)}</Typography>
+                                <Typography align="right" variant="h6" children={"+ $"+corte.tacuenta}/>
+                                <Typography align="right" variant="body2" children="a cuenta" color="textSecondary"  paragraph/>
+                            </div>
+                        } {...a11yProps(2)}></Tab>
+                        <Tab label={
+                            <div>
+                                <Typography align="right" variant="body1">{corte.egresos.length} Egresos</Typography>
+                                <Typography align="right" variant="h4" color="secondary">- ${formatNumber(corte.tegresos)}</Typography>
+                                <Typography align="right" variant="body2" children="Egresos / Gastos / Pagos" color="textSecondary" paragraph/>
+                            </div>
+                        } {...a11yProps(3)}></Tab>
+                        <Tab label={
+                            <div>
+                                <Typography align="right" variant="body1">Total</Typography>
+                                <Typography align="right" variant="h4" >= ${formatNumber(corte.total)}</Typography>
+                                <Typography align="right" variant="body2" children="Saldo en caja" color="textSecondary" paragraph/>
+                            </div>
+                        } {...a11yProps(4)}></Tab>
+
+                    </Tabs>
+                    <TabPanel  value={values.tabSelected} index={0}>
+                        <TablaVentas data={corte.ventas} cancelar={delVenta}/>
+                    </TabPanel>
+                    <TabPanel  value={values.tabSelected} index={1}>
+                        <TablaIngresos data={corte.ingresos} />
+                    </TabPanel>
+                    <TabPanel  value={values.tabSelected} index={2}>
+                        <TablaCreditos data={corte.creditos} />
+                    </TabPanel>
+                    <TabPanel  value={values.tabSelected} index={3}>
+                        <TablaEgresos data={corte.egresos} />
+                    </TabPanel>
+                </DialogContent>
+                <DialogActions>
+                    <Button className={classes.botonSimplon} onClick={() => handleClose('corteDialog')} >
+                        Salir
+                    </Button>
+                    <Button className={classes.botonGenerico} type="button" onClick={() => confirm()} >
+                        Cerrar corte
+                    </Button>
+                </DialogActions>
+                <ConfirmDialog 
+                    ubicacions={ubicacions}
+                    id="confirma cierre de corte"
+                    keepMounted
+                    open={values.confirm}
+                    onClose={closeConfirm}
+                    data={corte}
+                    cierraCorte={cierraCorte}
+                />
                 </div>
-                :
-                <Typography align="center" variant="h3" children="No se encontraron datos." />
             }
-
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={() => handleClose('corteDialog')} color="primary">
-                    Salir
-                </Button>
-                <Button type="button" variant="contained" onClick={() => confirm()} color="primary">
-                    Cerrar corte
-                </Button>
-            </DialogActions>
         </Dialog>
-        <ConfirmDialog 
-            // classes={{
-            //     paper: classes.paper,
-            // }}
-            id="confirma cierre de corte"
-            keepMounted
-            open={values.confirm}
-            onClose={handleClose}
-            data={corteData}
-            cierraCorte={cierraCorte}
-        />
         </div>
     )
 }

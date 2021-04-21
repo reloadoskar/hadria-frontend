@@ -99,16 +99,16 @@ export default function CrearCxcDialog() {
                         </Grid>
 
                         <Grid item xs={6}>
-                            <MuiPickersUtilsProvider utils={MomentUtils} locale={locale}>
-                                <DatePicker
+                            <TextField
+                                id="fecha"
+                                type="date"
                                     value={values.fecha}
                                     fullWidth
                                     margin="normal"
                                     variant="outlined" 
-                                    format="DD/MM/YYYY"
-                                    onChange={e => handleChange('fecha', e)}
+                                    onChange={e => handleChange('fecha', e.target.value)}
                                 />
-                            </MuiPickersUtilsProvider>
+                            
                         </Grid>
 
                         <Grid item xs={6}>

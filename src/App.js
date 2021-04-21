@@ -1,58 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './assets/css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { SnackbarProvider } from 'notistack';
 import Router from './Router';
-import Landing from './components/Landing'
+import Home from './components/Home'
 import Register from './components/Register'
+import NotFound from './components/404'
 import {PrivateRoute} from './privateRoute'
-import IsLoading from './IsLoading'
-
-import auth from './auth'
-
+import { ProvideAuth } from "./components/auth/use_auth"
 
 function App() {
-
-    const [isLoading, setIsLoading] = useState(false)
-
-    const openLoading = () => {
-        setIsLoading(!isLoading)
-    }
-
-    const closeLoading = () => {
-        setIsLoading(false)
-    }
-
+    
 	return (
-		<BrowserRouter>
-            <IsLoading isLoading={isLoading} openLoading={openLoading}/>
-
-            <Switch>
-                <Route exact path="/">
-                    <Landing auth={auth} isLoading={isLoading} openLoading={openLoading} closeLoading={closeLoading}/>
-                </Route>
-                <Route exact path="/register">
-                    <Register auth={auth} isLoading={isLoading} openLoading={openLoading} closeLoading={closeLoading}/>
-                </Route>
-                <PrivateRoute path="/app" auth={auth} >
-                    <Router auth={auth} isLoading={isLoading} openLoading={openLoading} closeLoading={closeLoading}/>
-                </PrivateRoute>
-                <Route path="*" component={() => "404 NOT FOUND"} />
-            </Switch>
-            
-		</BrowserRouter>
-			
+        <ProvideAuth>
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path="/">
+                        <Home/>
+                    </Route>
+                    <Route exact path="/register">
+                        <Register />
+                    </Route>
+                    <PrivateRoute path="/app" >
+                        <Router />
+                    </PrivateRoute>
+                    <Route path="*" component={NotFound} />
+                </Switch>            
+            </BrowserRouter>			
+        </ProvideAuth>
 	)
 }
-
-//export default App;
-
 
 export default function IntegrationNotistack() {
     return (
         <SnackbarProvider maxSnack={3} anchorOrigin={{
-            vertical: 'bottom',
+            vertical: 'top',
             horizontal: 'right',
         }}>
             <App />

@@ -16,7 +16,8 @@ function reducer (state, action){
     switch (action.type){
         case 'nombre':
             var nombre = action.value
-            return {...state, [action.type]: nombre.toUpperCase()}
+            var mail = nombre.replace(/ /g, "").toLowerCase() +"@mail.com"
+            return {...state, [action.type]: nombre.toUpperCase(), email: mail}
         case 'rfc':
             const rfc = action.value
             return {...state, [action.type]: rfc.toUpperCase()}

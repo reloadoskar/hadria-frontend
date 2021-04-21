@@ -5,11 +5,12 @@ const useProduccions = () => {
 	const [produccions, setProduccions] = useState(null)
 	const { enqueueSnackbar } = useSnackbar()
 	useEffect(() => {
-		async function loadProvedors() {
+		async function loadProductions() {
 			const res = await getProduccions()
 			setProduccions(res.produccions);
 		}
-		loadProvedors()
+		loadProductions()
+		return () => setProduccions(null)
 	}, [])
 
 	function add() {

@@ -3,8 +3,9 @@ import { useSnackbar } from 'notistack';
 import { Card, CardHeader, CardContent, Grid, TextField, CardActions, Button, Typography, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import useUnidades from '../hooks/useUnidades'
-
+import useStyles from '../hooks/useStyles'
 const Unidades = () => {
+    const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
     const {unidades, add, del} = useUnidades()
     const [values, setValues] = useState({unidad: '', abr: ''})
@@ -61,8 +62,8 @@ const Unidades = () => {
                     </CardContent>
                     <CardActions>
                         <Grid container justify="flex-end">
-                            <Grid item xs={12}>
-                                <Button variant="contained" size="small" onClick={() => addUnidad(values)} disabled={ values.unidad === '' || values.abr === '' ? true : false}>Agregar</Button>
+                            <Grid item>
+                                <Button className={classes.botonGenerico} onClick={() => addUnidad(values)} disabled={ values.unidad === '' || values.abr === '' ? true : false}>Agregar</Button>
                             </Grid>
                         </Grid>
                     </CardActions>

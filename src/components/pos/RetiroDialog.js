@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { saveRetiro } from '../api'
-import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, MenuItem, TextField } from '@material-ui/core';
+import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, MenuItem, TextField, Zoom } from '@material-ui/core';
 import useUbicacions from '../hooks/useUbicacions';
+import useStyles from '../hooks/useStyles';
 
 export default function EgresoDialog({ ubicacion, fecha, isOpen, close, showMessage, subFromSaldo }) {
+    const classess = useStyles()
     const initialData = {
         descripcion: '',
         importe: 0,
@@ -11,9 +13,15 @@ export default function EgresoDialog({ ubicacion, fecha, isOpen, close, showMess
     }
     const [values, setValues] = useState(initialData)
     const {ubicacions} = useUbicacions()
+    const [guardando, setGuardando] = useState(false)
 
     const handleChange = (field, value) => {
-        setValues({ ...values, [field]: value })
+        switch(field){
+            case 'descripcion':
+                return setValues({ ...values, [field]: value.toUpperCase()})
+            default:
+                return setValues({ ...values, [field]: value })
+        }
     }
 
     const handleClose = (dialog) => {
@@ -26,6 +34,7 @@ export default function EgresoDialog({ ubicacion, fecha, isOpen, close, showMess
     }
 
     const handleSubmit = (e) => {
+        setGuardando(true)
         e.preventDefault()
         let retiro = {
             fecha: fecha,
@@ -36,6 +45,7 @@ export default function EgresoDialog({ ubicacion, fecha, isOpen, close, showMess
         }
 
         saveRetiro(retiro).then(res => {
+            setGuardando(false)
             showMessage(res.message, res.status)
             subFromSaldo(retiro.importe)
             clearFields()
@@ -62,6 +72,12 @@ export default function EgresoDialog({ ubicacion, fecha, isOpen, close, showMess
                 </Grid>
             </DialogTitle>
             <form onSubmit={handleSubmit}>
+            {
+                guardando === true ?
+                <Zoom in={guardando}>
+                    <Typography variant="h5" align="center">Guardando...</Typography>
+                </Zoom>
+                :
                 <DialogContent>
                     <Grid container spacing={2}>
 
@@ -109,9 +125,10 @@ export default function EgresoDialog({ ubicacion, fecha, isOpen, close, showMess
 
                     </Grid>
                 </DialogContent>
+            }
                 <DialogActions>
-                    <Button onClick={() => handleClose('retiroDialog')} color="secondary">Cancelar</Button>
-                    <Button type="submit" variant="contained" color="primary" disabled={values.importe > 0 ? false : true}>Retirar</Button>
+                    <Button className={classess.botonSimplon} onClick={() => handleClose('retiroDialog')} >Cancelar</Button>
+                    <Button className={classess.botonGenerico} type="submit" disabled={values.importe === 0 || guardando === true ? true : false}>Retirar</Button>
                 </DialogActions>
             </form>
         </Dialog>

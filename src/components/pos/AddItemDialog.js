@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, Typography, Button, TextField } from '@material-ui/core';
-
+import useStyles from '../hooks/useStyles';
+import {formatNumber} from '../Tools'
 const calclulaImporte = (cant, prec) => {
     return cant * prec
 }
 
 export default function AddItemDialog({item, isOpen, close, showMessage, add }) {
+    const classes = useStyles()
     const initData = {
-        precio: item.item.producto.precio1,
+        precio: '',
         item: item,
         cantidad: '',
         empaques: '',
@@ -19,34 +21,31 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
         close(dialog)
     }
 
-    const calculaEmpaques = (emp, stock, cant) => {
-        let unit = 0
-        let calc = 0
-
-        unit = parseFloat(stock) / parseFloat(emp) 
-
-        calc = parseFloat(cant) / unit
-        return calc
-    }
-
     const handleChange = (field, value) => {
-        const stock = item.item.stock
+        let stock = item.item.stock
+        let empStock = item.item.empaquesStock
         let imp = 0
-        let emp = 0
+        // let emp = 0
         switch(field){
             case 'cantidad':
                 if(value <= 0){
                     return setValues({...values, [field]: ''})
                 }
                 if(value > stock){
-                    var message = "Solo hay " +stock + " disponibles."
+                    let message = "Solo hay " +stock + " disponibles."
                     showMessage(message, 'warning' )
                     return setValues({...values, [field]: '', empaques: '', importe: ''})
                 }
                 imp = calclulaImporte(value, values.precio)
-                emp = calculaEmpaques(item.item.empaquesStock, stock, value)
-                return setValues({ ...values, [field]: value, empaques: emp, importe: imp})
-            
+                // emp = calculaEmpaques(item.item.empaquesStock, stock, value)
+                return setValues({ ...values, [field]: value, importe: imp})
+            case 'empaques':
+                if(value > empStock){
+                    let message = "Solo hay " +empStock + " disponibles."
+                    showMessage(message, 'warning' )
+                    return setValues({...values, [field]: '', empaques: '', importe: ''})
+                }
+                return setValues({...values, [field]: value})
             case 'precio':
                 imp = calclulaImporte(values.cantidad, value)
                 return setValues({ ...values, [field]: value, importe: imp })
@@ -65,10 +64,10 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        // e.preventDefault()
         let newItem = {
             selected: item,
-            compra: item.compraId,
+            compra: item.item.compra._id,
             item: item.item._id,
             producto: item.item.producto,
             cantidad: values.cantidad,
@@ -91,16 +90,30 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
             <DialogTitle id="dialog-add">
                 
                 <Grid container spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <Typography variant="h6" >{item.item.producto.descripcion}</Typography>
-                        <Typography variant="subtitle2" >Disponible: {item.item.stock}</Typography>
+    <Typography variant="subtitle2" >Disponible: {formatNumber(item.item.empaquesStock,1)}/{formatNumber(item.item.stock,2)} 
+                        {/* {item.item.producto.unidad.abr} */}
+                        </Typography>                        
                     </Grid>
 
                 </Grid>
             </DialogTitle>
                 <form onSubmit={handleSubmit}>
                     <DialogContent>
-                        <Grid container spacing={2}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs={12} md={3}>
+                                <TextField 
+                                    id="empaques"
+                                    label="Empaques"
+                                    variant="outlined"
+                                    autoFocus
+                                    required
+                                    fullWidth
+                                    value={values.empaques}
+                                    onChange={(e) => handleChange('empaques', e.target.value)}
+                                />
+                            </Grid>
                             <Grid item xs={12} md={3}>
                                 <TextField 
                                     id="cantidad"
@@ -108,20 +121,8 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    autoFocus
                                     value={values.cantidad}
                                     onChange={(e) => handleChange('cantidad', e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
-                                <TextField 
-                                    id="empaques"
-                                    label="Empaques"
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    value={values.empaques}
-                                    onChange={(e) => handleChange('empaques', e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} md={3}>
@@ -152,11 +153,13 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => handleClose('addItemDialog')} color="primary">
-                            Cancel
+                        <Button className={classes.botonSimplon} onClick={() => handleClose('addItemDialog')} >
+                            Cancelar
                         </Button>
-                        <Button type="submit" variant="contained" color="primary" disabled={values.cantidad > 0 ? false : true }>
-                            Registrar
+                        <Button className={classes.botonGenerico} type="submit" 
+                        // disabled={values.cantidad > 0 ? false : true }
+                        >
+                            Agregar
                         </Button>
                     </DialogActions>
                 </form>

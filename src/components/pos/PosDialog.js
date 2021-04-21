@@ -4,10 +4,10 @@ import moment from 'moment'
 import PosMenu from './PosMenu'
 import PosComprasFor from './PosComprasFor'
 import PosListaDeVenta from './PosListaDeVenta'
-
-import { Typography, IconButton, Dialog, Slide, AppBar, Toolbar, Grid, Container, } from '@material-ui/core';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import { Typography, IconButton, Dialog, Slide, Toolbar, Grid, Button, DialogContent, DialogActions } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-
+import {formatNumber} from '../Tools'
 import useStyles from '../hooks/useStyles'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -15,7 +15,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function PosDialog({ 
-        props,
+        inventario,
+        ubicacion,
+        fecha,
         values, 
         isOpen,
         wantThisItem, 
@@ -35,48 +37,65 @@ export default function PosDialog({
         openDialog(dialog)
     };
 
+    const handleKeyPress = (e) => {
+        if(e.key === "x" || e.key === "X"){
+            
+            openDialog('cobrarDialog')
+        }
+    }
+
     return (
         <React.Fragment>
-        
-        <Dialog 
-            fullScreen 
-            open={isOpen} 
-            onEnter={resetVenta}
-            onClose={() => closeDialog('posDialog')} 
-            TransitionComponent={Transition}>
-            
-            <AppBar className={classes.posBar} position="fixed">
+            <Dialog 
+                onKeyPress={(e) => handleKeyPress(e)}
+                fullScreen 
+                open={isOpen} 
+                onEnter={resetVenta}
+                onClose={() => closeDialog('posDialog')} 
+                TransitionComponent={Transition}>            
                 <Toolbar>
                     <IconButton edge="start" color="inherit" onClick={ (e) => handleClick('menuDialog', e) } aria-label="close">
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        POS| {values.ubicacion.nombre} | {moment(values.fecha).format("DD MMMM [de] YYYY")}
+                        {ubicacion._id.nombre} | {moment(fecha).format("DD MMMM [de] YYYY")}
                     </Typography>
                 </Toolbar>
-            </AppBar>
+                <PosMenu anchorEl={anchorEl} openDialog={openDialog} showCorte={showCorte} isOpen={menuDialog} closeDialog={closeDialog}/>
+                
+                <DialogContent>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md>
+                            <PosComprasFor
+                                inventario={inventario}
+                                wantThisItem={wantThisItem}
+                                showMessage={showMessage} />
 
-            <PosMenu anchorEl={anchorEl} openDialog={openDialog} showCorte={showCorte} isOpen={menuDialog} closeDialog={closeDialog}/>
-            
-            <Grid container spacing={2}>
-                <Grid item xs={12} md>
-                    <PosComprasFor
-                        inventario={values.inventarioFiltrado}
-                        wantThisItem={wantThisItem}
-                        showMessage={showMessage} />
+                        </Grid>
+                        <Grid item xs={12} md>
+                            <PosListaDeVenta
+                                items={values.itemsToSave}
+                                openDialog={openDialog}
+                                total={values.total}
+                                removeItem={removeItem} />
 
-                </Grid>
-                <Grid item xs={12} md>
-                    <Container fixed>
-                    <PosListaDeVenta
-                        items={values.itemsToSave}
-                        openDialog={openDialog}
-                        total={values.total}
-                        removeItem={removeItem} />
-                    </Container>
-                </Grid>
-            </Grid>
-        </Dialog>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button 
+                        size="large"
+                        fullWidth
+                        disabled={values.itemsToSave.length > 0 ? false : true}
+                        className={ values.total === 0 ? classes.botonGenerico : classes.botonCosmico}
+                        onClick={() => openDialog('cobrarDialog')}
+                        variant="contained"
+                        startIcon={<MonetizationOnIcon />}
+                    >
+                        Cobrar ${formatNumber( values.total )} (x)
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     )
 }

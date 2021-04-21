@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
-import ProductosDialog from './ProductosDialog';
 import Loading from '../Loading'
 
-import { Container, Grid, IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Paper, Button, Divider } from '@material-ui/core';
+import { 
+    MenuItem, Container, Grid, IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Paper, Button, Divider, TextField, Box } from '@material-ui/core';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 
 // HOOKS
 import useProducts from '../hooks/useProducts';
+import { useSnackbar } from 'notistack';
+import CrearProducto from './CrearProducto';
+import {searchBy} from '../Tools'
+import useStyles from '../hooks/useStyles';
 
 function Productos() {
-    const { products, add, del } = useProducts()
+    const classes = useStyles()
+    const { products, addProduct, del } = useProducts()
     const [dialog, setDialog] = useState(false)
     const [loading] = useState(true)
+    const fields = ["clave", "descripcion"]
+    const [fieldSelected, setFieldSelected] = useState('descripcion')
+    const [searchField, setSearchField] = useState('')
+    const [resultado, setResultado] = useState([])
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
     const showDialog = () => {
         setDialog(true)
@@ -23,33 +34,75 @@ function Productos() {
     }
 
     function addProducto(producto) {
-        add(producto)
+        showMessage("Agregando...", "info")
         closeDialog()
+        addProduct(producto).then(res => {
+            showMessage(res.message, res.status)
+        })
     }
 
-    function removeProduct(index, id) {
-        del(index, id)
+    function removeProduct(id) {
+        showMessage("Eliminando...", "info")
+        setResultado([])
+        setSearchField('')
+        del(id).then(res => {
+            if(res.status === 'success'){
+                showMessage(res.message, res.status)
+            }
+        })
+    }
+
+    function handleChange(field, value){
+        switch(field)
+        {
+            case "field":
+                return setFieldSelected(value)
+            case "search":
+                setResultado( searchBy(fieldSelected, value.toUpperCase(), products) )
+                return setSearchField(value)
+            default: 
+                return setSearchField(value)
+        }
     }
 
     return (
-        <Paper>
+        <React.Fragment>
+            <Box>
+                <Grid container justify="flex-end">
+                        <Button className={classes.botonGenerico} onClick={showDialog}>Agregar</Button>
+                        <CrearProducto add={addProducto} open={dialog} close={closeDialog} search={searchBy} />
+                </Grid>
+            </Box>
+            <Paper>
+
             {
                 products === null ?
-                    <Loading loading={loading} />
-                    :
-                    <Container maxWidth="lg">
+                <Loading loading={loading} />
+                :
+                <Container maxWidth="lg">
                         <Grid container spacing={2}>
-                            <Grid item xs={12} md={6}>
-                                <Typography variant="h3" children="Productos"/>
-                                <Typography variant="subtitle1" children={ products.length + " productos en la lista" } />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <Grid container justify="flex-end">
-                                    <Button variant="contained" color="secondary" onClick={showDialog}>
-                                        + Agregar un producto
-                                    </Button>
-                                    <ProductosDialog addProducto={addProducto} isShowing={dialog} close={closeDialog} />
+                            <Grid item xs={6}>
+                                <Grid container>
+                                    <Grid item xs={12}>
+                                        <Typography variant="h3" children={ products.length + " Productos"}/>
+                                        <Typography variant="subtitle1" children="en la lista" />
+                                    </Grid>
                                 </Grid>
+                            </Grid>
+                            <Grid item xs={6}>
+                                Buscar por: 
+                                {/* <Button children={fieldSelected} />  */}
+                                    <TextField 
+                                        select 
+                                        value={fieldSelected}
+                                        onChange={(e) => handleChange('field', e.target.value)}
+                                        >
+
+                                                {fields.map((el, index) => (
+                                                    <MenuItem key={index} value={el}>{el}</MenuItem>
+                                                    ))}
+                                    </TextField> 
+                                    <TextField helperText="Ingrese un texto de bùsqueda." fullWidth value={searchField} onChange={(e) => handleChange('search', e.target.value)}/>
                             </Grid>
 
                         </Grid>
@@ -58,8 +111,8 @@ function Productos() {
 
                         <Grid container>
 
-                            {products.length === 0 ?
-                                <Typography variant="h6" align="center" gutterBottom>No hay productos registrados.</Typography>
+                            {resultado.length === 0 ?
+                                null
                                 :
                                 <Table size="small">
                                     <TableHead>
@@ -75,7 +128,7 @@ function Productos() {
                                     </TableHead>
                                     <TableBody>
                                         {
-                                            products.map((row, index) => (
+                                            resultado.map((row, index) => (
                                                 <TableRow key={index} index={index}>
                                                     <TableCell >{row.clave}</TableCell>
                                                     <TableCell component="th" scope="row">{row.descripcion}</TableCell>
@@ -85,8 +138,8 @@ function Productos() {
                                                     <TableCell align="right">{row.precio3}</TableCell>
                                                     <TableCell align="right">
                                                         <IconButton aria-label="delete"
-                                                            onClick={() => removeProduct(index, row._id)}
-                                                        >
+                                                            onClick={() => removeProduct(row._id)}
+                                                            >
                                                             <DeleteIcon />
                                                         </IconButton>
                                                     </TableCell>
@@ -100,8 +153,9 @@ function Productos() {
                         
                     </Container>
 
-            }
-        </Paper>
+}
+            </Paper>
+        </React.Fragment>
     )
 }
 
