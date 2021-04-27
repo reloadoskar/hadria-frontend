@@ -3,18 +3,20 @@ import { getEgresos, saveEgreso, getCuentasPorPagar, savePagoACuentaPorPagar,
 	// getDisponiblexUbicacion 
 	} from '../api'
 import { sumImporte, sumSaldo } from '../Tools'
+import moment from 'moment'
 const useEgresos = () => {
 	const [egresos, setEgresos] = useState([])
-	const [totalEgresos, setTotalEgresos] = useState(0)
+	const [totalEgresos, setTotalEgresos] = useState(null)
 	const [updating, setUpdating] = useState(false)
 	useEffect(() => {
-		async function loadEgresos() {
-			const res = await getEgresos()
+		let hoy = moment().format("YYYY-MM-DD")
+		async function loadEgresos(fecha) {
+			const res = await getEgresos(fecha)
 			if(res !== undefined){
 				setEgresos(res.egresos)
 			}
 		}
-        loadEgresos()
+        loadEgresos(hoy)
         return () => {
 			setEgresos([])
         }

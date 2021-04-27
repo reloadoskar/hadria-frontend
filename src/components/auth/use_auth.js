@@ -69,7 +69,7 @@ function useProvideAuth() {
 
             return decoded
         }catch(err){
-            console.log(err)
+            return null
         }
     }
 
@@ -77,8 +77,8 @@ function useProvideAuth() {
         if(token){
             setMensaje("Verificando la sesión.")
             let decoded = verificaToken(token)
+            // console.log(decoded)
             if (decoded !== null){
-                // console.log("token acceptado")
                 setAutenticado(true)
                 setUser({
                     nombre: decoded.nombre,

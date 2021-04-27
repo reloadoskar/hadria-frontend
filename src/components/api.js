@@ -697,11 +697,11 @@ export const saveIngreso = (ingreso) => {
     }
 }
 
-export const getIngresos = () => {
+export const getIngresos = (fecha) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database+  '/ingresos')
+                .get(url_client + decoded.database+  '/ingresos/' + fecha)
                 .then( res => {
                     return res.data
                 })
@@ -743,11 +743,11 @@ export const saveEgreso = (egreso) => {
     }
 }
 
-export const getEgresos = () => {
+export const getEgresos = (fecha) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database+  '/egresos')
+                .get(url_client + decoded.database+  '/egresos/' + fecha)
                 .then( res => {
                     return res.data
                 })
@@ -830,11 +830,11 @@ export const getBalance = () => {
         console.log(err+ ' Desconectado?')
     }
 }
-export const getDisponiblexUbicacion = () => {
+export const getDisponiblexUbicacion = (fecha) => {
     try{
         if (decoded){
             return axios
-                .get(url_client + decoded.database + '/balance/disponiblexubicacion/')
+                .get(url_client + decoded.database + '/balance/disponiblexubicacion/' + fecha)
                 .then( res => {
                     return res.data.disp
                 })

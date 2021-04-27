@@ -207,3 +207,17 @@ export function esEntero(n){
 export function esDecimal(n){
     return Number(n) === n && n % 1 !== 0;
 }
+
+export function groupBy(arr, key){
+    return arr.reduce(function(storage, item){
+        var group = item[key]
+        // set `storage` for this instance of group to the outer scope (if not empty) or initialize it
+        storage[group] = storage[group] || [];
+    
+        // add this item to its group within `storage`
+        storage[group].push(item);
+    
+        // return the updated storage to the reduce function, which will then loop through the next 
+        return storage
+    },{})
+}

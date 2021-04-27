@@ -57,7 +57,7 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                             <ListItemIcon>
                                 <DashboardIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Dashboard" />
+                            <ListItemText primary="Tablero" />
                         </ListItem>
                             
                     </NavLink>

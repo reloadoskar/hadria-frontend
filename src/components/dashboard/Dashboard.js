@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import {useAuth} from '../auth/use_auth'
+
 // import Balance from './Balance'
+
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
 import CuentasxPagar from '../cxp/CuentasxPagar'
 // import Produccions from '../produccions/Produccions'
@@ -12,67 +15,48 @@ import CuentasxPagar from '../cxp/CuentasxPagar'
 // import CrearEgreso from '../egresos/CrearEgreso'
 // import useUser from '../hooks/useUser'
 // import useCompras from '../hooks/useCompras'
-// import useUbicacions from '../hooks/useUbicacions'
+import useUbicacions from '../hooks/useUbicacions'
 import useCortes from '../hooks/useCortes'
-import useBalance from '../balance/useBalance'
-import useStyles from '../hooks/useStyles'
+import useIngresos from '../ingresos/useIngresos'
+import useEgresos from '../egresos/useEgresos'
+// import useBalance from '../balance/useBalance'
+// import useStyles from '../hooks/useStyles'
 import { useSnackbar } from 'notistack';
 
-import MenuIcon from '@material-ui/icons/Menu';
+// import MenuIcon from '@material-ui/icons/Menu';
 import moment from 'moment'
 
 import { Grid, 
-    IconButton, 
-    Backdrop, 
+    // IconButton, 
+    // Backdrop, 
     Typography, 
-    CircularProgress, 
-    Menu, 
-    MenuItem,
-    Container, 
-} from '@material-ui/core';
+    // CircularProgress, 
+    // Menu, 
+    // MenuItem,
+    Container,
+    // Card, 
+} from '@material-ui/core'
 
 // import PaymentIcon from '@material-ui/icons/Payment';
 // import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 // import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
-import Disponible from './Disponible'
+import Disponible from '../disponible/Disponible'
 import Corte from '../cortes/Corte'
 // import CrearCompra from '../compras/CrearCompra'
 
 export default function Dashboard(props) {
-    const {
-        user,
-        ubicacions,
-    } = props
-    const {
-        balance,
-        disp,
-        // ingresos, 
-        // totalIngresos, 
-        // addIngreso,
-        cuentasxCobrar, 
-        // addPagoCxc, 
-        totalCxc, 
-    
-        // egresos,
-        // totalEgresos, 
-        // addEgreso, 
-        cuentasxPagar, 
-        totalCxp, 
-        // addPagoCxp,
-
-        // inventario, 
-        // totalInventario,
-
-    } = useBalance()
+    const auth = useAuth()
+    const ingresos = useIngresos()
+    const egresos = useEgresos()
     const [corte, setCorte] = useState(null)
-    const[bckdrpOpen, setBdopen] = useState(true)
-    useEffect(()=> {
-        if(balance === null){
-            setBdopen(true)
-        }else{
-            setBdopen(false)
-        }
-    },[balance])
+    // const[bckdrpOpen, setBdopen] = useState(true)
+    // useEffect(()=> {
+    //     if(balance === null){
+    //         setBdopen(true)
+    //     }else{
+    //         setBdopen(false)
+    //     }
+    // },[balance])
     const [fecha, setFecha] = useState(null)
     const now = moment()
     useEffect(() => {
@@ -84,15 +68,18 @@ export default function Dashboard(props) {
     
     // const { user } = useUser()
     // const {compras, crearCompra, cancelarCompra} = useCompras()
-    // const{ubicacions} = useUbicacions()
-    const { guardarCorte, reabrirCorte, getCorte} = useCortes()
+    const{ubicacions} = useUbicacions()
+    const { 
+        // guardarCorte, 
+        // reabrirCorte, 
+        getCorte} = useCortes()
     
-    const classes = useStyles();
+    // const classes = useStyles();
     // const [cobrar, setCobrar] = useState(false)
     // const [pagar, setPagar] = useState(false)
     // const [crearIngreso, setCrearIngreso] = useState(false)
     // const [crearEgreso, setCrearEgreso] = useState(false)
-    const [anchorEl, setAnchorEl] = useState(null);
+    // const [anchorEl, setAnchorEl] = useState(null);
     const [corteDialog, setCorteDialog] = useState(false)
     // const [dCrearCompra, setDCrearCompra] = useState(false)
     
@@ -131,13 +118,13 @@ export default function Dashboard(props) {
     //     setCrearEgreso(false)
     // }
 
-    const openMenu = (e) => {
-        setAnchorEl(e.currentTarget);
-    }
+    // const openMenu = (e) => {
+    //     setAnchorEl(e.currentTarget);
+    // }
 
-    const closeMenu = () => {
-        setAnchorEl(null)
-    }
+    // const closeMenu = () => {
+    //     setAnchorEl(null)
+    // }
 
     function verCorte(ub){
         setCorteDialog(true)
@@ -173,128 +160,28 @@ export default function Dashboard(props) {
 
     return (
         <Container maxWidth="md">
-                {balance === null || ubicacions === []  ?
-                    
-                    <Backdrop className={classes.backdrop} open={bckdrpOpen}>
-                        <div>
-                            <Typography align="center" variant="subtitle1" children="Espere..." />
-                            <CircularProgress color="inherit" />
-                        </div>
-                    </Backdrop>
-                    :
-                <Grid container spacing={2}>
-                    { user.level > 2 ? null :
-                        <React.Fragment>
-                            <Grid item xs={10}>
-                                <Typography variant="h6">{now.format("MMMM DD, YYYY")}</Typography>
-                            </Grid>
-                            <Grid item xs>
-                                <IconButton
-                                    edge="start"
-                                    color="inherit"
-                                    aria-label="menu"
-                                    onClick={openMenu}
-                                    >
-                                    <MenuIcon />
-                                </IconButton>
-                                <Menu
-                                    id="dashboard-menu"
-                                    anchorEl={anchorEl}
-                                    keepMounted
-                                    open={Boolean(anchorEl)}
-                                    onClose={closeMenu}
-                                >
-                                    {/* <MenuItem onClick={showCreateIngreso}>Ingreso</MenuItem>
-                                    <MenuItem onClick={showCreateEgreso}>Egreso</MenuItem>
-                                    <MenuItem onClick={showCobrar}>Cobrar</MenuItem>
-                                    <MenuItem onClick={showPagar}>Pagar</MenuItem> */}
-                                    <MenuItem onClick={closeMenu}>Traspasar</MenuItem>
-                                </Menu>
-                            </Grid>
-                        </React.Fragment>
-                    }
-
-                    {/* { user.level > 1 ? null :
-                        <Grid item xs={12}>
-                            <Balance 
-                                balance={balance} 
-                            />
-                        </Grid>
-                    }     */}
-
-                    {/* <Grid item xs={12} md={6}>                        
-                        <ComprasDash 
-                            compras={compras} 
-                            crearCompra={crearCompra} 
-                            cancelarCompra={cancelarCompra}
-                        />
-                    </Grid>  */}
-
-                    <Grid item xs={12} md={6}>
-                        <Disponible disp={disp} verCorte={verCorte}/>   
-                        <Corte 
-                            fecha={fecha}
-                            open={corteDialog}
-                            close={closeCorteDialog}
-                            corte={corte}
-                            onChangeFecha={onChangeFecha}
-                            guardar={guardarCorte}
-                            reabrir={reabrirCorte}
-                            ubicacions={ubicacions}
-                            user={user}
-                            message={showMessage}
-                        />                 
+            <Grid container spacing={3}>
+                {/* TOP MENU */}
+                <Grid container >
+                    <Grid item xs={2}></Grid>
+                    <Grid item xs={8}>
+                        <Typography variant="h6" align="center">{now.format("DD MMMM, YYYY")}</Typography>
                     </Grid>
-
-                    <Grid item xs={12} md={6}>
-                        <CuentasxCobrar cuentas={cuentasxCobrar} total={totalCxc}/>
-                        {/* <EstadoDeCuenta cuentas={cuentasxcCliente}/> */}
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <CuentasxPagar cuentas={cuentasxPagar} total={totalCxp}/>
-                    </Grid>
-                    {/* <Grid item xs={12}>
-                        <UltimosMovimientos 
-                            ingresos={ingresos}
-                            egresos={egresos}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Produccions 
-                            showMessage={showMessage}/>
-                    </Grid> */}
-                    {/* <CrearIngreso 
-                        open={crearIngreso} 
-                        close={closeCreateIngreso} 
-                        crear={addIngreso} 
-                        ubicacions={ubicacions} 
-                        mensaje={showMessage}/>
-                    <CrearEgreso 
-                        open={crearEgreso} 
-                        close={closeCreateEgreso} 
-                        crear={addEgreso} 
-                        ubicacions={ubicacions} 
-                        compras={compras} 
-                        mensaje={showMessage}
-                        disponible={balance.disponible}/> */}
-                    {/* <Cobro 
-                        open={cobrar} 
-                        cuentas={cuentasxCobrar}
-                        ubicacions={ubicacions}
-                        close={closeCobrar} 
-                        showMessage={showMessage} 
-                        save={addPagoCxc}/> */}
-                    {/* <Pagar 
-                        open={pagar} 
-                        cuentas={cuentasxPagar} 
-                        ubicacions={ubicacions}
-                        close={closePagar} 
-                        disponible={balance.disponible} 
-                        showMessage={showMessage} 
-                        save={addPagoCxp}/> */}
+                    <Grid item xs={2}></Grid>
                 </Grid>
-                }
-
+                {/* INFO UBICACIONES */}
+                <Grid item xs={12}>
+                    <Disponible verCorte={verCorte} ubicacions={ubicacions} ingresos={ingresos} egresos={egresos} />
+                    <Corte user={auth.user} open={corteDialog} close={closeCorteDialog} corte={corte} fecha={now.format("YYYY-MM-DD")} onChangeFecha={onChangeFecha}  ubicacions={ubicacions}/>
+                </Grid>
+                {/* INFO CUENTAS POR COBRAR */}
+                <Grid item xs={12}>
+                    <CuentasxCobrar cuentas={ingresos.cuentasxCobrar} total={ingresos.totalCxc}/>
+                </Grid>
+                <Grid item xs={12}>
+                    <CuentasxPagar cuentas={egresos.cuentasxPagar} total={egresos.totalCxp}/>
+                </Grid>
+            </Grid>                
         </Container>
     )
 }

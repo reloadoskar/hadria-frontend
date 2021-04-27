@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getIngresos, saveIngreso, getCuentasPorCobrar, getCxcPdv, getCxcCliente, savePagoACuentaPorCobrar, saveVenta } from '../api'
 import { sumImporte, sumSaldo } from '../Tools'
+import moment from 'moment'
 const useIngresos = () => {
     const [ingresos, setIngresos] = useState([])
-	const [totalIngresos, setTotalIngresos] = useState(0)
+	const [totalIngresos, setTotalIngresos] = useState(null)
 	const [updatingIngresos, setUpdIng] = useState(false)
 	const [updatingCuentasxc, setUpdCxc] = useState(false)
 	const [cuentasxCobrar, setCuentasxCobrar] = useState([])
@@ -12,13 +13,14 @@ const useIngresos = () => {
 	const [cuentasxcCliente , setCuentasxcCliente] = useState(null)
 
 	useEffect(() => {
-		async function loadIngresos() {
-			const res = await getIngresos()
+		let hoy = moment().format("YYYY-MM-DD")
+		async function loadIngresos(fecha) {
+			const res = await getIngresos(fecha)
 			if(res !== undefined){
 				setIngresos(res.ingresos)
 			}
 		}
-        loadIngresos()
+        loadIngresos(hoy)
         return () => setIngresos([])
 	}, [updatingIngresos])
 
