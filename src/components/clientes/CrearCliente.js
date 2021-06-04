@@ -23,8 +23,7 @@ const CrearCliente = (props) =>{
     const handleSubmit = (e) =>{
         e.preventDefault()
         crear(cliente)
-        setCliente(ncliente)
-        close()
+        handleClose()
     }
 
     const handleChange = (field, value) => {
@@ -39,8 +38,13 @@ const CrearCliente = (props) =>{
                 return setCliente({...cliente, [field]: value })
         }
     }
+
+    const handleClose = () => {
+        setCliente(ncliente)
+        close()
+    }
     return(
-        <Dialog open={open} onClose={close}>
+        <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Crear Cliente</DialogTitle>
             <form onSubmit={(e) => handleSubmit(e)}>
                 <DialogContent>

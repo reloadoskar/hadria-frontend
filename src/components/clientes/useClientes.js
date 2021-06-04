@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useSnackbar } from 'notistack';
+
 import { getClientes, saveCliente, deleteCliente } from '../api'
 const useClientes = () => {
 	const [clientes, setClientes] = useState([])
-	const { enqueueSnackbar } = useSnackbar()
 
-	
 	useEffect(() => {
 		async function loadClientes() {
 			const res = await getClientes()
@@ -16,12 +14,12 @@ const useClientes = () => {
 	}, [])
 
 	function crearCliente(cliente) {
-		saveCliente(cliente).then(res => {
+		return saveCliente(cliente).then(res => {
 			if (res.status === 'success') {
 				const newCliente = [res.cliente, ...clientes];  
 				setClientes(newCliente)
 			}
-			enqueueSnackbar(res.message, { variant: res.status })
+			return res
 		})
 	}
 
@@ -32,7 +30,6 @@ const useClientes = () => {
                 newClientes.splice(index,1);
                 setClientes(newClientes);
 			}
-			enqueueSnackbar(res.message, { variant: res.status });
 		})
 	}
 
