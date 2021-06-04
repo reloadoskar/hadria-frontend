@@ -22,7 +22,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function CrearCompra(props){
-    const { open, crear, showMessage, close, provedors, add, tipoCompras, ubicacions, addTipoCompra } = props
+    const { open, crear, showMessage, close, provedors, addProvedor, tipoCompras, ubicacions, addTipoCompra } = props
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0)
     const steps = ["Datos generales", "Agregar productos", "Agregar Gastos", "Resumen"]
@@ -281,7 +281,7 @@ export default function CrearCompra(props){
             <ProvedorLite 
                 open={provedorFastDialog}
                 close={closeProvedorFastDialog}
-                addProvedor={add}
+                addProvedor={addProvedor}
             />
 
             <TipoCompra

@@ -24,7 +24,7 @@ import ConfirmDialog from './ConfirmDialog'
 function Compras(props) {
     const {compras, crearCompra, cancelarCompra} = useCompras()
     const {products, addProduct } = useProducts()
-    const {provedors, add} = useProvedors()
+    const {provedors, addProvedor} = useProvedors()
     const {ubicacions} = useUbicacions();
     const {tipoCompras, addTipoCompra} = useTipoCompras();
     const classes = useStyles();
@@ -104,12 +104,12 @@ function Compras(props) {
                         showMessage={showMessage}
                         crear={crear}
                         products={products}
-                        addProducto={addProduct}
+                        addProduct={addProduct}
                         provedors={provedors}
                         tipoCompras={tipoCompras}
                         ubicacions={ubicacions}
                         addTipoCompra={addTipoCompra}
-                        add={add}
+                        addProvedor={addProvedor}
                     />
                 </Grid>
                 {compras === null ? null :
