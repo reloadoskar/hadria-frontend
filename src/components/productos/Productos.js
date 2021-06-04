@@ -70,7 +70,7 @@ function Productos() {
             <Box>
                 <Grid container justify="flex-end">
                         <Button className={classes.botonGenerico} onClick={showDialog}>Agregar</Button>
-                        <CrearProducto add={addProducto} open={dialog} close={closeDialog} search={searchBy} />
+                        <CrearProducto addProduct={addProducto} open={dialog} close={closeDialog} search={searchBy} />
                 </Grid>
             </Box>
             <Paper>
