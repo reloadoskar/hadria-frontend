@@ -483,7 +483,7 @@ export const getInventarioBy = (ubicacion) => {
         console.log(err)
     }
 }
-export const getInventarioUbicacion = () => {
+export const getInventarioxUbicacion = () => {
     try{
         if(decoded){
             return axios

@@ -14,19 +14,15 @@ import Header from './components/Header';
 import Pos from './components/pos/Pos';
 import ConceptosTabs from './components/conceptos/ConceptosTabs';
 import Ventas from './components/ventas/Ventas';
-
-// import useUser from './components/hooks/useUser'
 import useUbicacions from './components/hooks/useUbicacions'
 import useStyles from './components/hooks/useStyles'
 import { useAuth } from "./components/auth/use_auth.js"
 
 export default function Router(props){
-    // const {auth, user, logout} = props
     const auth = useAuth()
     let { path, url } = useRouteMatch();
     const classes = useStyles()
-    
-    // const {user} = useUser()
+
     const {ubicacions} = useUbicacions()
     const [open, setOpen] = useState(false)
 
@@ -101,7 +97,6 @@ export default function Router(props){
                                 </Route>
                                 <Route exact path={`${path}/pos`}>
                                     <Pos 
-                                        // invxubic={invxubic}
                                         ubicacions={ubicacions}
                                         user={auth.user}
                                     />
