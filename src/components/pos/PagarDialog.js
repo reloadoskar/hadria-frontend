@@ -10,7 +10,7 @@ import { formatNumber } from '../Tools';
 import useStyles from '../hooks/useStyles';
 
 
-export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, showMessage, saldoDisponible, subFromSaldo, fecha}) {
+export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, showMessage, fecha}) {
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const classes = useStyles()
     const [values, setValues] = useState({
@@ -23,12 +23,7 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
     const [guardando, setGuardando] = useState(false)
     const handleChange = (type, value) => {
         switch(type){
-            case 'importe':
-                if(value > saldoDisponible){
-                    showMessage("El importe es mayor al Saldo disponible.", "error")
-                    setValues({...values, importe: 0})
-                    return false
-                }
+            case 'importe':             
                 if(value > values.cuenta.saldo){
                     showMessage("El importe es mayor al saldo de la cuenta.", "warning")
                     setValues({...values, importe: 0})
@@ -64,7 +59,6 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
         pagar(pago).then(res =>{
             setGuardando(false)
             showMessage(res.message, res.status)
-            subFromSaldo(pago.importe)
             setValues({
                 provedor: '',
                 cuenta: '',
