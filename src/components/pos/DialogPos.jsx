@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import { Grid, Button, Dialog, Typography } from '@material-ui/core'
 import CrearVenta from '../ventas/CrearVenta'
 import Reloj from '../herramientas/reloj'

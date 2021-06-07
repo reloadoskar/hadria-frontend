@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ticketVenta, ticketSalida} from '../api'
+// import {ticketVenta, ticketSalida} from '../api'
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';

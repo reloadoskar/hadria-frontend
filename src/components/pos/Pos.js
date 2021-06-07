@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import { useSnackbar } from 'notistack';
-import { Container, Backdrop, CircularProgress, Typography } from '@material-ui/core'
+import { Container, Backdrop, Typography } from '@material-ui/core'
 import Acceso from './Acceso'
 import useStyles from '../hooks/useStyles'
 import useInventario from '../inventario/useInventario'
@@ -10,7 +10,7 @@ import useCortes from '../cortes/useCortes'
 import useClientes from '../clientes/useClientes'
 import useIngresos from '../ingresos/useIngresos'
 import DialogPos from './DialogPos'
-import {sumImporte} from '../Tools'
+// import {sumImporte} from '../Tools'
 export default function Pos(props){
     const {user}=props
     const classes = useStyles()

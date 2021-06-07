@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Dialog, DialogActions, DialogContent, Avatar, DialogTitle, Grid, Typography, TextField, Button, Chip, Container, IconButton } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, Avatar, DialogTitle, Grid, Typography, TextField, Button, Chip} from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { ListaPesadas } from './ListaPesadas';
 export default function Pesadas(props){
     const{pesadas, addPesada, delPesada, clearPesadas} = props

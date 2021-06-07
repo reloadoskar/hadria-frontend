@@ -1,5 +1,5 @@
-import React, { useEffect, useState }from 'react'
-import {Grid, Card, CardHeader, Divider, Typography, IconButton, Badge} from '@material-ui/core'
+import React, { useState }from 'react'
+import {Grid,  Divider, Typography, IconButton, Badge} from '@material-ui/core'
 import VentaItem from './VentaItem'
 import useStyles from '../hooks/useStyles'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'

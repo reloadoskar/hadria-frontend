@@ -1,4 +1,4 @@
-import { Divider, Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { formatNumber } from '../Tools'
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Grid, Card, CardContent, CardMedia, Typography } from '@material-ui/core'
 import avatarh from '../../img/avatarH1.png'
 import avatarm from '../../img/avatarM2.png'

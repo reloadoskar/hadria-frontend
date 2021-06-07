@@ -7,7 +7,7 @@ import CrearVentaItem from './CrearVentaItem'
 import CobrarDialog from '../pos/CobrarDialog'
 import VentaItems from './VentaItems'
 import useStyles from '../hooks/useStyles'
-
+import {ticketVenta, ticketSalida} from '../api'
 import { formatNumber, sumImporte } from '../Tools'
 export default function CrearVenta({clientes, elinventario, laubicacion, lafecha, open, close, showMessage, addVenta}){
     const classes = useStyles()
@@ -23,14 +23,14 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
     const [fecha, setFecha] = useState(null)
     const [cliente, setCliente] = useState('')
     const [items, setItems] = useState([])
-    const [total, setTotal] = useState(0)
+    // const [total, setTotal] = useState(0)
 
-    useEffect(() => {
-        if (items.length > 0){
-            setTotal(sumImporte(items))
-        }
-        return () => setTotal(0)
-    },[items])
+    // useEffect(() => {
+    //     if (items.length > 0){
+    //         setTotal(sumImporte(items))
+    //     }
+    //     return () => setTotal(0)
+    // },[items])
     useEffect(() => {
         if (clientes){
             setCliente(clientes[0])
@@ -117,6 +117,14 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
         console.log(venta)
         addVenta(venta).then(res => {
             setGuardando(false)
+            ticketSalida(res.venta)
+            ticketVenta(res.venta).then(res=> {
+                if(res.status === 'warning'){
+                    showMessage(res.message, res.status)
+                }else{
+                    // setReprintDialog(true)
+                }
+            })
             showMessage(res.message, res.status)
             toggleCobrarDialog()
             handleClose()
@@ -126,7 +134,7 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
     const handleClose = () => {
         setItemSelected(null)
         setItems([])
-        setTotal(0)
+        // setTotal(0)
         close()
     }
     return (

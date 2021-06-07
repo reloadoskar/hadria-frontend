@@ -5,7 +5,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 export default function CompraBasic(props){
-    const {compra, openConfirm, editCompra} = props
+    const {compra, openConfirm, editCompra, verCompra} = props
     const [compraLocal, setCompraLocal] = useState(null)
 
     useEffect(() => {
@@ -15,6 +15,9 @@ export default function CompraBasic(props){
         return () => setCompraLocal(null)
     },[compra])
 
+    const handleVerCompra = (compra) => {
+        verCompra(compra)
+    }
     return (
         <React.Fragment>
             {compraLocal === null ? <CircularProgress /> :
@@ -40,8 +43,7 @@ export default function CompraBasic(props){
                                 </IconButton>
                                 <IconButton
                                     size="small"
-                                    disabled
-                                    // onClick={() => verCompra(compra)}
+                                    onClick={() => handleVerCompra(compra)}
                                 >
                                     <VisibilityIcon />
                                 </IconButton>

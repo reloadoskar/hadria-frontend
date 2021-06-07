@@ -19,6 +19,7 @@ import AddIcon from '@material-ui/icons/Add';
 import useStyles from '../hooks/useStyles'
 import CrearCompra from './CrearCompra';
 import ConfirmDialog from './ConfirmDialog'
+import VerCompra from './VerCompra';
 
 
 function Compras(props) {
@@ -34,6 +35,7 @@ function Compras(props) {
     const [showDialogP, setShowDialogP] = useState(false)
     const [detCompra, setDetCompra] = useState(false)
     const [compra, setCompra] = useState(null)
+    const [verCompra, setVerCompra] = useState(false)
     const [confirm, setConfirm] = useState(false)
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     const crear = (compra) => {
@@ -85,6 +87,16 @@ function Compras(props) {
         setCompra(null)
         setConfirm(false)
     }
+
+    function closeVerCompra(){
+        setCompra(null)
+        setVerCompra(!verCompra)
+    }
+
+    function showVerCompra(compra){
+        setCompra(compra)
+        setVerCompra(true)
+    }
     return (
         <Container maxWidth="xl">
             <Grid container spacing={2}>
@@ -115,7 +127,7 @@ function Compras(props) {
                 {compras === null ? null :
                     compras.map((compra, index) => (
                         <Grid item xs={12} key={index}>                    
-                            <CompraBasic compra={compra}  openConfirm={openConfirm} editCompra={editCompra}/>
+                            <CompraBasic compra={compra}  openConfirm={openConfirm} editCompra={editCompra} verCompra={showVerCompra}/>
                         </Grid>
                     ))
                 }
@@ -130,6 +142,12 @@ function Compras(props) {
                 provedors={provedors}
             />
             <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelar}/>
+            <VerCompra 
+                compra={compra} 
+                isOpen={verCompra} 
+                handleClose={closeVerCompra} 
+                cerrar={cancelarCompra}                
+            />
         </Container>
     )
 }
