@@ -9,8 +9,8 @@ export default function CrearVentaItem(props){
     const classes = useStyles()
     const {open, close, elitem, add} = props
     const [item, setItem] = useState(null)
-    const [empaques, setEmpaques] = useState(0)
-    const [cantidad, setCantidad] = useState(0)
+    const [empaques, setEmpaques] = useState('')
+    const [cantidad, setCantidad] = useState('')
     const [precio, setPrecio] = useState('')
     const [importe, setImporte] = useState('')
     const [guardando, setGuardando] = useState(false)
@@ -54,8 +54,8 @@ export default function CrearVentaItem(props){
     }
 
     function clearFields(){
-        setCantidad(0)
-        setEmpaques(0)
+        setCantidad('')
+        setEmpaques('')
         setImporte('')
         setPrecio('')
         setGuardando(false)
@@ -67,6 +67,7 @@ export default function CrearVentaItem(props){
         setGuardando(true)
 
         let newItem = {
+            itemOrigen: item,
             compraItem: item._id,
             compra: item.compra,
             producto: item.producto,
@@ -93,15 +94,30 @@ export default function CrearVentaItem(props){
         let lista = pesadas
         lista.push(pesada)
         let emps = lista.length
-        let cant = parseFloat(cantidad) + parseFloat(pesada)
+        let cant = Number
+        if(emps===0){
+            cant = pesada
+        }else{
+            cant = parseFloat(cantidad) + parseFloat(pesada)
+        }
         setPesadas(lista)
         setEmpaques(emps)
         setCantidad(cant)
     }
+    function delPesada(pesada, index){
+        let lista = pesadas
+            lista.splice(index,1);
+        setPesadas(lista)
+        let ncant = cantidad - pesada
+        let nempq = empaques - 1
+        setCantidad(ncant)
+        setEmpaques(nempq)
+        
+    }
     const clearPesadas = () => {
         setPesadas([])
-        setCantidad(0)
-        setEmpaques(0)
+        setCantidad('')
+        setEmpaques('')
     }
     return (
         <Dialog
@@ -121,15 +137,6 @@ export default function CrearVentaItem(props){
                         <Slide direction="up" in={!guardando}>
                             <DialogContent>
                                 <Grid container spacing={2} alignItems="center">
-                                    <Grid item xs={12}>
-                                        <Button 
-                                            onClick={openPesadas}
-                                            fullWidth 
-                                            className={classes.botonCosmico}>
-                                                Pesadas
-                                        </Button>
-                                        
-                                    </Grid>
                                     <Grid item xs={12} md={3}>
                                         <TextField 
                                             id="empaques"
@@ -143,15 +150,25 @@ export default function CrearVentaItem(props){
                                         />
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <TextField 
-                                            id="cantidad"
-                                            label="Kilos"
-                                            variant="outlined"
-                                            required
-                                            fullWidth
-                                            value={cantidad}
-                                            onChange={(e) => handleChange('cantidad',e.target.value)}
-                                        />
+                                        <Grid container alignItems="center" spacing={2}>
+                                            <Grid item xs={pesadas.length >0 ? 9 : 12}>
+                                                <TextField 
+                                                    id="cantidad"
+                                                    label="Kilos"
+                                                    variant="outlined"
+                                                    required
+                                                    fullWidth
+                                                    value={cantidad}
+                                                    onChange={(e) => handleChange('cantidad',e.target.value)}
+                                                />
+                                            </Grid> 
+                                            {pesadas.length > 0 ? 
+                                                <Grid item xs={3}>
+                                                    <Button className={classes.botonGenerico} onClick={() => openPesadas()}>Ver pesadas</Button>
+                                                </Grid>
+                                                : null
+                                            }
+                                        </Grid>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
                                         <TextField 
@@ -195,7 +212,8 @@ export default function CrearVentaItem(props){
                 close={closePesadas} 
                 pesadas={pesadas} 
                 addPesada={addPesada}
-                clearPesadas={clearPesadas}  
+                delPesada={delPesada}
+                clearPesadas={clearPesadas}
             />
         </Dialog>
     )

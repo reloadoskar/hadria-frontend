@@ -42,6 +42,7 @@ const useCortes = () => {
 
     async function existeCorte(ubicacion, fecha){
         const res = await existCorte(ubicacion, fecha)
+            setCorte(res)
             return res
     }
 

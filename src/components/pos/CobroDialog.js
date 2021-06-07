@@ -13,7 +13,7 @@ const initialData = {
     tipoPago: 'EFECTIVO'
 }
 export default function CobroDialog(props) {
-    const { ubicacion, isOpen, close, showMessage, fecha, cobrar } = props
+    const { ubicacion, open, close, showMessage, fecha, cobrar } = props
     const [cuentas, setCuentas] = useState(null)
     useEffect(()=>{
         setCuentas(props.cuentas)
@@ -49,19 +49,16 @@ export default function CobroDialog(props) {
         setGuardando(true)
         e.preventDefault()
         var pago = {
-            ubicacion: ubicacion._id._id,
+            ubicacion: ubicacion._id,
             cuenta: values.cuenta,
             tipoPago: values.tipoPago,
             importe: values.importe,
             referencia: values.referencia,
             fecha: fecha
         }
-        console.log(pago)
         cobrar(pago).then(res =>{
             setGuardando(false)
             showMessage(res.message, res.status)
-            //updateSaldoCuenta() FALTA
-            // addToSaldo(pago.importe)
             setValues(initialData)
             ticketCobranza(pago).then(res=>{
                 if(res.status === 'warning'){
@@ -78,7 +75,7 @@ export default function CobroDialog(props) {
         <Dialog
             fullWidth={true}
             maxWidth="sm"
-            open={isOpen}
+            open={open}
             onClose={() => handleClose('cobroDialog')} >
                 {cuentas === null ? null :
                     <React.Fragment>

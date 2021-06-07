@@ -1,93 +1,99 @@
 import React from 'react'
 import moment from 'moment'
+import 'moment/locale/es-mx';
 import useStyles from '../hooks/useStyles'
-import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, Typography, } from '@material-ui/core';
+import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, Typography, CircularProgress, } from '@material-ui/core';
 
-export default function PosAcceso({accesando, ubicacions, ubicacion, fecha, checkCorte, handleChange, invUbic, user}){
+export default function Acceso({accesando, ubicacions, ubicacion, fecha, access, handleChange, invUbic, user}){
     const classes = useStyles();
-    // const [accesando, setAccesando] = useState(false)
     const handleSubmit = (e) => {
         e.preventDefault()
-        // setAccesando(true)
-        checkCorte().then(res => {
-            // setAccesando(false)
-        })
+        access()
     }
 
     return (
-        <Container maxWidth="sm">
-            <Card className={classes.posCard}>
+        <Container maxWidth="xs">
+            <Card >
                 <CardHeader 
                     title="Selección de Ubicación"
-                    subheader={"fecha del sistema: " + (
-                        moment().format("dddd, DD MMMM [de] YYYY")
-                        )}
+                    subheader={moment().format("dddd DD, MMMM YYYY")}
                 />
-                <CardContent>
-                    {accesando ?
-                        <Typography variant="h6" align="center"> Accesando... </Typography>
-                        :
-                        <form onSubmit={(e) => handleSubmit(e)}>
-                            {user.level < 3 ?
+                {ubicacions === null ? 
+                    <React.Fragment>
+                        <Typography variant="h6" align="center">Cargando..</Typography>
+                        <Typography variant="h6" align="center"><CircularProgress /></Typography>
+                    </React.Fragment>
+                    :
+                    <CardContent>
+                        {accesando ?
+                            <React.Fragment>
+                                <Typography variant="h6" align="center"> Accesando... </Typography>
+                                <Typography variant="h6" align="center"> <CircularProgress /></Typography>
+                            </React.Fragment>
+                            :
+                            <form onSubmit={(e) => handleSubmit(e)}>
+                                {user.level < 3 ?
+                                    <TextField
+                                        id="ubicacion"
+                                        label="Selecciona una ubicación"
+                                        autoFocus
+                                        select
+                                        required
+                                        fullWidth
+                                        margin="normal"
+                                        variant="outlined"
+                                        value={ubicacion}
+                                        // onChange={(e) => setUbicacion(e.target.value)}
+                                        onChange={(e) => handleChange('ubicacion',e.target.value)}
+                                        >
+                                        {
+                                            ubicacions === null ?
+                                                <MenuItem>Cargando...</MenuItem>
+                                            :
+                                            
+                                                ubicacions.map((option, index) =>{ 
+                                                    if(option.tipo=== 'SUCURSAL'){
+                                                        return (
+                                                            <MenuItem key={index} value={option}>
+                                                                {option.nombre}
+                                                            </MenuItem>
+                                                        )
+                                                    }else{
+                                                        return false
+                                                    }
+                                                })
+                                        }
+                                    </TextField>
+                                    :
+                                    <Typography variant="h5" align="center" >{ubicacion === '' ? null : ubicacion._id.nombre}</Typography>
+                                }
+
                                 <TextField
-                                    id="ubicacion"
-                                    label="Selecciona una ubicación"
-                                    autoFocus
-                                    select
-                                    required
-                                    fullWidth
-                                    margin="normal"
-                                    variant="outlined"
-                                    value={ubicacion}
-                                    // onChange={(e) => setUbicacion(e.target.value)}
-                                    onChange={(e) => handleChange('ubicacion',e.target.value)}
-                                    >
-                                    {
-                                        ubicacions === null ?
-                                            <MenuItem>Cargando...</MenuItem>
-                                        :
-                                        
-                                            ubicacions.map((option, index) =>{ 
-                                                if(option._id.tipo=== 'SUCURSAL'){
-                                                    return (
-                                                        <MenuItem key={index} value={option}>
-                                                            {option._id.nombre}
-                                                        </MenuItem>
-                                                    )
-                                                }else{
-                                                    return false
-                                                }
-                                            })
-                                    }
-                                </TextField>
-                                :
-                                <Typography variant="h5" align="center" >{ubicacion === '' ? null : ubicacion._id.nombre}</Typography>
-                            }
+                                        id="fecha"
+                                        type="date"
+                                        value={fecha}
+                                        fullWidth
+                                        margin="normal"
+                                        variant="outlined"                             
+                                        onChange={e => handleChange('fecha', e.target.value)}
+                                />
+                                <Grid container justify="flex-end">
+                                    <Button 
+                                        fullWidth
+                                        className={classes.botonCosmico}
+                                        disabled={ubicacion === "" || fecha === "" ? true : false }
+                                        type="button" 
+                                        variant="contained" 
+                                        color="primary" 
+                                        size="large" 
+                                        onClick={(e) => handleSubmit(e)}>Acceder</Button>
+                                </Grid>
 
-                            <TextField
-                                    id="fecha"
-                                    type="date"
-                                    value={fecha}
-                                    fullWidth
-                                    margin="normal"
-                                    variant="outlined"                             
-                                    onChange={e => handleChange('fecha', e.target.value)}
-                            />
-                            <Grid container justify="flex-end">
-                                <Button 
-                                    fullWidth
-                                    className={ invUbic === null  ? classes.botonGenerico : classes.botonCosmico}
-                                    disabled={invUbic === null || ubicacion === null ? true : false }
-                                    type="button" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    size="large" 
-                                    onClick={(e) => handleSubmit(e)}>Acceder</Button>
-                            </Grid>
+                            </form>
+                        }
+                    </CardContent>
 
-                        </form>
-                    }
-                </CardContent>
+                }
             </Card>
         </Container>
     )

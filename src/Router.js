@@ -11,7 +11,7 @@ import Compras from './components/compras/Compras';
 import Inventario from './components/inventario/Inventario';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/Header';
-import Container from './components/pos/Container';
+import Pos from './components/pos/Pos';
 import ConceptosTabs from './components/conceptos/ConceptosTabs';
 import Ventas from './components/ventas/Ventas';
 
@@ -100,7 +100,7 @@ export default function Router(props){
                                         />
                                 </Route>
                                 <Route exact path={`${path}/pos`}>
-                                    <Container 
+                                    <Pos 
                                         // invxubic={invxubic}
                                         ubicacions={ubicacions}
                                         user={auth.user}

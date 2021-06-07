@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogTitle, Typography, Grid, DialogActions, Bu
 import useCompras from '../hooks/useCompras'
 import useConceptos from '../hooks/useConceptos'
 import useStyles from '../hooks/useStyles';
-export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessage, subFromSaldo, saldoDisponible}) {
+export default function EgresoDialog({ubicacion, fecha, open, close, showMessage}) {
     const initialData ={
         tipo: 'GASTO DE CAJA',
         concepto: '',
@@ -32,12 +32,12 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
     const handleChange = (type, value) => {
         switch(type){
             case 'importe':
-                if(value > saldoDisponible){
-                    showMessage("El importe es mayor al Saldo disponible.", "error")
-                    return setValues({...values, importe: ''})
-                }else{
+                // if(value > saldoDisponible){
+                //     showMessage("El importe es mayor al Saldo disponible.", "error")
+                //     return setValues({...values, importe: ''})
+                // }else{
                     setValues({...values, [type]: value})
-                }
+                // }
                 break;
             case 'descripcion':
                 return setValues({...values, [type]: value.toUpperCase()})
@@ -65,13 +65,13 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
         } 
         else{
             var egreso = {
-                ubicacion: ubicacion,
+                ubicacion: ubicacion._id,
                 tipo: values.tipo,
                 concepto: values.concepto,
                 compra: values.compra,
                 descripcion: values.descripcion,
                 fecha: fecha,
-                importe: values.importe,
+                importe: values.importe, 
             }
 
             // console.log(egreso)
@@ -79,8 +79,7 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
             saveEgreso(egreso).then(res => {
                 setGuardando(false)
                 showMessage(res.message, res.status)
-                subFromSaldo(egreso.importe)
-                clearFields()
+                clearFields() 
                 ticketEgreso(egreso)
                 close('egresoDialog')
             })
@@ -92,7 +91,7 @@ export default function EgresoDialog({ubicacion, fecha, isOpen, close, showMessa
         <Dialog 
             fullWidth={true}
             maxWidth="sm" 
-            open={isOpen} 
+            open={open} 
             onClose={() => handleClose('egresoDialog')} >
 
             <DialogTitle id="form-dialog-title">

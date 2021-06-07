@@ -7,7 +7,7 @@ import { formatNumber } from '../Tools'
 import {ticketVenta } from "../api"
 import { useSnackbar } from 'notistack';
 export default function VentaItem(props){
-    const {basic=false, del, index} = props
+    const {basic=false, eliminar, index} = props
     const { enqueueSnackbar } = useSnackbar()
     const [item, setItem] = useState(null)
     useEffect(() => {
@@ -29,8 +29,8 @@ export default function VentaItem(props){
     }
     
     function borrar(index){
-        console.log(index)
-        del(index)
+        // console.log(index)
+        eliminar(index, item)
     }
     return (
         <Grid item xs={12}>

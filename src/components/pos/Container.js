@@ -20,10 +20,11 @@ import { Container, } from '@material-ui/core'
 import reducer from './PosReducer'
 import useIngresos from '../ingresos/useIngresos'
 import useCuentasxPagar from '../cxp/useCuentasxPagar'
-import useCortes from '../hooks/useCortes'
+import useCortes from '../cortes/useCortes'
 import useInventario from '../hooks/useInventario'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';
+import CrearVentaItem from '../ventas/CrearVentaItem';
 // import Pesadas from '../inventario/Pesadas';
 // import CrearVenta from '../ventas/CrearVenta';
 // import useStyles from '../hooks/useStyles';
@@ -186,6 +187,7 @@ function PosContainer(props) {
             if(res.status === 'error'){
                 showMessage(res.message, res.status)
                 closeDialog('corteDialog')
+                setAccesando(false)
             }else{
                 setCorte(res)
             }
@@ -202,7 +204,6 @@ function PosContainer(props) {
                 dispatch({type: 'corteExist', value: true})
                 showMessage('Fecha cerrada, para esta ubicación', 'error')
             }
-            setAccesando(false)
             return res
         })
     }
@@ -287,12 +288,12 @@ function PosContainer(props) {
                                 closeDialog={closeDialog}/>
                             
                             {values.itemToAdd &&
-                                <AddItemDialog 
-                                    isOpen={values.addItemDialog}
+                                <CrearVentaItem
+                                // <AddItemDialog 
+                                    open={values.addItemDialog}
                                     close={closeDialog}
-                                    item={values.itemToAdd}
+                                    elitem={values.itemToAdd}
                                     add={add}
-                                    showMessage={showMessage}
                                 />
                             }
         

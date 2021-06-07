@@ -156,9 +156,7 @@ export default function AddItemDialog({item, isOpen, close, showMessage, add }) 
                         <Button className={classes.botonSimplon} onClick={() => handleClose('addItemDialog')} >
                             Cancelar
                         </Button>
-                        <Button className={classes.botonGenerico} type="submit" 
-                        // disabled={values.cantidad > 0 ? false : true }
-                        >
+                        <Button className={classes.botonGenerico} type="submit" >
                             Agregar
                         </Button>
                     </DialogActions>

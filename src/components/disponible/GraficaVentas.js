@@ -1,17 +1,20 @@
-import { CircularProgress } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+// import { CircularProgress } from '@material-ui/core'
 import { VictoryChart, VictoryAxis, VictoryBar } from 'victory'
 export default function GraficaVentas(props){
     const [data, setData] = useState(null)
     useEffect(() => {
         if(props.data){
-            setData(props.data)
+            let ubics = props.data.filter(ubic => ubic.total > 1)
+            if(ubics.length > 0){
+                setData(props.data)
+            }
         }
     },[props.data]) 
     return (
         <React.Fragment>
         { data ===  null || data === [] ?
-            <CircularProgress />
+            null
             :
             <VictoryChart key="chart"
                 height={250}

@@ -31,24 +31,24 @@ export default function Login(){
                 }
             }
         }
-        return () => clearFields
+        // return () => {
+        //     setUsuario('')
+        //     setPassword('')
+        //     setCargando(false)
+        // }
     },[auth, history, from])
     
-    const clearFields = () => {
-        setUsuario('')
-        setPassword('')
-        setCargando(false)
-    }
  
-    const showMessage = (text, type) => { enqueueSnackbar(
-        text, 
-        {
-            variant: type,
-            anchorOrigin: {
-                vertical: 'top',
-                horizontal: 'center',
-        },
-    } ) }
+    const showMessage = (text, type) => { 
+        enqueueSnackbar(
+            text, 
+            {
+                variant: type,
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'center',
+            },
+    })}
 
     function handleChange(field, value){
         switch (field) {
@@ -77,7 +77,6 @@ export default function Login(){
                 history.push("/app");
                 setCargando(false)
             }
-            showMessage(res.message, res.status)
         })
         .catch(err => {
             setCargando(false)

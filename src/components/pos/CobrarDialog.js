@@ -1,13 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ticketVenta, ticketSalida} from '../api'
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
-
-import useClientes from '../clientes/useClientes'
 import useStyles from '../hooks/useStyles';
 
 function ReprintDialog(props) {
@@ -46,33 +43,33 @@ function ReprintDialog(props) {
     )
 }
 
-export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen, close, showMessage, addToSaldo, resetVenta, crearVenta, crearPago }) {
+export default function CobrarDialog({ open, total, close, guardarVenta, cliente, showMessage, guardando }) {
     const classes = useStyles()
-    const {clientes} = useClientes()
-    const [venta, setVenta] = useState(null)
+
+    const [tipoPago, setTipoPago] = useState("CONTADO")
+    const [efectivo, setEfectivo] = useState(total)
+    const [cambio, setCambio] = useState(0)
+    const [acuenta, setAcuenta] = useState(0)
+    const [saldo, setSaldo] = useState(total)
+    
     const [reprintDialog, setReprintDialog] = useState(false)
-    const [loading, setLoading] = useState(false)
+    
+    useEffect(() => {
+        if(total>0){
+            setEfectivo(total)
+        }
+        
+    },[total])
 
     const cancelReprint = () => {
         setReprintDialog(false)
-        resetVenta()
     }
 
-    const initialData = {
-        cliente: '',
-        tipoPago: 'CONTADO',
-        efectivo: 0,
-        cambio: 0,
-        acuenta: 0,
-        saldo: 0,
-    }
-
-    const [values, setValues] = useState(initialData)
     const tipos = ['CONTADO', 'CRÉDITO']
 
     const handleClose = (dialog) => {
         clearFields()
-        close(dialog)
+        close()
     }
 
     const calculaCambio = (efe, total) => {
@@ -89,38 +86,43 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
 
     const handleChange = (type, value) => {
         switch(type){
-            case 'cliente':
-                return setValues({...values, [type]: value, tipoPago: 'CONTADO', efectivo: valuesToSave.total, saldo: valuesToSave.total})
             case 'acuenta':
-                let saldo = calculaSaldo(value, valuesToSave.total)
-                return setValues({...values, [type]: value, saldo: saldo})
+                let saldo = calculaSaldo(value, total)
+                setAcuenta(value)
+                setSaldo(saldo)
+                break
             case 'efectivo':
-                if(value >= valuesToSave.total){
-                    setLoading(false)
+                if(value >= total){
+                    let cambio = calculaCambio(value, total)
+                    setCambio(cambio)
                 }
-                let cambio = calculaCambio(value, valuesToSave.total)
-                return setValues({...values, [type]: value, cambio: cambio})
+                setEfectivo(value)
+                break
                 
             default:
-                return setValues({...values, [type]: value })
+                
         }
     }
 
     const checkIfTipoPagoIsOk = (tipo, e) => {
         if(e === 'CONTADO'){
-            handleChange(tipo, e)
+            setTipoPago(e)
         }else{
-            if(valuesToSave.total > values.cliente.credito_disponible ){
-                showMessage("El crédito disponible para: "+values.cliente.nombre+" no es suficiente.", 'warning')
-                handleChange(tipo, 'CONTADO')
+            if(total > cliente.credito_disponible ){
+                showMessage("El crédito disponible para: "+cliente.nombre+" no es suficiente.", 'warning')
+                setTipoPago(tipo, 'CONTADO')
             }else{
-                handleChange(tipo, e)
+                setTipoPago(e)
             }
         }
     }
 
     const clearFields = () => {
-        setValues(initialData)
+        setTipoPago("CONTADO")
+        setEfectivo(0)
+        setCambio(0)
+        setAcuenta(0)
+        setSaldo(0)
     }
 
     // const updateCLientCredit = () => {
@@ -131,46 +133,38 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
     // }
     
     const handleSubmit = (e) => {
-        e.preventDefault()
-        setLoading(true)
-        const nventa = {
-            ubicacion: ubicacion._id,
-            fecha: fecha,
-            cliente: values.cliente,
-            tipoPago: values.tipoPago,
-            total: valuesToSave.total,
-            items: valuesToSave.itemsToSave,
-            efectivo: values.efectivo,
-            cambio: values.cambio,
-            acuenta: values.acuenta,
-            saldo: values.saldo,
+        e.preventDefault()      
+        let venta = {
+            tipoPago: tipoPago,
+            efectivo: efectivo,
+            cambio: cambio,
+            acuenta: acuenta,
+            saldo: saldo,
         }
-        setVenta(nventa)
-        // console.log(nventa)
+        guardarVenta(venta)
+        // crearVenta()
+        //     .then(res => {
+        //         showMessage(res.message, res.status)
+        //         clearFields()
+        //         close('cobrarDialog')
+        //         ticketSalida(res.venta)
+        //         ticketVenta(res.venta).then(res=> {
+        //             if(res.status === 'warning'){
+        //                 showMessage(res.message, res.status)
+        //                 resetVenta()
+        //             }else{
+        //                 setReprintDialog(true)
+        //             }
+        //         })
+        //         // rePrintTicket()
+        //         setLoading(false)
+        //     })
+        //     .catch(err => {
+        //         close('cobrarDialog')
+        //         setLoading(false)
+        //         console.log(err)
 
-        crearVenta(nventa)
-            .then(res => {
-                showMessage(res.message, res.status)
-                clearFields()
-                close('cobrarDialog')
-                ticketSalida(res.venta)
-                ticketVenta(res.venta).then(res=> {
-                    if(res.status === 'warning'){
-                        showMessage(res.message, res.status)
-                        resetVenta()
-                    }else{
-                        setReprintDialog(true)
-                    }
-                })
-                // rePrintTicket()
-                setLoading(false)
-            })
-            .catch(err => {
-                close('cobrarDialog')
-                setLoading(false)
-                console.log(err)
-
-            })
+        //     })
     }
 
     // const rePrintTicket = () =>{
@@ -178,8 +172,7 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
     // }
 
     const printTicket = () => {
-        ticketVenta(venta)
-        resetVenta()
+        // ticketVenta(venta)
     }
 
     const handleKeyPress = (e) => {
@@ -195,9 +188,8 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
             fullWidth
             maxWidth="sm"
             onKeyPress={(e) => handleKeyPress(e)}
-            open={isOpen} onClose={() => handleClose('cobrarDialog')} aria-labelledby="form-dialog-title">
+            open={open} onClose={() => handleClose('cobrarDialog')} aria-labelledby="form-dialog-title">
 
-        {valuesToSave.itemsToSave.length > 0 && 
             <React.Fragment>
             <form onSubmit={handleSubmit}>
                 <DialogTitle id="form-dialog-title">
@@ -208,56 +200,20 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
                         </Grid>
                         <Grid item xs >
                             <Grid container justify="flex-end">
-                                <Typography variant="h6"  >$ {valuesToSave.total}</Typography>
+                                <Typography variant="h6"  >$ {total}</Typography>
                             </Grid>
                         </Grid>
                     </Grid>
 
                 </DialogTitle>
                 {
-                    loading === true ?
-                        <Zoom in={loading}>
+                    guardando === true ?
+                        <Zoom in={guardando}>
                             <Typography variant="h6" align="center">Guardando...</Typography>
                         </Zoom>
                     :
                         <DialogContent>
                             <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        id="cliente"
-                                        select
-                                        variant="outlined"
-                                        autoFocus
-                                        required
-                                        fullWidth
-                                        label="Cliente"
-                                        value={values.cliente}
-                                        onChange={(e) => handleChange('cliente', e.target.value)}
-                                    >
-                                        {clientes.map((option, index) => (
-                                            <MenuItem key={index} value={option}>
-                                                <Grid container >
-                                                    <Grid item xs={6}>
-                                                        {option.nombre}
-                                                    </Grid>
-                                                    <Grid item xs={6}>
-                                                        <Grid container justify="flex-end">
-                                                            {
-                                                                option.credito_disponible >= valuesToSave.total 
-                                                                ?
-                                                                    <Typography color="primary" >
-                                                                        <AssignmentTurnedInIcon />
-                                                                    </Typography>
-                                                                :
-                                                                    <Typography color="secondary" >Crédito no disponible</Typography>
-                                                            }
-                                                        </Grid>
-                                                    </Grid>
-                                                </Grid>
-                                            </MenuItem>
-                                        ))} 
-                                    </TextField>
-                                </Grid>
                                 <Grid item xs={12} md={4}>
                                     <TextField
                                         id="tipoPago"
@@ -266,7 +222,7 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
                                         required
                                         fullWidth
                                         label="Tipo de pago"
-                                        value={values.tipoPago}
+                                        value={tipoPago}
                                         // onChange={(e) => handleChange('tipoPago', e.target.value)}
                                         onChange={(e) => checkIfTipoPagoIsOk('tipoPago', e.target.value)}
                                     >
@@ -277,7 +233,7 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
                                         ))} 
                                     </TextField>
                                 </Grid>
-                                {values.tipoPago === 'CONTADO' ?
+                                {tipoPago === 'CONTADO' ?
                                 <React.Fragment>
 
                                     <Grid item xs={12} md={4}>
@@ -287,8 +243,9 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
                                             label="Efectivo"
                                             required
                                             fullWidth
+                                            autoFocus
                                             type="number"
-                                            value={values.efectivo}
+                                            value={efectivo}
                                             onChange={(e) => handleChange('efectivo', e.target.value)}
                                             />
                                     </Grid>
@@ -300,7 +257,7 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
                                             required
                                             type="number"
                                             fullWidth
-                                            value={values.cambio}
+                                            value={cambio}
                                             InputProps={{
                                                 readOnly: true,
                                             }}
@@ -319,7 +276,7 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
                                             required
                                             fullWidth
                                             type="number"
-                                            value={values.acuenta}
+                                            value={acuenta}
                                             onChange={(e) => handleChange('acuenta', e.target.value)}
                                             />
                                     </Grid>
@@ -331,7 +288,7 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
                                             required
                                             type="number"
                                             fullWidth
-                                            value={values.saldo}
+                                            value={saldo}
                                             InputProps={{
                                                 readOnly: true,
                                             }}
@@ -350,14 +307,13 @@ export default function PosCobrarDialog({ valuesToSave, ubicacion, fecha, isOpen
                     </Button>
                     <Button 
                         type="submit" 
-                        className={ loading ? classes.botonGenerico : classes.botonCosmico} 
-                        disabled={loading}>
-                        { loading ? "Espere..." : "Registrar (r)"}
+                        className={ guardando ? classes.botonGenerico : classes.botonCosmico} 
+                        disabled={efectivo >= total ? false : true}>
+                        { guardando ? "Espere..." : "Registrar (r)"}
                     </Button>
                 </DialogActions>
             </form>
             </React.Fragment>    
-        }         
         </Dialog>
         <ReprintDialog open={reprintDialog} cancel={cancelReprint} ok={printTicket} />
         </React.Fragment>

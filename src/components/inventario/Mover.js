@@ -19,7 +19,6 @@ export default function Mover(props){
     const {open, close, inventario, ubicacions, mover} = props
     const [guardando, setGuardando] = useState(false)
     const [movimiento, setMovimiento] = useState(init)
-    const [pesadas, setPesadas] = useState(false)
     const handleChange = (field, value) =>{
         switch (field) {
             case "origen":
@@ -44,12 +43,6 @@ export default function Mover(props){
                 setMovimiento({...movimiento, [field]: value})
                 break;
         }
-    }
-    const openPesadas = () => {
-        setPesadas(true)
-    }
-    const closePesadas = () => {
-        setPesadas(false)
     }
     const addPesada = (pesada) => {
         var lista = movimiento.pesadas
@@ -160,12 +153,12 @@ export default function Mover(props){
                                                     </Grid>
                                                     <Grid item xs={12} sm={3}>
                                                         <Typography variant="body2" align="right">
-                                                            cajas: {formatNumber(itm.empaquesStock,2)}
+                                                            {itm.productoempaque.empaque}: {formatNumber(itm.empaquesStock,2)}
                                                         </Typography> 
                                                     </Grid>
                                                     <Grid item xs={12} sm={3}>
                                                         <Typography variant="body2" align="right">
-                                                            kilos: {formatNumber(itm.stock,2)}
+                                                            {itm.productounidad.unidad}: {formatNumber(itm.stock,2)}
                                                         </Typography> 
                                                     </Grid>
                                                 </Grid>                                                          
@@ -181,10 +174,8 @@ export default function Mover(props){
                             :
                             <React.Fragment>
                                 <Grid item xs={12} md={4}>
-                                    <Button fullWidth className={classes.botonGenerico} onClick={openPesadas}>Agrega Pesadas</Button>
+                                    {/* <Button fullWidth className={classes.botonGenerico} onClick={openPesadas}>Agrega Pesadas</Button> */}
                                     <Pesadas
-                                        open={pesadas} 
-                                        close={closePesadas} 
                                         pesadas={movimiento.pesadas} 
                                         addPesada={addPesada}
                                         clearPesadas={clearPesadas} 
@@ -193,7 +184,7 @@ export default function Mover(props){
                                 <Grid item xs={6} md={4}>
                                     <TextField
                                         id="itemselempaques"
-                                        label="Cajas"
+                                        label={movimiento.itemsel === '' ? "Empaques" : movimiento.itemsel.productoempaque.empaque}
                                         type="number"
                                         fullWidth
                                         required
@@ -205,7 +196,7 @@ export default function Mover(props){
                                 <Grid item xs={6} md={4}>
                                     <TextField
                                         id="itemselcantidad"
-                                        label="Kilos"
+                                        label={movimiento.itemsel === '' ? "Unidades" : movimiento.itemsel.productounidad.unidad}
                                         fullWidth
                                         required
                                         variant="outlined"

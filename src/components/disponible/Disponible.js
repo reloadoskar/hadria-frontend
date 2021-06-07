@@ -69,8 +69,9 @@ export default function Disponible(props){
                             </Typography>
                         </Grid>
                         <Grid item sm={12} md={4}>
-                            {dispxubic.map((ubic, i) => (
-                                <MenuItem key={i} onClick={() => props.verCorte(ubic.ubicacion)}>
+                            {/* {dispxubic.map((ubic, i) => ( */}
+                                {dispxubic.filter(ubic => ubic.total > 1).map(ubic => (
+                                <MenuItem key={ubic.ubicacion._id} onClick={() => props.verCorte(ubic.ubicacion)}>
                                     <Grid container >
                                         <Grid item xs={6}>
                                             <Typography>{ubic.ubicacion.nombre}</Typography>

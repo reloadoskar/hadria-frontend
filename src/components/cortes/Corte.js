@@ -284,7 +284,12 @@ export default function Corte(props){
                                 <Divider />
                                 <Typography  
                                     className={classes.textoMirame}
-                                    align="right" color="secondary">- ${formatNumber(elcorte.tcreditos,2)}</Typography>
+                                    align="right" color="secondary">- ${formatNumber(elcorte.tcreditos,2)}
+                                </Typography>
+                                <Typography  
+                                    className={classes.textoMirame}
+                                    align="right" color="primary">+ ${formatNumber(elcorte.tacuenta,2)}
+                                </Typography>
                             </Grid>
                         }
 
