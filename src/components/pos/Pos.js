@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useSnackbar } from 'notistack';
 import { Container, Backdrop, Typography } from '@material-ui/core'
 import Acceso from './Acceso'
@@ -27,6 +27,12 @@ export default function Pos(props){
     
     const [dialogPos, setDialogPos] = useState(false)
     
+    useEffect(() => {
+        if(user.ubicacion ){
+            setUbicacion(user.ubicacion)
+        }
+    },[user])
+
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
     const handleChange = (type, value) => { 
         if(type === 'ubicacion'){            

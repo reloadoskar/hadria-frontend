@@ -65,7 +65,7 @@ export default function Acceso({accesando, ubicacions, ubicacion, fecha, access,
                                         }
                                     </TextField>
                                     :
-                                    <Typography variant="h5" align="center" >{ubicacion === '' ? null : ubicacion._id.nombre}</Typography>
+                                    <Typography variant="h5" align="center" >{ubicacion === '' ? null : ubicacion.nombre}</Typography>
                                 }
 
                                 <TextField
