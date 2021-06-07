@@ -6,8 +6,9 @@ import Corte from '../cortes/Corte'
 import useStyles from '../hooks/useStyles'
 import CobroDialog from './CobroDialog'
 import EgresoDialog from './EgresoDialog'
+import PagarDialog from './PagarDialog'
 export default function DialogPos(props){
-    const {open, close, clientes, inventario, ubicacion, ubicacions, fecha, showMessage, user, cortes, cxcPdv, addPagoCxc} = props
+    const {open, close, clientes, inventario, ubicacion, ubicacions, fecha, showMessage, user, cortes, cxcPdv, addPagoCxc, addPagoCxp, cuentasxPagar} = props
     
     const classes = useStyles()
     const [corte, setCorte] = useState(null)
@@ -15,9 +16,13 @@ export default function DialogPos(props){
     const [crearVenta, setCrearVenta] = useState(false)
     const [cxcDialog, setCxcDialog] = useState(false)
     const [egresoDialog, setEgresoDialog] = useState(false)
+    const [pagoDialog, setPagoDialog] = useState(false)
     
     const toggleCxcDialog = () => {
         setCxcDialog(!cxcDialog)
+    }
+    const togglePagoDialog = () => {
+        setPagoDialog(!cxcDialog)
     }
     const toggleEgesoDialog = () => {
         setEgresoDialog(!egresoDialog)
@@ -59,6 +64,10 @@ export default function DialogPos(props){
             closeDialogCorte()
             close()
         })
+    }
+
+    function closeDialogPago(){
+        setPagoDialog(false)
     }
     return(
         <Dialog
@@ -112,6 +121,25 @@ export default function DialogPos(props){
                         cobrar={addPagoCxc}
                         ubicacion={ubicacion}
                         close={toggleCxcDialog}
+                        showMessage={showMessage}
+                    />
+                </Grid>
+
+                <Grid item xs={8}>
+                    <Button 
+                        fullWidth
+                        onClick={()=>togglePagoDialog()}
+                        className={classes.botonGenerico}
+                    >
+                        Pagar -
+                    </Button>
+                    <PagarDialog 
+                        fecha={fecha}
+                        cuentas={cuentasxPagar}
+                        pagar={addPagoCxp}
+                        ubicacion={ubicacion}
+                        isOpen={pagoDialog}
+                        close={closeDialogPago}
                         showMessage={showMessage}
                     />
                 </Grid>

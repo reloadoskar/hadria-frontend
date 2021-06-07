@@ -5,10 +5,11 @@ import Acceso from './Acceso'
 import useStyles from '../hooks/useStyles'
 import useInventario from '../inventario/useInventario'
 import useUbicacions from '../hooks/useUbicacions'
-import moment from 'moment'
 import useCortes from '../cortes/useCortes'
 import useClientes from '../clientes/useClientes'
 import useIngresos from '../ingresos/useIngresos'
+import useEgresos from '../egresos/useEgresos'
+import moment from 'moment'
 import DialogPos from './DialogPos'
 // import {sumImporte} from '../Tools'
 export default function Pos(props){
@@ -19,6 +20,7 @@ export default function Pos(props){
     const inventario = useInventario()
     const {clientes} = useClientes()
     const {addVenta, cxcPdv, addPagoCxc} = useIngresos()
+    const {cuentasxPagar, addPagoCxp} = useEgresos()
     const cortes = useCortes()
     
     const [accesando, setAccesando] = useState(false)
@@ -93,6 +95,8 @@ export default function Pos(props){
                 addVenta={addVenta}
                 cxcPdv={cxcPdv}
                 addPagoCxc={addPagoCxc}
+                cuentasxPagar={cuentasxPagar}
+                addPagoCxp={addPagoCxp}
             />
 
 
