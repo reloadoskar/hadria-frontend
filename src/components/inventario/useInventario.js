@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { getInventario, getInventarioBy, 
-    // getInventarioUbicacion,
+    getInventarioxUbicacion,
     moveInventario } from '../api'
 // import { sumImporte, sumStock } from '../Tools'
 const useInventario = () => {
     const [inventario, setInventario] = useState(null)
     const [inventarioGeneral, setInventarioGeneral] = useState(null)
-    const [inventarioUbicacion, setInventarioUbicacion] = useState(null)
+    // const [inventarioUbicacion, setInventarioUbicacion] = useState(null)
     const [inventarioXub, setInventarioXub] = useState(null)
     const [totalInventario, setTotalInventario] = useState(0)
     const [updating, setUpdating] = useState(false)
@@ -32,7 +32,7 @@ const useInventario = () => {
     }
 
     const getInventarioXUbic = () => {
-        return getInventarioUbicacion()
+        return getInventarioxUbicacion()
             .then(res => {
                 setInventarioXub(res.inventario)
             })
@@ -83,7 +83,6 @@ const useInventario = () => {
         inventario,
         inventarioGeneral,
         getInventarioGeneral,
-        inventarioUbicacion,
         getInventarioUbicacion,
         inventarioXub,
         getInventarioXUbic,
