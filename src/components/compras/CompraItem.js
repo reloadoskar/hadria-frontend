@@ -22,28 +22,20 @@ export default function CompraItem(props){
                 <Grid item xs={12} sm={12}>
                     <MenuItem onClick={()=> selectItem(item)} >
                         <Grid container spacing={2} alignItems="flex-end">
-                            {item.compra === undefined ?
-                                null
-                                :
-                                <Grid item xs={2} sm={1}>
-                                    <Typography>{item.compra.folio}</Typography>
-                                </Grid>
-                            }
-                            {verUbicacion ? 
-                                <Grid item xs={2} sm={1} >
-                                    <Typography >{item.ubicacion.nombre}</Typography>
-                                </Grid>
-                                : null
-                            }
                             <Grid item xs={10} sm={7}>
+                        <Typography className={classes.textoMiniFacheron} >{
+                            item.compra !== undefined ? 
+                            "#" + item.compra.folio
+                            :item.ubicacion.nombre
+                        }</Typography>
                                 <Typography align="left">{item.producto.descripcion}</Typography>
                             </Grid>
                             <Grid item xs={6} sm={2}>
-                                <Typography align="right" className={classes.textoMiniFacheron} >{item.producto.empaque.abr}:</Typography>
+                                <Typography align="right" className={classes.textoMiniFacheron} >{item.producto.empaque ? item.producto.empaque.abr : item.productoempaque.abr}:</Typography>
                                 <Typography align="right">{formatNumber(item.empaquesStock,2)}</Typography>
                             </Grid>
                             <Grid item xs={6} sm={2}>
-                                <Typography align="right" className={classes.textoMiniFacheron} >{item.producto.unidad.abr}:</Typography>
+                                <Typography align="right" className={classes.textoMiniFacheron} >{item.producto.unidad ? item.producto.unidad.abr : item.productounidad.abr}:</Typography>
                                 <Typography align="right">{formatNumber(item.stock,2)}</Typography>
                             </Grid>
                         </Grid>
