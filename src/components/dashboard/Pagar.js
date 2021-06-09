@@ -66,11 +66,13 @@ export default function Pagar({ubicacions=[], cuentas, open, close, showMessage,
             fecha: pago.fecha
         }
         save(npago).then(res =>{
-            showMessage(res.message, res.status)
             setPago(init)
             setPagando(false)
-            //subFromSaldo(pago.importe)
-            ticketPago(pago)
+            ticketPago(pago).then(res => {
+                if(res.status === 'warning'){
+                    showMessage(res.message, res.status)
+                }
+            })
             close('pagarDialog')
         })
     }
@@ -115,7 +117,10 @@ export default function Pagar({ubicacions=[], cuentas, open, close, showMessage,
                                     value={pago.provedor}
                                     onChange={(e) => handleChange('provedor', e.target.value)}
                                 >
-                                    {cuentas.map((provedor, index) => (
+                                    {
+                                        cuentas
+                                        .filter(prov => prov.cuentas.length > 0)
+                                        .map((provedor, index) => (
                                             
                                         <MenuItem key={index} value={provedor}>
                                             <Grid container >

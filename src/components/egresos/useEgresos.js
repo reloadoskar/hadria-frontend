@@ -20,7 +20,7 @@ const useEgresos = () => {
         return () => {
 			setEgresos([])
         }
-	}, [])
+	}, [updating])
 	
 	useEffect(() => {
 		if(egresos!==[]){

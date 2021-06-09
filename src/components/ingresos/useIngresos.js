@@ -5,8 +5,7 @@ import moment from 'moment'
 const useIngresos = () => {
     const [ingresos, setIngresos] = useState([])
 	const [totalIngresos, setTotalIngresos] = useState(null)
-	const [updatingIngresos, setUpdIng] = useState(false)
-	const [updatingCuentasxc, setUpdCxc] = useState(false)
+	const [updating, setUpdating] = useState(false)
 	const [cuentasxCobrar, setCuentasxCobrar] = useState([])
 	const [cxcPdv, setCxcPdv] = useState([])
 	const [totalCxc, setTotalCxc] = useState(0)
@@ -22,7 +21,7 @@ const useIngresos = () => {
 		}
         loadIngresos(hoy)
         return () => setIngresos([])
-	}, [updatingIngresos])
+	}, [updating])
 
 	useEffect(()=> {
 		if (ingresos !== []){
@@ -42,7 +41,7 @@ const useIngresos = () => {
 		}
         loadCuentas()        
         return () => setCuentasxCobrar([])
-	}, [updatingCuentasxc])
+	}, [updating])
 
 	useEffect(()=> {
 		async function loadcxcpdv(){
@@ -55,7 +54,7 @@ const useIngresos = () => {
 		}
 		loadcxcpdv()
 		return () => setCxcPdv([])
-	},[updatingCuentasxc])
+	},[updating])
 	
 	useEffect(() => {
         var tt = 0
@@ -76,24 +75,21 @@ const useIngresos = () => {
 
 	const addPagoCxc = (pago) => {
 		return savePagoACuentaPorCobrar(pago).then(res=>{
-			setUpdCxc(!updatingCuentasxc)
+			setUpdating(!updating)
             return res
         })
     }
 
 	const addIngreso = (ingreso) => {
 		return saveIngreso(ingreso).then(res=>{
-			setUpdIng(!updatingIngresos)
+			setUpdating(!updating)
 			return res
 		})
 	}
 
 	const addVenta = (venta) =>{
 		return saveVenta(venta).then(res=>{
-			setUpdIng(!updatingIngresos)
-			if(venta.tipoPago === "CRÉDITO"){
-				setUpdCxc(!updatingCuentasxc)
-			}
+			setUpdating(!updating)
 			return res
 		})
 	}
@@ -114,7 +110,9 @@ const useIngresos = () => {
 		totalCxc,
 		cxcPdv,
 		cxcCliente,
-		addPagoCxc
+		addPagoCxc,
+
+		setUpdating
 	}
 };
 

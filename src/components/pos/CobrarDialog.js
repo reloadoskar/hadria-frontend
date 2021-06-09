@@ -109,8 +109,10 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
             setTipoPago(e)
         }else{
             if(total > cliente.credito_disponible ){
-                showMessage("El crédito disponible para: "+cliente.nombre+" no es suficiente.", 'warning')
-                setTipoPago(tipo, 'CONTADO')
+                let diferencia = (cliente.credito_disponible - total) * -1
+                showMessage("El crédito disponible para: "+cliente.nombre+" no es suficiente. Tendrá que dejar a cuenta: "+diferencia, 'warning')
+                setTipoPago(e)
+                handleChange('acuenta', (cliente.credito_disponible - total) * -1)
             }else{
                 setTipoPago(e)
             }

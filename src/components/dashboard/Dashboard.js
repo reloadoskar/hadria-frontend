@@ -10,6 +10,7 @@ import CuentasxPagar from '../cxp/CuentasxPagar'
 // import UltimosMovimientos from './UltimosMovimientos'
 // import ComprasDash from './ComprasDash'
 import Pagar from './Pagar'
+import Traspasar from './Traspasar'
 // import Cobro from '../creators/Cobro'
 // import CrearIngreso from '../ingresos/CrearIngreso'
 // import CrearEgreso from '../egresos/CrearEgreso'
@@ -44,6 +45,7 @@ import { Grid,
 // import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import Disponible from '../disponible/Disponible'
 import Corte from '../cortes/Corte'
+import Cobrar from './Cobrar'
 // import CrearCompra from '../compras/CrearCompra'
 
 export default function Dashboard(props) {
@@ -79,6 +81,7 @@ export default function Dashboard(props) {
     const classes = useStyles();
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
+    const [traspasar, setTraspasar] = useState(false)
     const [crearIngreso, setCrearIngreso] = useState(false)
     const [crearEgreso, setCrearEgreso] = useState(false)
     // const [anchorEl, setAnchorEl] = useState(null);
@@ -101,6 +104,14 @@ export default function Dashboard(props) {
 
     const closeCobrar = () => {
         setCobrar(false)
+    }
+
+    const showTraspasar = () => {
+        setTraspasar(true)
+    }
+
+    const closeTraspasar = () => {
+        setTraspasar(false)
     }
 
     const showCreateIngreso = () =>{
@@ -159,7 +170,51 @@ export default function Dashboard(props) {
     // function closedCrearCompra(){
     //     setDCrearCompra(false)
     // }
+    const crearPago = (pago) => {
+        return egresos.addPagoCxp(pago).then(res => {
+            showMessage(res.message, res.status)
+            ingresos.setUpdating(res)
+        })
+        .catch(err => {
+            showMessage("No se pudo guardar el pago", "error")
+        })
+    }
 
+    const crearCobro = (cobro) => {
+        return ingresos.addPagoCxc(cobro).then(res => {
+            showMessage(res.message, res.status)
+
+        })
+        .catch(err=>{
+            showMessage("No se pudo guardar el cobro", 'error')
+        })
+    }
+
+    const crearTraspaso = (traspaso) => {
+        egresos.addEgreso({
+            ubicacion: traspaso.origen._id,
+            tipo: "TRASPASO",
+            concepto: "TRASPASO",
+            descripcion: traspaso.referencia,
+            fecha: traspaso.fecha,
+            importe: traspaso.importe, 
+        })
+        .catch(()=> {
+            showMessage("No se guardo el egreso.", "error")
+        })
+
+        ingresos.addIngreso({
+            ubicacion: traspaso.destino._id,
+            concepto: "TRASPASO",
+            descripcion: traspaso.referencia,
+            fecha: traspaso.fecha,
+            tipoPago: "EFECTIVO",
+            importe: traspaso.importe
+        })
+        .catch(()=> {
+            showMessage("No se guardo el ingreso.", "error")
+        })
+    }
     return (
         <Container maxWidth="md">
             <Grid container spacing={3}>
@@ -179,11 +234,38 @@ export default function Dashboard(props) {
                                 ubicacions={ubicacions}
                                 open={pagar}
                                 close={closePagar}
-                                save={egresos.addPagoCxp}
+                                save={crearPago}
                                 showMessage={showMessage}
                             />
                             
-                            <Button disabled>Cobrar</Button>
+                            <Button
+                                onClick={() => showCobrar()}
+                            >
+                                Cobrar
+                            </Button>
+                            <Cobrar                           
+                                cuentas={ingresos.cxcPdv}
+                                open={cobrar}
+                                close={closeCobrar}
+                                fecha={fecha}
+                                cobrar={crearCobro}
+                                ubicacions={ubicacions}
+                                showMessage={showMessage}
+                            />
+                            
+                            <Button
+                                onClick={() => showTraspasar()}
+                            >
+                                Traspasar
+                            </Button>
+                            <Traspasar                           
+                                cuentas={ingresos.cxcPdv}
+                                open={traspasar}
+                                close={closeTraspasar}
+                                save={crearTraspaso}
+                                ubicacions={ubicacions}
+                                showMessage={showMessage}
+                            />
 
                         </ButtonGroup>
                     </Grid>
