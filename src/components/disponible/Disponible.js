@@ -70,7 +70,7 @@ export default function Disponible(props){
                         </Grid>
                         <Grid item sm={12} md={4}>
                             {/* {dispxubic.map((ubic, i) => ( */}
-                                {dispxubic.filter(ubic => ubic.total > 1).map(ubic => (
+                                {dispxubic.filter(ubic => ubic.total !== 0).map(ubic => (
                                 <MenuItem key={ubic.ubicacion._id} onClick={() => props.verCorte(ubic.ubicacion)}>
                                     <Grid container >
                                         <Grid item xs={6}>
