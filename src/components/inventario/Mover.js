@@ -144,8 +144,9 @@ export default function Mover(props){
                                     value={movimiento.itemsel}
                                     onChange={(e) => handleChange('itemsel', e.target.value)}
                                 >
-                                    {movimiento.origensel.items.map((itm,i)=>{
-                                        return itm.stock < 1 ? null :
+                                    {movimiento.origensel.items.filter(i => i.stock >= 1 && i.empaquesStock >= 1).map((itm,i)=>(
+                                    // {movimiento.origensel.items.map((itm,i)=>{
+                                        // return itm.stock < 1 ? null :
                                             <MenuItem key={i} value={itm}>  
                                                 <Grid container >
                                                     <Grid item xs={12} sm={6}>
@@ -163,7 +164,7 @@ export default function Mover(props){
                                                     </Grid>
                                                 </Grid>                                                          
                                             </MenuItem>
-                                        })
+                                        ))
                                     }
                                 </TextField>                                
                             </Grid>
