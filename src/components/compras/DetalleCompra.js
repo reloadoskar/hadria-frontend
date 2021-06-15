@@ -318,15 +318,19 @@ export default function DetalleCompra(props) {
                                                                 {
                                                                     edit.index === index ?
                                                                         <React.Fragment>
-                                                                            <TableCell>{item.producto.descripcion}</TableCell>
-                                                                            <TableCell align="right">
-                                                                                <TextField id="cantidad" label="Cantidad" value={edit.cantidad} onChange={(e) => handleChange('cantidad', e.target.value)} />
+
+                                                                            <TableCell>
+                                                                                <Typography className={classes.sobreTexto}>{item.ubicacion.nombre} - {moment(item.createdAt).format("YYYY-MM-DD")}</Typography>
+                                                                                <Typography>{item.producto.descripcion}</Typography>
                                                                             </TableCell>
                                                                             <TableCell align="right">
-                                                                                <TextField id="empaques" label="Empaques" value={edit.empaques} onChange={(e) => handleChange('empaques', e.target.value)} />
+                                                                                <TextField type="number" id="cantidad" label="Cantidad" value={edit.cantidad} onChange={(e) => handleChange('cantidad', e.target.value)} />
                                                                             </TableCell>
                                                                             <TableCell align="right">
-                                                                                <TextField id="costo" label="Costo" value={edit.costo} onChange={(e) => handleChange('costo', e.target.value)} />
+                                                                                <TextField type="number" id="empaques" label="Empaques" value={edit.empaques} onChange={(e) => handleChange('empaques', e.target.value)} />
+                                                                            </TableCell>
+                                                                            <TableCell align="right">
+                                                                                <TextField type="number" id="costo" label="Costo" value={edit.costo} onChange={(e) => handleChange('costo', e.target.value)} />
                                                                             </TableCell>
                                                                             <TableCell align="right">
                                                                                 <TextField InputProps={{ readOnly: true, }} id="importe" label="Importe" value={edit.importe} onChange={(e) => handleChange('importe', e.target.value)} />
