@@ -134,7 +134,7 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
     const handleClose = () => {
         setItemSelected(null)
         setItems([])
-        // setTotal(0)
+        setCliente(clientes[0])
         close()
     }
     return (
