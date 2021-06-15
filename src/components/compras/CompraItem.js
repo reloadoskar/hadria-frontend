@@ -3,7 +3,6 @@ import { Divider, Grid, MenuItem, Typography } from '@material-ui/core'
 import { formatNumber } from '../Tools';
 import useStyles from '../hooks/useStyles';
 export default function CompraItem(props){
-    const {verUbicacion = false} =props
     const [item, setItem] = useState(null)
     const classes = useStyles()
     useEffect(()=>{

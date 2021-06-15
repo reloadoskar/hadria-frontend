@@ -4,8 +4,9 @@ import { useSnackbar } from 'notistack'
 import {
     Button,
     Container,
-    Grid} from '@material-ui/core';
-
+    Grid,
+    Typography} from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress'
 import DetalleCompra from './DetalleCompra'
 import Buscador from './Buscador'
 
@@ -124,7 +125,13 @@ function Compras(props) {
                         addProvedor={addProvedor}
                     />
                 </Grid>
-                {compras === null ? null :
+                {compras === null ? 
+                    <Grid item xs={12}>                    
+                        <Typography align="center" component="div">
+                            <CircularProgress/>
+                        </Typography>
+                    </Grid>
+                :
                     compras.map((compra, index) => (
                         <Grid item xs={12} key={index}>                    
                             <CompraBasic compra={compra}  openConfirm={openConfirm} editCompra={editCompra} verCompra={showVerCompra}/>
