@@ -78,13 +78,7 @@ export default function VentaItem(props){
                             </Typography>
                         </Grid>
                         :
-                        <Grid item xs={12} sm={1}>
-                            <Typography align="right">
-                                <IconButton size="small" onClick={() => printTicket(item.venta)}>
-                                    <ReceiptIcon fontSize="small" />
-                                </IconButton>
-                            </Typography>
-                        </Grid>
+                        null
                     }
                 </Grid>
                 <Divider />
