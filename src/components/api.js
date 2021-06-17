@@ -1172,6 +1172,25 @@ export const ticketCancelaVenta = (venta) => {
         })
 }
 
+export const ticketTraspaso = (traspaso) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/traspaso.php', traspaso)
+        .then( res => {
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'warning',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
+}
+
 // PRODUCCIONES
 
 export const getProduccions = () => {
