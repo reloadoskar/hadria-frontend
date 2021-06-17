@@ -118,7 +118,8 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
         addVenta(venta).then(res => {
             setGuardando(false)
             ticketSalida(res.venta)
-            ticketVenta(res.venta).then(res=> {
+            venta.folio = res.venta.folio
+            ticketVenta(venta).then(res=> {
                 if(res.status === 'warning'){
                     showMessage(res.message, res.status)
                 }else{
