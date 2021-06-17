@@ -49,8 +49,8 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
     const [tipoPago, setTipoPago] = useState("CONTADO")
     const [efectivo, setEfectivo] = useState(total)
     const [cambio, setCambio] = useState(0)
-    const [acuenta, setAcuenta] = useState(0)
-    const [saldo, setSaldo] = useState(total)
+    const [acuenta, setAcuenta] = useState('')
+    const [saldo, setSaldo] = useState('')
     
     const [reprintDialog, setReprintDialog] = useState(false)
     
@@ -114,6 +114,7 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                 setTipoPago(e)
                 handleChange('acuenta', (cliente.credito_disponible - total) * -1)
             }else{
+                setSaldo(total)
                 setTipoPago(e)
             }
         }
@@ -123,8 +124,8 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
         setTipoPago("CONTADO")
         setEfectivo(0)
         setCambio(0)
-        setAcuenta(0)
-        setSaldo(0)
+        setAcuenta('')
+        setSaldo('')
     }
 
     // const updateCLientCredit = () => {
