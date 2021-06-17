@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
-import CompraBasic from './CompraBasic'
 import { useSnackbar } from 'notistack'
 import {
     Button,
     Container,
     Grid,
-    Typography} from '@material-ui/core';
+    Typography
+} from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@material-ui/core/CircularProgress'
-import DetalleCompra from './DetalleCompra'
-import Buscador from './Buscador'
 
 import useCompras from '../hooks/useCompras';
 import useProducts from '../hooks/useProducts'
@@ -16,7 +15,9 @@ import useProvedors from '../hooks/useProvedors';
 import useUbicacions from '../hooks/useUbicacions';
 import useTipoCompras from '../hooks/useTipoCompras';
 
-import AddIcon from '@material-ui/icons/Add';
+import DetalleCompra from './DetalleCompra'
+import Buscador from './Buscador'
+import CompraBasic from './CompraBasic'
 import useStyles from '../hooks/useStyles'
 import CrearCompra from './CrearCompra';
 import ConfirmDialog from './ConfirmDialog'
