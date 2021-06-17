@@ -8,6 +8,7 @@ const init = {
     destino:'',
     importe: 0,
 }
+
 export default function Traspasar({save, ubicacions, open, close}){
     const classes = useStyles()
     const [traspaso, setTraspaso] = useState(init)
@@ -22,9 +23,10 @@ export default function Traspasar({save, ubicacions, open, close}){
         e.preventDefault()
         setGuardando(true)
         save(traspaso)
-
+        
         setGuardando(false)
         setTraspaso(init)
+        close()
     }
     return(
         <Dialog
