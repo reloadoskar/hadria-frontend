@@ -70,24 +70,23 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                 return (
                                     <TableRow key={index}>
                                         <TableCell>
-                                            <Typography >
-                                                {item.ubicacion.nombre}
-                                            </Typography>
+                                            <Typography className={classes.sobreTexto} children={item.ubicacion.nombre} />
+                                            <Typography children={item.producto.descripcion} />
                                         </TableCell>
                                         <TableCell
                                             children={
                                             item.producto.unidad.unidad === item.producto.empaque.empaque ?
-                                                <Typography align="right" children={item.cantidad + " " + item.producto.unidad.unidad} />
+                                                <Typography align="right" children={item.cantidad + " " + item.producto.unidad.abr} />
                                                 :
-                                                <Typography align="right" children={item.empaques + " " + item.producto.empaque.empaque + " / " + item.cantidad + " " + item.producto.unidad.unidad} />
+                                                <Typography align="right" children={item.empaques + " " + item.producto.empaque.abr + " / " + item.cantidad + " " + item.producto.unidad.unidad} />
                                             }
                                         />
                                         <TableCell
                                             children={ 
                                                 item.producto.unidad.unidad === item.producto.empaque.empaque ?
-                                                    <Typography align="right" children={ cantVendido + " " + item.producto.unidad.unidad } />
+                                                    <Typography align="right" children={ cantVendido + " " + item.producto.unidad.abr } />
                                                     :
-                                                    <Typography align="right" children={ cantVendido + " " + item.producto.unidad.unidad + " / " + empVendido + " " + item.producto.empaque.empaque } />
+                                                    <Typography align="right" children={ cantVendido + " " + item.producto.unidad.abr + " / " + empVendido + " " + item.producto.empaque.abr } />
                                                 }
                                         />
                                         <TableCell>
@@ -100,10 +99,10 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                             <Typography 
                                                 align="right" 
                                                 children={
-                                                    item.producto.unidad.unidad === item.producto.empaque.empaque ?
-                                                            item.stock + " " + item.producto.unidad.unidad
+                                                    item.producto.unidad.unidad === item.producto.empaque.abr ?
+                                                            item.stock + " " + item.producto.unidad.abr
                                                         :
-                                                            item.empaquesStock + " " + item.producto.empaque.empaque + " / " + item.stock + " " + item.producto.unidad.unidad
+                                                            item.empaquesStock + " " + item.producto.empaque.abr + " / " + item.stock + " " + item.producto.unidad.abr
                                                     }
                                                 />
                                         </TableCell>
@@ -150,9 +149,9 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                         align="right"
                                         children={
                                             item.producto.unidad.unidad === item.producto.empaque.empaque ?
-                                                <Typography align="right" children={item.cantidad + " " + item.producto.unidad.unidad} />
+                                                <Typography align="right" children={item.cantidad + " " + item.producto.unidad.abr} />
                                                 :
-                                                <Typography align="right" children={item.empaques + " " + item.producto.empaque.empaque + " / " + item.cantidad + " " + item.producto.unidad.unidad} />
+                                                <Typography align="right" children={item.empaques + " " + item.producto.empaque.abr + " / " + item.cantidad + " " + item.producto.unidad.abr} />
                                         } 
                                     />
                                     <TableCell>
@@ -162,7 +161,7 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                         <Typography align="right" color="secondary" children={"$" + formatNumber(item.importe)} />
                                     </TableCell>
                                     <TableCell>
-                                        <Typography align="right" children={formatNumber(cantVendido) + " " + item.producto.unidad.unidad} />
+                                        <Typography align="right" children={formatNumber(cantVendido) + " " + item.producto.unidad.abr} />
                                     </TableCell>
                                     <TableCell>
                                         <Typography align="right" children={"$" + formatNumber(precioProm,2)} />
@@ -173,10 +172,10 @@ export default function ResumenProductos ({ tipoCompra, data, calcVentasItem, fo
                                     <TableCell>
                                         <Typography variant="body2" align="right" 
                                             children={
-                                                item.producto.unidad.unidad === item.producto.empaque.empaque ?
+                                                item.producto.unidad.unidad === item.producto.empaque.abr ?
                                                     item.stock + " " + item.producto.unidad.unidad
                                                     :
-                                                    item.empaquesStock + " " + item.producto.empaque.empaque + " / " + item.stock + " " + item.producto.unidad.unidad
+                                                    item.empaquesStock + " " + item.producto.empaque.abr + " / " + item.stock + " " + item.producto.unidad.abr
                                             }
                                         />
                                     </TableCell>
