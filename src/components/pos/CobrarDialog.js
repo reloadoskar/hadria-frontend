@@ -178,19 +178,11 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
         // ticketVenta(venta)
     }
 
-    const handleKeyPress = (e) => {
-        if(e.key === "r" || e.key === "R"){
-            
-            handleSubmit(e)
-        }
-    }
-
     return (
         <React.Fragment>
         <Dialog 
             fullWidth
             maxWidth="sm"
-            onKeyPress={(e) => handleKeyPress(e)}
             open={open} onClose={() => handleClose('cobrarDialog')} aria-labelledby="form-dialog-title">
 
             <React.Fragment>
@@ -312,7 +304,7 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                         type="submit" 
                         className={ guardando ? classes.botonGenerico : classes.botonCosmico} 
                         disabled={efectivo >= total ? false : true}>
-                        { guardando ? "Espere..." : "Registrar (r)"}
+                        { guardando ? "Espere..." : "Registrar"}
                     </Button>
                 </DialogActions>
             </form>
