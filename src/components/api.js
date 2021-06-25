@@ -1,7 +1,7 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken'
 // import jwt_decode from 'jwt-decode'
-const URL = process.env.REACT_APP_API_TEST
+const URL = process.env.REACT_APP_API_URL
 let token = false
 let decoded = false
 if(localStorage.usertoken){
