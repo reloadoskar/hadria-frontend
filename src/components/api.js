@@ -1,7 +1,7 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken'
 // import jwt_decode from 'jwt-decode'
-const URL = process.env.REACT_APP_API_URL
+const URL = process.env.REACT_APP_API_TEST
 let token = false
 let decoded = false
 if(localStorage.usertoken){
@@ -31,18 +31,16 @@ export const register = (newClient) => {
         })
 }
 
-export const logIn = user => {
+export const login = user => {
     try{
         return axios
             .post(url + 'user/login' , user)
             .then( res => {
-                localStorage.setItem('usertoken', res.data.token)
-                return res.data
+                return res
             })
             .catch(err => {
                 err.message = "Error de red, no hay conexión con la base de datos";
                 err.status = 'error'
-                // console.log(err)
                 return err
             })
 
