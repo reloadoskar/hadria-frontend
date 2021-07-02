@@ -8,7 +8,7 @@ export default function Items({inventario, selectItem}){
                 inventario.length === 0 ?
                     <Typography align="center" >No hay productos</Typography>
                     :
-                    inventario.filter(item => item.stock > 1 ).map( (item, i) => (
+                    inventario.filter(item => item.stock >= 1 ).map( (item, i) => (
                         <CompraItem elitem={item} key={i} action={selectItem} />
                     ))
             }

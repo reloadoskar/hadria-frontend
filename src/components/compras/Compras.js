@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import CompraBasic from './CompraBasic'
 import { useSnackbar } from 'notistack'
 import {
     Button,
     Container,
-    Grid} from '@material-ui/core';
+    Grid
+} from '@material-ui/core';
 
 import DetalleCompra from './DetalleCompra'
 import Buscador from './Buscador'
@@ -19,11 +19,12 @@ import AddIcon from '@material-ui/icons/Add';
 import useStyles from '../hooks/useStyles'
 import CrearCompra from './CrearCompra';
 import ConfirmDialog from './ConfirmDialog'
-import VerCompra from './VerCompra';
+import Compra from './Compra';
+import ListaCompras from './ListaCompras';
 
 
 function Compras(props) {
-    const {compras, crearCompra, cancelarCompra} = useCompras()
+    const compras = useCompras()
     const {products, addProduct } = useProducts()
     const {provedors, addProvedor} = useProvedors()
     const {ubicacions} = useUbicacions();
@@ -39,7 +40,7 @@ function Compras(props) {
     const [confirm, setConfirm] = useState(false)
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     const crear = (compra) => {
-        return crearCompra(compra).then(res => {
+        return compras.crearCompra(compra).then(res => {
             closeDialog()
             return res
         })
@@ -71,7 +72,7 @@ function Compras(props) {
 
 
     function cancelar(){
-        cancelarCompra(compra._id).then(res => {
+        compras.cancelarCompra(compra._id).then(res => {
             closeConfirm()
             if (res.status === 'error') {
             } else {
@@ -124,13 +125,7 @@ function Compras(props) {
                         addProvedor={addProvedor}
                     />
                 </Grid>
-                {compras === null ? null :
-                    compras.map((compra, index) => (
-                        <Grid item xs={12} key={index}>                    
-                            <CompraBasic compra={compra}  openConfirm={openConfirm} editCompra={editCompra} verCompra={showVerCompra}/>
-                        </Grid>
-                    ))
-                }
+                <ListaCompras compras={compras.compras} editCompra={editCompra} verCompra={showVerCompra} />
             </Grid>
             <DetalleCompra 
                 compra={compra} 
@@ -142,12 +137,7 @@ function Compras(props) {
                 provedors={provedors}
             />
             <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelar}/>
-            <VerCompra 
-                compra={compra} 
-                isOpen={verCompra} 
-                handleClose={closeVerCompra} 
-                cerrar={cancelarCompra}                
-            />
+            <Compra compra={compra} open={verCompra} close={closeVerCompra} compras={compras} />
         </Container>
     )
 }

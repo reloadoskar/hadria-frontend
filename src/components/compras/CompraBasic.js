@@ -20,52 +20,48 @@ export default function CompraBasic(props){
     }
     return (
         <React.Fragment>
-            {compraLocal === null ? <CircularProgress /> :
-                <Card>
-                    <CardContent>
-                    <Grid container >
-                        <Grid item xs={12} sm={6}>
-                            <Typography>#{compraLocal.folio} {compraLocal.clave} | {compraLocal.provedor.nombre}</Typography>
-                        </Grid>
-                        <Grid item xs={6} sm={2}>
-                            <Typography>{compraLocal.fecha}</Typography>
-                        </Grid>
-                        <Grid item xs={6} sm={2}>
-                            <Typography align="right">{compraLocal.status}</Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={2}>
-                            <Typography align="right">
-                                <IconButton
-                                    size="small"
-                                    disabled
-                                >
-                                    <CompareArrowsIcon />
-                                </IconButton>
-                                <IconButton
-                                    size="small"
-                                    onClick={() => handleVerCompra(compra)}
-                                >
-                                    <VisibilityIcon />
-                                </IconButton>
-                                <IconButton
-                                    size="small"
-                                    onClick={() => editCompra(compra)}
-                                >
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton
-                                    size="small"
-                                    disabled={compra.status === "CANCELADO" ? true : false}
-                                    aria-label="delete"
-                                    onClick={() => openConfirm(compra)}
-                                >
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    </CardContent>
-                </Card>
+            {compraLocal === null ? null :
+            <Grid item container xs={12}>
+                <Grid item xs={12} sm={2}>
+                    <Typography>#{compraLocal.folio} {compraLocal.fecha}</Typography>
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                    <Typography>{compraLocal.clave} | {compraLocal.provedor.nombre}</Typography>
+                </Grid>
+                <Grid item xs={6} sm={2}>
+                    <Typography align="right">{compraLocal.status}</Typography>
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                    <Typography align="right">
+                        <IconButton
+                            size="small"
+                            disabled
+                            >
+                            <CompareArrowsIcon />
+                        </IconButton>
+                        <IconButton
+                            size="small"
+                            onClick={() => handleVerCompra(compra)}
+                            >
+                            <VisibilityIcon />
+                        </IconButton>
+                        <IconButton
+                            size="small"
+                            onClick={() => editCompra(compra)}
+                            >
+                            <EditIcon />
+                        </IconButton>
+                        <IconButton
+                            size="small"
+                            disabled={compra.status === "CANCELADO" ? true : false}
+                            aria-label="delete"
+                            onClick={() => openConfirm(compra)}
+                            >
+                            <DeleteIcon />
+                        </IconButton>
+                    </Typography>
+                </Grid>
+            </Grid>
             }
         </React.Fragment>
     )
