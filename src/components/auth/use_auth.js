@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext, createContext } from "react"
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
-const URL = process.env.REACT_APP_API_URL
+import {login as appLogin}  from '../api'
+
 const authContext = createContext();
 
 export function ProvideAuth({ children }) {
@@ -29,7 +30,8 @@ function useProvideAuth() {
 
     const login = async (data) => {
         try{
-            const res = await axios.post(URL + 'user/login', data)
+
+            const res = await appLogin(data)
             if( res.data.status === 'success'){
                 localStorage.setItem('usertoken', res.data.token)
                 // setToken(res.data.token)

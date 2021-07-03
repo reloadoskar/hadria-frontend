@@ -49,8 +49,8 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
     const [tipoPago, setTipoPago] = useState("CONTADO")
     const [efectivo, setEfectivo] = useState(total)
     const [cambio, setCambio] = useState(0)
-    const [acuenta, setAcuenta] = useState(0)
-    const [saldo, setSaldo] = useState(total)
+    const [acuenta, setAcuenta] = useState('')
+    const [saldo, setSaldo] = useState('')
     
     const [reprintDialog, setReprintDialog] = useState(false)
     
@@ -114,6 +114,7 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                 setTipoPago(e)
                 handleChange('acuenta', (cliente.credito_disponible - total) * -1)
             }else{
+                setSaldo(total)
                 setTipoPago(e)
             }
         }
@@ -123,8 +124,8 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
         setTipoPago("CONTADO")
         setEfectivo(0)
         setCambio(0)
-        setAcuenta(0)
-        setSaldo(0)
+        setAcuenta('')
+        setSaldo('')
     }
 
     // const updateCLientCredit = () => {
@@ -177,19 +178,11 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
         // ticketVenta(venta)
     }
 
-    const handleKeyPress = (e) => {
-        if(e.key === "r" || e.key === "R"){
-            
-            handleSubmit(e)
-        }
-    }
-
     return (
         <React.Fragment>
         <Dialog 
             fullWidth
             maxWidth="sm"
-            onKeyPress={(e) => handleKeyPress(e)}
             open={open} onClose={() => handleClose('cobrarDialog')} aria-labelledby="form-dialog-title">
 
             <React.Fragment>
@@ -311,7 +304,7 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                         type="submit" 
                         className={ guardando ? classes.botonGenerico : classes.botonCosmico} 
                         disabled={efectivo >= total ? false : true}>
-                        { guardando ? "Espere..." : "Registrar (r)"}
+                        { guardando ? "Espere..." : "Registrar"}
                     </Button>
                 </DialogActions>
             </form>

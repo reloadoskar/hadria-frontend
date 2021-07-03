@@ -5,22 +5,19 @@ import {
     Container,
     Grid
 } from '@material-ui/core';
-
-import DetalleCompra from './DetalleCompra'
-import Buscador from './Buscador'
-
+import AddIcon from '@material-ui/icons/Add'
 import useCompras from '../hooks/useCompras';
 import useProducts from '../hooks/useProducts'
 import useProvedors from '../hooks/useProvedors';
 import useUbicacions from '../hooks/useUbicacions';
 import useTipoCompras from '../hooks/useTipoCompras';
-
-import AddIcon from '@material-ui/icons/Add';
+import Buscador from './Buscador'
 import useStyles from '../hooks/useStyles'
 import CrearCompra from './CrearCompra';
 import ConfirmDialog from './ConfirmDialog'
 import Compra from './Compra';
 import ListaCompras from './ListaCompras';
+import DetalleCompra from './DetalleCompra'
 
 
 function Compras(props) {
@@ -126,6 +123,7 @@ function Compras(props) {
                     />
                 </Grid>
                 <ListaCompras compras={compras.compras} editCompra={editCompra} verCompra={showVerCompra} />
+
             </Grid>
             <DetalleCompra 
                 compra={compra} 

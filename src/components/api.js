@@ -31,18 +31,16 @@ export const register = (newClient) => {
         })
 }
 
-export const logIn = user => {
+export const login = user => {
     try{
         return axios
             .post(url + 'user/login' , user)
             .then( res => {
-                localStorage.setItem('usertoken', res.data.token)
-                return res.data
+                return res
             })
             .catch(err => {
                 err.message = "Error de red, no hay conexión con la base de datos";
                 err.status = 'error'
-                // console.log(err)
                 return err
             })
 
@@ -1156,6 +1154,25 @@ export const ticketVentasCorte = (ventas) => {
 export const ticketCancelaVenta = (venta) => {
     return axios
         .post('http://localhost:8080/ticket-hadria/cancelaVenta.php', venta)
+        .then( res => {
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
+
+                return {
+                    status: 'warning',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
+}
+
+export const ticketTraspaso = (traspaso) => {
+    return axios
+        .post('http://localhost:8080/ticket-hadria/traspaso.php', traspaso)
         .then( res => {
             return res
         })

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {useAuth} from '../auth/use_auth'
 
 // import Balance from './Balance'
-
+import {ticketTraspaso} from '../api'
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
 import CuentasxPagar from '../cxp/CuentasxPagar'
 // import Produccions from '../produccions/Produccions'
@@ -191,29 +191,44 @@ export default function Dashboard(props) {
     }
 
     const crearTraspaso = (traspaso) => {
-        egresos.addEgreso({
+        let eg = {
             ubicacion: traspaso.origen._id,
             tipo: "TRASPASO",
             concepto: "TRASPASO",
             descripcion: traspaso.referencia,
             fecha: traspaso.fecha,
             importe: traspaso.importe, 
-        })
-        .catch(()=> {
-            showMessage("No se guardo el egreso.", "error")
-        })
+        }
 
-        ingresos.addIngreso({
+        let ing = {
             ubicacion: traspaso.destino._id,
             concepto: "TRASPASO",
             descripcion: traspaso.referencia,
             fecha: traspaso.fecha,
             tipoPago: "EFECTIVO",
             importe: traspaso.importe
+        }
+
+        egresos.addEgreso(eg)
+        .then(() => {
+            
+            ingresos.addIngreso(ing)
+            .then(()=>{
+                showMessage("Traspaso guardado", "success")
+                ticketTraspaso(traspaso).then(res => {
+                    if(res.status === 'warning'){
+                        showMessage(res.message, res.status)
+                    }
+                })
+            })
+            .catch(()=> {
+                showMessage("No se guardo el ingreso.", "error")
+            })
         })
         .catch(()=> {
-            showMessage("No se guardo el ingreso.", "error")
+            showMessage("No se guardo el egreso.", "error")
         })
+
     }
     return (
         <Container maxWidth="md">

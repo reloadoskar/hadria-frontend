@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState} from 'react'
 import { Dialog, DialogTitle, DialogContent, Grid, TextField, MenuItem, DialogActions, Button, Zoom, Typography } from '@material-ui/core'
 import moment from 'moment'
 import useStyles from '../hooks/useStyles'
@@ -8,6 +8,7 @@ const init = {
     destino:'',
     importe: 0,
 }
+
 export default function Traspasar({save, ubicacions, open, close}){
     const classes = useStyles()
     const [traspaso, setTraspaso] = useState(init)
@@ -22,9 +23,10 @@ export default function Traspasar({save, ubicacions, open, close}){
         e.preventDefault()
         setGuardando(true)
         save(traspaso)
-
+        
         setGuardando(false)
         setTraspaso(init)
+        close()
     }
     return(
         <Dialog

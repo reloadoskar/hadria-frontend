@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import { Button, Dialog, DialogContent, DialogTitle, Grid, TextField, Typography, Zoom, MenuItem, DialogActions } from '@material-ui/core'
 import moment from 'moment'
 import {formatNumber} from '../Tools'
