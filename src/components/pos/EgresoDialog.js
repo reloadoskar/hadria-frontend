@@ -9,7 +9,7 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
     const initialData ={
         tipo: 'GASTO DE CAJA',
         concepto: '',
-        compra: 1,
+        compra: 0,
         descripcion: '',
 
         importe: 0,

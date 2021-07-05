@@ -70,6 +70,7 @@ export default function Compra({open, close, compra, openConfirm, editCompra, co
                         <Grid item xs={12} sm={6}>
                             <Typography className={classes.textoMiniFacheron} >{laCompra.compra.fecha}</Typography>
                             <Typography variant ="h6">#{laCompra.compra.folio} {laCompra.compra.clave} | {laCompra.compra.provedor.nombre} | {laCompra.compra.tipoCompra.tipo}</Typography>
+                            <Typography className={classes.textoMiniFacheron} >Remision: {laCompra.compra.remision}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6} container justify="flex-end">
                             <IconButton
@@ -78,12 +79,7 @@ export default function Compra({open, close, compra, openConfirm, editCompra, co
                             >
                                 <CompareArrowsIcon />
                             </IconButton>
-                            <IconButton
-                                size="small"
-                                onClick={() => editCompra(laCompra)}
-                            >
-                                <EditIcon />
-                            </IconButton>
+                            
                             <IconButton
                                 size="small"
                                 disabled={laCompra.status === "CANCELADO" ? true : false}
@@ -107,14 +103,14 @@ export default function Compra({open, close, compra, openConfirm, editCompra, co
                             ))} */}
                         </Grid>
                         <Grid item xs={12}>
-                            <ResumenVentas items={laCompra.ventasGroup}/>
+                            <ResumenVentas items={laCompra.ventasGroup} compra={laCompra.compra}/>
                         </Grid>
 
                         <Grid item xs={12} container>
                             <Grid item xs={12}>
                                 <Typography align="center" className={classes.textoMirame} >Gastos</Typography>
                                 <Divider />
-                            {laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO").map((gasto, i) => (
+                            {laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO" || gasto.tipo=== "GASTO A COMPRA").map((gasto, i) => (
                                 <EgresoBasic egreso={gasto} key={i} />
                             ))}
                                 <Divider />
@@ -124,7 +120,7 @@ export default function Compra({open, close, compra, openConfirm, editCompra, co
                                     TOTAL GASTOS:
                                 </Typography>
                                 <Typography align="right" className={classes.textoSangron} >
-                                    ${formatNumber(sumImporte(laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO")),2)}
+                                    ${formatNumber(sumImporte(laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO" || gasto.tipo=== "GASTO A COMPRA")),2)}
                                 </Typography>
                             </Grid>
                         </Grid>
