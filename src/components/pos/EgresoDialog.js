@@ -9,7 +9,7 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
     const initialData ={
         tipo: 'GASTO DE CAJA',
         concepto: '',
-        compra: 0,
+        compra: 1,
         descripcion: '',
 
         importe: 0,
@@ -62,6 +62,7 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
         e.preventDefault()
         if( hasNull(values) ) {
             showMessage("Faltan datos", 'error')
+            setGuardando(false)
         } 
         else{
             var egreso = {
