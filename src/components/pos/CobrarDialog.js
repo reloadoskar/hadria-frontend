@@ -12,13 +12,11 @@ function ReprintDialog(props) {
 
     const handleCancel = () => {
         cancel()
-       // return false
     }
 
     const handleOk = () => {
         ok()
         handleCancel()
-        //return true
     }
     return (
         <Dialog
@@ -49,8 +47,8 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
     const [tipoPago, setTipoPago] = useState("CONTADO")
     const [efectivo, setEfectivo] = useState(total)
     const [cambio, setCambio] = useState(0)
-    const [acuenta, setAcuenta] = useState('')
-    const [saldo, setSaldo] = useState('')
+    const [acuenta, setAcuenta] = useState(0)
+    const [saldo, setSaldo] = useState(0)
     
     const [reprintDialog, setReprintDialog] = useState(false)
     
@@ -124,16 +122,9 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
         setTipoPago("CONTADO")
         setEfectivo(0)
         setCambio(0)
-        setAcuenta('')
-        setSaldo('')
+        setAcuenta(0)
+        setSaldo(0)
     }
-
-    // const updateCLientCredit = () => {
-    //     let cliente = values.cliente
-
-    //     cliente.credito_disponible -= values.saldo
-    //     setValues({...values, cliente: cliente})
-    // }
     
     const handleSubmit = (e) => {
         e.preventDefault()      
@@ -145,37 +136,7 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
             saldo: saldo,
         }
         guardarVenta(venta)
-        // crearVenta()
-        //     .then(res => {
-        //         showMessage(res.message, res.status)
-        //         clearFields()
-        //         close('cobrarDialog')
-        //         ticketSalida(res.venta)
-        //         ticketVenta(res.venta).then(res=> {
-        //             if(res.status === 'warning'){
-        //                 showMessage(res.message, res.status)
-        //                 resetVenta()
-        //             }else{
-        //                 setReprintDialog(true)
-        //             }
-        //         })
-        //         // rePrintTicket()
-        //         setLoading(false)
-        //     })
-        //     .catch(err => {
-        //         close('cobrarDialog')
-        //         setLoading(false)
-        //         console.log(err)
-
-        //     })
-    }
-
-    // const rePrintTicket = () =>{
-    //     setReprintDialog(true)
-    // }
-
-    const printTicket = () => {
-        // ticketVenta(venta)
+        
     }
 
     return (
@@ -310,7 +271,9 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
             </form>
             </React.Fragment>    
         </Dialog>
-        <ReprintDialog open={reprintDialog} cancel={cancelReprint} ok={printTicket} />
+        <ReprintDialog open={reprintDialog} cancel={cancelReprint} 
+            // ok={printTicket} 
+        />
         </React.Fragment>
     )
 }

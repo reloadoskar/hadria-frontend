@@ -86,6 +86,8 @@ const useStyles = makeStyles(theme => ({
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
         color: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
     },
     backgroundCustom: {
         // background: 'linear-gradient(30deg,'+ getRandomColor()+','+getRandomColor()+')',
@@ -288,7 +290,16 @@ const useStyles = makeStyles(theme => ({
         background: 'linear-gradient(45deg, #2CF6B3 30%, #2DEFF6 90%)',
         border: 0,
         // borderRadius: 3,
-        // boxShadow: '0 1px 5px 2px rgba(255, 105, 135, .3)',
+        boxShadow: '0 1px 5px 2px rgba(255, 105, 135, .3)',
+        color: 'black',
+        height: 48,
+        padding: '0 30px',
+    },
+    botonSatanico: {
+        background: 'linear-gradient(45deg, #e22e5d 30%, #9e2041 90%)',
+        border: 0,
+        borderRadius: 3,
+        boxShadow: '0 1px 5px 2px rgba(255, 105, 135, .3)',
         color: 'black',
         height: 48,
         padding: '0 30px',

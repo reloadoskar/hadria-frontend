@@ -1,34 +1,21 @@
 import React, {useEffect, useState} from 'react'
-import { Card, CardActions, CardHeader, CircularProgress, Dialog, DialogContent, Divider, Grid, IconButton, LinearProgress, Slide, Typography } from '@material-ui/core'
-import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import { Dialog, DialogContent, Divider, Grid, IconButton, LinearProgress, Slide, Typography } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import useStyles from '../hooks/useStyles'
 import ResumenVentas from '../ventas/ResumenVentas'
-import CompraItem from './CompraItem'
 import EgresoBasic from '../egresos/EgresoBasic'
 import {sumImporte, formatNumber} from '../Tools'
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
-export default function Compra({open, close, compra, openConfirm, editCompra, compras}){
+export default function Compra({open, close, compra, 
+    compras}){
     const [laCompra, setLaCompra] = useState(null)
-    const [ventaItems, setVentaItems] = useState([])
     const [saldo, setSaldo] = useState(0)
     const [total, setTotal] = useState(0)
     const [comision, setComision] = useState(0)
     const classes = useStyles()
 
-    const filtraVentaItems = (ventas) => {
-        let items = []
-        if(ventas.length > 0){
-            ventas.forEach(venta => {
-                venta.items.map(item => items.push(item))
-            });
-        }
-        return items
-    }
     useEffect(() => {
         if(compra){
             compras.findCompra(compra._id)
@@ -36,18 +23,15 @@ export default function Compra({open, close, compra, openConfirm, editCompra, co
                     setLaCompra(res.data)
                     let tot = calculaTotal(res.data)
                     setTotal(tot)
-
                     if(res.data.compra.tipoCompra.tipo === "CONSIGNACION"){
                         let com = 0
                         com = ( res.data.compra.provedor.comision / 100 ) * tot
                         setComision(com)
-
                         let sal = 0
                         sal = tot - com
                         setSaldo(sal)
                     }
                 })
-            setVentaItems(filtraVentaItems(compra.ventas))
         }
         return () => setLaCompra(null)
     },[compra, compras])
@@ -75,32 +59,12 @@ export default function Compra({open, close, compra, openConfirm, editCompra, co
                         <Grid item xs={12} sm={6} container justify="flex-end">
                             <IconButton
                                 size="small"
-                                disabled
-                            >
-                                <CompareArrowsIcon />
-                            </IconButton>
-                            
-                            <IconButton
-                                size="small"
-                                disabled={laCompra.status === "CANCELADO" ? true : false}
-                                aria-label="delete"
-                                onClick={() => openConfirm(laCompra)}
-                            >
-                                <DeleteIcon />
-                            </IconButton>
-                            <IconButton
-                                size="small"
                                 aria-label="close"
                                 onClick={close}
                             >
                                 <CloseIcon />
                             </IconButton>
                             
-                        </Grid>
-                        <Grid item xs={12}>
-                            {/* {laCompra.items.map((item,i) =>(
-                                <CompraItem elitem={item} key={i} />
-                            ))} */}
                         </Grid>
                         <Grid item xs={12}>
                             <ResumenVentas items={laCompra.ventasGroup} compra={laCompra.compra}/>

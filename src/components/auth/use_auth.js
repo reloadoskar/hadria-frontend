@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, createContext } from "react"
-import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import {login as appLogin}  from '../api'
 

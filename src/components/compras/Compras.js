@@ -19,7 +19,6 @@ import Compra from './Compra';
 import ListaCompras from './ListaCompras';
 import DetalleCompra from './DetalleCompra'
 
-
 function Compras(props) {
     const compras = useCompras()
     const {products, addProduct } = useProducts()
@@ -67,7 +66,6 @@ function Compras(props) {
         setCompra(null)
     }
 
-
     function cancelar(){
         compras.cancelarCompra(compra._id).then(res => {
             closeConfirm()
@@ -77,10 +75,10 @@ function Compras(props) {
             }
         })
     }
-    function openConfirm(compra){
-        setCompra(compra)
-        setConfirm(true)
-    }
+    // function openConfirm(compra){
+    //     setCompra(compra)
+    //     setConfirm(true)
+    // }
     function closeConfirm(){
         setCompra(null)
         setConfirm(false)

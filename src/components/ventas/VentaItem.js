@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { Grid, Typography, Divider, IconButton } from '@material-ui/core'
-import ReceiptIcon from '@material-ui/icons/Receipt';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { formatNumber } from '../Tools'
-import {ticketVenta } from "../api"
-import { useSnackbar } from 'notistack';
 export default function VentaItem(props){
     const {basic=false, eliminar, index} = props
-    const { enqueueSnackbar } = useSnackbar()
     const [item, setItem] = useState(null)
     useEffect(() => {
         if(props.item !== null){
@@ -16,20 +12,8 @@ export default function VentaItem(props){
         }
         return () => setItem(null)
     }, [props])
-
-    function printTicket(venta){
-		ticketVenta(venta).then(res=>{
-			if(res.status === 'warning'){
-                enqueueSnackbar(res.message, {variant: res.status} )
-            }
-            else{
-                enqueueSnackbar("Se imprimió la venta.", {variant: "success"})
-            }
-		})
-    }
     
     function borrar(index){
-        // console.log(index)
         eliminar(index, item)
     }
     return (

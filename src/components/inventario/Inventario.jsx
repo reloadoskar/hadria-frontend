@@ -14,7 +14,7 @@ export default function Inventario({ubicacions}){
     useEffect(() => {
         inventario.getInventarioGeneral()
         inventario.getInventarioXUbic()
-    },[])
+    })
     function toggleVerFolios(){
         setVerFolios(!verFolios)
     }

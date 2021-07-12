@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CircularProgress, Grid, IconButton, Card, Typography, CardContent } from '@material-ui/core'
+import { Grid, IconButton, Typography } from '@material-ui/core'
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';

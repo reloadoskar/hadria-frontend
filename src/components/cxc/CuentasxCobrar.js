@@ -1,18 +1,12 @@
 import React from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, Avatar, Card, CardContent, CardHeader, IconButton,
-    Grid, 
+import { Card, CardContent, CardHeader,
     Typography,
     LinearProgress, 
 } from '@material-ui/core'
-
-
-
-import {formatNumber, sumSaldo} from '../Tools'
-
+import {formatNumber} from '../Tools'
 import CuentasxcCliente from './CuentasxcCliente';
 export default function CuentasxCobrar(props) {
     const {cuentas, total} = props
-
     return (
         <Card>
             <CardHeader title="Créditos" />

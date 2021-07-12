@@ -1,66 +1,31 @@
 import React, { useState, useEffect } from 'react'
 import {useAuth} from '../auth/use_auth'
-
-// import Balance from './Balance'
 import {ticketTraspaso} from '../api'
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
 import CuentasxPagar from '../cxp/CuentasxPagar'
-// import Produccions from '../produccions/Produccions'
-// import EstadoDeCuenta from '../cxc/EstadoDeCuenta'
-// import UltimosMovimientos from './UltimosMovimientos'
-// import ComprasDash from './ComprasDash'
 import Pagar from './Pagar'
 import Traspasar from './Traspasar'
-// import Cobro from '../creators/Cobro'
-// import CrearIngreso from '../ingresos/CrearIngreso'
-// import CrearEgreso from '../egresos/CrearEgreso'
-// import useUser from '../hooks/useUser'
-// import useCompras from '../hooks/useCompras'
 import useUbicacions from '../hooks/useUbicacions'
 import useCortes from '../cortes/useCortes'
 import useIngresos from '../ingresos/useIngresos'
 import useEgresos from '../egresos/useEgresos'
-// import useBalance from '../balance/useBalance'
-import useStyles from '../hooks/useStyles'
 import { useSnackbar } from 'notistack';
-
-// import MenuIcon from '@material-ui/icons/Menu';
 import moment from 'moment'
-
 import { Grid, 
-    // IconButton, 
-    // Backdrop, 
     Typography, 
-    // CircularProgress, 
-    // Menu, 
-    // MenuItem,
     Container,
     ButtonGroup,
     Button,
-    // Card, 
 } from '@material-ui/core'
-
-// import PaymentIcon from '@material-ui/icons/Payment';
-// import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-// import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import Disponible from '../disponible/Disponible'
 import Corte from '../cortes/Corte'
 import Cobrar from './Cobrar'
-// import CrearCompra from '../compras/CrearCompra'
 
 export default function Dashboard(props) {
     const auth = useAuth()
     const ingresos = useIngresos()
     const egresos = useEgresos()
     const [corte, setCorte] = useState(null)
-    // const[bckdrpOpen, setBdopen] = useState(true)
-    // useEffect(()=> {
-    //     if(balance === null){
-    //         setBdopen(true)
-    //     }else{
-    //         setBdopen(false)
-    //     }
-    // },[balance])
     const [fecha, setFecha] = useState(null)
     const now = moment()
     useEffect(() => {
@@ -69,27 +34,13 @@ export default function Dashboard(props) {
         return () => setFecha(null)
     },[])
     const { enqueueSnackbar } = useSnackbar()
-    
-    // const { user } = useUser()
-    // const {compras, crearCompra, cancelarCompra} = useCompras()
     const{ubicacions} = useUbicacions()
-    const { 
-        // guardarCorte, 
-        // reabrirCorte, 
-        getCorte} = useCortes()
-    
-    const classes = useStyles();
+    const {getCorte} = useCortes()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
     const [traspasar, setTraspasar] = useState(false)
-    const [crearIngreso, setCrearIngreso] = useState(false)
-    const [crearEgreso, setCrearEgreso] = useState(false)
-    // const [anchorEl, setAnchorEl] = useState(null);
     const [corteDialog, setCorteDialog] = useState(false)
-    // const [dCrearCompra, setDCrearCompra] = useState(false)
-    
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
-
     const showPagar = () => {
         setPagar(true)
     }
@@ -113,31 +64,6 @@ export default function Dashboard(props) {
     const closeTraspasar = () => {
         setTraspasar(false)
     }
-
-    const showCreateIngreso = () =>{
-        setCrearIngreso(true)
-    }
-    const createIngreso = () => {
-
-    }
-    const closeCreateIngreso = () =>{
-        setCrearIngreso(false)
-    }
-
-    const showCreateEgreso = () => {
-        setCrearEgreso(true)
-    }
-    const closeCreateEgreso = () => {
-        setCrearEgreso(false)
-    }
-
-    // const openMenu = (e) => {
-    //     setAnchorEl(e.currentTarget);
-    // }
-
-    // const closeMenu = () => {
-    //     setAnchorEl(null)
-    // }
 
     function verCorte(ub){
         setCorteDialog(true)
@@ -167,16 +93,13 @@ export default function Dashboard(props) {
         setCorte(res)
     }
 
-    // function closedCrearCompra(){
-    //     setDCrearCompra(false)
-    // }
     const crearPago = (pago) => {
         return egresos.addPagoCxp(pago).then(res => {
             showMessage(res.message, res.status)
             ingresos.setUpdating(res)
         })
         .catch(err => {
-            showMessage("No se pudo guardar el pago", "error")
+            showMessage("No se pudo guardar el pago "+ err, "error")
         })
     }
 

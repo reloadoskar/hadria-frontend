@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState} from 'react'
+import { useMediaQuery } from '@material-ui/core';
+
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Dialog, DialogContent, DialogActions, Button, Grid, Typography, Menu, MenuItem } from '@material-ui/core'
+import { Dialog, Backdrop, DialogContent, DialogActions, Button, Grid, Typography, Menu, MenuItem } from '@material-ui/core'
 import CompraItems from '../compras/CompraItems'
 import CrearVentaItem from './CrearVentaItem'
 import CobrarDialog from '../pos/CobrarDialog'
@@ -9,12 +11,17 @@ import VentaItems from './VentaItems'
 import useStyles from '../hooks/useStyles'
 import {ticketVenta, ticketSalida} from '../api'
 import { formatNumber, sumImporte } from '../Tools'
+import Ticket from './Ticket'
 export default function CrearVenta({clientes, elinventario, laubicacion, lafecha, open, close, showMessage, addVenta}){
     const classes = useStyles()
     const [inventario, setInventario] = useState(null)
-    
+    const isMobile = useMediaQuery('(max-width: 760px)')
+
+    const [ticket, setTicket] = useState(null)
+    const [imprimir, setImprimir] = useState(null)
+
     const [itemSelected, setItemSelected] = useState(null)
-    const [anchorEl, setAnchorEl] = React.useState(null)
+    const [anchorEl, setAnchorEl] = useState(null)
     const [ventaItemDialog, setVentaItemDialog] = useState(false)
     const [cobrarDialog, setCobrarDialog] = useState(false)
     const [guardando, setGuardando] = useState(false)
@@ -23,14 +30,7 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
     const [fecha, setFecha] = useState(null)
     const [cliente, setCliente] = useState('')
     const [items, setItems] = useState([])
-    // const [total, setTotal] = useState(0)
-
-    // useEffect(() => {
-    //     if (items.length > 0){
-    //         setTotal(sumImporte(items))
-    //     }
-    //     return () => setTotal(0)
-    // },[items])
+  
     useEffect(() => {
         if (clientes){
             setCliente(clientes[0])
@@ -82,13 +82,11 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
         setItems(itms)
         item.itemOrigen.stock -= item.cantidad
         item.itemOrigen.empaquesStock -= item.empaques
-
     }
 
     function delItem(index, item){
         item.itemOrigen.stock += parseFloat(item.cantidad)
         item.itemOrigen.empaquesStock += parseFloat(item.empaques)
-        
         let itms = items
         itms.splice(index, 1)
         setItems(itms)
@@ -114,18 +112,23 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
         venta.items = items
         venta.cliente = cliente
         venta.total = sumImporte(items)
-        console.log(venta)
+        venta.importe = sumImporte(items)
         addVenta(venta).then(res => {
             setGuardando(false)
-            ticketSalida(res.venta)
             venta.folio = res.venta.folio
-            ticketVenta(venta).then(res=> {
-                if(res.status === 'warning'){
-                    showMessage(res.message, res.status)
-                }else{
-                    // setReprintDialog(true)
-                }
-            })
+            if(isMobile){
+                setTicket(venta)
+                setImprimir(true)
+            }else{
+                ticketVenta(venta).then(resb=> {
+                    if(resb.status === 'warning'){
+                        showMessage(resb.message, resb.status)
+                    }else{
+                        ticketSalida(res.venta)
+                        // setReprintDialog(true)
+                    }
+                })
+            }
             showMessage(res.message, res.status)
             toggleCobrarDialog()
             handleClose()
@@ -138,8 +141,16 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
         setCliente(clientes[0])
         close()
     }
+
+    const noPrint = () =>{
+        setImprimir(false)
+        setTicket(null)
+    }
     return (
-        <React.Fragment>            
+        <React.Fragment>    
+            <Backdrop className={classes.backdrop} open={imprimir} onClick={noPrint}>
+                <Ticket data={ticket} noPrint={noPrint}/>
+            </Backdrop>
             <Dialog
                 onKeyPress={(e) => handleKeyPress(e)}
                 open={open}
@@ -198,9 +209,6 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
                                 <Grid item xs={12}>
                                     <VentaItems items={items} eliminar={delItem}/>
                                 </Grid>
-
-                                
-
                             </Grid>
                         </DialogContent>
                         <DialogActions>
