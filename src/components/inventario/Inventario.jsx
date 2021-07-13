@@ -8,7 +8,7 @@ import Mover from './Mover'
 export default function Inventario({ubicacions}){
     const inventario = useInventario()
     const classes = useStyles()
-    const [verFolios, setVerFolios] = useState(false)
+    const [verFolios, setVerFolios] = useState(true)
     const [verUbicaciones, setVerUbicaciones] = useState(false)
     const [moverDialog, setMoverDialog] = useState(false)
     useEffect(() => {
@@ -59,7 +59,7 @@ export default function Inventario({ubicacions}){
                             checked={verFolios}
                             onChange={toggleVerFolios}
                         />
-                        Ver detalle
+                        Ver por UBICACION
                         <Switch 
                             checked={verUbicaciones}
                             onChange={toggleVerUbicaciones}

@@ -14,7 +14,7 @@ export default function VistaPorFolio(props){
                         <Card>
                             <CardHeader title={compra.folio + ":" + compra.clave} />
                             <CardContent>
-                                { compra.items.filter(item => item.stock > 0).map((item, i) => (
+                                { compra.items.filter(item => item.stock > 0.01).map((item, i) => (
                                     <CompraItem elitem={item} key={i} verUbicacion/>
                                 ))}
                                 <Grid container>

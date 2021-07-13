@@ -18,7 +18,7 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
     const isMobile = useMediaQuery('(max-width: 760px)')
 
     const [ticket, setTicket] = useState(null)
-    const [imprimir, setImprimir] = useState(null)
+    const [imprimir, setImprimir] = useState(false)
 
     const [itemSelected, setItemSelected] = useState(null)
     const [anchorEl, setAnchorEl] = useState(null)
