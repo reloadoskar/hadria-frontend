@@ -9,12 +9,12 @@ export default function VistaPorFolio(props){
     return (
         <React.Fragment>
             {compras === null ? null :
-                compras.filter(compra => sumStock(compra.items) > 1).map((compra, i) => (
+                compras.filter(compra => sumStock(compra.items) > 0).map((compra, i) => (
                     <Grid key={i} item xs={12}>
                         <Card>
                             <CardHeader title={compra.folio + ":" + compra.clave} />
                             <CardContent>
-                                { compra.items.filter(item => item.stock > 1).map((item, i) => (
+                                { compra.items.filter(item => item.stock > 0).map((item, i) => (
                                     <CompraItem elitem={item} key={i} verUbicacion/>
                                 ))}
                                 <Grid container>
