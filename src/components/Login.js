@@ -95,7 +95,7 @@ export default function Login(){
                                     </Typography>
                             </Slide>
                             :   
-                            <Grid container spacing={2} direction="row" justify="center" alignItems="center">                                
+                            <Grid container spacing={2} direction="row" justifyContent="center" alignItems="center">                                
                                 <Grid item xs={12}>
                                     <TextField
                                         id="email"
@@ -128,7 +128,7 @@ export default function Login(){
                     </CardContent>
                     {cargando === true ? null :
                         <CardActions>
-                            <Grid container justify="flex-end"  >
+                            <Grid container justifyContent="flex-end"  >
                                 <Button 
                                     className={classes.botonGenerico}
                                     disabled={!usuario || !password || cargando ? true : false}

@@ -32,9 +32,8 @@ const useCompras = () => {
 	}
 
 	const cerrarCompra = (id) => {
-		setUpCompras(true)
 		return closeCompra(id).then( res => {
-			setUpCompras(false)
+			setUpCompras(!upCompras)
 			return res
 		})
 	}

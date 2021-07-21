@@ -21,11 +21,14 @@ export const capitalize = (s) => {
 
 export const sumImporte = (list) => {
     let suma = 0
-
-    list.forEach(function(item){
-        suma += parseFloat(item.importe)
-    })
-    return suma
+    if( list === [] || list === undefined){
+        return suma
+    }else{
+        list.forEach(function(item){
+            suma += parseFloat(item.importe)
+        })
+        return suma
+    }
 }
 
 export const countCreditos = (list) => {

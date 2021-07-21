@@ -6,7 +6,7 @@ import Empleados from './components/empleados/Empleados'
 import Productos from './components/productos/Productos';
 import Clientes from './components/clientes/Clientes';
 import Provedores from './components/Provedores';
-import Ubicaciones from './components/Ubicaciones';
+import Ubicaciones from './components/ubicaciones/Ubicaciones';
 import Compras from './components/compras/Compras';
 import Inventario from './components/inventario/Inventario';
 import Dashboard from './components/dashboard/Dashboard';
@@ -14,7 +14,7 @@ import Header from './components/Header';
 import Pos from './components/pos/Pos';
 import ConceptosTabs from './components/conceptos/ConceptosTabs';
 import Ventas from './components/ventas/Ventas';
-import useUbicacions from './components/hooks/useUbicacions'
+import useUbicacions from './components/ubicaciones/useUbicacions'
 import useStyles from './components/hooks/useStyles'
 import { useAuth } from "./components/auth/use_auth.js"
 
@@ -23,7 +23,7 @@ export default function Router(props){
     let { path, url } = useRouteMatch();
     const classes = useStyles()
 
-    const {ubicacions} = useUbicacions()
+    const useUbic = useUbicacions()
     const [open, setOpen] = useState(false)
 
     const toggle = () => {
@@ -52,7 +52,7 @@ export default function Router(props){
                                             (props) => ( 
                                                 <Dashboard auth={auth.autenticado}  
                                                     user={auth.user}
-                                                    ubicacions={ubicacions}
+                                                    ubicacions={useUbic.ubicacions}
                                                 /> 
                                             )
                                         }
@@ -72,11 +72,14 @@ export default function Router(props){
                                     <Route exact path={`${path}/provedores`} component={Provedores}></Route>
                                 }
                                 {auth.user.level > 2 ? null :
-                                    <Route exact path={`${path}/ubicaciones`} component={Ubicaciones}></Route>
+                                    <Route exact path={`${path}/ubicaciones`}>
+                                        <Ubicaciones ubicacions={useUbic} />
+                                    </Route>
                                 }
                                 {auth.user.level > 2 ? null :
                                     <Route exact path={`${path}/compras`}>
                                         <Compras 
+                                            ubicacions={useUbic.ubicacions}
                                         />
                                     </Route>
                                 }
@@ -92,12 +95,12 @@ export default function Router(props){
                                 
                                 <Route exact path={`${path}/inventario`}>
                                     <Inventario 
-                                        ubicacions={ubicacions}
+                                        ubicacions={useUbic.ubicacions}
                                         />
                                 </Route>
                                 <Route exact path={`${path}/pos`}>
                                     <Pos 
-                                        ubicacions={ubicacions}
+                                        ubicacions={useUbic.ubicacions}
                                         user={auth.user}
                                     />
                                 </Route>

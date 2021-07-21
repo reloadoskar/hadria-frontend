@@ -15,7 +15,7 @@ import Ticket from './Ticket'
 export default function CrearVenta({clientes, elinventario, laubicacion, lafecha, open, close, showMessage, addVenta}){
     const classes = useStyles()
     const [inventario, setInventario] = useState(null)
-    const isMobile = useMediaQuery('(max-width: 760px)')
+    const isMobile = useMediaQuery('(max-width: 720px)')
 
     const [ticket, setTicket] = useState(null)
     const [imprimir, setImprimir] = useState(false)
@@ -125,7 +125,6 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
                         showMessage(resb.message, resb.status)
                     }else{
                         ticketSalida(res.venta)
-                        // setReprintDialog(true)
                     }
                 })
             }

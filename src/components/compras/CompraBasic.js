@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, IconButton, Typography } from '@material-ui/core'
+import { Card, CardContent, Grid, IconButton, Typography } from '@material-ui/core'
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -19,14 +19,15 @@ export default function CompraBasic(props){
         verCompra(compra)
     }
     return (
-        <React.Fragment>
+        <Card>
+            <CardContent>
             {compraLocal === null ? null :
             <Grid item container xs={12}>
                 <Grid item xs={12} sm={2}>
                     <Typography>#{compraLocal.folio} {compraLocal.fecha}</Typography>
                 </Grid>
                 <Grid item xs={6} sm={6}>
-                    <Typography>{compraLocal.clave} | {compraLocal.provedor.nombre}</Typography>
+                    <Typography>{compraLocal.provedor.nombre} | {compraLocal.clave} </Typography>
                 </Grid>
                 <Grid item xs={6} sm={2}>
                     <Typography align="right">{compraLocal.status}</Typography>
@@ -63,6 +64,7 @@ export default function CompraBasic(props){
                 </Grid>
             </Grid>
             }
-        </React.Fragment>
+            </CardContent>
+        </Card>
     )
 }

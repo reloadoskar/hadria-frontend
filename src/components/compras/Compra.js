@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Dialog, DialogContent, Divider, Grid, IconButton, LinearProgress, Slide, Typography } from '@material-ui/core'
+import { Dialog, Button, DialogContent, Divider, Grid, IconButton, LinearProgress, Slide, Typography } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import useStyles from '../hooks/useStyles'
 import ResumenVentas from '../ventas/ResumenVentas'
@@ -41,6 +41,11 @@ export default function Compra({open, close, compra,
         s = sumImporte(data.ventas) - sumImporte(data.egresos)
         return s
     }
+
+    const cerrarComp = (id) => {
+        compras.cerrarCompra(id)
+        close()
+    }
     return (
         <Dialog
             fullScreen
@@ -57,6 +62,13 @@ export default function Compra({open, close, compra,
                             <Typography className={classes.textoMiniFacheron} >Remision: {laCompra.compra.remision}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6} container justify="flex-end">
+                            <Button
+                                size="small"
+                                aria-label="Cerrar"
+                                onClick={()=>cerrarComp(laCompra.compra._id)}
+                            >
+                                cerrar compra
+                            </Button>
                             <IconButton
                                 size="small"
                                 aria-label="close"
