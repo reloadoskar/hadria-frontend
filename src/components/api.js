@@ -7,7 +7,7 @@ let decoded = false
 if(localStorage.usertoken){
     token = localStorage.usertoken
 }
-if(token !== undefined){
+if(token !== false){
     try{
         decoded = jwt.verify(token, "muffintop")
     }catch(err){
@@ -216,6 +216,21 @@ export const getUbicacion = (id) => {
         console.log(err)
     }
 }
+export const editUbicacion = (data) => {
+    try{
+        if(decoded){
+            return axios
+                .put(url_client + decoded.database + '/ubicacion/update/' + data._id, data)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+
 export const getUbicacions = () => {
     try{
         if(decoded){
@@ -383,6 +398,20 @@ export const updateCompra = (compra) => {
         if(decoded){
             return axios
                 .put(url + decoded.database + '/update/compra/' + compra._id, compra)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const recuperaVentasCompra = (id) => {
+    try{
+        if(decoded){
+            return axios
+                .get(url + decoded.database + '/compra/recuperarVentas/' + id)
                 .then( res => {
                     return res.data
                 })
