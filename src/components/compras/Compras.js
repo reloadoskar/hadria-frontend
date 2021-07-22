@@ -9,7 +9,7 @@ import AddIcon from '@material-ui/icons/Add'
 import useCompras from '../hooks/useCompras';
 import useProducts from '../hooks/useProducts'
 import useProvedors from '../hooks/useProvedors';
-import useUbicacions from '../hooks/useUbicacions';
+// import useUbicacions from '../hooks/useUbicacions';
 import useTipoCompras from '../hooks/useTipoCompras';
 import Buscador from './Buscador'
 import useStyles from '../hooks/useStyles'
@@ -19,11 +19,11 @@ import Compra from './Compra';
 import ListaCompras from './ListaCompras';
 import DetalleCompra from './DetalleCompra'
 
-function Compras(props) {
+function Compras({ubicacions}) {
     const compras = useCompras()
     const {products, addProduct } = useProducts()
     const {provedors, addProvedor} = useProvedors()
-    const {ubicacions} = useUbicacions();
+    // const {ubicacions} = useUbicacions();
     const {tipoCompras, addTipoCompra} = useTipoCompras();
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()

@@ -249,7 +249,7 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                                 </TextField>
                             </Grid>
                         </Grid>
-                        <Grid container justify="center">
+                        <Grid container justifyContent="center">
                             <Grid item xs={12} md={4}>
                                 <Button fullWidth variant="contained" color="secondary" onClick={() => openDialog()}>
                                     + Agregar productos
@@ -307,7 +307,7 @@ export default function ComprasDialog({ open, close, addCompra, showMessage }) {
                                 <Typography variant="h6" align="center" gutterBottom>Aún no hay productos agregados.</Typography>
                                 }
                             </Grid>
-                            <Grid container spacing={2} justify="flex-end" alignContent="flex-end">
+                            <Grid container spacing={2} justifyContent="flex-end" alignContent="flex-end">
                                 <Grid item xs={6} md={2}>
                                     <Button 
                                         fullWidth

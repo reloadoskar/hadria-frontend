@@ -21,8 +21,6 @@ const ConfirmDialog = (props) => {
     }
     return (
         <Dialog
-            disableBackdropClick
-            disableEscapeKeyDown
             maxWidth="sm"
             fullWidth
             open={open}

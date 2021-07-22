@@ -13,7 +13,7 @@ export default function ListaItems(props) {
         handleClick()
     }
     return(
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
             <Chip 
                 // icon={<ListAltIcon />}
                 color="primary"
@@ -26,7 +26,7 @@ export default function ListaItems(props) {
                 <DialogContent>
                     <Grid container spacing={2}>
                         { items.map((item, i) => (
-                            <Grid container alignItems="center" justify="flex-end" key={i}>
+                            <Grid container alignItems="center" justifyContent="flex-end" key={i}>
                                 <Grid item xs={10} >
                                     <Typography>{i+1} - {item.producto.descripcion}</Typography>
                                     <Typography align="right">{item.empaques}/{item.cantidad} x {item.costo}</Typography>
