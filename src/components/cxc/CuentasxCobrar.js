@@ -14,13 +14,11 @@ export default function CuentasxCobrar(props) {
                     <LinearProgress variant="query" />
                     :
                     <CardContent>
-                        <div >
-                            {cuentas.filter(cliente => cliente.cuentas.length >0 )
-                                .map((cliente, i) => (
-                                    <CuentasxcCliente  cliente={cliente} key={i} />  
-                                )
-                            )}
-                    </div>
+                        {cuentas.filter(cliente => cliente.cuentas.length >0 )
+                            .map((cliente, i) => (
+                                <CuentasxcCliente  cliente={cliente} key={i} />  
+                            )
+                        )}
                     <Typography align="right" variant="h6" children={"$" + formatNumber(total,2)} />
                 </CardContent>
                 }

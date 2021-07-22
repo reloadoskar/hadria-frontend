@@ -69,7 +69,7 @@ const UserFunctions = () => {
     }
     return (
         <div>
-            <Grid container spacing={2} alignItems="center" justify="flex-end">
+            <Grid container spacing={2} alignItems="center" justifyContent="flex-end">
                 <Grid item >
                     <Button
                         color="inherit"

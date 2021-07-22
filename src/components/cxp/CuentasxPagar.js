@@ -16,42 +16,37 @@ export default function CuentasxPagar(props) {
                 {cuentas === null ?
                     <LinearProgress variant="query" />
                     :
-                    <CardContent>
-                        <div >                        
-                        {cuentas.map((prov,i) =>{
-                            let sldo = sumSaldo(prov.cuentas)
-                            if(sldo>0){
-                                return(
-                                    <Accordion key={i}>
-                                        <AccordionSummary>
-                                            <Grid container >
-                                                <Grid item xs={2}>
-                                                    <Avatar>
-                                                        <PersonIcon />
-                                                    </Avatar>
-                                                </Grid>
-                                                <Grid item xs={10}>
-                                                    <Typography align="right" variant="h6">
-                                                        {prov.nombre}
-                                                    </Typography>
-                                                    <Typography align="right" variant="subtitle2">
-                                                        ${formatNumber(sumSaldo(prov.cuentas),2)}
-                                                    </Typography>
-                                                </Grid>                                
-                                            </Grid>
-                                        </AccordionSummary>
-                                        <AccordionDetails>
-                                            <EstadoDeCuenta cuentas={prov.cuentas}/>
-                                        </AccordionDetails> 
-                                    </Accordion>
+                    <CardContent>              
+                        {cuentas.filter(prov=> sumSaldo(prov.cuentas) > 0)
+                        .map((prov,i) =>(
+                            <Accordion key={i}>
+                                <AccordionSummary>
+                                    <Grid container >
+                                        <Grid item xs={1}>
+                                            <Avatar>
+                                                <PersonIcon />
+                                            </Avatar>
+                                        </Grid>
+                                        <Grid item xs={11}>
+                                            <Typography align="right">
+                                                {prov.nombre}
+                                            </Typography>
+                                            <Typography align="right" variant="subtitle2">
+                                                ${formatNumber(sumSaldo(prov.cuentas),2)}
+                                            </Typography>
+                                        </Grid>                                
+                                    </Grid>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Grid container>
+                                        <EstadoDeCuenta cuentas={prov.cuentas}/>
+                                    </Grid>
+                                </AccordionDetails> 
+                            </Accordion>
                                 )
-                            }else{
-                                return false
-                            }
-                        })} 
-                    </div>
-                    <Typography align="right" variant="h6" children={"$" + formatNumber(total,2)} />
-                </CardContent>
+                        )} 
+                        <Typography align="right" variant="h6" children={"$" + formatNumber(total,2)} />
+                    </CardContent>
                 }
         </Card>
     )

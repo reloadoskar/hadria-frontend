@@ -5,7 +5,7 @@ import CuentasxCobrar from '../cxc/CuentasxCobrar'
 import CuentasxPagar from '../cxp/CuentasxPagar'
 import Pagar from './Pagar'
 import Traspasar from './Traspasar'
-import useUbicacions from '../hooks/useUbicacions'
+// import useUbicacions from '../hooks/useUbicacions'
 import useCortes from '../cortes/useCortes'
 import useIngresos from '../ingresos/useIngresos'
 import useEgresos from '../egresos/useEgresos'
@@ -21,7 +21,7 @@ import Disponible from '../disponible/Disponible'
 import Corte from '../cortes/Corte'
 import Cobrar from './Cobrar'
 
-export default function Dashboard(props) {
+export default function Dashboard({ubicacions}) {
     const auth = useAuth()
     const ingresos = useIngresos()
     const egresos = useEgresos()
@@ -34,7 +34,7 @@ export default function Dashboard(props) {
         return () => setFecha(null)
     },[])
     const { enqueueSnackbar } = useSnackbar()
-    const{ubicacions} = useUbicacions()
+    // const{ubicacions} = useUbicacions()
     const {getCorte} = useCortes()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
@@ -157,11 +157,11 @@ export default function Dashboard(props) {
         <Container maxWidth="md">
             <Grid container spacing={3}>
                 {/* TOP MENU */}
-                <Grid container >
-                    <Grid item xs={6}>
+                <Grid container>
+                    <Grid item xs={12} sm={6}>
                         <Typography variant="h6" align="center">{now.format("DD MMMM, YYYY")}</Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6}>
                         <ButtonGroup>
 
                             <Button

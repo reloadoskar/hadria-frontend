@@ -324,7 +324,7 @@ export default function Corte(props){
                         id="confirma cierre de corte"
                         keepMounted
                         open={confirm}
-                        onClose={closeConfirm}
+                        close={closeConfirm}
                         corte={elcorte}
                         cierraCorte={cierraCorte}
                     />

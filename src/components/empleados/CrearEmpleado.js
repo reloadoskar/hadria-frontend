@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuIt
 import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import useStyles from '../hooks/useStyles'
-import useUbicacions from '../hooks/useUbicacions';
+import useUbicacions from '../ubicaciones/useUbicacions';
 const nempleado = {
     nombre: '',
     area: "",

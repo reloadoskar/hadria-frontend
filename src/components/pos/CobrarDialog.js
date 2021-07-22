@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from 'react';
-// import {ticketVenta, ticketSalida} from '../api'
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -20,7 +18,6 @@ function ReprintDialog(props) {
     }
     return (
         <Dialog
-            disableBackdropClick
             disableEscapeKeyDown
             maxWidth="xs"
             open={open}>

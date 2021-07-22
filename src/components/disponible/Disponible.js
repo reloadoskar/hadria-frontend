@@ -68,7 +68,7 @@ export default function Disponible(props){
                                 $ {formatNumber(totalDisp,2)}
                             </Typography>
                         </Grid>
-                        <Grid item sm={12} md={4}>
+                        <Grid item xs={12} sm={4}>
                             {/* {dispxubic.map((ubic, i) => ( */}
                                 {dispxubic
                                     // .filter(ubic => ubic.total !== 0)

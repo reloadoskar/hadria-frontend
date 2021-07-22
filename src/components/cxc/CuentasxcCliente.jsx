@@ -4,7 +4,8 @@ import { useReactToPrint } from 'react-to-print';
 import ReceiptIcon from '@material-ui/icons/Receipt'
 import PersonIcon from '@material-ui/icons/Person';
 import {formatNumber, sumSaldo} from '../Tools'
-import EstadoDeCuenta from './EstadoDeCuenta'
+// import EstadoDeCuenta from './EstadoDeCuenta'
+import Cxc from './Cxc'
 
 export default function CuentasxcCliente({cliente}){
     const componentRef = useRef();
@@ -43,7 +44,11 @@ export default function CuentasxcCliente({cliente}){
                         </Typography>
                     </Grid>  
                     <Grid item xs={12}>
-                        <EstadoDeCuenta cuentas={cliente.cuentas}/>                                    
+                        {
+                            cliente.cuentas.map((cta,i)=>(
+                                <Cxc cta={cta} key={i} />
+                            ))
+                        }                                
                     </Grid>
                 </Grid>
             </AccordionDetails> 

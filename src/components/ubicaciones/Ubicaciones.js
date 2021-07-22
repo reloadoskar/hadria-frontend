@@ -14,8 +14,9 @@ function Ubicaciones({ubicacions}) {
     function addUbicacion(ubicacion) {
         if(ubicacions.ubicacions.length<5){
             ubicacions.add(ubicacion)
+        }else{
+            showMessage('Limite de ubicaciones alcanzado, actualice su servicio', 'error')
         }
-        showMessage('Limite de ubicaciones alcanzado, actualice su servicio', 'error')
         setDialog(false)
     }
     return ubicacions ?

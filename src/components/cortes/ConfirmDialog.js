@@ -12,7 +12,7 @@ import {formatNumber} from '../Tools'
 export default function ConfirmaDialog(props) {
     const classess = useStyles()    
     const { 
-        onClose, 
+        close, 
         open, 
         corte, 
         ubicacions,
@@ -20,7 +20,7 @@ export default function ConfirmaDialog(props) {
     const [data, setData] = useState(null)
     const [enviarCorteA, setEnviarCorteA] = useState('')
     const handleCancel = () => {
-        onClose('confirm');
+        close('confirm');
     }
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export default function ConfirmaDialog(props) {
     const handleOk = () => {
         data.enviarA = enviarCorteA
         cierraCorte(data)
-        onClose('confirm');
+        close('confirm');
     };
 
     return (

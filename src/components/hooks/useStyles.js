@@ -330,6 +330,12 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
     },
 
+    paperBasico: {
+        width: '100%',
+        margin: 4,
+        padding:10,
+    }
+
 }));
 
 export default useStyles

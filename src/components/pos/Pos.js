@@ -4,19 +4,16 @@ import { Container, Backdrop, Typography } from '@material-ui/core'
 import Acceso from './Acceso'
 import useStyles from '../hooks/useStyles'
 import useInventario from '../inventario/useInventario'
-import useUbicacions from '../hooks/useUbicacions'
 import useCortes from '../cortes/useCortes'
 import useClientes from '../clientes/useClientes'
 import useIngresos from '../ingresos/useIngresos'
 import useEgresos from '../egresos/useEgresos'
 import moment from 'moment'
 import DialogPos from './DialogPos'
-// import {sumImporte} from '../Tools'
 export default function Pos(props){
-    const {user}=props
+    const {user, ubicacions}=props
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
-    const {ubicacions} = useUbicacions()
     const inventario = useInventario()
     const {clientes} = useClientes()
     const {addVenta, cxcPdv, addPagoCxc} = useIngresos()

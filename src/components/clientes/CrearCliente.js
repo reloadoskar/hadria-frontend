@@ -49,7 +49,7 @@ const CrearCliente = (props) =>{
             <form onSubmit={(e) => handleSubmit(e)}>
                 <DialogContent>
                     <Grid container spacing={2}>
-                        <Grid item xs={8}>
+                        <Grid item xs={12} sm={6}>
                             <TextField 
                                 id="nombre"
                                 fullWidth
@@ -60,7 +60,7 @@ const CrearCliente = (props) =>{
                                 onChange={(e) => handleChange('nombre', e.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={12} sm={6}>
                             <TextField 
                                 id="rfc"
                                 fullWidth
