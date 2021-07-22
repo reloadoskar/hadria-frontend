@@ -12,6 +12,7 @@ import { useSnackbar } from 'notistack';
 import CrearProducto from './CrearProducto';
 import {searchBy} from '../Tools'
 import useStyles from '../hooks/useStyles';
+import Producto from './Producto';
 
 function Productos() {
     const classes = useStyles()
@@ -68,7 +69,7 @@ function Productos() {
     return (
         <React.Fragment>
             <Box>
-                <Grid container justify="flex-end">
+                <Grid container justifyContent="flex-end">
                         <Button className={classes.botonGenerico} onClick={showDialog}>Agregar</Button>
                         <CrearProducto addProduct={addProducto} open={dialog} close={closeDialog} search={searchBy} />
                 </Grid>
@@ -84,7 +85,7 @@ function Productos() {
                             <Grid item xs={6}>
                                 <Grid container>
                                     <Grid item xs={12}>
-                                        <Typography variant="h3" children={ products.length + " Productos"}/>
+                                        <Typography variant="h6" children={ products.length + " Productos"}/>
                                         <Typography variant="subtitle1" children="en la lista" />
                                     </Grid>
                                 </Grid>
@@ -114,40 +115,45 @@ function Productos() {
                             {resultado.length === 0 ?
                                 null
                                 :
-                                <Table size="small">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Clave</TableCell>
-                                            <TableCell>Producto</TableCell>
-                                            <TableCell align="right">Costo</TableCell>
-                                            <TableCell align="right">Precio Público</TableCell>
-                                            <TableCell align="right">Precio Mayoreo</TableCell>
-                                            <TableCell align="right">Precio Especial</TableCell>
-                                            <TableCell>Acciones</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {
-                                            resultado.map((row, index) => (
-                                                <TableRow key={index} index={index}>
-                                                    <TableCell >{row.clave}</TableCell>
-                                                    <TableCell component="th" scope="row">{row.descripcion}</TableCell>
-                                                    <TableCell align="right">{row.costo}</TableCell>
-                                                    <TableCell align="right">{row.precio1}</TableCell>
-                                                    <TableCell align="right">{row.precio2}</TableCell>
-                                                    <TableCell align="right">{row.precio3}</TableCell>
-                                                    <TableCell align="right">
-                                                        <IconButton aria-label="delete"
-                                                            onClick={() => removeProduct(row._id)}
-                                                            >
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))
-                                        }
-                                    </TableBody>
-                                </Table>
+                                resultado.map((producto, i) =>(
+                                    <Grid item xs={12}>
+                                        <Producto producto={producto} key={i} />
+                                    </Grid>
+                                ))
+                                // <Table size="small">
+                                //     <TableHead>
+                                //         <TableRow>
+                                //             <TableCell>Clave</TableCell>
+                                //             <TableCell>Producto</TableCell>
+                                //             <TableCell align="right">Costo</TableCell>
+                                //             <TableCell align="right">Precio Público</TableCell>
+                                //             <TableCell align="right">Precio Mayoreo</TableCell>
+                                //             <TableCell align="right">Precio Especial</TableCell>
+                                //             <TableCell>Acciones</TableCell>
+                                //         </TableRow>
+                                //     </TableHead>
+                                //     <TableBody>
+                                //         {
+                                //             resultado.map((row, index) => (
+                                //                 <TableRow key={index} index={index}>
+                                //                     <TableCell >{row.clave}</TableCell>
+                                //                     <TableCell component="th" scope="row">{row.descripcion}</TableCell>
+                                //                     <TableCell align="right">{row.costo}</TableCell>
+                                //                     <TableCell align="right">{row.precio1}</TableCell>
+                                //                     <TableCell align="right">{row.precio2}</TableCell>
+                                //                     <TableCell align="right">{row.precio3}</TableCell>
+                                //                     <TableCell align="right">
+                                //                         <IconButton aria-label="delete"
+                                //                             onClick={() => removeProduct(row._id)}
+                                //                             >
+                                //                             <DeleteIcon />
+                                //                         </IconButton>
+                                //                     </TableCell>
+                                //                 </TableRow>
+                                //             ))
+                                //         }
+                                //     </TableBody>
+                                // </Table>
                             }
                         </Grid>
                         
