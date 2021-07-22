@@ -11,6 +11,7 @@ export default function Inventario({ubicacions}){
     const [verFolios, setVerFolios] = useState(true)
     const [verUbicaciones, setVerUbicaciones] = useState(false)
     const [moverDialog, setMoverDialog] = useState(false)
+    // const [isMounted, setIsmounted] = useState(false)
     useEffect(() => {
         inventario.getInventarioGeneral()
         inventario.getInventarioXUbic()

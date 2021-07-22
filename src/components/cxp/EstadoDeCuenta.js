@@ -5,7 +5,7 @@ export default function EstadoDeCuenta(props){
     const {cuentas} =props
     return cuentas.length > 0 ?
             cuentas.map((cuenta, i)  => (
-                <React.Fragment>
+                <React.Fragment key={i}>
                 <Grid item xs={12} container >
                     <Grid item xs={2} sm={4}>#{cuenta.folio}</Grid>
                     <Grid item xs={5} sm={4}>{cuenta.compra.fecha}</Grid>

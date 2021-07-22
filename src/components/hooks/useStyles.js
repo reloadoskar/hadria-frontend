@@ -334,6 +334,12 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         margin: 4,
         padding:10,
+    },
+
+    borderInferior: {
+        border: 1,
+        borderRadius: 3,
+        color: 'black',
     }
 
 }));

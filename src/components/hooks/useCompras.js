@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getCompras, cancelCompra, closeCompra, saveCompra, getCompra } from '../api'
+import { getCompras, cancelCompra, closeCompra, saveCompra, getCompra, recuperaVentasCompra } from '../api'
 const useCompras = () => {
 	const [compras, setCompras] = useState(null)
 	const [upCompras, setUpCompras] = useState(false)
@@ -44,6 +44,13 @@ const useCompras = () => {
 		})
 	}
 
+	const recuperarVentas = (id) => {
+		return recuperaVentasCompra(id)
+			.then( res => {
+				return res
+			})
+	}
+
 	return {
 		compras,
 		crearCompra,
@@ -51,7 +58,8 @@ const useCompras = () => {
 		cerrarCompra,
 		upCompras,
 		setUpCompras, 
-		findCompra
+		findCompra,
+		recuperarVentas
 	}
 };
 
