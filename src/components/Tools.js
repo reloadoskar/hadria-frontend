@@ -211,16 +211,34 @@ export function esDecimal(n){
     return Number(n) === n && n % 1 !== 0;
 }
 
-export function groupBy(arr, key){
-    return arr.reduce(function(storage, item){
-        var group = item[key]
-        // set `storage` for this instance of group to the outer scope (if not empty) or initialize it
-        storage[group] = storage[group] || [];
+// export function groupBy(arr, key){
+//     return arr.reduce(function(storage, item){
+//         var group = item[key]
+//         // set `storage` for this instance of group to the outer scope (if not empty) or initialize it
+//         storage[group] = storage[group] || [];
     
-        // add this item to its group within `storage`
-        storage[group].push(item);
+//         // add this item to its group within `storage`
+//         storage[group].push(item);
     
-        // return the updated storage to the reduce function, which will then loop through the next 
-        return storage
-    },{})
+//         // return the updated storage to the reduce function, which will then loop through the next 
+//         return storage
+//     },{})
+// }
+
+export function agrupaVentas(array, prop) {
+    return array.reduce(function(groups, item) {
+        var val = item[prop];
+        groups[val] = groups[val] || 
+        {
+            folio: item.venta.folio, 
+            fecha: item.fecha,
+            cliente: item.venta.cliente,
+            items: [],
+            tipoPago: item.venta.tipoPago,
+            importe: 0
+        };
+        groups[val].importe += item.importe;
+        groups[val].items.push(item);
+        return groups;
+    }, []);
 }

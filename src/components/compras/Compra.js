@@ -3,10 +3,12 @@ import { Dialog, DialogContent, Divider, Grid, IconButton, LinearProgress, Slide
     Typography, Tooltip } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import LockIcon from '@material-ui/icons/Lock';
+import ListIcon from '@material-ui/icons/List';
 import useStyles from '../hooks/useStyles'
 import ResumenVentas from '../ventas/ResumenVentas'
 import EgresoBasic from '../egresos/EgresoBasic'
 import {sumImporte, formatNumber} from '../Tools'
+import ListaVentas from '../ventas/ListaVentas';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -16,6 +18,7 @@ export default function Compra({open, close, compra,
     const [saldo, setSaldo] = useState(0)
     const [total, setTotal] = useState(0)
     const [comision, setComision] = useState(0)
+    const [dialogListaVentas, setDialog] = useState(false)
     const classes = useStyles()
 
     useEffect(() => {
@@ -64,6 +67,15 @@ export default function Compra({open, close, compra,
                             <Typography className={classes.textoMiniFacheron} >Remision: {laCompra.compra.remision}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6} container justifyContent="flex-end">
+                            <Tooltip title="Ver ventas" >
+                                <IconButton
+                                    size="small"
+                                    aria-label="Ver ventas"
+                                    onClick={()=>setDialog(true)}
+                                >
+                                    <ListIcon />
+                                </IconButton>
+                            </Tooltip>
                             <Tooltip title="Cerrar" >
                                 <IconButton
                                     size="small"
@@ -137,6 +149,9 @@ export default function Compra({open, close, compra,
                                 :
                                 null
                             }
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ListaVentas ventas={laCompra.ventas} open={dialogListaVentas} close={()=>setDialog(false)} />
                         </Grid>
                         
                     </Grid>
