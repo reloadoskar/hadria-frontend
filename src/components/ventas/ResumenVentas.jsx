@@ -45,13 +45,13 @@ export default function ResumenVentas({items,compra}){
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={3} sm={2}>
-                                        <Typography className={classes.textoMiniFacheron} align="right">{item.producto.unidad.abr}</Typography>
+                                        <Typography className={classes.textoMiniFacheron} align="right">{item.producto.unidad.abr} disp: { checkInvInicial(item._id).cantidad - item.cantidad}</Typography>
                                         <Typography align="right">
                                             {formatNumber(item.cantidad,2)} / {formatNumber(checkInvInicial(item._id).cantidad,2)}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={3} sm={2}>
-                                        <Typography className={classes.textoMiniFacheron} align="right">{item.producto.empaque.abr}</Typography>
+                                        <Typography className={classes.textoMiniFacheron} align="right">{item.producto.empaque.abr} disp: { checkInvInicial(item._id).empaques - item.empaques}</Typography>
                                         <Typography align="right">
                                             {item.empaques} / {checkInvInicial(item._id).empaques}
                                         </Typography>

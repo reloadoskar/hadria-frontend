@@ -8,7 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 export default function Ubicacion({ubicacion, update}){
     const [editMode, setEditMode] = useState(false)
     const [laUbic, setLaubic] = useState(false)
-    const tipos = ["SUCURSAL", "ADMINISTRACION", "BANCO", "BODEGA/ALMACEN"]
+    const tipos = ["SUCURSAL", "ADMINISTRACIÓN", "BANCO", "BODEGA/ALMACÉN"]
     const classes = useStyles()
 
     useEffect(()=>{

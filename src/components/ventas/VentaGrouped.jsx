@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import { formatNumber } from '../Tools'
 export default function VentaGrouped({venta}){
     return venta !== null ?

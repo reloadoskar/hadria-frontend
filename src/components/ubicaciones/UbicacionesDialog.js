@@ -24,7 +24,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function UbicacionesDialog({ addUbicacion, isShowing, open, close }) {
     const classes = useStyles();
 	const [values, dispatch] = useReducer(reducer, initialState)
-	const tipos = ["SUCURSAL", "ADMINISTRACION", "BANCO", "BODEGA/ALMACEN"]
+	const tipos = ["SUCURSAL", "ADMINISTRACIÓN", "BANCO", "BODEGA/ALMACÉN"]
     const handleSubmit = (event) => {
         event.preventDefault()
 		addUbicacion(values)
