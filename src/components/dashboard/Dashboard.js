@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from 'react'
-import {useAuth} from '../auth/use_auth'
-import {ticketTraspaso} from '../api'
-import CuentasxCobrar from '../cxc/CuentasxCobrar'
-import CuentasxPagar from '../cxp/CuentasxPagar'
-import Pagar from './Pagar'
-import Traspasar from './Traspasar'
-// import useUbicacions from '../hooks/useUbicacions'
-import useCortes from '../cortes/useCortes'
-import useIngresos from '../ingresos/useIngresos'
-import useEgresos from '../egresos/useEgresos'
-import { useSnackbar } from 'notistack';
-import moment from 'moment'
+// UI
 import { Grid, 
     Typography, 
     Container,
     ButtonGroup,
     Button,
 } from '@material-ui/core'
+// componentes
+import CuentasxCobrar from '../cxc/CuentasxCobrar'
+import CuentasxPagar from '../cxp/CuentasxPagar'
+import Pagar from './Pagar'
+import Traspasar from './Traspasar'
+import {ticketTraspaso} from '../api'
 import Disponible from '../disponible/Disponible'
 import Corte from '../cortes/Corte'
 import Cobrar from './Cobrar'
+import CrearEgreso from '../egresos/CrearEgreso'
+// HOOKS
+import {useAuth} from '../auth/use_auth'
+import useCortes from '../cortes/useCortes'
+import useIngresos from '../ingresos/useIngresos'
+import useEgresos from '../egresos/useEgresos'
+import { useSnackbar } from 'notistack';
+
+import moment from 'moment'
 
 export default function Dashboard({ubicacions}) {
     const auth = useAuth()
@@ -38,6 +42,7 @@ export default function Dashboard({ubicacions}) {
     const {getCorte} = useCortes()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
+    const [gastar, setGastar] = useState(false)
     const [traspasar, setTraspasar] = useState(false)
     const [corteDialog, setCorteDialog] = useState(false)
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
@@ -51,6 +56,9 @@ export default function Dashboard({ubicacions}) {
 
     const showCobrar = () => {
         setCobrar(true)
+    }
+    const showGastar = () => {
+        setGastar(true)
     }
 
     const closeCobrar = () => {
@@ -157,12 +165,12 @@ export default function Dashboard({ubicacions}) {
         <Container maxWidth="md">
             <Grid container spacing={3}>
                 {/* TOP MENU */}
-                <Grid container>
+                <Grid container justifyContent="center">
                     <Grid item xs={12} sm={6}>
                         <Typography variant="h6" align="center">{now.format("DD MMMM, YYYY")}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <ButtonGroup>
+                        <ButtonGroup  size="small">
 
                             <Button
                                 onClick={() => showPagar()}
@@ -174,6 +182,17 @@ export default function Dashboard({ubicacions}) {
                                 close={closePagar}
                                 save={crearPago}
                                 showMessage={showMessage}
+                            />
+
+                            <Button
+                                onClick={() => showGastar()}>
+                                    Gastar
+                            </Button>
+                            <CrearEgreso 
+                                ubicacions={ubicacions}
+                                open={gastar}
+                                close={()=>setGastar(false)}
+                                mensaje={showMessage}
                             />
                             
                             <Button

@@ -1,8 +1,9 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Dialog, DialogActions, DialogContent, DialogTitle,  Grid, TextField, MenuItem, Button, Zoom, Typography } from '@material-ui/core'
+import {saveEgreso, ticketEgreso} from '../api'
 import moment from 'moment'
 import useStyles from '../hooks/useStyles'
-
+import useCompras from '../compras/useCompras'
 const hoy = moment().format("YYYY-MM-DD")
 const init = {
     compra: 1,
@@ -12,15 +13,19 @@ const init = {
     importe: "",
     saldo:0,
     tipoPago: "EFECTIVO",
-    concepto: "EGRESO",
+    concepto: "",
     tipo: "GASTO DE CAJA"
 }
 export default function CrearEgreso(props) {
-    const {open, close, crear, ubicacions, compras, disponible, mensaje} = props
-    const tipos = ["GASTO DE CAJA", "GASTO DE COMPRA", "GASTO DE PRODUCCION"] 
+    const {open, close, ubicacions, disponible, mensaje} = props
+    const Compra = useCompras() 
+    const tipos = ["GASTO DE CAJA", "GASTO A COMPRA"] 
     const classes = useStyles()
     const [egreso, setEgreso] = useState(init)
     const [guardando, setGuardando] = useState(false)
+    useEffect(() => {
+        Compra.getCompDash()
+    },[])
     const resetFields = () => {
         setEgreso(init)
     }
@@ -45,9 +50,10 @@ export default function CrearEgreso(props) {
     }
     const handleRegistrar = () => {
         setGuardando(true)
-        crear(egreso).then(res=>{
+        saveEgreso(egreso).then(res=>{
             setGuardando(false)
             mensaje(res.message, res.status)
+            ticketEgreso(egreso)
             handleClose()
         })
     }
@@ -81,7 +87,7 @@ export default function CrearEgreso(props) {
                                         </MenuItem>
                                     ))}
                                 </TextField>
-                                {egreso.tipo === "GASTO DE COMPRA" ? 
+                                {egreso.tipo === "GASTO A COMPRA" ? 
                                     <TextField
                                         id="compra"
                                         label="Selecciona una compra"
@@ -90,7 +96,7 @@ export default function CrearEgreso(props) {
                                         value={egreso.compra}
                                         onChange={(e) => handleChange('compra', e.target.value)}
                                         >
-                                        {compras.map((option, index) => (
+                                        {Compra.compras.map((option, index) => (
                                             <MenuItem key={index} value={option._id}>
                                                 {option.folio}:{option.clave}
                                             </MenuItem>

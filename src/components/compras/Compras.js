@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSnackbar } from 'notistack'
 import {
     Button,
@@ -6,8 +6,8 @@ import {
     Grid
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add'
-import useCompras from '../hooks/useCompras';
-import useProducts from '../hooks/useProducts'
+import useCompras from '../compras/useCompras';
+import useProducts from '../productos/useProducts'
 import useProvedors from '../hooks/useProvedors';
 // import useUbicacions from '../hooks/useUbicacions';
 import useTipoCompras from '../hooks/useTipoCompras';
@@ -35,6 +35,11 @@ function Compras({ubicacions}) {
     const [verCompra, setVerCompra] = useState(false)
     const [confirm, setConfirm] = useState(false)
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+
+    useEffect(()=>{
+        compras.loadCompras()
+    },[])
+
     const crear = (compra) => {
         return compras.crearCompra(compra).then(res => {
             closeDialog()

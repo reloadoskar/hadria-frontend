@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
-import Loading from '../Loading'
-
+// COMPONENTES DE INTERFAZ // MATERIAL-UI
 import { 
-    MenuItem, Container, Grid, IconButton, Typography, Table, TableHead, TableRow, TableCell, TableBody, Paper, Button, Divider, TextField, Box } from '@material-ui/core';
-
-import DeleteIcon from '@material-ui/icons/Delete';
+    MenuItem, 
+    Grid, 
+    Button, 
+    TextField,
+    Card, 
+    CardContent } from '@material-ui/core';
 
 // HOOKS
-import useProducts from '../hooks/useProducts';
+import useProducts from './useProducts';
 import { useSnackbar } from 'notistack';
-import CrearProducto from './CrearProducto';
-import {searchBy} from '../Tools'
 import useStyles from '../hooks/useStyles';
+import {searchBy} from '../Tools'
+
+// COMPONENTES EXTERNOS
+import CrearProducto from './CrearProducto';
 import Producto from './Producto';
 
+//COMPONENTE 
 function Productos() {
     const classes = useStyles()
-    const { products, addProduct, del } = useProducts()
+    const { products, addProduct, updateProducto } = useProducts()
     const [dialog, setDialog] = useState(false)
-    const [loading] = useState(true)
     const fields = ["clave", "descripcion"]
     const [fieldSelected, setFieldSelected] = useState('descripcion')
     const [searchField, setSearchField] = useState('')
@@ -42,17 +46,6 @@ function Productos() {
         })
     }
 
-    function removeProduct(id) {
-        showMessage("Eliminando...", "info")
-        setResultado([])
-        setSearchField('')
-        del(id).then(res => {
-            if(res.status === 'success'){
-                showMessage(res.message, res.status)
-            }
-        })
-    }
-
     function handleChange(field, value){
         switch(field)
         {
@@ -68,99 +61,44 @@ function Productos() {
 
     return (
         <React.Fragment>
-            <Box>
-                <Grid container justifyContent="flex-end">
-                        <Button className={classes.botonGenerico} onClick={showDialog}>Agregar</Button>
-                        <CrearProducto addProduct={addProducto} open={dialog} close={closeDialog} search={searchBy} />
+            <Grid container justifyContent="center" spacing={2}>
+                <Grid item xs={8}>
+                    <Button fullWidth className={classes.botonGenerico} onClick={showDialog}>Agregar</Button>
+                    <CrearProducto addProduct={addProducto} open={dialog} close={closeDialog} search={searchBy} />
                 </Grid>
-            </Box>
-            <Paper>
-
-            {
-                products === null ?
-                <Loading loading={loading} />
-                :
-                <Container maxWidth="lg">
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Grid container>
-                                    <Grid item xs={12}>
-                                        <Typography variant="h6" children={ products.length + " Productos"}/>
-                                        <Typography variant="subtitle1" children="en la lista" />
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={6}>
-                                Buscar por: 
-                                {/* <Button children={fieldSelected} />  */}
-                                    <TextField 
-                                        select 
-                                        value={fieldSelected}
-                                        onChange={(e) => handleChange('field', e.target.value)}
-                                        >
-
-                                                {fields.map((el, index) => (
-                                                    <MenuItem key={index} value={el}>{el}</MenuItem>
-                                                    ))}
-                                    </TextField> 
-                                    <TextField helperText="Ingrese un texto de bùsqueda." fullWidth value={searchField} onChange={(e) => handleChange('search', e.target.value)}/>
-                            </Grid>
-
-                        </Grid>
-
-                        <Divider />
-
-                        <Grid container>
-
-                            {resultado.length === 0 ?
-                                null
-                                :
-                                resultado.map((producto, i) =>(
-                                    <Grid item xs={12}>
-                                        <Producto producto={producto} key={i} />
-                                    </Grid>
-                                ))
-                                // <Table size="small">
-                                //     <TableHead>
-                                //         <TableRow>
-                                //             <TableCell>Clave</TableCell>
-                                //             <TableCell>Producto</TableCell>
-                                //             <TableCell align="right">Costo</TableCell>
-                                //             <TableCell align="right">Precio Público</TableCell>
-                                //             <TableCell align="right">Precio Mayoreo</TableCell>
-                                //             <TableCell align="right">Precio Especial</TableCell>
-                                //             <TableCell>Acciones</TableCell>
-                                //         </TableRow>
-                                //     </TableHead>
-                                //     <TableBody>
-                                //         {
-                                //             resultado.map((row, index) => (
-                                //                 <TableRow key={index} index={index}>
-                                //                     <TableCell >{row.clave}</TableCell>
-                                //                     <TableCell component="th" scope="row">{row.descripcion}</TableCell>
-                                //                     <TableCell align="right">{row.costo}</TableCell>
-                                //                     <TableCell align="right">{row.precio1}</TableCell>
-                                //                     <TableCell align="right">{row.precio2}</TableCell>
-                                //                     <TableCell align="right">{row.precio3}</TableCell>
-                                //                     <TableCell align="right">
-                                //                         <IconButton aria-label="delete"
-                                //                             onClick={() => removeProduct(row._id)}
-                                //                             >
-                                //                             <DeleteIcon />
-                                //                         </IconButton>
-                                //                     </TableCell>
-                                //                 </TableRow>
-                                //             ))
-                                //         }
-                                //     </TableBody>
-                                // </Table>
-                            }
-                        </Grid>
-                        
-                    </Container>
-
-}
-            </Paper>
+                <Grid item xs={12} sm={6}>
+                    <TextField 
+                        variant="outlined"
+                        fullWidth
+                        label="Buscar por:"
+                        select 
+                        value={fieldSelected}
+                        onChange={(e) => handleChange('field', e.target.value)}
+                        >
+                            {fields.map((el, index) => (
+                                <MenuItem key={index} value={el}>{el}</MenuItem>
+                                ))}
+                    </TextField> 
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField 
+                        fullWidth 
+                        variant="outlined"
+                        label="Ingrese un texto de b&uacute;squeda." 
+                        value={searchField} 
+                        onChange={(e) => handleChange('search', e.target.value)}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    {resultado.length === 0 ?
+                        null
+                        :
+                        resultado.map((producto, i) =>(
+                            <Producto producto={producto} update={updateProducto} key={i} />
+                        ))
+                    }                
+                </Grid>
+            </Grid>
         </React.Fragment>
     )
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FormControlLabel, Switch, Dialog, DialogTitle, Button, DialogContent, DialogActions, Grid, TextField, MenuItem, Box } from '@material-ui/core';
 // import SaveIcon from '@material-ui/icons/Save';
 
-import useProducts from '../hooks/useProducts'
+import useProducts from '../productos/useProducts'
 import useProvedors from '../hooks/useProvedors'
 import {objectIsNull} from '../Tools'
 

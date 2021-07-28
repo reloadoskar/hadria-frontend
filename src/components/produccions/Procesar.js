@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Dialog, DialogTitle, DialogContent, Typography, Grid, TextField, MenuItem, Button, DialogActions, Divider } from '@material-ui/core'
-import useProducts from '../hooks/useProducts'
+import useProducts from '../productos/useProducts'
 import useStyles from '../hooks/useStyles'
 import {formatNumber, sumImporte} from '../Tools'
 const Procesar = (props) => {

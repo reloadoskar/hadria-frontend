@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {saveEgreso, ticketEgreso} from '../api'
 import { Dialog, DialogContent, DialogTitle, Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
 
-import useCompras from '../hooks/useCompras'
+import useCompras from '../compras/useCompras'
 import useConceptos from '../hooks/useConceptos'
 import useStyles from '../hooks/useStyles';
 export default function EgresoDialog({ubicacion, fecha, open, close, showMessage}) {
@@ -15,12 +15,14 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
         importe: 0,
     }
     const classes = useStyles()
-    const {compras} = useCompras() 
+    const Compra = useCompras() 
     const [values, setValues] = useState(initialData)
     const {conceptos} = useConceptos()
     const tipos = ["GASTO DE CAJA", "GASTO A COMPRA"] 
     const [guardando, setGuardando] = useState(false)
-    
+    useEffect(() => {
+        Compra.getCompDash()
+    },[])
     function hasNull(target) {
         for (var member in target) {
             if (target[member] === null || target[member] === '')
@@ -165,7 +167,7 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
                                     value={values.compra}
                                     onChange={(e) => handleChange('compra', e.target.value)}
                                     >
-                                        {compras.map((option, index) => (
+                                        {Compra.compras.map((option, index) => (
                                             <MenuItem key={index} value={option}>
                                                 {option.folio}:{option.clave}
                                             </MenuItem>

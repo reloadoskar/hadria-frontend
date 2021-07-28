@@ -77,7 +77,7 @@ export default function Acceso({accesando, ubicacions, ubicacion, fecha, access,
                                         variant="outlined"                             
                                         onChange={e => handleChange('fecha', e.target.value)}
                                 />
-                                <Grid container justify="flex-end">
+                                <Grid container justifyContent="flex-end">
                                     <Button 
                                         fullWidth
                                         className={classes.botonCosmico}

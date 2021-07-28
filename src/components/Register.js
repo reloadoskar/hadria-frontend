@@ -13,7 +13,15 @@ const Register = (props) => {
     const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
     
-    const [data, setData] = useState({nombre: '', apellido: '', email: '', password: '', passwordCheck: '', error: true})
+    const [data, setData] = useState({
+        nombre: '', 
+        apellido: '', 
+        email: '',
+        telefono: '',
+        password: '', 
+        passwordCheck: '', 
+        error: true
+    })
     
     const showMessage = (text, type) => { enqueueSnackbar(text, {
         variant: type,
@@ -93,6 +101,18 @@ const Register = (props) => {
                                         required
                                         value={data.email}
                                         onChange={(e)=>handleChange('email', e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="telefono"
+                                        label="Tel&eacute;fono"
+                                        variant="outlined"
+                                        fullWidth
+                                        type="text"
+                                        required
+                                        value={data.telefono}
+                                        onChange={(e)=>handleChange('telefono', e.target.value)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>

@@ -58,8 +58,8 @@ export default function Cobrar({open, close, cuentas, ubicacions, showMessage, c
             maxWidth="sm"
             open={open}
             onClose={() => close()} >
-                <DialogTitle>
-                    <Typography variant="h6" >Cobranza </Typography>
+                <DialogTitle >
+                    Cobranza
                 </DialogTitle>
                 <form onSubmit={handleSubmit}>
                     {guardando ?  
