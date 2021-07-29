@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { getClientes, saveCliente, deleteCliente } from '../api'
+import { getClientes, saveCliente, deleteCliente, updateCliente } from '../api'
 const useClientes = () => {
 	const [clientes, setClientes] = useState([])
 
@@ -33,12 +33,17 @@ const useClientes = () => {
 		})
 	}
 
+	const updCliente = (cliente) => {
+		return updateCliente(cliente).then(res=>{
+			return res
+		})
+	}
 
-	return {
+	return {                           
 		clientes,
 		crearCliente,
 		eliminarCliente,
-
+		updCliente
 	}
 };
 

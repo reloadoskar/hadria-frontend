@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Button, Container, Grid, Typography} from '@material-ui/core'
+import { Button, Container, Grid} from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
 import useClientes from './useClientes'
 import CrearCliente from './CrearCliente'
@@ -8,14 +8,14 @@ import Cliente from './Cliente'
 export default function Clientes(){
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
-    const {clientes, crearCliente} = useClientes()
+    const Client = useClientes()
     const [dialogOpen, setDialogOpen] = useState(false)
     const closeDialog = () =>{
         setDialogOpen(false)
     }
 
     const crear = (cliente) =>{
-        crearCliente(cliente).then(res => {
+        Client.crearCliente(cliente).then(res => {
             if(res.status === 'success'){
                 enqueueSnackbar(res.message, { variant: res.status })
                 closeDialog()
@@ -24,26 +24,21 @@ export default function Clientes(){
     }
     return(
         <Container>
-            <Grid container>
-                <Grid item xs>
-                    <Typography variant="h6" >
-                        Clientes
-                    </Typography>
-                </Grid>
-                <Grid item xs>
+            <Grid container justifyContent="center" spacing={2}>
+                <Grid item xs={8}>
                     <Button fullWidth className={classes.botonGenerico} onClick={() => setDialogOpen(true)}>
                         Agregar
                     </Button>
                     <CrearCliente open={dialogOpen} close={closeDialog} crear={crear}/>
                 </Grid>
+                <Grid container spacing={2}>
+                    {
+                        Client.clientes.map((cliente, i) => (
+                            <Cliente key={i} cliente={cliente} update={Client.updCliente} />
+                        ))
+                    }
+                </Grid>
                 
-            </Grid>
-            <Grid container spacing={2}>
-                {
-                    clientes.map((cliente, i) => (
-                        <Cliente key={i} cliente={cliente} />
-                    ))
-                }
             </Grid>
         </Container>
     )

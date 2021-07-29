@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Grid, Box, Typography, Card, CardContent, IconButton, TextField, MenuItem } from '@material-ui/core'
+import { Grid, Typography, Card, CardContent, IconButton, TextField, MenuItem } from '@material-ui/core'
 import { formatNumber } from '../Tools'
 import useStyles from '../hooks/useStyles'
 import EditIcon from '@material-ui/icons/Edit'

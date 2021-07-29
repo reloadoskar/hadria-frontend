@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { getCompras, cancelCompra, closeCompra, saveCompra, getCompra, recuperaVentasCompra, getComprasDash } from '../api'
 const useCompras = () => {
 	const [compras, setCompras] = useState(null)

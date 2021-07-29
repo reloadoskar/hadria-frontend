@@ -5,8 +5,7 @@ import {
     Grid, 
     Button, 
     TextField,
-    Card, 
-    CardContent } from '@material-ui/core';
+    } from '@material-ui/core';
 
 // HOOKS
 import useProducts from './useProducts';

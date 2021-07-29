@@ -19,7 +19,6 @@ if(token !== false){
     }
 }
 const url = URL;
-const url_client = url
 
 // USUARIOS
 
@@ -76,7 +75,7 @@ export const getProducts = () => {
     try{
         if (decoded){
             return axios
-                .get(url_client + decoded.database + '/productos')
+                .get(url + decoded.database + '/productos')
                 .then(res => {
                     return res.data
                 })
@@ -91,7 +90,7 @@ export const saveProduct = (producto) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/producto/save', producto)
+                .post(url + decoded.database + '/producto/save', producto)
                 .then(res => {
                     return res.data
                 })
@@ -101,11 +100,25 @@ export const saveProduct = (producto) => {
     }
 }
 
+export const updateProduct = (id, data) => {
+    try{
+        if(decoded){
+            return axios
+                .put(url + decoded.database + '/producto/update/' + id, data)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
 export const deleteProduct = (id) => {
     try{
         if(decoded){
             return axios
-                .delete(url_client + decoded.database + `/producto/${id}`)
+                .delete(url + decoded.database + `/producto/${id}`)
                 .then(res => {
                     return res.data
                 })
@@ -121,7 +134,7 @@ export const getClientes = () => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/clientes')
+                .get(url + decoded.database + '/clientes')
                 .then(res => {
                     return res.data
                 })
@@ -134,7 +147,21 @@ export const saveCliente = (cliente) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/cliente/save', cliente)
+                .post(url + decoded.database + '/cliente/save', cliente)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const updateCliente = (cliente) => {
+    try{
+        if(decoded){
+            return axios
+                .put(url + decoded.database + '/cliente/update', cliente)
                 .then(res => {
                     return res.data
                 })
@@ -148,7 +175,7 @@ export const deleteCliente = (id) => {
     try{
         if(decoded){
             return axios
-                .delete(url_client + decoded.database +  `/cliente/${id}`)
+                .delete(url + decoded.database +  `/cliente/${id}`)
                 .then(res => {
                     return res.data
                 })
@@ -163,7 +190,7 @@ export const getProvedors = () => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/provedors')
+                .get(url + decoded.database + '/provedors')
                 .then(res => {
                     return res.data
                 })
@@ -176,7 +203,7 @@ export const saveProvedor = (provedor) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/provedor/save', provedor)
+                .post(url + decoded.database + '/provedor/save', provedor)
                 .then(res => {
                     return res.data
                 })
@@ -190,7 +217,7 @@ export const deleteProvedor = (id) => {
     try{
         if(decoded){
             return axios
-                .delete(url_client + decoded.database + `/provedor/${id}`)
+                .delete(url + decoded.database + `/provedor/${id}`)
                 .then(res => {
                     return res.data
                 })
@@ -207,7 +234,7 @@ export const getUbicacion = (id) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/ubicacion/' + id)
+                .get(url + decoded.database + '/ubicacion/' + id)
                 .then(res => {
                     return res.data
                 })
@@ -220,7 +247,7 @@ export const editUbicacion = (data) => {
     try{
         if(decoded){
             return axios
-                .put(url_client + decoded.database + '/ubicacion/update/' + data._id, data)
+                .put(url + decoded.database + '/ubicacion/update/' + data._id, data)
                 .then(res => {
                     return res.data
                 })
@@ -235,7 +262,7 @@ export const getUbicacions = () => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/ubicacions')
+                .get(url + decoded.database + '/ubicacions')
                 .then(res => {
                     return res.data
                 })
@@ -249,7 +276,7 @@ export const getUbicacionsSaldo = () =>{
     try {
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/ubicacions/saldo')
+                .get(url + decoded.database + '/ubicacions/saldo')
                 .then(res => {
                     return res.data
                 })
@@ -263,7 +290,7 @@ export const saveUbicacion = (ubicacion) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/ubicacion/save', ubicacion)
+                .post(url + decoded.database + '/ubicacion/save', ubicacion)
                 .then(res => {
                     return res.data
                 })
@@ -277,7 +304,7 @@ export const deleteUbicacion = (id) => {
     try{
         if(decoded){
             return axios
-                .delete(url_client + decoded.database + `/ubicacion/${id}`)
+                .delete(url + decoded.database + `/ubicacion/${id}`)
                 .then(res => {
                     return res.data
                 })
@@ -294,7 +321,7 @@ export const getComprasDash = () => {
     try{
         if (decoded){
             return axios
-                .get(url_client + decoded.database +'/compras/dash')
+                .get(url + decoded.database +'/compras/dash')
                 .then( res => {
                     return res.data
                 })
@@ -311,7 +338,7 @@ export const getCompras = () => {
     try{
         if (decoded){
             return axios
-                .get(url_client + decoded.database + '/compras')
+                .get(url + decoded.database + '/compras')
                 .then(res => {
                     return res.data
                 })
@@ -325,7 +352,7 @@ export const getCompra = (id) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database +  `/compra/${id}`)
+                .get(url + decoded.database +  `/compra/${id}`)
                 .then( res => {
                     return res.data
                 })
@@ -339,7 +366,7 @@ export const saveCompra = (compra) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/compra/save', compra)
+                .post(url + decoded.database + '/compra/save', compra)
                 .then(res => {
                     return res.data
                 })
@@ -354,7 +381,7 @@ export const deleteCompra = (id) => {
     try{
         if(decoded){
             return axios
-                .delete(url_client + decoded.database + `/compra/${id}`)
+                .delete(url + decoded.database + `/compra/${id}`)
                 .then(res => {
                     return res.data
                 })
@@ -368,7 +395,7 @@ export const closeCompra = (id) => {
     try{
         if(decoded){
             return axios
-                .put(url_client + decoded.database + `/compra/${id}`)
+                .put(url + decoded.database + `/compra/${id}`)
                 .then( res => {
                     return res.data
                 })
@@ -457,7 +484,7 @@ export const getTipoCompras = () => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/tipocompras')
+                .get(url + decoded.database + '/tipocompras')
                 .then(res => {
                     return res.data
                 })
@@ -471,7 +498,7 @@ export const createTipoCompra = (tipoCompra) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/tipocompra/create', tipoCompra)
+                .post(url + decoded.database + '/tipocompra/create', tipoCompra)
                 .then(res => {
                     return res.data
                 })
@@ -487,7 +514,7 @@ export const getInventario = () => {
     try{
         if (decoded) {
             return axios
-                .get(url_client + decoded.database + '/inventario')
+                .get(url + decoded.database + '/inventario')
                 .then(res => {
                     return res.data
                 })
@@ -501,7 +528,7 @@ export const getInventarioBy = (ubicacion) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database +  `/inventario/${ubicacion}`)
+                .get(url + decoded.database +  `/inventario/${ubicacion}`)
                 .then(res => {
                     return res.data
                 })
@@ -514,7 +541,7 @@ export const getInventarioxUbicacion = () => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database +  `/inventarioxubicacion/`)
+                .get(url + decoded.database +  `/inventarioxubicacion/`)
                 .then(res => {
                     return res.data
                 })
@@ -528,7 +555,7 @@ export const moveInventario = (move) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database +  `/inventario/movimiento`, move)
+                .post(url + decoded.database +  `/inventario/movimiento`, move)
                 .then(res => {
                     return res.data
                 })
@@ -543,7 +570,7 @@ export const getVenta = (folio) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/venta/'+ folio)
+                .get(url + decoded.database + '/venta/'+ folio)
                 .then( res => {
                     return res.data
                 })
@@ -556,7 +583,7 @@ export const getVentas = () => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/ventas')
+                .get(url + decoded.database + '/ventas')
                 .then( res => {
                     return res.data
                 })
@@ -569,7 +596,7 @@ export const getVentasSemana =(f1, f2) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/ventas/semana', {params: {f1: f1, f2: f2} })
+                .get(url + decoded.database + '/ventas/semana', {params: {f1: f1, f2: f2} })
                 .then( res => {
                     return res.data
                 })
@@ -582,7 +609,7 @@ export const saveVenta = (venta) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/venta/save', venta)
+                .post(url + decoded.database + '/venta/save', venta)
                 .then(res => {
                     return res.data
                 })
@@ -595,7 +622,7 @@ export const cancelVenta = (id) => {
     try{
         if(decoded){
             return axios
-                .delete(url_client + decoded.database + `/venta/${id}`)
+                .delete(url + decoded.database + `/venta/${id}`)
                 .then( res => {
                     return res.data
                 })
@@ -610,7 +637,7 @@ export const cancelVenta = (id) => {
 export const getCuentasPorPagar = () => {
     try{
         if(decoded){
-            return axios.get(url_client + decoded.database +'/cuentasporpagar')
+            return axios.get(url + decoded.database +'/cuentasporpagar')
                 .then(res => {
                     return res.data
                 })
@@ -625,7 +652,7 @@ export const savePagoACuentaPorPagar = (pago) =>{
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/cuentasporpagar/pago/save', pago)
+                .post(url + decoded.database + '/cuentasporpagar/pago/save', pago)
                 .then(res => {
                     return res.data
                 })
@@ -641,7 +668,7 @@ export const createCuentaPorCobrar = (cuenta) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database +  '/cuentasporcobrar/save', cuenta)
+                .post( url + decoded.database +  '/cuentasporcobrar/save', cuenta)
                 .then( res => {
                     return res.data
                 })
@@ -655,7 +682,7 @@ export const getCxcCliente = (id) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + `/cuentasporcobrar/cliente/${id}`)
+                .get(url + decoded.database + `/cuentasporcobrar/cliente/${id}`)
                 .then( res => {
                     return res.data
                 })
@@ -670,7 +697,7 @@ export const getCuentasPorCobrar = () => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/cuentasporcobrar')
+                .get(url + decoded.database + '/cuentasporcobrar')
                 .then( res => {
                     return res.data
                 })
@@ -684,7 +711,7 @@ export const getCxcPdv = () => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/cuentasporcobrar/pdv')
+                .get(url + decoded.database + '/cuentasporcobrar/pdv')
                 .then( res => {
                     return res.data
                 })
@@ -699,7 +726,7 @@ export const savePagoACuentaPorCobrar = (pago) =>{
     try{
         if (decoded){
             return axios
-                .post(url_client + decoded.database +  '/cuentasporcobrar/pago/save', pago)
+                .post(url + decoded.database +  '/cuentasporcobrar/pago/save', pago)
                 .then(res => {
                     return res.data
                 })
@@ -714,7 +741,7 @@ export const saveIngreso = (ingreso) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database+  '/ingreso/save', ingreso)
+                .post(url + decoded.database+  '/ingreso/save', ingreso)
                 .then( res => {
                     return res.data
                 })
@@ -728,7 +755,7 @@ export const getIngresos = (fecha) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database+  '/ingresos/' + fecha)
+                .get(url + decoded.database+  '/ingresos/' + fecha)
                 .then( res => {
                     return res.data
                 })
@@ -760,7 +787,7 @@ export const saveEgreso = (egreso) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/egreso/save', egreso)
+                .post(url + decoded.database + '/egreso/save', egreso)
                 .then(res => {
                     return res.data
                 })
@@ -774,7 +801,7 @@ export const getEgresos = (fecha) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database+  '/egresos/' + fecha)
+                .get(url + decoded.database+  '/egresos/' + fecha)
                 .then( res => {
                     return res.data
                 })
@@ -790,7 +817,7 @@ export const getDataFrom = (ubicacion, fecha) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + `/corte/${ubicacion}/${fecha}`)
+                .get(url + decoded.database + `/corte/${ubicacion}/${fecha}`)
                 .then( res => {
                     return res.data
                 })
@@ -804,7 +831,7 @@ export const saveCorte = (corte) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database +  '/corte/save', corte)
+                .post(url + decoded.database +  '/corte/save', corte)
                 .then( res => {
                     return res.data
                 })
@@ -818,7 +845,7 @@ export const existCorte = (ubicacion, fecha) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + `/corte/exist/${ubicacion}/${fecha}`)
+                .get(url + decoded.database + `/corte/exist/${ubicacion}/${fecha}`)
                 .then( res => {
                     return res.data
                 })
@@ -833,7 +860,7 @@ export const openCorte = (ubicacion, fecha) => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + `/corte/open/${ubicacion}/${fecha}`)
+                .get(url + decoded.database + `/corte/open/${ubicacion}/${fecha}`)
                 .then( res => {
                     return res.data
                 })
@@ -848,7 +875,7 @@ export const getBalance = () => {
     try{
         if (decoded){
             return axios
-                .get(url_client + decoded.database + '/balance/')
+                .get(url + decoded.database + '/balance/')
                 .then( res => {
                     return res.data.balance
                 })
@@ -861,7 +888,7 @@ export const getDisponiblexUbicacion = (fecha) => {
     try{
         if (decoded){
             return axios
-                .get(url_client + decoded.database + '/balance/disponiblexubicacion/' + fecha)
+                .get(url + decoded.database + '/balance/disponiblexubicacion/' + fecha)
                 .then( res => {
                     return res.data.disp
                 })
@@ -881,7 +908,7 @@ export const getUnidades = () => {
     try{
         if(decoded){
             return axios
-                .get(url_client + decoded.database + '/unidads')
+                .get(url + decoded.database + '/unidads')
                 .then( res => {
                     return res.data
                 })
@@ -895,7 +922,7 @@ export const addUnidad = (unidad) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/unidad/save', unidad)
+                .post( url + decoded.database + '/unidad/save', unidad)
                 .then( res => {
                     return res.data
                 })
@@ -909,7 +936,7 @@ export const delUnidad = (id) => {
     try{
         if(decoded){
             return axios
-                .delete(url_client + decoded.database + `/unidad/${id}`)
+                .delete(url + decoded.database + `/unidad/${id}`)
                 .then(res => {
                     return res.data
                 })
@@ -925,7 +952,7 @@ export const getEmpaques = () => {
     try{
         if(decoded){
             return axios
-                .get( url_client + decoded.database + '/empaques')
+                .get( url + decoded.database + '/empaques')
                 .then( res => {
                     return res.data
                 })
@@ -939,7 +966,7 @@ export const addEmpaque = (empaque) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/empaque/save', empaque)
+                .post( url + decoded.database + '/empaque/save', empaque)
                 .then( res => {
                     return res.data
                 })
@@ -954,7 +981,7 @@ export const delEmpaque = (id) => {
     try{
         if(decoded){
             return axios
-                .delete(url_client + decoded.database + `/empaque/${id}`)
+                .delete(url + decoded.database + `/empaque/${id}`)
                 .then(res => {
                     return res.data
                 })
@@ -970,7 +997,7 @@ export const getConceptos = () => {
     try{
         if(decoded){
             return axios
-                .get( url_client + decoded.database + '/conceptos')
+                .get( url + decoded.database + '/conceptos')
                 .then( res => {
                     return res.data
                 })
@@ -984,7 +1011,7 @@ export const addConcepto = (concepto) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/concepto/save', concepto)
+                .post( url + decoded.database + '/concepto/save', concepto)
                 .then( res => {
                     return res.data
                 })
@@ -998,7 +1025,7 @@ export const delConcepto = (id) => {
     try{
         if(decoded){
             return axios
-                .delete(url_client + decoded.database + `/concepto/${id}`)
+                .delete(url + decoded.database + `/concepto/${id}`)
                 .then(res => {
                     return res.data
                 })
@@ -1225,7 +1252,7 @@ export const getProduccions = () => {
     try{
         if (decoded){
             return axios
-                .get( url_client + decoded.database + '/produccions')
+                .get( url + decoded.database + '/produccions')
                 .then( res => {
                     return res.data
                 })
@@ -1254,7 +1281,7 @@ export const createProduccion = () => {
     try{
         if(decoded){
             return axios
-                .get( url_client + decoded.database + '/produccion/save')
+                .get( url + decoded.database + '/produccion/save')
                 .then( res => {
                     return res.data
                 })
@@ -1268,7 +1295,7 @@ export const delProduccion = (id) => {
     try{
         if(decoded){
             return axios
-                .delete(url_client + decoded.database + `/produccion/${id}`)
+                .delete(url + decoded.database + `/produccion/${id}`)
                 .then(res => {
                     return res.data
                 })
@@ -1300,7 +1327,7 @@ export const delProduccionItem = (item) => {
     try{
         if(decoded){
             return axios
-                .post(url_client + decoded.database + '/produccionitem/delete', item)
+                .post(url + decoded.database + '/produccionitem/delete', item)
                 .then(res => {
                     return res.data
                 })
@@ -1314,7 +1341,7 @@ export const subtractProduccionItemStock = (id, cantidad) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/produccionitem/subtract', {id, cantidad} )
+                .post( url + decoded.database + '/produccionitem/subtract', {id, cantidad} )
                 .then ( res => {
                     return res.data
                 })
@@ -1332,7 +1359,7 @@ export const addProduccionItem = (item) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/produccionitem/save', item)
+                .post( url + decoded.database + '/produccionitem/save', item)
                 .then( res => {
                     return res.data
                 })
@@ -1376,7 +1403,7 @@ export const addInsumo = (insumo) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/insumo/save', insumo)
+                .post( url + decoded.database + '/insumo/save', insumo)
                 .then( res => {
                     return res.data
                 })
@@ -1390,7 +1417,7 @@ export const delInsumo = (insumo) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/insumo/delete', insumo)
+                .post( url + decoded.database + '/insumo/delete', insumo)
                 .then( res => {
                     return res.data
                 })
@@ -1404,7 +1431,7 @@ export const subtractInsumoStock = (id, cantidad) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/insumo/subtract', {id, cantidad} )
+                .post( url + decoded.database + '/insumo/subtract', {id, cantidad} )
                 .then ( res => {
                     return res.data
                 })
@@ -1417,7 +1444,7 @@ export const addInsumoStock = (id, cantidad) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/insumo/add', {id, cantidad} )
+                .post( url + decoded.database + '/insumo/add', {id, cantidad} )
                 .then( res => {
                     return res.data
                 })
@@ -1431,7 +1458,7 @@ export const subtractStock = (id, cantidad) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/items/subtract', {id, cantidad})
+                .post( url + decoded.database + '/items/subtract', {id, cantidad})
                 .then( res => {
                     return res.data
                 })
@@ -1445,7 +1472,7 @@ export const addStock = (id, cantidad) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/items/add', {id, cantidad})
+                .post( url + decoded.database + '/items/add', {id, cantidad})
                 .then( res => {
                     return res.data
                 })
@@ -1459,7 +1486,7 @@ export const restartApp = () => {
     try{
         if(decoded){
             return axios
-                .get( url_client + decoded.database + '/restartApp')
+                .get( url + decoded.database + '/restartApp')
                 .then( res => {
                     return res.data
                 })
@@ -1475,7 +1502,7 @@ export const getEmpleados = () => {
     try{
         if(decoded){
             return axios
-                .get( url_client + decoded.database + '/empleados')
+                .get( url + decoded.database + '/empleados')
                 .then( res => {
                     return res.data
                 })
@@ -1489,7 +1516,7 @@ export const addEmpleado = (empleado) => {
     try{
         if(decoded){
             return axios
-                .post( url_client + decoded.database + '/empleados/add', empleado)
+                .post( url + decoded.database + '/empleados/add', empleado)
                 .then( res => {
                     return res.data
                 })
@@ -1502,7 +1529,7 @@ export const delEmpleado = (idEmpleado) => {
     try{
         if(decoded){
             return axios
-                .delete( url_client + decoded.database + `/empleado/${idEmpleado}`)
+                .delete( url + decoded.database + `/empleado/${idEmpleado}`)
                 .then( res => {
                     return res.data
                 })
