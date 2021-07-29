@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {getEmpleados, addEmpleado, delEmpleado} from '../api'
+import {getEmpleados, addEmpleado, delEmpleado, updateEmpleado} from '../api'
 const useEmpleados = () => {
     const [empleados, setEmpleados] = useState([])
     const [updtng, setupdtng] = useState(false)
@@ -25,10 +25,17 @@ const useEmpleados = () => {
         })
     }
 
+    const update = (empleado) =>{
+        return updateEmpleado(empleado).then(res=>{
+            return res
+        })
+    }
+
     return {
         empleados,
         crearEmpleado,
-        eliminarEmpleado
+        eliminarEmpleado,
+        update
     }
 }
 

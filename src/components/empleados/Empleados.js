@@ -1,23 +1,27 @@
 import React, {useState} from 'react'
 import { Button, Card, CardMedia, CardContent, Container, Grid, Typography } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
-import avatarh from '../../img/avatarH1.png'
-import avatarm from '../../img/avatarM2.png'
 import useEmpleados from './useEmpleados'
 import CrearEmpleado from './CrearEmpleado'
-
+import Empleado from './Empleado'
+import useUbicacions from '../ubicaciones/useUbicacions';
 export default function Empleados(){
     const classes = useStyles()
-    const {empleados, crearEmpleado} = useEmpleados()
+    const {empleados, crearEmpleado, update} = useEmpleados()
     const [dialogOpen, setDialogOpen] = useState(false)
+    const {ubicacions} = useUbicacions()
     const closeDialog = () =>{
         setDialogOpen(false)
     }
 
     const crear = (empleado) =>{
-        crearEmpleado(empleado).then(res => {
-            console.log(res)
-        })
+        if(empleados.length <6){
+            crearEmpleado(empleado).then(res => {
+                console.log(res)
+            })
+        }else{
+            alert('Maximo de empleados alcanzado')
+        }
     }
     return(
         <Container>
@@ -38,20 +42,7 @@ export default function Empleados(){
             <Grid container spacing={2}>
                 {
                     empleados.map((empleado, i) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
-                                <Card>
-                                    <CardMedia
-                                        className={classes.media}
-                                        image={empleado.sexo === 'H' ? avatarh : avatarm}
-                                    />
-                                    <CardContent>
-                                        <Typography variant="h6" >{empleado.nombre}</Typography>
-                                        <Typography>{empleado.telefono}</Typography>
-                                        <Typography>{empleado.email}</Typography>
-                                        <Typography>{empleado.ubicacion.nombre}</Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
+                        <Empleado data={empleado} key={i} update={update} ubicacions={ubicacions} />
                     ))
                 }
             </Grid>

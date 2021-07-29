@@ -1538,3 +1538,17 @@ export const delEmpleado = (idEmpleado) => {
         console.log(err)
     }
 }
+
+export const updateEmpleado = (empleado) => {
+    try{
+        if(decoded){
+            return axios
+                .put(url + decoded.database + '/empleado/update/',empleado)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}

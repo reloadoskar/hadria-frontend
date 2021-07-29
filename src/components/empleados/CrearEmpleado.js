@@ -11,18 +11,25 @@ const nempleado = {
     edad: 0,
     sexo: '',
     direccion: "",
-    telefono: "0123456789",
+    telefono: "",
     email: "",
     instagram: "",
     facebook: "",
     password: "", 
-    ubicacion: ''
+    ubicacion: '',
+    sueldo:0,
+    periodo: ""
 }
 const areas = [
     {level: 2, area: "ADMINISTRACIÓN"},
     {level: 3, area: "ALMACÉN"},
     {level: 4, area: "CAJAS"},
     {level: 5, area: "GENERAL"},
+]
+const periodos = [
+    "SEMANAL",
+    "QUINCENAL",
+    "MENSUAL",
 ]
 const CrearEmpleado = (props) =>{
     const {open, close, crear} = props
@@ -39,6 +46,16 @@ const CrearEmpleado = (props) =>{
 
     const handleChange = (field, value) => {
         switch(field){
+            case 'periodo':
+                if(value==="SEMANAL"){
+                    let smensual = empleado.sueldo * 4
+                    setEmpleado({...empleado, sueldo: smensual, periodo: "MENSUAL"})
+                }
+                if(value==="QUINCENAL"){
+                    let smensual = empleado.sueldo * 2
+                    setEmpleado({...empleado, sueldo: smensual, periodo: "MENSUAL"})
+                }
+                break
             case 'area':
                 return setEmpleado({...empleado, area: value, level: value.level})
             case 'nombre':
@@ -55,7 +72,7 @@ const CrearEmpleado = (props) =>{
             <form onSubmit={(e) => handleSubmit(e)}>
                 <DialogContent>
                     <Grid container spacing={2}>
-                        <Grid item xs={8}>
+                        <Grid item xs={12} sm={8}>
                             <TextField 
                                 id="nombre"
                                 fullWidth
@@ -66,7 +83,7 @@ const CrearEmpleado = (props) =>{
                                 onChange={(e) => handleChange('nombre', e.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={6} sm={2}>
                             <TextField 
                                 id="edad"
                                 fullWidth
@@ -78,7 +95,7 @@ const CrearEmpleado = (props) =>{
                                 onChange={(e) => handleChange('edad', e.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={6} sm={2}>
                             <TextField 
                                 id="sexo"
                                 select
@@ -99,7 +116,6 @@ const CrearEmpleado = (props) =>{
                                 fullWidth
                                 select
                                 label="Area"
-                                type="text"
                                 variant="outlined"
                                 value={empleado.area}
                                 onChange={(e) => handleChange('area', e.target.value)}
@@ -108,6 +124,32 @@ const CrearEmpleado = (props) =>{
                                     <MenuItem key={i} value={op}>
                                         {op.area}
                                     </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <TextField 
+                                id="sueldo"
+                                fullWidth
+                                label="Sueldo"
+                                type="number"
+                                variant="outlined"
+                                value={empleado.sueldo}
+                                onChange={(e) => handleChange('sueldo', e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField 
+                                id="periodo"
+                                fullWidth
+                                label="Periodo"
+                                select
+                                variant="outlined"
+                                value={empleado.periodo}
+                                onChange={(e) => handleChange('periodo', e.target.value)}
+                            >
+                                {periodos.map((periodo, i)=>(
+                                    <MenuItem value={periodo} key={i}>{periodo}</MenuItem>
                                 ))}
                             </TextField>
                         </Grid>
