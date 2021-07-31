@@ -75,7 +75,7 @@ export default function DialogPos(props){
             onClose={()=>{close()}}
             fullScreen
             >
-            <Grid container spacing={2} justify="center">
+            <Grid container spacing={2} justifyContent="center">
                 <Grid item xs={8} container>
                     <Grid item xs={6} sm={4}>
                         <Typography variant="h6" align="center">{ubicacion.nombre}</Typography>

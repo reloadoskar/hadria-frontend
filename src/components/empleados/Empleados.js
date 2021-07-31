@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Button, Card, CardMedia, CardContent, Container, Grid, Typography } from '@material-ui/core'
+import { Button, Container, Grid, Typography } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
 import useEmpleados from './useEmpleados'
 import CrearEmpleado from './CrearEmpleado'

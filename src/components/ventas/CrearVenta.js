@@ -160,7 +160,7 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
                 {inventario === null || fecha === null || ubicacion === null ? null :
                     <React.Fragment>
                         <DialogContent>                            
-                            <Grid container spacing={2} justify="center">
+                            <Grid container spacing={2} justifyContent="center">
                                 <Grid item xs={12} sm={4}>
                                     <Typography align="center" className={classes.textoMiniFacheron}>Cliente</Typography>
                                     <Button 

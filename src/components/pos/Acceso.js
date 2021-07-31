@@ -43,7 +43,6 @@ export default function Acceso({accesando, ubicacions, ubicacion, fecha, access,
                                         margin="normal"
                                         variant="outlined"
                                         value={ubicacion}
-                                        // onChange={(e) => setUbicacion(e.target.value)}
                                         onChange={(e) => handleChange('ubicacion',e.target.value)}
                                         >
                                         {

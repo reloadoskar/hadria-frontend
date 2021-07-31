@@ -46,7 +46,6 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
     const [cambio, setCambio] = useState(0)
     const [acuenta, setAcuenta] = useState(0)
     const [saldo, setSaldo] = useState(0)
-    
     const [reprintDialog, setReprintDialog] = useState(false)
     
     useEffect(() => {
