@@ -5,6 +5,7 @@ import { Card, CardContent,
     MenuItem,
     CardHeader,
     CircularProgress,
+    Divider,
 } from '@material-ui/core'
 import {formatNumber} from '../Tools'
 import useStyles from '../hooks/useStyles'
@@ -54,24 +55,21 @@ export default function Disponible(props){
     },[ingresos, egresos, ubicacions])
     return(
         <Card>
-            <CardHeader title="Disponible" />
-                <CardContent>
+            <CardContent>
                 {totalDisp === null  ?
                     <CircularProgress />
                 :
-                    <Grid container >
+                    <Grid container alignItems="center">
                         <Grid item xs={12}>
-                            <Typography className={classes.textoMiniFacheron} align="right">
-                                Total:
+                            <Typography className={classes.textoMiniFacheron} align="center">
+                                Total Disponible:
                             </Typography>
-                            <Typography variant="h6" className={classes.textoGroovie} align="right">
+                            <Typography variant="h6" className={classes.textoGroovie} align="center">
                                 $ {formatNumber(totalDisp,2)}
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} sm={4}>
-                            {/* {dispxubic.map((ubic, i) => ( */}
+                        <Grid item xs={12} sm={3}>
                                 {dispxubic
-                                    // .filter(ubic => ubic.total !== 0)
                                     .map(ubic => (
                                 <MenuItem key={ubic.ubicacion._id} onClick={() => props.verCorte(ubic.ubicacion)}>
                                     <Grid container >
@@ -81,11 +79,12 @@ export default function Disponible(props){
                                         <Grid item xs={6}>
                                             <Typography align="right">${formatNumber(ubic.total)}</Typography>
                                         </Grid>
+                                        <Grid item />
                                     </Grid>
                                 </MenuItem>
                             ))}
                         </Grid> 
-                        <Grid item sm={12} md={8}>
+                        <Grid item xs={12} sm={9}>
                             <GraficaVentas data={dispxubic} />
                         </Grid>                                                           
                     </Grid>

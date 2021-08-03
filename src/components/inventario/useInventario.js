@@ -11,14 +11,14 @@ const useInventario = () => {
     const [totalInventario, setTotalInventario] = useState(0)
     const [updating, setUpdating] = useState(false)
 
-    const getInventarioGeneral = () => {
-        return getInventario()
-        .then(res=> {
-            setInventarioGeneral(res.inventario)
-        })
-        .catch(err => {
-            return false
-        })
+    const getInventarioGeneral = async () => {
+        try {
+            const res = await getInventario();
+            setInventarioGeneral(res.inventario);
+            return res
+        } catch (err) {
+            return false;
+        }
     }
 
     const getInventarioUbicacion = (ubicacion_id) => {
@@ -31,14 +31,14 @@ const useInventario = () => {
             })
     }
 
-    const getInventarioXUbic = () => {
-        return getInventarioxUbicacion()
-            .then(res => {
-                setInventarioXub(res.inventario)
-            })
-            .catch(err => {
-                return false
-            })
+    const getInventarioXUbic = async () => {
+        try {
+            const res = await getInventarioxUbicacion();
+            setInventarioXub(res.inventario);
+            return res
+        } catch (err) {
+            return false;
+        }
     }
 
 	useEffect(() => {

@@ -31,7 +31,10 @@ export default function Corte(props){
         if(elcorte !== null){
             let cuenta = 0
             elcorte.items.map((el)=>{
-                if(el.empaques > 0 && el.empaques < 1){
+                // if(el.empaques > 0 && el.empaques < 1){
+                //     return cuenta++
+                // }
+                if(!Number.isInteger(el.empaques)){
                     return cuenta++
                 }
                 return false

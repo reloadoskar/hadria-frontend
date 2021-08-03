@@ -151,7 +151,7 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                             <Typography variant="h6" >Cobrar</Typography>
                         </Grid>
                         <Grid item xs >
-                            <Grid container justify="flex-end">
+                            <Grid container justifyContent="flex-end">
                                 <Typography variant="h6"  >$ {total}</Typography>
                             </Grid>
                         </Grid>

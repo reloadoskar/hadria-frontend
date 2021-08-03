@@ -15,7 +15,7 @@ export default function Empleados(){
     }
 
     const crear = (empleado) =>{
-        if(empleados.length <6){
+        if(empleados.length <10){
             crearEmpleado(empleado).then(res => {
                 console.log(res)
             })

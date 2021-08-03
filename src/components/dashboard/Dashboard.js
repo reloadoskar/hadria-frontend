@@ -5,6 +5,8 @@ import { Grid,
     Container,
     ButtonGroup,
     Button,
+    Tabs,
+    Tab,
 } from '@material-ui/core'
 // componentes
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
@@ -16,6 +18,7 @@ import Disponible from '../disponible/Disponible'
 import Corte from '../cortes/Corte'
 import Cobrar from './Cobrar'
 import CrearEgreso from '../egresos/CrearEgreso'
+import GraficaInventario from '../inventario/GraficaInventario'
 // HOOKS
 import {useAuth} from '../auth/use_auth'
 import useCortes from '../cortes/useCortes'
@@ -45,6 +48,10 @@ export default function Dashboard({ubicacions}) {
     const [gastar, setGastar] = useState(false)
     const [traspasar, setTraspasar] = useState(false)
     const [corteDialog, setCorteDialog] = useState(false)
+    const [tabSelected, setTab] = useState(1)
+    const selectTab = (event, selected) => {
+        setTab(selected)
+    }
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     const showPagar = () => {
         setPagar(true)
@@ -229,8 +236,20 @@ export default function Dashboard({ubicacions}) {
                 </Grid>
                 {/* INFO UBICACIONES */}
                 <Grid item xs={12}>
-                    <Disponible verCorte={verCorte} ubicacions={ubicacions} ingresos={ingresos} egresos={egresos} />
-                    <Corte user={auth.user} open={corteDialog} close={closeCorteDialog} corte={corte} fecha={now.format("YYYY-MM-DD")} onChangeFecha={onChangeFecha}  ubicacions={ubicacions}/>
+                    <Tabs
+                        value={tabSelected}
+                        onChange={selectTab}
+                        centered>
+                        <Tab label="Disponible" value={1}/>
+                        <Tab label="Inventario" value={2}/>
+                    </Tabs>
+                    <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
+                        <Disponible verCorte={verCorte} ubicacions={ubicacions} ingresos={ingresos} egresos={egresos} />
+                        <Corte user={auth.user} open={corteDialog} close={closeCorteDialog} corte={corte} fecha={now.format("YYYY-MM-DD")} onChangeFecha={onChangeFecha}  ubicacions={ubicacions}/>
+                    </div>
+                    <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
+                        <GraficaInventario />
+                    </div>
                 </Grid>
                 {/* INFO CUENTAS POR COBRAR */}
                 <Grid item xs={12}>
