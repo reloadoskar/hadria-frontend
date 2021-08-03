@@ -3,6 +3,7 @@ import { Dialog, DialogContent, Divider, Grid, IconButton, LinearProgress, Slide
     Typography, Tooltip } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import LockIcon from '@material-ui/icons/Lock';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 import ListIcon from '@material-ui/icons/List';
 import useStyles from '../hooks/useStyles'
 import ResumenVentas from '../ventas/ResumenVentas'
@@ -12,14 +13,23 @@ import ListaVentas from '../ventas/ListaVentas';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
-export default function Compra({open, close, compra, 
-    compras}){
+export default function Compra({open, close, compra, compras}){
+    const classes = useStyles()
     const [laCompra, setLaCompra] = useState(null)
-    const [saldo, setSaldo] = useState(0)
+    const [totalVentas, setTv] = useState(0)
+    const [totalCosto, setTc] = useState(0)
+    const [totalPagos, setTp] = useState(0)
+    const [totalGastos, setTg] = useState(0)
+    const [totalComision, setTcom] = useState(0)
+    const [resultado, setRes] = useState(0)
+    
+    
+    
+    
     const [total, setTotal] = useState(0)
+    const [saldo, setSaldo] = useState(0)
     const [comision, setComision] = useState(0)
     const [dialogListaVentas, setDialog] = useState(false)
-    const classes = useStyles()
 
     useEffect(() => {
         if(compra){
@@ -27,6 +37,9 @@ export default function Compra({open, close, compra,
                 .then(res => {
                     setLaCompra(res.data)
                     let tot = sumImporte(res.data.ventas)
+                    let tcost = res.data.compra.importe
+                    let tg = sumImporte(res.data.egresos.filter((e)=>e.tipo!=="PAGO"))
+                    let tp = sumImporte(res.data.egresos.filter((e)=>e.tipo==="PAGO"))
                     if(res.data.compra.tipoCompra.tipo === "CONSIGNACION"){
                         let com = 0
                         com = ( res.data.compra.provedor.comision / 100 ) * tot
@@ -34,8 +47,14 @@ export default function Compra({open, close, compra,
                         let sal = 0
                         sal = tot - com
                         setSaldo(sal)
+                    }else{
+                        setTv(tot)
+                        setTc(tcost)
+                        setTg(tg)
+                        setTp(tp)
+                        setRes(tot-tcost-tg)
                     }
-                    setTotal(calculaTotal(res.data))
+                    // setTotal(calculaTotal(res.data))
                 })
         }
         return () => setLaCompra(null)
@@ -82,7 +101,7 @@ export default function Compra({open, close, compra,
                                     aria-label="Cerrar"
                                     onClick={()=>cerrarComp(laCompra.compra._id)}
                                 >
-                                    <LockIcon />
+                                   { laCompra.compra.status === "ACTIVO" ?  <LockOpenIcon /> : <LockIcon /> }
                                 </IconButton>
                             </Tooltip>
                             <IconButton
@@ -126,7 +145,7 @@ export default function Compra({open, close, compra,
                             </Grid>
                             <Grid item xs={12} >
                                 <Typography align="right" className={classes.textoMiniFacheron} >
-                                    TOTAL GASTOS:
+                                    TOTAL PAGOS:
                                 </Typography>
                                 <Typography align="right" className={classes.textoSangron} >
                                     ${formatNumber(sumImporte(laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO")),2)}
@@ -135,7 +154,23 @@ export default function Compra({open, close, compra,
                         </Grid>
 
                         <Grid item xs={12}>
-                            <Typography align="right" className={classes.textoMiniFacheron}>TOTAL:</Typography>
+                            { laCompra.compra.tipoCompra.tipo === "COMPRAS"  ?
+                                <React.Fragment>
+                                    <Typography align="right" className={classes.textoMiniFacheron}>TOTAL VENTAS:</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(totalVentas,1)}</Typography>
+                                    <Typography align="right" className={classes.textoMiniFacheron}>COSTO:</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalCosto,1)}</Typography>
+                                    <Typography align="right" className={classes.textoMiniFacheron}>TOTAL GASTOS:</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalGastos,1)}</Typography>
+                                    <Typography align="right" className={classes.textoMiniFacheron}>RESULTADO:</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(resultado,1)}</Typography>
+                                </React.Fragment>
+                                :
+                                null
+                            }
+
+
+                            {/* <Typography align="right" className={classes.textoMiniFacheron}>TOTAL:</Typography>
                             <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(total,2)}</Typography>
                             {laCompra.compra.tipoCompra.tipo === "CONSIGNACION" ?
                                 <React.Fragment>
@@ -148,7 +183,7 @@ export default function Compra({open, close, compra,
                                 </React.Fragment>
                                 :
                                 null
-                            }
+                            } */}
                         </Grid>
                         <Grid item xs={12}>
                             <ListaVentas ventas={laCompra.ventas} open={dialogListaVentas} close={()=>setDialog(false)} />
