@@ -2,37 +2,41 @@ import {useState, useEffect} from 'react'
 import {getEmpleados, addEmpleado, delEmpleado, updateEmpleado} from '../api'
 const useEmpleados = () => {
     const [empleados, setEmpleados] = useState([])
-    const [updtng, setupdtng] = useState(false)
+    const [updating, setUpdating] = useState(false)
+
     useEffect(()=>{
-        getEmpleados().then(res=>{
-            setEmpleados(res.empleados)
-        })
+        fetchEmpleados()
         return () =>{
             setEmpleados([])
         }
-    }, [updtng])
-
-    const crearEmpleado = (empleado) =>{
-        return addEmpleado(empleado).then(res => {
-            setupdtng(!updtng)
-            return res
-        })
+    }, [updating])
+    
+    const fetchEmpleados = async () =>{
+        const res = await getEmpleados()
+        setEmpleados(res.empleados)
+        return res.empleados
     }
 
-    const eliminarEmpleado = (idEmpleado) =>{
-        return delEmpleado(idEmpleado).then(res=>{
-            return res
-        })
+    const crearEmpleado = async (empleado) =>{
+        const res = await addEmpleado(empleado)
+        setUpdating(!updating)
+        return res
     }
 
-    const update = (empleado) =>{
-        return updateEmpleado(empleado).then(res=>{
-            return res
-        })
+    const eliminarEmpleado = async (idEmpleado, index) =>{
+        const res = await delEmpleado(idEmpleado)
+        setUpdating(!updating)
+        return res
+    }
+
+    const update = async (empleado) =>{
+        const res = await updateEmpleado(empleado)
+        return res
     }
 
     return {
         empleados,
+        fetchEmpleados,
         crearEmpleado,
         eliminarEmpleado,
         update

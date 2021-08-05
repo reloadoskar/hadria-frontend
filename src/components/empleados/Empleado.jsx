@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
-import { Grid, Typography, Card, CardContent, CardMedia, CardActions, IconButton, TextField, MenuItem } from '@material-ui/core'
+import { Grid, Typography, Card, CardContent, CardMedia, CardActions, IconButton, TextField, MenuItem, Button } from '@material-ui/core'
 import avatarh from '../../img/avatarH1.png'
 import avatarm from '../../img/avatarM2.png'
 import EditIcon from '@material-ui/icons/Edit'
@@ -10,9 +10,10 @@ import useStyles from '../hooks/useStyles'
 import PhoneIcon from '@material-ui/icons/Phone';
 import MailIcon from '@material-ui/icons/Mail';
 
-export default function Empleado({data, update, ubicacions}){
+export default function Empleado({index, data, update, del, ubicacions}){
     const [empleado, setEmpleado] = useState(false)
     const [editMode, setEditMode] = useState(false)
+    const [confirmMode, setConfirmMode] = useState(false)
     const classes = useStyles()
     const areas = ["GOD", "SUPERVISOR DEL SISTEMA", "ADMINISTRADOR", "ALMACEN", "CAJAS", "GENERAL"]
     useEffect(()=>{
@@ -32,6 +33,15 @@ export default function Empleado({data, update, ubicacions}){
         update(empleado).then(res=>{
             setEditMode(false)
         })
+    }
+
+    const handleConfirm = () =>{
+        del(empleado._id, index).then(
+            res => {
+                setEditMode(false)
+                setConfirmMode(false)
+            }
+        )
     }
     return empleado ?
         <Grid item xs={12} sm={6} md={4} lg={3} >
@@ -187,6 +197,25 @@ export default function Empleado({data, update, ubicacions}){
                                     value={empleado.sueldo}
                                     onChange={(e) => handleChange('sueldo',e.target.value)}
                                 />
+                            </Grid>
+                            <Grid item xs={12}>
+                                {confirmMode ?
+                                    <React.Fragment>
+                                        <Typography align="center">Confirmar</Typography>
+                                        <Typography align="center">
+                                            <IconButton onClick={()=>setConfirmMode(false)}>
+                                                <CloseIcon />
+                                            </IconButton>
+                                            <IconButton onClick={()=>handleConfirm()}>
+                                                <CheckIcon />
+                                            </IconButton>
+                                        </Typography>
+                                    </React.Fragment>
+                                :
+                                    <Button onClick={()=>setConfirmMode(true)} fullWidth color="secondary" >
+                                        eliminar
+                                    </Button>
+                                }
                             </Grid>
                         </Grid>
                     </CardContent>

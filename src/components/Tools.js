@@ -30,6 +30,19 @@ export const sumImporte = (list) => {
         return suma
     }
 }
+export const sumSueldo = (list) => {
+    let suma = 0
+    if( list === [] || list === undefined){
+        return suma
+    }else{
+        list.forEach(function(item){
+            if(item.sueldo){
+                suma += parseFloat(item.sueldo)
+            }
+        })
+        return suma
+    }
+}
 
 export const countCreditos = (list) => {
     let count = 0
