@@ -74,6 +74,7 @@ export default function Corte(props){
 
     function cierraCorte (){
         guardar(elcorte)
+        close()
     }
 
     function toggleVerDetalle(){
@@ -81,6 +82,10 @@ export default function Corte(props){
     }
     function toggleVerFolios(){
         setVerFolios(!verFolios)
+    }
+    const handleReabrir = (id,fecha) =>{
+        reabrir(id,fecha)
+        close()
     }
     return(
         <Dialog
@@ -317,7 +322,7 @@ export default function Corte(props){
                             user.level > 2 ? null :
                             <Button
                                 className={classes.botonCosmico}
-                                onClick={() => reabrir(elcorte.ubicacion._id, lafecha)}
+                                onClick={() => handleReabrir(elcorte.ubicacion._id, lafecha)}
                             >
                                 Reabrir
                             </Button>

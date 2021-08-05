@@ -42,7 +42,7 @@ export default function Dashboard({ubicacions}) {
     },[])
     const { enqueueSnackbar } = useSnackbar()
     // const{ubicacions} = useUbicacions()
-    const {getCorte} = useCortes()
+    const {getCorte, reOpen, guardarCorte} = useCortes()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
     const [gastar, setGastar] = useState(false)
@@ -245,7 +245,7 @@ export default function Dashboard({ubicacions}) {
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
                         <Disponible verCorte={verCorte} ubicacions={ubicacions} ingresos={ingresos} egresos={egresos} />
-                        <Corte user={auth.user} open={corteDialog} close={closeCorteDialog} corte={corte} fecha={now.format("YYYY-MM-DD")} onChangeFecha={onChangeFecha}  ubicacions={ubicacions}/>
+                        <Corte user={auth.user} open={corteDialog} close={closeCorteDialog} corte={corte} fecha={now.format("YYYY-MM-DD")} onChangeFecha={onChangeFecha}  ubicacions={ubicacions} reabrir={reOpen} guardar={guardarCorte}/>
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
                         <GraficaInventario />
