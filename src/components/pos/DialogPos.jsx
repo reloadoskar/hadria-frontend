@@ -59,9 +59,8 @@ export default function DialogPos(props){
         // setFecha(fecha)
     }
     function saveCorte(corte){
-        cortes.guardarCorte(corte).then( res => {
-            showMessage(res.message, res.status)
-            closeDialogCorte()
+        return cortes.guardarCorte(corte).then( res => {
+            // closeDialogCorte()
             close()
         })
     }
@@ -178,7 +177,8 @@ export default function DialogPos(props){
                         corte={corte}
                         onChangeFecha={onChangeFecha}
                         guardar={saveCorte}
-                        message={showMessage}
+                        // guardar={cortes.guardarCorte}
+                        reabrir={cortes.reOpen}
                     />
                 </Grid>
                 <Grid item xs={8}>

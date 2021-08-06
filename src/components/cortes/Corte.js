@@ -11,8 +11,11 @@ import { formatNumber, sumCantidad, sumEmpaques, sumImporte } from '../Tools'
 import moment from 'moment'
 import VentaItem from '../ventas/VentaItem'
 import useStyles from '../hooks/useStyles'
+import { useSnackbar } from 'notistack';
 export default function Corte(props){
     const {user, open, close, corte, fecha, onChangeFecha, guardar, reabrir} = props
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     const classes = useStyles()
     const [elcorte, setElcorte] = useState(null)
     const [lafecha, setLafecha] = useState("")
@@ -20,6 +23,7 @@ export default function Corte(props){
     const [verFolios, setVerFolios] = useState(false)
     const [verDetalle, setVerDetalle] = useState(false)
     const [confirm, setConfirm] = useState(false)
+    const [working, setWorking] = useState(false)
     useEffect(()=>{
         if(corte){
             setElcorte(corte)
@@ -73,8 +77,13 @@ export default function Corte(props){
     }
 
     function cierraCorte (){
+        setWorking(true)
         guardar(elcorte)
-        close()
+        .then(res=>{
+            // showMessage(res.message, res.status)
+            setWorking(false)
+            close()
+        })
     }
 
     function toggleVerDetalle(){
@@ -84,8 +93,13 @@ export default function Corte(props){
         setVerFolios(!verFolios)
     }
     const handleReabrir = (id,fecha) =>{
+        setWorking(true)
         reabrir(id,fecha)
-        close()
+        .then(res=>{
+            setWorking(false)
+            showMessage(res.message, res.status)
+            close()
+        })
     }
     return(
         <Dialog
@@ -94,7 +108,7 @@ export default function Corte(props){
             maxWidth="lg"
             fullWidth
         >   
-            {elcorte === null ? <Typography align="center" >Cargando...</Typography> :
+            {elcorte === null || working===true ? <Typography align="center" >Cargando...</Typography> :
             <React.Fragment>
                 <DialogTitle disableTypography>
                     <Grid container >
