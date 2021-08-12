@@ -243,20 +243,30 @@ export function esDecimal(n){
 //     },{})
 // }
 
-export function agrupaVentas(array, prop) {
-    return array.reduce(function(groups, item) {
-        var val = item[prop];
-        groups[val] = groups[val] || 
-        {
-            folio: item.venta.folio, 
-            fecha: item.fecha,
-            cliente: item.venta.cliente,
-            items: [],
-            tipoPago: item.venta.tipoPago,
-            importe: 0
-        };
-        groups[val].importe += item.importe;
-        groups[val].items.push(item);
-        return groups;
-    }, []);
+// export function agrupaVentas(array, prop) {
+//     return array.reduce(function(groups, item) {
+//         var val = item[prop];
+//         groups[val] = groups[val] || 
+//         {
+//             folio: item.venta.folio, 
+//             fecha: item.fecha,
+//             cliente: item.venta.cliente,
+//             items: [],
+//             tipoPago: item.venta.tipoPago,
+//             importe: 0
+//         };
+//         groups[val].importe += item.importe;
+//         groups[val].items.push(item);
+//         return groups;
+//     }, []);
+export function agrupaVentas(ventas, filtro) {
+    return ventas.reduce(function(grupos, venta) {
+        (grupos[venta[filtro]] = grupos[venta[filtro]] || {[filtro]: venta[filtro], timporte:0, tcantidad:0,tempaques:0, items:[]})
+        // var grupo = venta[filtro]
+        // console.log("grupo:"+grupo)
+        grupos[venta[filtro]].timporte += venta.importe
+        grupos[venta[filtro]].tcantidad += venta.cantidad
+        grupos[venta[filtro]].tempaques += venta.empaques
+        return grupos;
+    }, {});
 }

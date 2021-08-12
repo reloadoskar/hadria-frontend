@@ -40,18 +40,19 @@ export default function Compra({open, close, compra, compras}){
                     let tcost = res.data.compra.importe
                     let tg = sumImporte(res.data.egresos.filter((e)=>e.tipo!=="PAGO"))
                     let tp = sumImporte(res.data.egresos.filter((e)=>e.tipo==="PAGO"))
+                    
+                    setTv(tot)
+                    setTc(tcost)
+                    setTg(tg)
+                    setTp(tp)
                     if(res.data.compra.tipoCompra.tipo === "CONSIGNACION"){
                         let com = 0
                         com = ( res.data.compra.provedor.comision / 100 ) * tot
-                        setComision(com)
+                        setTcom(com)
                         let sal = 0
                         sal = tot - com
-                        setSaldo(sal)
+                        setRes(tot - com - tg - tp)
                     }else{
-                        setTv(tot)
-                        setTc(tcost)
-                        setTg(tg)
-                        setTp(tp)
                         setRes(tot-tcost-tg)
                     }
                     // setTotal(calculaTotal(res.data))
@@ -86,9 +87,8 @@ export default function Compra({open, close, compra, compras}){
                             <Typography className={classes.textoMiniFacheron} >Remision: {laCompra.compra.remision}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6} container justifyContent="flex-end">
-                            <Tooltip title="Ver ventas" >
+                            <Tooltip title="Ver ventas" open={true} arrow placement="left">
                                 <IconButton
-                                    size="small"
                                     aria-label="Ver ventas"
                                     onClick={()=>setDialog(true)}
                                 >
@@ -97,7 +97,6 @@ export default function Compra({open, close, compra, compras}){
                             </Tooltip>
                             <Tooltip title="Cerrar" >
                                 <IconButton
-                                    size="small"
                                     aria-label="Cerrar"
                                     onClick={()=>cerrarComp(laCompra.compra._id)}
                                 >
@@ -105,7 +104,6 @@ export default function Compra({open, close, compra, compras}){
                                 </IconButton>
                             </Tooltip>
                             <IconButton
-                                size="small"
                                 aria-label="close"
                                 onClick={close}
                             >
@@ -115,43 +113,49 @@ export default function Compra({open, close, compra, compras}){
                         <Grid item xs={12}>
                             <ResumenVentas items={laCompra.ventasGroup} compra={laCompra.compra}/>
                         </Grid>
-                        <Grid item xs={12} container>
-                            <Grid item xs={12}>
-                                <Typography align="center" className={classes.textoMirame} >Gastos</Typography>
-                                <Divider />
-                            {laCompra.egresos.filter(gasto=> gasto.tipo=== "GASTO A COMPRA").map((gasto, i) => (
-                                <EgresoBasic egreso={gasto} key={i} />
-                            ))}
-                                <Divider />
+                        {laCompra.egresos.filter(gasto=> gasto.tipo=== "GASTO A COMPRA").length > 0 ?
+                            <Grid item xs={12} container>
+                                <Grid item xs={12}>
+                                    <Typography align="center" className={classes.textoMirame} >Gastos</Typography>
+                                    <Divider />
+                                {laCompra.egresos.filter(gasto=> gasto.tipo=== "GASTO A COMPRA").map((gasto, i) => (
+                                    <EgresoBasic egreso={gasto} key={i} />
+                                ))}
+                                    <Divider />
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <Typography align="right" className={classes.textoMiniFacheron} >
+                                        TOTAL GASTOS:
+                                    </Typography>
+                                    <Typography align="right" className={classes.textoSangron} >
+                                        ${formatNumber(sumImporte(laCompra.egresos.filter(gasto=> gasto.tipo=== "GASTO A COMPRA")),2)}
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} >
-                                <Typography align="right" className={classes.textoMiniFacheron} >
-                                    TOTAL GASTOS:
-                                </Typography>
-                                <Typography align="right" className={classes.textoSangron} >
-                                    ${formatNumber(sumImporte(laCompra.egresos.filter(gasto=> gasto.tipo=== "GASTO A COMPRA")),2)}
-                                </Typography>
-                            </Grid>
-                        </Grid>
+                            : null
+                        }
 
-                        <Grid item xs={12} container>
-                            <Grid item xs={12}>
-                                <Typography align="center" className={classes.textoMirame} >Pagos</Typography>
-                                <Divider />
-                            {laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO").map((gasto, i) => (
-                                <EgresoBasic egreso={gasto} key={i} />
-                            ))}
-                                <Divider />
+                        {laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO").length > 0 ?
+                            <Grid item xs={12} container>
+                                <Grid item xs={12}>
+                                    <Typography align="center" className={classes.textoMirame} >Pagos</Typography>
+                                    <Divider />
+                                {laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO").map((gasto, i) => (
+                                    <EgresoBasic egreso={gasto} key={i} />
+                                ))}
+                                    <Divider />
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <Typography align="right" className={classes.textoMiniFacheron} >
+                                        TOTAL PAGOS:
+                                    </Typography>
+                                    <Typography align="right" className={classes.textoSangron} >
+                                        ${formatNumber(sumImporte(laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO")),2)}
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} >
-                                <Typography align="right" className={classes.textoMiniFacheron} >
-                                    TOTAL PAGOS:
-                                </Typography>
-                                <Typography align="right" className={classes.textoSangron} >
-                                    ${formatNumber(sumImporte(laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO")),2)}
-                                </Typography>
-                            </Grid>
-                        </Grid>
+                            : null
+                        }
 
                         <Grid item xs={12}>
                             { laCompra.compra.tipoCompra.tipo === "COMPRAS"  ?
@@ -166,7 +170,18 @@ export default function Compra({open, close, compra, compras}){
                                     <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(resultado,1)}</Typography>
                                 </React.Fragment>
                                 :
-                                null
+                                <React.Fragment>
+                                    <Typography align="right" className={classes.textoMiniFacheron}>TOTAL VENTAS:</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(totalVentas,1)}</Typography>
+                                    <Typography align="right" className={classes.textoMiniFacheron}>COMISIÓN:</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalComision,1)}</Typography>
+                                    <Typography align="right" className={classes.textoMiniFacheron}>TOTAL GASTOS:</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalGastos,1)}</Typography>
+                                    <Typography align="right" className={classes.textoMiniFacheron}>TOTAL PAGOS:</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalPagos,1)}</Typography>
+                                    <Typography align="right" className={classes.textoMiniFacheron}>SALDO PRODUCTOR:</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(resultado,1)}</Typography>
+                                </React.Fragment>
                             }
 
 

@@ -21,7 +21,7 @@
 
 # files
 Global.js
-
+start.bat
 
 npm-debug.log*
 yarn-debug.log*

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import clsx from 'clsx';
-import Produccions from './components/Produccions'
+import Produccions from './components/produccions/Produccions'
 import Empleados from './components/empleados/Empleados'
 import Productos from './components/productos/Productos';
 import Clientes from './components/clientes/Clientes';

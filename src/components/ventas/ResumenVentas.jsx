@@ -73,7 +73,7 @@ export default function ResumenVentas({items,compra}){
                             <Grid item xs={12} >
                                 <Divider />
                                 <Typography align="right" className={classes.textoMiniFacheron}>
-                                    TOTAL VENTAS:
+                                    TOTAL:
                                 </Typography>
                                 <Typography className={classes.textoMirame} align="right">
                                     ${formatNumber(sumImporte(elResumen),2)}
