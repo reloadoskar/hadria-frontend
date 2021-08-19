@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, Grid, LinearProgress, Table, TableCell, TableHead, TableRow, TableBody, Typography, TableFooter, Tabs, Tab } from '@material-ui/core'
+import { Paper, Button, Dialog, DialogActions, DialogContent, Grid, LinearProgress, Table, TableCell, TableHead, TableRow, TableBody, Typography, TableFooter, Tabs, Tab, TableContainer, Divider } from '@material-ui/core'
 import VentaGrouped from '../ventas/VentaGrouped'
 import {agrupaVentas, formatNumber, sumImporte, sumCantidad, sumEmpaques} from '../Tools'
 import useStyles from '../hooks/useStyles'
@@ -41,7 +41,7 @@ export default function ListaVentas({ventas, open, close}){
             onClose={()=>close()}>
             <DialogContent>
             {lasVentas.length > 0 ?
-                <Grid container >
+                <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Tabs
                             value={tabSelected}
@@ -57,8 +57,10 @@ export default function ListaVentas({ventas, open, close}){
                                     <Grid item xs ={12}>
                                         <Typography align="center" className={classes.textoMirame}>VENTAS A CRÉDITO</Typography>
                                     </Grid>
+                                    <Divider />
                                     <Grid item xs={12}>
-                                        <Table>
+                                        <TableContainer component={Paper}>
+                                        <Table >
                                             <TableHead>
                                                 <TableRow>
                                                     <TableCell>Folio</TableCell>
@@ -90,55 +92,23 @@ export default function ListaVentas({ventas, open, close}){
                                                 </TableRow>
                                             </TableFooter>
                                         </Table>
+                                        </TableContainer>
                                     </Grid>
                                 </React.Fragment>
                                 : null
                             }
                             {lasVentas.filter(vta=>vta.venta.tipoPago!=="CRÉDITO").length > 0 ?
-                                <PaginationTable data={lasVentas.filter(vta=>vta.venta.tipoPago!=="CRÉDITO")} />
-                                : null
-                            }
-                            {/* {lasVentas.filter(vta=>vta.venta.tipoPago!=="CRÉDITO").length > 0 ?
                                 <React.Fragment>
                                     <Grid item xs ={12}>
-                                        <Typography align="center" className={classes.textoMirame} >VENTAS DE CONTADO</Typography>
+                                        <Typography align="center" className={classes.textoMirame}>VENTAS DE CONTADO</Typography>
                                     </Grid>
+                                    <Divider />
                                     <Grid item xs={12}>
-                                        <Table stickyHeader>
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>Folio</TableCell>
-                                                    <TableCell>Ubicai&oacute;n</TableCell>
-                                                    <TableCell>Fecha</TableCell>
-                                                    <TableCell>Cliente</TableCell>
-                                                    <TableCell>Producto</TableCell>
-                                                    <TableCell align="right">Cantidad</TableCell>
-                                                    <TableCell align="right">Empaques</TableCell>
-                                                    <TableCell align="right">Precio</TableCell>
-                                                    <TableCell align="right">Importe</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {lasVentas
-                                                .filter(vta=>vta.venta.tipoPago==="CONTADO")
-                                                .map((venta,i)=>(
-                                                    <VentaGrouped venta={venta} key={i} />
-                                                ))}
-                                            </TableBody>
-                                            <TableFooter>
-                                                <TableRow>
-                                                    <TableCell colSpan={5} align="right">Totales</TableCell>
-                                                    <TableCell align="right">{formatNumber(sumCantidad(lasVentas.filter(vta=>vta.venta.tipoPago==="CONTADO")),2)}</TableCell>
-                                                    <TableCell align="right">{formatNumber(sumEmpaques(lasVentas.filter(vta=>vta.venta.tipoPago==="CONTADO")),2)}</TableCell>
-                                                    <TableCell align="right">-</TableCell>
-                                                    <TableCell align="right">${formatNumber(sumImporte(lasVentas.filter(vta=>vta.venta.tipoPago==="CONTADO")),2)}</TableCell>
-                                                </TableRow>
-                                            </TableFooter>
-                                        </Table>
+                                        <PaginationTable data={lasVentas.filter(vta=>vta.venta.tipoPago!=="CRÉDITO")} />
                                     </Grid>
                                 </React.Fragment>
                                 : null
-                            } */}
+                            }
                         </div>
                         <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
                             <Grid item xs={12} >
@@ -159,7 +129,7 @@ export default function ListaVentas({ventas, open, close}){
             }
             </DialogContent>
             <DialogActions>
-                <Button onClick={()=>close()} className={classes.botonSimplon}>salir</Button>
+                <Button onClick={()=>close()} className={classes.botonSimplon} color="secondary">salir</Button>
             </DialogActions>
         </Dialog>
     )

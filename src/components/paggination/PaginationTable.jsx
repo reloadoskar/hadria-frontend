@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Paper, TableContainer, Table, TableBody, TableRow, TableCell, TableFooter, TablePagination, TableHead } from '@material-ui/core'
 import TablePaginationActions from './TablePaginationActions'
-import { formatNumber } from '../Tools'
+import { formatNumber, sumCantidad, sumEmpaques, sumImporte } from '../Tools'
 
 export default function PaginationTable({data}){
     const [page, setPage] = useState(0);
@@ -96,6 +96,13 @@ export default function PaginationTable({data}){
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
             />
+          </TableRow>
+          <TableRow>
+              <TableCell colSpan={4} align="right">Totales</TableCell>
+              <TableCell align="right">{formatNumber(sumCantidad(rows.filter(vta=>vta.venta.tipoPago==="CONTADO")),2)}</TableCell>
+              <TableCell align="right">{formatNumber(sumEmpaques(rows.filter(vta=>vta.venta.tipoPago==="CONTADO")),2)}</TableCell>
+              <TableCell align="right">-</TableCell>
+              <TableCell align="right">${formatNumber(sumImporte(rows.filter(vta=>vta.venta.tipoPago==="CONTADO")),2)}</TableCell>
           </TableRow>
         </TableFooter>
       </Table>

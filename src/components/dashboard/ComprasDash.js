@@ -10,9 +10,9 @@ import CrearCompra from '../compras/CrearCompra'
 import { useSnackbar } from 'notistack';
 import useStyles from '../hooks/useStyles';
 export default function ComprasDash(props){
+    const {compras, crearCompra, cancelarCompra} = props
     // const {compras, crearCompra, cancelarCompra} = useCompras();
     const classes = useStyles()
-    const {compras, crearCompra, cancelarCompra} = props
     const [compraSelected, setCompraSelected] = useState(null)
     const [verCompra, setVerCompra] = React.useState(false);
     const [showDialog, setShowDialog] = useState(false)
