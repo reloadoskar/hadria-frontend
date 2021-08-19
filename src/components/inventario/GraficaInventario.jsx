@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Grid, CircularProgress, Card, CardContent, Typography } from '@material-ui/core'
-import { VictoryBar, VictoryChart,VictoryLabel, VictoryAxis } from 'victory';
+import { VictoryBar, VictoryChart,VictoryLabel, VictoryAxis, VictoryTooltip } from 'victory';
 import {sumStock, sumEmpStock, formatNumber} from "../Tools"
 import useInventario from './useInventario'
 import useStyles from '../hooks/useStyles';
@@ -68,11 +68,12 @@ export default function GraficaInventario({data}){
                                 }}
                             />
                             <VictoryBar
+                                // labelComponent={<VictoryTooltip />}
                                 name="Inventario"
                                 data={barData}
-                                labels={({ datum }) => `${formatNumber(datum.totalStock,1)} Kg \n ${formatNumber(datum.totalEmpaques,1)} Cajas`}
+                                labels={({ datum }) => `${formatNumber(datum.totalEmpaques,1)} Cajas \n ${formatNumber(datum.totalStock,1)} Kg`}
                                 x="ubicacion"
-                                y="totalStock"
+                                y="totalEmpaques"
                                 style={{
                                     data: {fill: "#ffd369", fillOpacity: 0.8},
                                     labels: {fontSize: 8, fill: "#524656"},

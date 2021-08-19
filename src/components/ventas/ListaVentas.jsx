@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Dialog, DialogActions, DialogContent, Grid, LinearProgress, Table, TableCell, TableHead, TableRow, TableBody, Typography, TableFooter, Tabs, Tab } from '@material-ui/core'
+import { Button, Dialog, DialogActions, DialogContent, Grid, LinearProgress, Table, TableCell, TableHead, TableRow, TableBody, Typography, TableFooter, Tabs, Tab } from '@material-ui/core'
 import VentaGrouped from '../ventas/VentaGrouped'
 import {agrupaVentas, formatNumber, sumImporte, sumCantidad, sumEmpaques} from '../Tools'
 import useStyles from '../hooks/useStyles'
 import ReportexFecha from './ReporteVentasxFecha'
 import ReportexPrecio from './ReportexPrecio'
+import PaginationTable from '../paggination/PaginationTable'
 export default function ListaVentas({ventas, open, close}){
-    const [lasVentas, setLasVentas] = useState([])
-    const [ventasxproducto, setVxp] = useState([])
+    const [lasVentas, setLasVentas] = useState([])  
     const [ventasxfecha, setVxf] = useState([])
-    const [ventasxubicacion, setVxu] = useState([])
     const [ventasxprecio, setVxpr] = useState([])
     const classes = useStyles()
     const [tabSelected, setTab] = useState(1)
+    const [ventasxubicacion, setVxu] = useState([])
+    const [ventasxproducto, setVxp] = useState([])
+
     const selectTab = (event, selected) => {
         setTab(selected)
     }
@@ -34,7 +36,7 @@ export default function ListaVentas({ventas, open, close}){
     },[ventas])
     return (
         <Dialog 
-            maxWidth="xl"
+            fullScreen
             open={open}
             onClose={()=>close()}>
             <DialogContent>
@@ -92,8 +94,11 @@ export default function ListaVentas({ventas, open, close}){
                                 </React.Fragment>
                                 : null
                             }
-
                             {lasVentas.filter(vta=>vta.venta.tipoPago!=="CRÉDITO").length > 0 ?
+                                <PaginationTable data={lasVentas.filter(vta=>vta.venta.tipoPago!=="CRÉDITO")} />
+                                : null
+                            }
+                            {/* {lasVentas.filter(vta=>vta.venta.tipoPago!=="CRÉDITO").length > 0 ?
                                 <React.Fragment>
                                     <Grid item xs ={12}>
                                         <Typography align="center" className={classes.textoMirame} >VENTAS DE CONTADO</Typography>
@@ -133,7 +138,7 @@ export default function ListaVentas({ventas, open, close}){
                                     </Grid>
                                 </React.Fragment>
                                 : null
-                            }
+                            } */}
                         </div>
                         <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
                             <Grid item xs={12} >
@@ -143,9 +148,9 @@ export default function ListaVentas({ventas, open, close}){
                             {/* <Grid item xs={12} >
                                 <ReportexFecha data={ventasxfecha}/>
                             </Grid> */}
-                            {/* <Grid item xs={12} >
+                            <Grid item xs={12} >
                                 <ReportexPrecio data={ventasxprecio}/>
-                            </Grid> */}
+                            </Grid>
                         </div>
                     </Grid>
                 </Grid>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader } from '@material-ui/core'
-import { VictoryBar, VictoryChart,VictoryLabel, VictoryAxis, VictoryTooltip, VictoryLine } from 'victory';
-import {sumStock, sumEmpStock, formatNumber, sumImporte, sumCantidad, sumEmpaques} from "../Tools"
+import { Card, CardContent } from '@material-ui/core'
+import { VictoryBar, VictoryChart} from 'victory';
 export default function ReportexPrecio({data}){
     const [barData, setBardata] = useState(false)
     useEffect(()=>{

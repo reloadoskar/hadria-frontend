@@ -51,7 +51,7 @@ export default function CompraBasic(props){
                 </Grid>
                 <Grid item xs={4} sm={2}>
                     <Typography className={classes.textoMiniFacheron} align="right">Resultado:</Typography>
-                    <Typography align="right" color={resultado<0 ? "secondary" : "primary"}>
+                    <Typography align="right" className={resultado<0 ? classes.textoMirameSangron : classes.textoMirameExito}>
                         ${formatNumber(resultado,2)} 
                     </Typography>
                 </Grid>

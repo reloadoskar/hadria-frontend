@@ -32,6 +32,14 @@ const useStyles = makeStyles(theme => ({
     textoMirame: {
         fontWeight: 'bolder'
     },
+    textoMirameSangron: {
+        fontWeight: 'bolder',
+        color: '#c70039'
+    },
+    textoMirameExito: {
+        fontWeight: 'bolder',
+        color: '#1EAE98'
+    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
@@ -340,7 +348,12 @@ const useStyles = makeStyles(theme => ({
         border: 1,
         borderRadius: 3,
         color: 'black',
-    }
+    },
+
+    rootPagination: {
+        flexShrink: 0,
+        marginLeft: theme.spacing(2.5),
+      },
 
 }));
 

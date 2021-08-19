@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, Card, CardContent, CardHeader } from '@material-ui/core'
-import { VictoryBar, VictoryChart,VictoryLabel, VictoryAxis, VictoryTooltip, VictoryLine } from 'victory';
-import {sumStock, sumEmpStock, formatNumber, sumImporte, sumCantidad, sumEmpaques} from "../Tools"
+import { VictoryChart,VictoryLabel, VictoryAxis, VictoryLine } from 'victory';
+import { formatNumber } from '../Tools';
 import moment from 'moment'
 export default function ReportexFecha({data}){
     const [barData, setBardata] = useState(false)

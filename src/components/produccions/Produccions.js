@@ -4,12 +4,13 @@ import AddIcon from '@material-ui/icons/Add';
 import Produccion from './Produccion'
 import useProduccions from '../produccions/useProduccions'
 import moment from 'moment'
-export default function Produccions(props){
-    const {showMessage} = props
+import { useSnackbar } from 'notistack';
+export default function Produccions(){
     const {produccions, crearProduccion, eliminarProduccion, agregarInsumo, eliminarInsumo } = useProduccions()
     const [produccionSelected, setProduccionSelected] = useState(null)
     const [ver, setVer] = useState(false);
-
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
     const handleClose = () => {
         setVer(false)
     };
@@ -45,7 +46,7 @@ export default function Produccions(props){
                     : 
                         produccions.map( (produccion, index) => (
                             <ListItem button key={index} onClick={()=> handleMenu('ver', produccion)}>
-                                <Grid key={index} container justify="space-between" alignItems="center">
+                                <Grid key={index} container justifyContent="space-between" alignItems="center">
                                     <Grid item xs>
                                         <Typography variant="h5">{produccion.folio}</Typography>
                                     </Grid>
