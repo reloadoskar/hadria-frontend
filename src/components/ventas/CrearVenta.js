@@ -113,25 +113,35 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
         venta.cliente = cliente
         venta.total = sumImporte(items)
         venta.importe = sumImporte(items)
-        addVenta(venta).then(res => {
-            setGuardando(false)
-            venta.folio = res.venta.folio
-            if(isMobile){
-                setTicket(venta)
-                setImprimir(true)
-            }else{
-                ticketVenta(venta).then(resb=> {
-                    if(resb.status === 'warning'){
-                        showMessage(resb.message, resb.status)
+        try{
+            addVenta(venta).then(res => {
+                if(res.status==="error"){
+                    showMessage(res.message, res.status)
+                    setGuardando(false)
+                }else{
+                    setGuardando(false)
+                    venta.folio = res.venta.folio
+                    if(isMobile){
+                        setTicket(venta)
+                        setImprimir(true)
                     }else{
-                        ticketSalida(res.venta)
+                        ticketVenta(venta).then(resb=> {
+                            if(resb.status === 'warning'){
+                                showMessage(resb.message, resb.status)
+                            }else{
+                                ticketSalida(res.venta)
+                            }
+                        })
                     }
-                })
-            }
-            showMessage(res.message, res.status)
-            toggleCobrarDialog()
-            handleClose()
-        })
+                    showMessage(res.message, res.status)
+                    toggleCobrarDialog()
+                    handleClose()
+                }
+            })
+        }catch(err){
+            console.log(err)
+            showMessage("Red saturada", "error")
+        }
     }
 
     const handleClose = () => {

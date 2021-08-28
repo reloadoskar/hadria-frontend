@@ -260,7 +260,7 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                     <Button 
                         type="submit" 
                         className={ guardando ? classes.botonGenerico : classes.botonCosmico} 
-                        disabled={efectivo >= total ? false : true}>
+                        disabled={guardando ? true : false}>
                         { guardando ? "Espere..." : "Registrar"}
                     </Button>
                 </DialogActions>

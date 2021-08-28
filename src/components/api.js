@@ -609,13 +609,23 @@ export const saveVenta = (venta) => {
     try{
         if(decoded){
             return axios
-                .post(url + decoded.database + '/venta/save', venta)
+                .post(url + decoded.database + '/venta/save', venta, {timeout: 6000})
                 .then(res => {
                     return res.data
+                })
+                .catch( error => {
+                    return {
+                        status: "error",
+                        message:"Red saturada, intentelo de nuevo."
+                        }
                 })
         }
     }catch (err){
         console.log(err)
+        return {
+            status: "error",
+            message:"Red saturada, intentelo de nuevo."
+        }
     }
 }
 export const cancelVenta = (id) => {
