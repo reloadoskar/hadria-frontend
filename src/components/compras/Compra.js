@@ -17,18 +17,14 @@ export default function Compra({open, close, compra, compras}){
     const classes = useStyles()
     const [laCompra, setLaCompra] = useState(null)
     const [totalVentas, setTv] = useState(0)
-    const [totalCosto, setTc] = useState(0)
     const [totalPagos, setTp] = useState(0)
     const [totalGastos, setTg] = useState(0)
     const [totalComision, setTcom] = useState(0)
     const [resultado, setRes] = useState(0)
-    
-    
-    
-    
-    const [total, setTotal] = useState(0)
-    const [saldo, setSaldo] = useState(0)
-    const [comision, setComision] = useState(0)
+    const [totalCosto, setTc] = useState(0)
+    // const [total, setTotal] = useState(0)
+    // const [saldo, setSaldo] = useState(0)
+    // const [comision, setComision] = useState(0)
     const [dialogListaVentas, setDialog] = useState(false)
 
     useEffect(() => {
@@ -49,8 +45,8 @@ export default function Compra({open, close, compra, compras}){
                         let com = 0
                         com = ( res.data.compra.provedor.comision / 100 ) * tot
                         setTcom(com)
-                        let sal = 0
-                        sal = tot - com
+                        // let sal = 0
+                        // sal = tot - com
                         setRes(tot - com - tg - tp)
                     }else{
                         setRes(tot-tp-tg)
@@ -61,11 +57,11 @@ export default function Compra({open, close, compra, compras}){
         return () => setLaCompra(null)
     },[compra, compras])
 
-    const calculaTotal = (data) => {
-        let s = 0
-        s = sumImporte(data.ventas) - sumImporte(data.egresos)
-        return s
-    }
+    // const calculaTotal = (data) => {
+    //     let s = 0
+    //     s = sumImporte(data.ventas) - sumImporte(data.egresos)
+    //     return s
+    // }
 
     const cerrarComp = (id) => {
         compras.cerrarCompra(id)
@@ -162,6 +158,7 @@ export default function Compra({open, close, compra, compras}){
                                 <React.Fragment>
                                     <Typography align="right" className={classes.textoMiniFacheron}>TOTAL VENTAS:</Typography>
                                     <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(totalVentas,1)}</Typography>
+                                    <Typography className={classes.textoMiniFacheron}align="right" >COSTO: $ {formatNumber(totalCosto,1)}</Typography>
                                     <Typography align="right" className={classes.textoMiniFacheron}>PAGADO:</Typography>
                                     <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalPagos,1)}</Typography>
                                     <Typography align="right" className={classes.textoMiniFacheron}>TOTAL GASTOS:</Typography>
@@ -183,22 +180,6 @@ export default function Compra({open, close, compra, compras}){
                                     <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(resultado,1)}</Typography>
                                 </React.Fragment>
                             }
-
-
-                            {/* <Typography align="right" className={classes.textoMiniFacheron}>TOTAL:</Typography>
-                            <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(total,2)}</Typography>
-                            {laCompra.compra.tipoCompra.tipo === "CONSIGNACION" ?
-                                <React.Fragment>
-                                    <Divider />
-                                    <Typography className={classes.textoMiniFacheron} align="right">COMISIÓN:</Typography>
-                                    <Typography className={classes.textoSangron} variant="h6" align="right" >-${formatNumber(comision,2)}</Typography>
-                                    <Divider />
-                                    <Typography className={classes.textoMiniFacheron} align="right">SALDO:</Typography>
-                                    <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(saldo,2)}</Typography>
-                                </React.Fragment>
-                                :
-                                null
-                            } */}
                         </Grid>
                         <Grid item xs={12}>
                             <ListaVentas ventas={laCompra.ventas} open={dialogListaVentas} close={()=>setDialog(false)} />

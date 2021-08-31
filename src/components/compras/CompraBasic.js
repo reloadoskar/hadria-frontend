@@ -7,7 +7,6 @@ import { formatNumber, sumImporte } from '../Tools';
 import useStyles from '../hooks/useStyles';
 export default function CompraBasic(props){
     const {compra, 
-        // openConfirm, 
         editCompra, verCompra, recuperarVentas, recuperarGastos} = props
     const [compraLocal, setCompraLocal] = useState(null)
     const [totalVenta, setTotalVenta] = useState(0)
@@ -18,8 +17,6 @@ export default function CompraBasic(props){
     useEffect(() => {
         if(compra !== null){
             setCompraLocal(compra)
-            // setTotalVenta(sumImporte(compra.ventaItems))
-            // setResultado(  (sumImporte(compra.ventaItems) - compra.importe))
         }
         return () => setCompraLocal(null)
     },[compra])
@@ -29,7 +26,6 @@ export default function CompraBasic(props){
             let tv = sumImporte(compraLocal.ventaItems)
             let tg = sumImporte(compraLocal.gastos)
             let tp = sumImporte(compraLocal.pagos)
-            let costo = compraLocal.importe
             setTotalVenta(tv) 
             setTotalGastos(tg)
             setTotalPagos(tp)
@@ -124,6 +120,7 @@ export default function CompraBasic(props){
                 <Grid item xs={12} sm={1}>
                     <Typography align="right">
                         <IconButton
+                            disabled
                             size="small"
                             onClick={() => handleRecuperarGastos(compra._id)}
                             >
