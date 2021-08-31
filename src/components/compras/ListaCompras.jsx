@@ -6,7 +6,7 @@ import moment from 'moment'
 import MomentUtils from '@date-io/moment';
 import { sumImporte, formatNumber } from '../Tools'
 import useStyles  from '../hooks/useStyles'
-export default function ListaCompras({compras, editCompra, verCompra}){
+export default function ListaCompras({compras, editCompra, verCompra, recuperarVentas, recuperarGastos}){
     const classes = useStyles()
     const [lasCompras, setLasCompras] = useState(null)
     const [tVentas, setTventas] = useState(0)
@@ -72,6 +72,8 @@ export default function ListaCompras({compras, editCompra, verCompra}){
                                 compra={compra} 
                                 editCompra={editCompra}  
                                 verCompra={verCompra}
+                                recuperarVentas={recuperarVentas}
+                                recuperarGastos={recuperarGastos}
                             />
                         </Grid>
                     ))

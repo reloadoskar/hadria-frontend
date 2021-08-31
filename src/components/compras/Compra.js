@@ -53,7 +53,7 @@ export default function Compra({open, close, compra, compras}){
                         sal = tot - com
                         setRes(tot - com - tg - tp)
                     }else{
-                        setRes(tot-tcost-tg)
+                        setRes(tot-tp-tg)
                     }
                     // setTotal(calculaTotal(res.data))
                 })
@@ -162,8 +162,8 @@ export default function Compra({open, close, compra, compras}){
                                 <React.Fragment>
                                     <Typography align="right" className={classes.textoMiniFacheron}>TOTAL VENTAS:</Typography>
                                     <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(totalVentas,1)}</Typography>
-                                    <Typography align="right" className={classes.textoMiniFacheron}>COSTO:</Typography>
-                                    <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalCosto,1)}</Typography>
+                                    <Typography align="right" className={classes.textoMiniFacheron}>PAGADO:</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalPagos,1)}</Typography>
                                     <Typography align="right" className={classes.textoMiniFacheron}>TOTAL GASTOS:</Typography>
                                     <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalGastos,1)}</Typography>
                                     <Typography align="right" className={classes.textoMiniFacheron}>RESULTADO:</Typography>

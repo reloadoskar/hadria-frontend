@@ -448,6 +448,20 @@ export const recuperaVentasCompra = (id) => {
     }
 }
 
+export const recuperaGastosCompra = (id) => {
+    try{
+        if(decoded){
+            return axios
+                .get(url + decoded.database + '/compra/recuperarGastos/' + id)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
 export const addCompraItem = (item) => {
     try{
         if(decoded){

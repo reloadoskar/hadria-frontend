@@ -125,7 +125,13 @@ function Compras({ubicacions}) {
                         addProvedor={addProvedor}
                     />
                 </Grid>
-                <ListaCompras compras={compras.compras} editCompra={editCompra} verCompra={showVerCompra} />
+                <ListaCompras 
+                    compras={compras.compras} 
+                    editCompra={editCompra} 
+                    verCompra={showVerCompra} 
+                    recuperarVentas={compras.recuperarVentas} 
+                    recuperarGastos={compras.recuperarGastos}
+                    />
 
             </Grid>
             <DetalleCompra 
