@@ -333,12 +333,12 @@ export const getComprasDash = () => {
     
 }
 
-export const getCompras = () => {
+export const getCompras = (mes) => {
 
     try{
         if (decoded){
             return axios
-                .get(url + decoded.database + '/compras')
+                .get(url + decoded.database + '/compras/'+mes)
                 .then(res => {
                     return res.data
                 })

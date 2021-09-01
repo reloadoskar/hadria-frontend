@@ -1,9 +1,6 @@
 import { CircularProgress, Grid, Typography } from '@material-ui/core'
 import React, {useState, useEffect} from 'react'
 import CompraBasic from './CompraBasic'
-import { DatePicker, MuiPickersUtilsProvider, } from "@material-ui/pickers"
-import moment from 'moment'
-import MomentUtils from '@date-io/moment';
 import { sumImporte, formatNumber } from '../Tools'
 import useStyles  from '../hooks/useStyles'
 export default function ListaCompras({compras, editCompra, verCompra, recuperarVentas, recuperarGastos}){
@@ -13,13 +10,13 @@ export default function ListaCompras({compras, editCompra, verCompra, recuperarV
     const [tCompras, setTcompras] = useState(0)
 
     const [tResultado, setTresultado] = useState(0)
-    const [selectedDate, handleDateChange] = useState(moment());
+    // const [selectedDate, handleDateChange] = useState(moment());
     useEffect(() => {
         if(compras){
-            setLasCompras(compras.filter(compra=> moment(compra.fecha).format("MM") === moment(selectedDate).format("MM") ))
+            setLasCompras(compras)
         }
         return () => setLasCompras(null)
-    },[compras, selectedDate])
+    },[compras])
 
     useEffect(()=>{
         if(lasCompras){
@@ -43,7 +40,7 @@ export default function ListaCompras({compras, editCompra, verCompra, recuperarV
     }
     return(
         <Grid item container xs={12} spacing={2}>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
                 <Typography component="div" align="center">
                     <MuiPickersUtilsProvider utils={MomentUtils}>
                         <DatePicker
@@ -54,7 +51,7 @@ export default function ListaCompras({compras, editCompra, verCompra, recuperarV
                         />
                     </MuiPickersUtilsProvider>
                 </Typography>
-            </Grid>
+            </Grid> */}
             {lasCompras === null ?
                 <Grid item xs={12}>
                     <Typography component="div" align="center" >

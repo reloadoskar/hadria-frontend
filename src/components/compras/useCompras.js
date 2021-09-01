@@ -3,11 +3,13 @@ import { getCompras, cancelCompra, closeCompra, saveCompra, getCompra, recuperaV
 const useCompras = () => {
 	const [compras, setCompras] = useState(null)
 
-	const loadCompras = async () => {
-		const res = await getCompras()
+	const loadCompras = async (mes) => {
+		setCompras(null)
+		const res = await getCompras(mes)
 			if (res !== undefined){
 				setCompras(res.compras);
 			}
+			return res
 	}
 
 	const crearCompra = async (compra) => {
