@@ -2,7 +2,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken'
 // import jwt_decode from 'jwt-decode'
 const URL = process.env.REACT_APP_API_URL
-let token = false
+let token = false 
 let decoded = false
 if(localStorage.usertoken){
     token = localStorage.usertoken
@@ -623,14 +623,15 @@ export const saveVenta = (venta) => {
     try{
         if(decoded){
             return axios
-                .post(url + decoded.database + '/venta/save', venta, {timeout: 6000})
+                .post(url + decoded.database + '/venta/save', venta, {timeout: 5000})
                 .then(res => {
                     return res.data
                 })
                 .catch( error => {
                     return {
                         status: "error",
-                        message:"Red saturada, intentelo de nuevo."
+                        message:"Red ocupada, intentelo de nuevo más tarde.",
+                        error: error
                         }
                 })
         }
@@ -638,7 +639,7 @@ export const saveVenta = (venta) => {
         console.log(err)
         return {
             status: "error",
-            message:"Red saturada, intentelo de nuevo."
+            message:"Ocurrio un error."
         }
     }
 }
