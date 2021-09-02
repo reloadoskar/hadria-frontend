@@ -24,7 +24,7 @@ export default function VentaItem(props){
                     { basic ? null :
                         <Grid item xs={12} sm={2}>
                             <Typography variant="body2">
-                                {item.venta.folio} : {moment(item.venta.createdAt).format("hh:mm:ss A")}
+                                {item.ventaFolio} : {moment(item.venta.createdAt).format("hh:mm:ss A")}
                             </Typography>
                         </Grid>                                        
                     }
@@ -33,12 +33,12 @@ export default function VentaItem(props){
                             #{item.compra.folio} - {item.producto.descripcion}
                         </Typography>
                     </Grid>                                        
-                    <Grid item xs={3} sm={basic ? 1 : 1}>
+                    <Grid item xs={3} sm={1}>
                         <Typography variant="body2" align="right" >
                             {item.empaques}
                         </Typography>
                     </Grid>
-                    <Grid item xs={3} sm={basic ? 1 : 1}>
+                    <Grid item xs={3} sm={1}>
                         <Typography variant="body2" align="right" >
                             {item.cantidad}
                         </Typography>

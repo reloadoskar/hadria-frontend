@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { Divider, Grid, IconButton, Typography } from '@material-ui/core'
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit'
-import RefreshIcon from '@material-ui/icons/Refresh'
+// import RefreshIcon from '@material-ui/icons/Refresh'
 import { formatNumber, sumImporte } from '../Tools';
 import useStyles from '../hooks/useStyles';
 export default function CompraBasic(props){
     const {compra, 
-        editCompra, verCompra, recuperarVentas, recuperarGastos} = props
+        editCompra, 
+        verCompra, 
+        // recuperarVentas, 
+        // recuperarGastos
+    } = props
     const [compraLocal, setCompraLocal] = useState(null)
     const [totalVenta, setTotalVenta] = useState(0)
     const [totalGastos, setTotalGastos] = useState(0)
@@ -42,43 +46,44 @@ export default function CompraBasic(props){
         verCompra(compra)
     }
 
-    const handleRecuperarVentas = (compraId) => {
-        recuperarVentas(compraId).then(res=>{
-            setCompraLocal(res.compra)
-        })
-    }
+    // const handleRecuperarVentas = (compraId) => {
+    //     recuperarVentas(compraId).then(res=>{
+    //         setCompraLocal(res.compra)
+    //     })
+    // }
 
-    const handleRecuperarGastos = (compraId) => {
-        recuperarGastos(compraId).then(res=>{
-            setCompraLocal(res.compra)
-        })
-    }
+    // const handleRecuperarGastos = (compraId) => {
+    //     recuperarGastos(compraId).then(res=>{
+    //         setCompraLocal(res.compra)
+    //     })
+    // }
     return (
         <React.Fragment>
             {compraLocal === null ? null :
             <Grid item container xs={12} justifyContent="center" alignItems="center">
-                <Grid item xs={6} sm={1}>
+                <Grid item xs={3} sm={1}>
                     <Typography className={classes.textoMiniFacheron}>{compraLocal.fecha}</Typography>
                     <Typography className={classes.textoMirame} >#{compraLocal.folio}</Typography>
                 </Grid>
-                <Grid item xs={6} sm={2}>
+                <Grid item xs={9} sm={2}>
                     <Typography className={classes.textoMiniFacheron}>{compraLocal.clave} | {compraLocal.tipoCompra.tipo}</Typography>
                     <Typography>{compraLocal.provedor.nombre}</Typography>
                 </Grid>
                 {compraLocal.tipoCompra.tipo === "COMPRAS" ?
                     <React.Fragment>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={12} sm={2}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Venta:</Typography>
                             <Typography align="right">
                                 ${formatNumber(totalVenta,2)} 
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={12} sm={2}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Pagos:</Typography>
                             <Typography align="right">${formatNumber(totalPagos,2)}</Typography>
-                            <Typography align="right" className={classes.textoMiniFacheron}>Costo: $ {formatNumber(compraLocal.importe,2)}</Typography>
+                            <Typography align="right" className={classes.textoMiniFacheron}>Costo:</Typography>
+                            <Typography align="right" className={classes.textoMiniFacheron}>$ {formatNumber(compraLocal.importe,2)}</Typography>
                         </Grid>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={12} sm={2}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Gastos:</Typography>
                             <Typography align="right">
                                 ${formatNumber(totalGastos,2)} 
@@ -119,7 +124,7 @@ export default function CompraBasic(props){
                 }
                 <Grid item xs={12} sm={1}>
                     <Typography align="right">
-                        <IconButton
+                        {/* <IconButton
                             disabled
                             size="small"
                             onClick={() => handleRecuperarGastos(compra._id)}
@@ -132,7 +137,7 @@ export default function CompraBasic(props){
                             onClick={() => handleRecuperarVentas(compra._id)}
                             >
                             <RefreshIcon />
-                        </IconButton>
+                        </IconButton> */}
                         <IconButton
                             size="small"
                             onClick={() => handleVerCompra(compra)}

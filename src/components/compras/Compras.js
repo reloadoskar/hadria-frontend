@@ -175,6 +175,15 @@ function Compras({ubicacions}) {
                             anchorEl={anchorEl}
                             keepMounted
                             open={Boolean(anchorEl)}
+                            getContentAnchorEl={null}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                              }}
                             onClose={handleClose}
                         >
                             {meses.map((mes,i)=>(
