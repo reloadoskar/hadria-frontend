@@ -24,7 +24,7 @@ export default function CrearEgreso(props) {
     const [egreso, setEgreso] = useState(init)
     const [guardando, setGuardando] = useState(false)
     useEffect(() => {
-        Compra.getCompDash()
+        Compra.getCompActivas()
     },[])
     const resetFields = () => {
         setEgreso(init)

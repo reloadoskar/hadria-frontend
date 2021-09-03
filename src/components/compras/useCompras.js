@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getCompras, cancelCompra, closeCompra, saveCompra, getCompra, recuperaVentasCompra, getComprasDash, recuperaGastosCompra } from '../api'
+import { getCompras, cancelCompra, closeCompra, saveCompra, getCompra, recuperaVentasCompra, getComprasActivas, recuperaGastosCompra } from '../api'
 const useCompras = () => {
 	const [compras, setCompras] = useState(null)
 
@@ -47,8 +47,8 @@ const useCompras = () => {
 			})
 	}
 
-	const getCompDash = async () => {
-		const res = await getComprasDash();
+	const getCompActivas = async () => {
+		const res = await getComprasActivas();
 		setCompras(res.compras)
 		return res;
 	}
@@ -68,7 +68,7 @@ const useCompras = () => {
 		cerrarCompra,
 		findCompra,
 		recuperarVentas,
-		getCompDash,
+		getCompActivas,
 		recuperarGastos
 	}
 };

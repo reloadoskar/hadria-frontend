@@ -21,7 +21,7 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
     const tipos = ["GASTO DE CAJA", "GASTO A COMPRA"] 
     const [guardando, setGuardando] = useState(false)
     useEffect(() => {
-        Compra.getCompDash()
+        Compra.getCompActivas()
     },[])
     function hasNull(target) {
         for (var member in target) {

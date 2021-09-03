@@ -316,12 +316,12 @@ export const deleteUbicacion = (id) => {
 
 // API COMPRAS
 
-export const getComprasDash = () => {
+export const getComprasActivas = () => {
 
     try{
         if (decoded){
             return axios
-                .get(url + decoded.database +'/compras/dash')
+                .get(url + decoded.database +'/compras/activas')
                 .then( res => {
                     return res.data
                 })
@@ -329,8 +329,6 @@ export const getComprasDash = () => {
     }catch (err) {
         console.log(err+ ' Desconectado?')
     }
-
-    
 }
 
 export const getCompras = (mes) => {
@@ -338,7 +336,7 @@ export const getCompras = (mes) => {
     try{
         if (decoded){
             return axios
-                .get(url + decoded.database + '/compras/'+mes)
+                .get(url + decoded.database + '/compras/mes/'+mes)
                 .then(res => {
                     return res.data
                 })
