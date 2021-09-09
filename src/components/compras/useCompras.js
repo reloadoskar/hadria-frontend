@@ -4,7 +4,7 @@ const useCompras = () => {
 	const [compras, setCompras] = useState(null)
 
 	const loadCompras = async (mes) => {
-		setCompras(null)
+		// setCompras(null)
 		const res = await getCompras(mes)
 			if (res !== undefined){
 				setCompras(res.compras);

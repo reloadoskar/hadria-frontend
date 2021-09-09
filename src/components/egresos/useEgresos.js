@@ -1,26 +1,20 @@
 import { useState, useEffect } from 'react';
-import { getEgresos, saveEgreso, getCuentasPorPagar, savePagoACuentaPorPagar, 
+import { getEgresos, saveEgreso, getCuentasPorPagar, savePagoACuentaPorPagar, deleteEgreso
 	// getDisponiblexUbicacion 
 	} from '../api'
 import { sumImporte, sumSaldo } from '../Tools'
-import moment from 'moment'
 const useEgresos = () => {
 	const [egresos, setEgresos] = useState([])
 	const [totalEgresos, setTotalEgresos] = useState(null)
 	const [updating, setUpdating] = useState(false)
-	useEffect(() => {
-		let hoy = moment().format("YYYY-MM-DD")
-		async function loadEgresos(fecha) {
-			const res = await getEgresos(fecha)
-			if(res !== undefined){
-				setEgresos(res.egresos)
-			}
+
+	async function loadEgresos(fecha) {
+		const res = await getEgresos(fecha)
+		if(res !== undefined){
+			setEgresos(res.egresos)
 		}
-        loadEgresos(hoy)
-        return () => {
-			setEgresos([])
-        }
-	}, [updating])
+		return res
+	}
 	
 	useEffect(() => {
 		if(egresos!==[]){
@@ -82,14 +76,20 @@ const useEgresos = () => {
 		})
 	}
 
+	const delEgreso = async (id) => {
+		const res = await deleteEgreso(id)
+			return res
+	}
+
 	return {
 		egresos,
 		totalEgresos,
-		addEgreso, 
-		
 		cuentasxPagar,
 		totalCxp,
+		addEgreso, 
+		loadEgresos,
 		addPagoCxp,
+		delEgreso
 	}
 };
 

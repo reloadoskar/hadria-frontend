@@ -1,16 +1,19 @@
-import { CircularProgress, Grid, Typography } from '@material-ui/core'
 import React, {useState, useEffect} from 'react'
+import { CircularProgress, Grid, Typography, Button, Menu, MenuItem, Divider } from '@material-ui/core'
 import CompraBasic from './CompraBasic'
 import { sumImporte, formatNumber } from '../Tools'
 import useStyles  from '../hooks/useStyles'
-export default function ListaCompras({compras, editCompra, verCompra, recuperarVentas, recuperarGastos}){
+export default function ListaCompras({compras, editCompra, verCompra, recuperarVentas, recuperarGastos, meses, month, onChangeMonth}){
     const classes = useStyles()
     const [lasCompras, setLasCompras] = useState(null)
-    const [tVentas, setTventas] = useState(0)
-    const [tCompras, setTcompras] = useState(0)
 
-    const [tResultado, setTresultado] = useState(0)
-    // const [selectedDate, handleDateChange] = useState(moment());
+    const [tVentas, setVentas] = useState(0)
+    const [tCosto, setCosto] = useState(0)
+    const [tPagos, setPagos] = useState(0)
+    const [tGastos, setGastos] = useState(0)
+    const [tResultado, setResultado] = useState(0)
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
     useEffect(() => {
         if(compras){
             setLasCompras(compras)
@@ -22,36 +25,90 @@ export default function ListaCompras({compras, editCompra, verCompra, recuperarV
         if(lasCompras){
             let tc = 0
             tc = sumImporte(lasCompras)
-            setTcompras(tc)
+            setCosto(tc)
             let tv = 0
             lasCompras.map(compra=> tv += sumImporte(compra.ventaItems))
-            setTventas(tv)
+            setVentas(tv)
             let tg = 0
-
+            lasCompras.map(compra=> tg += sumImporte(compra.gastos))
+            setGastos(tg)
+            let tp = 0
+            lasCompras.map(compra=> tp += sumImporte(compra.pagos))
+            setPagos(tp)
             let tr = tv - tc - tg
-            setTresultado(tr)
+            setResultado(tr)
         }
         return () => clearTotals()
     },[lasCompras])
     const clearTotals = () => {
-        setTcompras(0)
-        setTventas(0)
-        setTresultado(0)
+        setCosto(0)
+        setVentas(0)
+        setResultado(0)
+    }
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+    const handleChange = (mes) => {
+        setLasCompras(null)
+        onChangeMonth(mes)
+        handleClose()
     }
     return(
         <Grid item container xs={12} spacing={2}>
-            {/* <Grid item xs={12}>
-                <Typography component="div" align="center">
-                    <MuiPickersUtilsProvider utils={MomentUtils}>
-                        <DatePicker
-                            views={["year", "month"]}
-                            label="Año y mes"
-                            value={selectedDate}
-                            onChange={handleDateChange}
-                        />
-                    </MuiPickersUtilsProvider>
-                </Typography>
-            </Grid> */}
+            <Grid item xs={12} sm={3}>
+                        <Button 
+                            fullWidth
+                            onClick={handleClick}
+                            className={classes.botonsoteGenerico} 
+                            children={
+                                meses[month]
+                        }/>
+                        <Menu 
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            getContentAnchorEl={null}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                              }}
+                            onClose={handleClose}
+                        >
+                            {meses.map((mes,i)=>(
+                                <MenuItem onClick={()=>handleChange(i)} key={i}>{mes}</MenuItem>
+                            ))}
+                        </Menu>
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                    <Typography variant="h2" align="center">{lasCompras ? lasCompras.length : null}</Typography>
+                    <Typography align="center">Operaciones</Typography>
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                    <Typography align="right">Venta total</Typography>
+                    <Typography variant="h5" align="right">${formatNumber(tVentas,2)}</Typography>
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                    <Typography align="right">Costo total</Typography>
+                    <Typography align="right" variant="h5" className={classes.textoMirameSangron}>${formatNumber(tCosto,2)}</Typography>
+                    <Typography align="right" variant="h6">Pagos: -${formatNumber(tPagos,2)}</Typography>
+                    <Divider />
+                    <Typography align="right" variant="h6">Saldo: ${formatNumber(tCosto-tPagos,2)}</Typography>
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                    <Typography align="right">Gasto total</Typography>
+                    <Typography variant="h5" align="right">-${formatNumber(tGastos,2)}</Typography>
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                    <Typography align="right">Resultado</Typography>
+                    <Typography align="right" variant="h5" className={tResultado > 0 ? classes.textoMirameExito : classes.textoMirameSangron}>${formatNumber(tResultado,2)}</Typography>
+                </Grid>
             {lasCompras === null ?
                 <Grid item xs={12}>
                     <Typography component="div" align="center" >
@@ -61,7 +118,6 @@ export default function ListaCompras({compras, editCompra, verCompra, recuperarV
                 :
                 <React.Fragment>
                     {lasCompras
-                    // .filter(compra=> moment(compra.fecha).format("MM") === moment(selectedDate).format("MM") )
                     .map((compra, i) => (
                         <Grid item xs={12} key={i}>
                             <CompraBasic 
@@ -75,30 +131,7 @@ export default function ListaCompras({compras, editCompra, verCompra, recuperarV
                         </Grid>
                     ))
                     }
-                    <Grid
-                        container
-                        alignItems="center"
-                    >
-                        <Grid item xs={12} sm={4}>
-                            <Typography align="center" className={classes.textoMiniFacheron}>Total Compras:</Typography>
-                            <Typography align="center" >
-                                ${formatNumber(tCompras,2)}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Typography align="center" className={classes.textoMiniFacheron}>Total Ventas:</Typography>
-                            <Typography align="center" >
-                                ${formatNumber(tVentas,2)}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Typography align="center" className={classes.textoMiniFacheron}>Total Resultado:</Typography>
-                            <Typography align="center" color={tResultado<0 ? "secondary" : "primary"}>
-                                ${formatNumber(tResultado,2)}
-                            </Typography>
-                        </Grid>
-
-                    </Grid>
+                
                 </React.Fragment>
             }
         </Grid>

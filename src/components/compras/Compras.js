@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useSnackbar } from 'notistack'
-import moment from 'moment'
+// import moment from 'moment'
 import {
     Button,
     Container,
     Grid,
-    Typography,
-    Menu,
-    MenuItem
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add'
 import useCompras from '../compras/useCompras';
@@ -58,19 +55,11 @@ function Compras({ubicacions}) {
     let now = new Date()
     
     const [month, setMonth] = useState(now.getMonth() + 1)
-    const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(()=>{
         compras.loadCompras(month)
     },[month])
-    
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    }
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
     
     const crear = (compra) => {
         return compras.crearCompra(compra).then(res => {
@@ -133,7 +122,6 @@ function Compras({ubicacions}) {
 
     const onChangeMonth = (mes) => {
         setMonth(mes)
-        handleClose()
     }
     return (
         <Container maxWidth="xl">
@@ -162,12 +150,11 @@ function Compras({ubicacions}) {
                         addProvedor={addProvedor}
                     />
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography align="center" children={
-                        <React.Fragment>
+                {/* <Grid item xs={4}>
                         <Button 
+                            fullWidth
                             onClick={handleClick}
-                            className={classes.botonGenerico} 
+                            className={classes.botonsoteGenerico} 
                             children={
                                 meses[month]
                         }/>
@@ -190,15 +177,19 @@ function Compras({ubicacions}) {
                                 <MenuItem onClick={()=>onChangeMonth(i)} key={i}>{mes}</MenuItem>
                             ))}
                         </Menu>
-                        </React.Fragment>
-                    }/>
                 </Grid>
+                <Grid item xs={4}>
+                    <Typography variant="h2">{compras.compras ? compras.compras.length : 0}</Typography>
+                </Grid> */}
                 <ListaCompras 
                     compras={compras.compras} 
                     editCompra={editCompra} 
                     verCompra={showVerCompra} 
                     recuperarVentas={compras.recuperarVentas} 
                     recuperarGastos={compras.recuperarGastos}
+                    meses={meses}
+                    month={month}
+                    onChangeMonth={onChangeMonth}
                     />
 
             </Grid>

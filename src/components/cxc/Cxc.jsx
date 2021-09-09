@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Grid, Typography } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
-
+import { formatNumber } from '../Tools'
 export default function Cxc({cta}){
     const classes = useStyles()
     return(
@@ -14,7 +14,7 @@ export default function Cxc({cta}){
                         Importe:
                     </Typography>
                     <Typography align="right">
-                        {cta.venta.importe}
+                        {formatNumber(cta.venta.importe,2)}
                     </Typography>
                 </Grid>
                 <Grid item xs={12} sm={4}>
@@ -22,7 +22,7 @@ export default function Cxc({cta}){
                         Saldo:
                     </Typography>
                     <Typography align="right">
-                        {cta.saldo}
+                        {formatNumber(cta.saldo,2)}
                     </Typography>
                 </Grid>
             </Grid>

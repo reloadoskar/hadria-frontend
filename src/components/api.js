@@ -1,6 +1,5 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken'
-// import jwt_decode from 'jwt-decode'
 const URL = process.env.REACT_APP_API_URL
 let token = false 
 let decoded = false
@@ -825,6 +824,20 @@ export const getEgresos = (fecha) => {
         if(decoded){
             return axios
                 .get(url + decoded.database+  '/egresos/' + fecha)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const deleteEgreso = (id) => {
+    try{
+        if(decoded){
+            return axios
+                .delete(url + decoded.database+  '/egreso/delete/' + id)
                 .then( res => {
                     return res.data
                 })

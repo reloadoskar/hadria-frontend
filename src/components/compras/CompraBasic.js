@@ -3,7 +3,7 @@ import { Divider, Grid, IconButton, Typography } from '@material-ui/core'
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit'
 // import RefreshIcon from '@material-ui/icons/Refresh'
-import { formatNumber, sumImporte } from '../Tools';
+import { formatNumber, sumImporte, sumStock, sumEmpStock } from '../Tools';
 import useStyles from '../hooks/useStyles';
 export default function CompraBasic(props){
     const {compra, 
@@ -17,6 +17,8 @@ export default function CompraBasic(props){
     const [totalGastos, setTotalGastos] = useState(0)
     const [totalPagos, setTotalPagos] = useState(0)
     const [resultado, setResultado] = useState(0)
+    const [tEmpaques, setEmpaques] = useState(0)
+    const [tCantidad, setCantidad] = useState(0)
     const classes = useStyles()
     useEffect(() => {
         if(compra !== null){
@@ -30,14 +32,17 @@ export default function CompraBasic(props){
             let tv = sumImporte(compraLocal.ventaItems)
             let tg = sumImporte(compraLocal.gastos)
             let tp = sumImporte(compraLocal.pagos)
+            let tc = compraLocal.importe
             setTotalVenta(tv) 
             setTotalGastos(tg)
             setTotalPagos(tp)
-            if(compraLocal.tipoCompra.tipo === 'COMPRAS'){
-                setResultado(tv-tp-tg)
+            if(compraLocal.tipoCompra.tipo === 'COMPRAS' ||compraLocal.tipoCompra.tipo === 'COMPRA' ){
+                setResultado(tv-tc-tg)
             }else{
                 setResultado(tv-tg-tp)
             }
+            setEmpaques(sumEmpStock(compraLocal.items))
+            setCantidad(sumStock(compraLocal.items))
         }
         return () => setTotalVenta(0) 
     },[compraLocal])
@@ -60,36 +65,39 @@ export default function CompraBasic(props){
     return (
         <React.Fragment>
             {compraLocal === null ? null :
-            <Grid item container xs={12} justifyContent="center" alignItems="center">
+            <Grid item container xs={12} justifyContent="center" alignItems="baseline">
                 <Grid item xs={3} sm={1}>
                     <Typography className={classes.textoMiniFacheron}>{compraLocal.fecha}</Typography>
                     <Typography className={classes.textoMirame} >#{compraLocal.folio}</Typography>
                 </Grid>
-                <Grid item xs={9} sm={2}>
-                    <Typography className={classes.textoMiniFacheron}>{compraLocal.clave} | {compraLocal.tipoCompra.tipo}</Typography>
+                <Grid item xs={9} sm={4}>
+                    <Typography className={classes.textoMiniFacheron}>{compraLocal.clave} | {compraLocal.tipoCompra.tipo} </Typography>
                     <Typography>{compraLocal.provedor.nombre}</Typography>
                 </Grid>
-                {compraLocal.tipoCompra.tipo === "COMPRAS" ?
+                <Grid item xs={12} sm={1} className={tEmpaques < 1 && tCantidad < 1 ? classes.suspended : classes.pro}>
+                    <Typography align="center" className={classes.textoMiniFacheron}>{tEmpaques < 1 && tCantidad < 1 ? "TERMINADO" : compraLocal.status}</Typography>
+                </Grid>
+                {compraLocal.tipoCompra.tipo === "COMPRAS" || compraLocal.tipoCompra.tipo === "COMPRA"  ?
                     <React.Fragment>
-                        <Grid item xs={12} sm={2}>
+                        <Grid item xs={4} sm={2}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Venta:</Typography>
                             <Typography align="right">
                                 ${formatNumber(totalVenta,2)} 
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} sm={2}>
-                            <Typography align="right" className={classes.textoMiniFacheron}>Pagos:</Typography>
-                            <Typography align="right">${formatNumber(totalPagos,2)}</Typography>
+                        <Grid item xs={4} sm={1}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Costo:</Typography>
-                            <Typography align="right" className={classes.textoMiniFacheron}>$ {formatNumber(compraLocal.importe,2)}</Typography>
+                            <Typography align="right">$ {formatNumber(compraLocal.importe,2)}</Typography>
+                            <Typography align="right" className={classes.textoMiniFacheron}>Pagado:</Typography>
+                            <Typography align="right">${formatNumber(totalPagos,2)}</Typography>
                         </Grid>
-                        <Grid item xs={12} sm={2}>
+                        <Grid item xs={4} sm={1}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Gastos:</Typography>
                             <Typography align="right">
                                 ${formatNumber(totalGastos,2)} 
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} sm={2}>
+                        <Grid item xs={12} sm={1}>
                             <Typography className={classes.textoMiniFacheron} align="right">Resultado:</Typography>
                             <Typography align="right" className={resultado<0 ? classes.textoMirameSangron : classes.textoMirameExito}>
                                 ${formatNumber(resultado,2)} 
@@ -102,19 +110,19 @@ export default function CompraBasic(props){
                             <Typography align="right" className={classes.textoMiniFacheron}>Venta:</Typography>
                             <Typography align="right">${formatNumber(totalVenta,2)} </Typography>
                         </Grid>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={4} sm={1}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Pagos:</Typography>
                             <Typography align="right">
                                 ${formatNumber(totalPagos,2)} 
                             </Typography>
                         </Grid>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={4} sm={1}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Gastos:</Typography>
                             <Typography align="right">
                                 ${formatNumber(totalGastos,2)} 
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} sm={2}>
+                        <Grid item xs={12} sm={1}>
                             <Typography className={classes.textoMiniFacheron} align="right">Resultado:</Typography>
                             <Typography align="right" className={resultado<0 ? classes.textoMirameSangron : classes.textoMirameExito}>
                                 ${formatNumber(resultado,2)} 

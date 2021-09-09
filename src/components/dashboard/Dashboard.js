@@ -35,6 +35,9 @@ export default function Dashboard({ubicacions}) {
     const [corte, setCorte] = useState(null)
     const [fecha, setFecha] = useState(null)
     const now = moment()
+    useEffect(()=>{
+        egresos.loadEgresos(fecha)
+    },[fecha])
     useEffect(() => {
         let hoy = moment().format("YYYY-MM-DD")
         setFecha(hoy)
@@ -169,7 +172,7 @@ export default function Dashboard({ubicacions}) {
 
     }
     return (
-        <Container maxWidth="md">
+        <Container maxWidth="lg">
             <Grid container spacing={3}>
                 {/* TOP MENU */}
                 <Grid container justifyContent="center">

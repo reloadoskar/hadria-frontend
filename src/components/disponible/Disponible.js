@@ -3,9 +3,7 @@ import { Card, CardContent,
     Grid,
     Typography, 
     MenuItem,
-    CardHeader,
     CircularProgress,
-    Divider,
 } from '@material-ui/core'
 import {formatNumber} from '../Tools'
 import useStyles from '../hooks/useStyles'

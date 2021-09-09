@@ -312,6 +312,15 @@ const useStyles = makeStyles(theme => ({
         height: 48,
         padding: '0 30px',
     },
+    botonsoteGenerico: {
+        background: 'linear-gradient(45deg, #ffd369 50%, #ffdf91 90%)',
+        border: 0,
+        borderRadius: 3,
+        color: 'black',
+        height: 96,
+        fontSize: 32,
+        padding: '0 30px',
+    },
     media: {
         height: 190,
     },
