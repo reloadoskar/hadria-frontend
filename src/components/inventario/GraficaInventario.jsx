@@ -63,7 +63,7 @@ export default function GraficaInventario({data}){
                             <VictoryAxis key="y"
                                 orientation="bottom"
                                 style={{
-                                    tickLabels:{fontSize: 7, fill: "#524656"},
+                                    tickLabels:{fontSize: 6, fill: "#524656"},
                                     axis: { stroke: "#524656", strokeWidth: 3 },
                                 }}
                             />
@@ -76,7 +76,7 @@ export default function GraficaInventario({data}){
                                 y="totalEmpaques"
                                 style={{
                                     data: {fill: "#ffd369", fillOpacity: 0.8},
-                                    labels: {fontSize: 8, fill: "#524656"},
+                                    labels: {fontSize: 6, fill: "#524656"},
                                     axis: {stroke: "#524656", strokeWidth: 12}
                                 }}
                             />

@@ -7,7 +7,7 @@ export default function GraficaVentas(props){
         if(props.data){
             let ubics = props.data.filter(ubic => ubic.total > 1)
             if(ubics.length > 0){
-                setData(props.data)
+                setData(ubics)
             }
         }
     },[props.data]) 
@@ -17,6 +17,7 @@ export default function GraficaVentas(props){
             null
             :
             <VictoryChart key="chart"
+                domainPadding={20}
                 height={250}
                 // animate={{
                 //     duration: 1500,
@@ -27,7 +28,7 @@ export default function GraficaVentas(props){
                 dependentAxis
                 style={{
                     axis: { stroke: "#524656", strokeWidth: 2 },
-                    tickLabels:{fontSize:7, fill: "#524656" },
+                    tickLabels:{fontSize:5, fill: "#524656" },
                     grid: {
                         stroke: ({ tick }) =>
                         tick < 10 ? "transparent" : "#C2B6C6",
@@ -39,7 +40,7 @@ export default function GraficaVentas(props){
                 <VictoryAxis key="y"
                     orientation="bottom"
                     style={{
-                        tickLabels:{fontSize: 8, fill: "#524656"},
+                        tickLabels:{fontSize: 5, fill: "#524656"},
                         axis: { stroke: "#524656", strokeWidth: 1 },
                     }}
                     /> 
