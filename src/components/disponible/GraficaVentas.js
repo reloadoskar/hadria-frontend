@@ -19,10 +19,10 @@ export default function GraficaVentas(props){
             <VictoryChart key="chart"
                 domainPadding={20}
                 height={250}
-                // animate={{
-                //     duration: 1500,
-                //     easing: "elastic",
-                // }}
+                animate={{
+                    duration: 1500,
+                    easing: "elastic",
+                }}
             >
             <VictoryAxis key="x"
                 dependentAxis

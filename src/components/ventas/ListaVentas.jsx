@@ -12,8 +12,8 @@ export default function ListaVentas({ventas, open, close}){
     const [ventasxprecio, setVxpr] = useState([])
     const classes = useStyles()
     const [tabSelected, setTab] = useState(1)
-    const [ventasxubicacion, setVxu] = useState([])
-    const [ventasxproducto, setVxp] = useState([])
+    // const [ventasxubicacion, setVxu] = useState([])
+    // const [ventasxproducto, setVxp] = useState([])
 
     const selectTab = (event, selected) => {
         setTab(selected)
@@ -21,17 +21,17 @@ export default function ListaVentas({ventas, open, close}){
     useEffect(()=>{
         if(ventas){
             setLasVentas(ventas)
-            setVxp(agrupaVentas(ventas, "compraItem"))
+            // setVxp(agrupaVentas(ventas, "compraItem"))
             setVxf(agrupaVentas(ventas, "fecha"))
-            setVxu(agrupaVentas(ventas, "ubicacion"))
+            // setVxu(agrupaVentas(ventas, "ubicacion"))
             setVxpr(agrupaVentas(ventas, "precio"))
         }
         return ()=> {
             setLasVentas([])
-            setVxp([])
+            // setVxp([])
             setVxf([])
-            setVxu([])
-            setVxpr([])
+            // setVxu([])
+            // setVxpr([])
         }
     },[ventas])
     return (

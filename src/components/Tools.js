@@ -270,3 +270,18 @@ export function agrupaVentas(ventas, filtro) {
         return grupos;
     }, {});
 }
+
+export function agrupaItems(items, filtro){
+    if(filtro === "producto"){
+        let reduce = items.reduce(function(grupo, item){
+            (grupo[item.producto._id] = grupo[item.producto._id] || { id: item.producto._id, [filtro] : item[filtro], stock:0, cantidad:0, empaques:0, empaquesStock:0, costo: item.costo})
+            grupo[item.producto._id].stock += item.stock
+            grupo[item.producto._id].cantidad += item.cantidad
+            grupo[item.producto._id].empaques += item.empaques
+            grupo[item.producto._id].empaquesStock += item.empaquesStock
+            return grupo
+        }, {})
+
+        return Object.keys(reduce).map(key => reduce[key])
+    }
+}

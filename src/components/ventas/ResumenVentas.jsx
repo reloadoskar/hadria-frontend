@@ -1,84 +1,98 @@
 import React, { useEffect, useState } from 'react'
-import { CircularProgress, Grid, Typography, Divider } from '@material-ui/core'
-import {formatNumber, sumImporte} from '../Tools'
+import { CircularProgress, Grid, Typography, Divider, LinearProgress } from '@material-ui/core'
+import {formatNumber, sumImporte, agrupaItems, sumEmpStock, sumCantidad, sumEmpaques, sumStock} from '../Tools'
 import useStyles from '../hooks/useStyles'
-export default function ResumenVentas({items,compra}){
-    const [elResumen, setElResumen] = useState(null)
+import { useMediaQuery } from '@material-ui/core';
+export default function ResumenVentas({items,ventas}){
+    const [lasVentas, setLasVentas] = useState(null)
+    const [losItems, setLosItems] = useState(null)
     const classes = useStyles()
+    const isMobile = useMediaQuery('(max-width: 720px)')
     useEffect(() => {
-        setElResumen(items)
+        if(items){
+            let grupo = agrupaItems(items, "producto")
+            setLosItems(grupo)
+        }
     },[items])
 
-    const checkInvInicial = (id) =>{
-        if(compra){
-            let sumac = 0
-            let sumae = 0
-            compra.items.forEach(item => {
-                if(item.producto._id === id){
-                    sumac += item.cantidad
-                    sumae += item.empaques
-                }
-            });
-            return {cantidad: sumac, empaques: sumae}
+    useEffect(()=>{
+        if(ventas){
+            setLasVentas(ventas)
         }
-    }
+    },[ventas])
 
     return  (
         <Grid container spacing={2}>
-            {!elResumen ? 
+            {!losItems ? 
                 <CircularProgress />
                 : 
                 <Grid item xs={12} container>
-                    {elResumen.length === 0 ?
+                    {losItems.length === 0 ?
                         <Typography align="center">No se han registrado ventas.</Typography>
                         :
                         <React.Fragment>
                             <Grid item xs={12} >
-                                <Typography className={classes.textoMirame} align="center" children="Resumen de VENTAS" />
-                                <Divider />
+                                <Typography className={classes.textoMirame} align="center" children="Resumen" />
                             </Grid>
-                            {elResumen.map((item, index)=> (
+                            <Divider />
+                            {losItems.map((item, index)=> (
                                 <Grid key={index} item xs={12} container alignItems="center">
                                     <Grid item xs={12} sm={4}>
                                         <Typography>
                                             {item.producto.descripcion}
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={3} sm={2}>
-                                        <Typography className={classes.textoMiniFacheron} align="right">{item.producto.unidad.abr} disp: { formatNumber( checkInvInicial(item._id).cantidad - item.cantidad, 1)}</Typography>
+                                    <Grid item xs={6} sm={2}>
+                                        <Typography className={classes.textoMiniFacheron} align="right">Comprado</Typography>
                                         <Typography align="right">
-                                            {formatNumber(item.cantidad,2)} / {formatNumber(checkInvInicial(item._id).cantidad,2)}
+                                            {formatNumber(item.cantidad,2)} {item.producto.unidad.abr} | {formatNumber(item.empaques)} {item.producto.empaque.abr}
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={3} sm={2}>
-                                        <Typography className={classes.textoMiniFacheron} align="right">{item.producto.empaque.abr} disp: { formatNumber(checkInvInicial(item._id).empaques - item.empaques,2)}</Typography>
-                                        <Typography align="right">
-                                            {formatNumber(item.empaques,2)} / {formatNumber(checkInvInicial(item._id).empaques,2)}
+                                    <Grid item xs={6} sm={2}>
+                                        <Typography className={classes.textoMiniFacheron} align="center">En Inventario</Typography>
+                                        <Typography align="center">
+                                            {formatNumber(item.stock,2)} {item.producto.unidad.abr} | {formatNumber(item.empaquesStock)} {item.producto.empaque.abr}
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={3} sm={2}>
-                                        <Typography className={classes.textoMiniFacheron} align="right">PRECIO PROMEDIO</Typography>
-                                        <Typography align="right">
-                                            ${formatNumber((item.importe/item.cantidad),2)}
+                                    <Grid item xs={12} sm={2}>
+                                        <Typography className={classes.textoMiniFacheron} align="center">Vendido {formatNumber(( ( (item.stock*100)/item.cantidad ) -100 ) * -1)} %</Typography>
+                                        <LinearProgress variant="determinate" value={( ( (item.stock*100)/item.cantidad ) -100 ) * -1} />
+                                    </Grid>
+                                    <Grid item xs={6} sm={1}>
+                                        <Typography className={classes.textoMiniFacheron} align="right">Precio promedio</Typography>
+                                        <Typography align="right" >$
+                                            {lasVentas.filter(vnta => vnta.producto._id === item.id).length > 0 ?
+                                                formatNumber( sumImporte(lasVentas.filter(vnta => vnta.producto._id === item.id) ) / (item.cantidad - item.stock) ,2) 
+                                                :
+                                                0
+                                            }
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={3} sm={2}>
-                                        <Typography align="right">
-                                            ${formatNumber(item.importe,2)}
-                                        </Typography>
+                                    <Grid item xs={6} sm={1}>
+                                        <Typography className={classes.textoMiniFacheron} align="right">Total Venta</Typography>
+                                        <Typography align="right" >${formatNumber( sumImporte(lasVentas.filter(vnta => vnta.producto._id === item.id), 1))}</Typography>
                                     </Grid>
                                 </Grid>
                             ))}
                             <Divider />
-                            <Grid item xs={12} >
-                                <Divider />
-                                <Typography align="right" className={classes.textoMiniFacheron}>
-                                    TOTAL:
-                                </Typography>
-                                <Typography className={classes.textoMirame} align="right">
-                                    ${formatNumber(sumImporte(elResumen),2)}
-                                </Typography>
-                            </Grid>     
+                            { !isMobile ?
+                                <Grid item xs={12} container>
+                                    <Grid sm={4}>
+                                        <Typography align="right" >Totales:</Typography>
+                                    </Grid>
+                                    <Grid item xs={6} sm={2}>
+                                        <Typography align="right">{ formatNumber(sumCantidad(losItems),2)} | { formatNumber(sumEmpaques(losItems),1) }</Typography>
+                                    </Grid>
+                                    <Grid item xs={6} sm={2}>
+                                        <Typography align="center">{ formatNumber(sumStock(losItems),2)} | { formatNumber(sumEmpStock(losItems),1) }</Typography>
+                                    </Grid>
+                                    <Grid item xs={6} sm={3}></Grid>
+                                    <Grid item xs={6} sm={1}>
+                                        <Typography align="right">${ formatNumber(sumImporte(lasVentas),2)}</Typography>
+                                    </Grid>
+                                </Grid>
+                                : null
+                            }
                         </React.Fragment>                   
                     }
                 </Grid>

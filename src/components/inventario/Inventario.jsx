@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Container, Grid, Typography, Switch, Button, Tabs, Tab } from '@material-ui/core'
+import { Container, Grid, Typography, Button, Tabs, Tab } from '@material-ui/core'
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows'
 import useInventario from '../inventario/useInventario'
 import VistaPorFolio from './VistaPorFolio'
@@ -9,8 +9,8 @@ import GraficaInventario from './GraficaInventario'
 export default function Inventario({ubicacions}){
     const inventario = useInventario()
     const classes = useStyles()
-    const [verFolios, setVerFolios] = useState(true)
-    const [verUbicaciones, setVerUbicaciones] = useState(false)
+    // const [verFolios, setVerFolios] = useState(true)
+    // const [verUbicaciones, setVerUbicaciones] = useState(false)
     const [moverDialog, setMoverDialog] = useState(false)
     // const [isMounted, setIsmounted] = useState(false)
     const [tabSelected, setTab] = useState(1)
@@ -21,12 +21,12 @@ export default function Inventario({ubicacions}){
         inventario.getInventarioGeneral()
         inventario.getInventarioXUbic()
     },[])
-    function toggleVerFolios(){
-        setVerFolios(!verFolios)
-    }
-    function toggleVerUbicaciones(){
-        setVerUbicaciones(!verUbicaciones)
-    }
+    // function toggleVerFolios(){
+    //     setVerFolios(!verFolios)
+    // }
+    // function toggleVerUbicaciones(){
+    //     setVerUbicaciones(!verUbicaciones)
+    // }
     const openMoverDialog = () => {
         setMoverDialog(true)
         inventario.getInventarioXUbic()
@@ -85,11 +85,11 @@ export default function Inventario({ubicacions}){
                         />
                     </Typography> */}
                 </Grid>
-                {verFolios === false ? null : 
+                {/* {verFolios === false ? null : 
                     <Grid item container xs={12} spacing={2}>
                         
                     </Grid>
-                }
+                } */}
             </Grid>
         </Container>
     )

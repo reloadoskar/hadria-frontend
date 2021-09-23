@@ -8,54 +8,52 @@ import ListIcon from '@material-ui/icons/List';
 import useStyles from '../hooks/useStyles'
 import ResumenVentas from '../ventas/ResumenVentas'
 import EgresoBasic from '../egresos/EgresoBasic'
-import {sumImporte, formatNumber} from '../Tools'
+import {sumImporte, sumEmpStock, sumStock, formatNumber} from '../Tools'
 import ListaVentas from '../ventas/ListaVentas';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 export default function Compra({open, close, compra, compras}){
     const classes = useStyles()
-    const [laCompra, setLaCompra] = useState(null)
-    const [totalVentas, setTv] = useState(0)
-    const [totalPagos, setTp] = useState(0)
-    const [totalGastos, setTg] = useState(0)
-    const [totalComision, setTcom] = useState(0)
-    const [resultado, setRes] = useState(0)
-    const [totalCosto, setTc] = useState(0)
-    // const [total, setTotal] = useState(0)
-    // const [saldo, setSaldo] = useState(0)
-    // const [comision, setComision] = useState(0)
     const [dialogListaVentas, setDialog] = useState(false)
+    
+    const [laCompra, setLaCompra] = useState(null)
+    const [totalVenta, setTotalVenta] = useState(0)
+    const [totalGastos, setTotalGastos] = useState(0)
+    const [totalPagos, setTotalPagos] = useState(0)
+    const [resultado, setResultado] = useState(0)
 
     useEffect(() => {
         if(compra){
-            compras.findCompra(compra._id)
-                .then(res => {
-                    setLaCompra(res.data)
-                    let tot = sumImporte(res.data.ventas)
-                    let tcost = res.data.compra.importe
-                    let tg = sumImporte(res.data.egresos.filter((e)=>e.tipo!=="PAGO"))
-                    let tp = sumImporte(res.data.egresos.filter((e)=>e.tipo==="PAGO"))
-                    
-                    setTv(tot)
-                    setTc(tcost)
-                    setTg(tg)
-                    setTp(tp)
-                    if(res.data.compra.tipoCompra.tipo === "CONSIGNACION"){
-                        let com = 0
-                        com = ( res.data.compra.provedor.comision / 100 ) * tot
-                        setTcom(com)
-                        // let sal = 0
-                        // sal = tot - com
-                        setRes(tot - com - tg - tp)
-                    }else{
-                        setRes(tot-tp-tg)
-                    }
-                    // setTotal(calculaTotal(res.data))
-                })
+            setLaCompra(compra)
         }
         return () => setLaCompra(null)
     },[compra, compras])
+
+    useEffect(()=>{
+        if(laCompra){
+            let tv = sumImporte(laCompra.ventaItems)
+            let tg = sumImporte(laCompra.gastos)
+            let tp = sumImporte(laCompra.pagos)
+            let tc = laCompra.importe
+            setTotalVenta(tv) 
+            setTotalGastos(tg)
+            setTotalPagos(tp)
+            if(laCompra.tipoCompra.tipo === 'COMPRAS' ||laCompra.tipoCompra.tipo === 'COMPRA' ){
+                setResultado(tv-tc-tg)
+            }else{
+                setResultado(tv-tg-tp)
+            }
+        }
+        return () => resetValues()
+    },[laCompra])
+
+    const resetValues = () => {
+        setTotalVenta(0)
+        setTotalPagos(0)
+        setTotalGastos(0)
+        setResultado(0)
+    }
 
     // const calculaTotal = (data) => {
     //     let s = 0
@@ -78,12 +76,12 @@ export default function Compra({open, close, compra, compras}){
                 {laCompra===null ? <LinearProgress variant="query" /> :
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                            <Typography className={classes.textoMiniFacheron} >{laCompra.compra.fecha}</Typography>
-                            <Typography variant ="h6">#{laCompra.compra.folio} {laCompra.compra.clave} | {laCompra.compra.provedor.nombre} | {laCompra.compra.tipoCompra.tipo}</Typography>
-                            <Typography className={classes.textoMiniFacheron} >Remision: {laCompra.compra.remision}</Typography>
+                            <Typography className={classes.textoMiniFacheron} >{laCompra.fecha}</Typography>
+                            <Typography variant ="h6">#{laCompra.folio} {laCompra.clave} | {laCompra.provedor.nombre} | {laCompra.tipoCompra.tipo}</Typography>
+                            <Typography className={classes.textoMiniFacheron} >Remision: {laCompra.remision}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6} container justifyContent="flex-end">
-                            <Tooltip title="Ver ventas" open={true} arrow placement="left">
+                            <Tooltip title="Ver ventas" arrow placement="left">
                                 <IconButton
                                     aria-label="Ver ventas"
                                     onClick={()=>setDialog(true)}
@@ -91,12 +89,12 @@ export default function Compra({open, close, compra, compras}){
                                     <ListIcon />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title="Cerrar" >
+                            <Tooltip title="Cerrar" arrow>
                                 <IconButton
                                     aria-label="Cerrar"
-                                    onClick={()=>cerrarComp(laCompra.compra._id)}
+                                    onClick={()=>cerrarComp(laCompra._id)}
                                 >
-                                   { laCompra.compra.status === "ACTIVO" ?  <LockOpenIcon /> : <LockIcon /> }
+                                   { laCompra.status === "ACTIVO" ?  <LockOpenIcon /> : <LockIcon /> }
                                 </IconButton>
                             </Tooltip>
                             <IconButton
@@ -107,14 +105,14 @@ export default function Compra({open, close, compra, compras}){
                             </IconButton>
                         </Grid>
                         <Grid item xs={12}>
-                            <ResumenVentas items={laCompra.ventasGroup} compra={laCompra.compra}/>
+                            <ResumenVentas items={laCompra.items} ventas={laCompra.ventaItems}/>
                         </Grid>
-                        {laCompra.egresos.filter(gasto=> gasto.tipo=== "GASTO A COMPRA").length > 0 ?
+                        {laCompra.gastos.length > 0 ?
                             <Grid item xs={12} container>
                                 <Grid item xs={12}>
                                     <Typography align="center" className={classes.textoMirame} >Gastos</Typography>
                                     <Divider />
-                                {laCompra.egresos.filter(gasto=> gasto.tipo=== "GASTO A COMPRA").map((gasto, i) => (
+                                {laCompra.gastos.map((gasto, i) => (
                                     <EgresoBasic egreso={gasto} key={i} />
                                 ))}
                                     <Divider />
@@ -124,19 +122,19 @@ export default function Compra({open, close, compra, compras}){
                                         TOTAL GASTOS:
                                     </Typography>
                                     <Typography align="right" className={classes.textoSangron} >
-                                        ${formatNumber(sumImporte(laCompra.egresos.filter(gasto=> gasto.tipo=== "GASTO A COMPRA")),2)}
+                                        ${formatNumber(sumImporte(laCompra.gastos),2)}
                                     </Typography>
                                 </Grid>
                             </Grid>
                             : null
                         }
 
-                        {laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO").length > 0 ?
+                        {laCompra.pagos.length > 0 ?
                             <Grid item xs={12} container>
                                 <Grid item xs={12}>
                                     <Typography align="center" className={classes.textoMirame} >Pagos</Typography>
                                     <Divider />
-                                {laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO").map((gasto, i) => (
+                                {laCompra.pagos.map((gasto, i) => (
                                     <EgresoBasic egreso={gasto} key={i} />
                                 ))}
                                     <Divider />
@@ -146,7 +144,7 @@ export default function Compra({open, close, compra, compras}){
                                         TOTAL PAGOS:
                                     </Typography>
                                     <Typography align="right" className={classes.textoSangron} >
-                                        ${formatNumber(sumImporte(laCompra.egresos.filter(gasto=> gasto.tipo === "PAGO")),2)}
+                                        ${formatNumber(sumImporte(laCompra.pagos,2))}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -154,11 +152,11 @@ export default function Compra({open, close, compra, compras}){
                         }
 
                         <Grid item xs={12}>
-                            { laCompra.compra.tipoCompra.tipo === "COMPRAS"  ?
+                            { laCompra.tipoCompra.tipo === "COMPRAS" || laCompra.tipoCompra.tipo === "COMPRA"  ?
                                 <React.Fragment>
                                     <Typography align="right" className={classes.textoMiniFacheron}>TOTAL VENTAS:</Typography>
-                                    <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(totalVentas,1)}</Typography>
-                                    <Typography className={classes.textoMiniFacheron}align="right" >COSTO: $ {formatNumber(totalCosto,1)}</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(totalVenta,1)}</Typography>
+                                    <Typography className={classes.textoMiniFacheron}align="right" >COSTO: $ {formatNumber(laCompra.importe,1)}</Typography>
                                     <Typography align="right" className={classes.textoMiniFacheron}>PAGADO:</Typography>
                                     <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalPagos,1)}</Typography>
                                     <Typography align="right" className={classes.textoMiniFacheron}>TOTAL GASTOS:</Typography>
@@ -169,9 +167,9 @@ export default function Compra({open, close, compra, compras}){
                                 :
                                 <React.Fragment>
                                     <Typography align="right" className={classes.textoMiniFacheron}>TOTAL VENTAS:</Typography>
-                                    <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(totalVentas,1)}</Typography>
+                                    <Typography className={classes.textoMirame} variant="h6" align="right" >${formatNumber(totalVenta,1)}</Typography>
                                     <Typography align="right" className={classes.textoMiniFacheron}>COMISIÓN:</Typography>
-                                    <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalComision,1)}</Typography>
+                                    {/* <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalComision,1)}</Typography> */}
                                     <Typography align="right" className={classes.textoMiniFacheron}>TOTAL GASTOS:</Typography>
                                     <Typography className={classes.textoMirame} variant="h6" align="right" >-${formatNumber(totalGastos,1)}</Typography>
                                     <Typography align="right" className={classes.textoMiniFacheron}>TOTAL PAGOS:</Typography>
@@ -182,7 +180,7 @@ export default function Compra({open, close, compra, compras}){
                             }
                         </Grid>
                         <Grid item xs={12}>
-                            <ListaVentas ventas={laCompra.ventas} open={dialogListaVentas} close={()=>setDialog(false)} />
+                            <ListaVentas ventas={laCompra.ventaItems} open={dialogListaVentas} close={()=>setDialog(false)} />
                         </Grid>
                         
                     </Grid>
