@@ -17,6 +17,7 @@ import Ventas from './components/ventas/Ventas';
 import useUbicacions from './components/ubicaciones/useUbicacions'
 import useStyles from './components/hooks/useStyles'
 import { useAuth } from "./components/auth/use_auth.js"
+import Config from './components/config/Config';
 
 export default function Router(props){
     const auth = useAuth()
@@ -101,6 +102,11 @@ export default function Router(props){
                                 <Route exact path={`${path}/pos`}>
                                     <Pos 
                                         ubicacions={useUbic.ubicacions}
+                                        user={auth.user}
+                                    />
+                                </Route>
+                                <Route exact path={`${path}/configuracion`}>
+                                    <Config 
                                         user={auth.user}
                                     />
                                 </Route>

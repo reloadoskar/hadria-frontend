@@ -37,14 +37,14 @@ export default function ResumenVentas({items,ventas}){
                             <Divider />
                             {losItems.map((item, index)=> (
                                 <Grid key={index} item xs={12} container alignItems="center">
-                                    <Grid item xs={12} sm={4}>
+                                    <Grid item xs={12} sm={3}>
                                         <Typography>
                                             {item.producto.descripcion}
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={6} sm={2}>
-                                        <Typography className={classes.textoMiniFacheron} align="right">Comprado</Typography>
-                                        <Typography align="right">
+                                    <Grid item xs={6} sm={3}>
+                                        <Typography className={classes.textoMiniFacheron} align="center">Comprado</Typography>
+                                        <Typography align="center">
                                             {formatNumber(item.cantidad,2)} {item.producto.unidad.abr} | {formatNumber(item.empaques)} {item.producto.empaque.abr}
                                         </Typography>
                                     </Grid>

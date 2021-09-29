@@ -8,7 +8,7 @@ import ListIcon from '@material-ui/icons/List';
 import useStyles from '../hooks/useStyles'
 import ResumenVentas from '../ventas/ResumenVentas'
 import EgresoBasic from '../egresos/EgresoBasic'
-import {sumImporte, sumEmpStock, sumStock, formatNumber} from '../Tools'
+import {sumImporte, formatNumber} from '../Tools'
 import ListaVentas from '../ventas/ListaVentas';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;

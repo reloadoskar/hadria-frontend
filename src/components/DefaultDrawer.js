@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { NavLink } from 'react-router-dom';
 
-import { IconButton, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Collapse } from '@material-ui/core';
+import { Badge, IconButton, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Collapse } from '@material-ui/core';
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -48,6 +48,22 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
 
             {!user ? null :
             <List component="nav" aria-label="menú principal">
+                { user.level > 1 ? null :
+                    <NavLink exact to={`${url}/configuracion`}
+                        className={classes.link} 
+                        activeClassName={classes.active} 
+                        >
+                        <ListItem button onClick={toggle}>
+                            <ListItemIcon>
+                                <HomeWorkIcon />
+                            </ListItemIcon>
+                            <Badge variant="dot" color="secondary">
+                                <ListItemText primary="Configuraci&oacute;n" />
+                            </Badge>                                
+                        </ListItem>
+                            
+                    </NavLink>
+                }
                 { user.level > 2 ? null :
                     <NavLink exact to="/app" 
                         className={classes.link} 

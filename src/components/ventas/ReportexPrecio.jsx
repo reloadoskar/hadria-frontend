@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent } from '@material-ui/core'
-import { VictoryBar, VictoryChart} from 'victory';
+import { VictoryPie, VictoryChart} from 'victory';
 export default function ReportexPrecio({data}){
     const [barData, setBardata] = useState(false)
     useEffect(()=>{
@@ -26,8 +26,11 @@ export default function ReportexPrecio({data}){
             {/* <CardHeader title="Ventas por Precio" /> */}
             <CardContent>
                 {barData ? 
-                    <VictoryChart>
-                        <VictoryBar horizontal
+                    <VictoryPie
+                        animate={{
+                            duration: 2500,
+                            easing: "elastic",
+                        }}
                             // categories={{x:"precio", y:"empaques"}}
                             name="Ventas x precio"
                             // interpolation="natural"
@@ -35,12 +38,11 @@ export default function ReportexPrecio({data}){
                             x="precio"
                             y="empaques"
                             style={{
-                                data: {fill: "#ffd369", fillOpacity: 0.8},
-                                labels: {fontSize: 10, fill: "#524656"},
-                                axis: {stroke: "#524656", strokeWidth: 12}
+                                // data: {fill: "#ffd369", fillOpacity: 0.8},
+                                labels: {fontSize: 8, fill: "#524656"},
+                                // axis: {stroke: "#524656", strokeWidth: 12}
                             }}
                         /> 
-                    </VictoryChart>
                     : null
                 }
             </CardContent>

@@ -1588,3 +1588,47 @@ export const updateEmpleado = (empleado) => {
         console.log(err)
     }
 }
+
+// EMPRESA
+
+export const getEmpresa = (bd) => {
+    try{
+        if(decoded){
+            return axios
+                .get(url + decoded.database + '/empresa/')
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const saveEmpresa = (empresa) => {
+    try{
+        if(decoded){
+            return axios
+                .post(url + decoded.database + '/empresa/save/', empresa)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const updateEmpresa = (empresa) => {
+    try{
+        if(decoded){
+            return axios
+                .put(url + decoded.database + '/empresa/update/',empresa)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
