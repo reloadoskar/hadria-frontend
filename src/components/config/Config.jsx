@@ -10,6 +10,7 @@ import {formatNumber, sumImporte} from '../Tools'
 import useStyles from '../hooks/useStyles';
 import PagarAhora from './PagarAhora';
 export default function Config(){
+    const Empresa = useEmpresa()
     const [pagarAhora, setPagar] = useState(false)
     const classes = useStyles()
     const [empresa, setEmpresa] = useState({
@@ -19,7 +20,6 @@ export default function Config(){
 
     })
     const [editMode, setEditmode] = useState(false)
-    const Empresa = useEmpresa()
 
     useEffect(()=>{
         Empresa.get().then( resp => {
@@ -203,7 +203,7 @@ export default function Config(){
                                 <Typography variant="h4">Plan</Typography>
                                 {empresa.saldo > 0 ? 
                                     <Paper classes={{root: classes.suspended}} elevation={2}>
-                                        <Typography variant="h6" align="center">Tiene un saldo de ${formatNumber(empresa.saldo,1)}, evite la suspension del servicio.</Typography>
+                                        <Typography variant="h6" align="center">Tiene un saldo de $ {formatNumber(empresa.saldo,1)}, evite la suspension del servicio.</Typography>
                                     </Paper>
                                     : null
                                 }
@@ -222,30 +222,42 @@ export default function Config(){
                             </Grid>
                             <Grid item xs={3}>
                                 <Typography align="right">Costo</Typography>                                
-                                <Typography align="right" variant="h6">${formatNumber(empresa.costo,1)}</Typography>
-                                <Typography align="right">Saldo</Typography>
-                                <Typography align="right" variant="h6" color="secondary">${formatNumber(empresa.saldo,1)}</Typography>
+                                <Typography align="right" variant="h6">$ {formatNumber(empresa.costo,1)}</Typography>
                                 {empresa.saldo>0?
-                                    <Button 
-                                        className={classes.botonCosmico}
-                                        fullWidth
-                                        onClick={()=>setPagar(true)}
-                                        >
-                                        Pagar ahora
-                                    </Button>
+                                    <React.Fragment>
+                                        <Typography align="right">Saldo</Typography>
+                                        <Typography align="right" variant="h6" color="secondary">$ {formatNumber(empresa.saldo,1)}</Typography>
+                                        <Button 
+                                            className={classes.botonCosmico}
+                                            fullWidth
+                                            onClick={()=>setPagar(true)}
+                                            >
+                                            Pagar ahora
+                                        </Button>
+                                    </React.Fragment>
                                     : null
                                 }
                             </Grid>
                             {empresa.pagos.length > 0 ?
                                 <Grid item container xs={12}>
-                                    <Typography>Pagos</Typography>
+                                    <Grid item xs={12}>
+                                        <Typography variant="h6">Pagos</Typography>
+                                    </Grid>
                                     {empresa.pagos.map((pago, i) =>(
-                                        <Grid item xs={12} key={i}>
-                                            <Typography>${pago.importe} - {pago.fecha} - {pago.descripcion}</Typography>
-                                        </Grid>
+                                        <React.Fragment key={i}>
+                                            <Grid item xs={2} >
+                                                <Typography>{pago.fecha}</Typography>
+                                            </Grid>
+                                            <Grid item xs={8} >
+                                                <Typography>{pago.descripcion}</Typography>
+                                            </Grid>
+                                            <Grid item xs={2} >
+                                                <Typography align="right">$ { formatNumber(pago.importe,1)}</Typography>
+                                            </Grid>
+                                        </React.Fragment>
                                     ))}
-                                    <Grid item >
-                                        <Typography>${formatNumber(sumImporte(empresa.pagos),1)}</Typography>
+                                    <Grid item xs={12}>
+                                        <Typography align="right">$ {formatNumber(sumImporte(empresa.pagos),1)}</Typography>
                                     </Grid>
                                 </Grid>
                                 : null
