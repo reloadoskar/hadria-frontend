@@ -4,19 +4,17 @@ const useProducts = () => {
 	const [products, setProducts] = useState([])
 	const [updating, setUpdating] = useState(false)
 
-	useEffect(() => {
-		async function loadProducts() {
-			const res = await getProducts()
-			setProducts(res.products);
-		}
-		loadProducts()
-		return () => setProducts([])
-	}, [])
-
+	async function loadProducts() {
+		const res = await getProducts()
+		setProducts(res.products);
+		return res
+	}
+	
 	async function addProduct(producto) {
 		const res = await saveProduct(producto);
-		setUpdating(!updating)
-		return res;
+			let newP = [...products, res.producto]
+			setProducts(newP)
+		return res
 	}
 
 	function del(productoId) {
@@ -38,6 +36,7 @@ const useProducts = () => {
 
 	return {
 		products,
+		loadProducts,
 		addProduct,
 		updateProducto,
 		del
