@@ -19,6 +19,7 @@ const initialState = {
     cta1: '1234567890',
     diasDeCredito: '10',
     comision: '10',
+	ref: ''
 }
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -39,7 +40,7 @@ export default function ProvedorLite({ addProvedor, open, close }) {
     return (
         <div>
             <Dialog maxWidth="md" open={open} onClose={close} TransitionComponent={Transition}>
-                <DialogTitle id="form-dialog-title">Nuevo Proveedor</DialogTitle>
+                <DialogTitle id="form-dialog-title">Nuevo Productor</DialogTitle>
                 <form onSubmit={handleSubmit}>
 				<DialogContent>
 						<Grid container spacing={2}>
@@ -48,8 +49,7 @@ export default function ProvedorLite({ addProvedor, open, close }) {
 									autoFocus
 									required
                                     id="nombre"
-                                    label="Nombre del provedor"
-                                    helperText="Ingresa el Nombre del Provedor"
+                                    label="Nombre del productor"
                                     fullWidth
                                     margin="normal"
 									variant="outlined"
@@ -59,32 +59,15 @@ export default function ProvedorLite({ addProvedor, open, close }) {
 							</Grid>
 							<Grid item xs={12}>
 								<TextField
-                                    required
-									id="clave"
-									label="Clave de Proveedor"
-									helperText="Clave que se asignara a este Proveedor"
+									id="ref"
+									label="Referencia"
 									fullWidth
 									margin="normal"
 									variant="outlined"
-									value={values.clave}
-									onChange={(e) => dispatch({type: 'clave', value: e.target.value})}
+									value={values.ref}
+									onChange={(e) => dispatch({type: 'ref', value: e.target.value})}
 									/>
 							</Grid>
-							
-							<Grid item xs>
-								<TextField
-                                    required
-									fullWidth
-									id="tel1"
-									label="Teléfono"
-									type="number"
-									margin="normal"
-									variant="outlined"
-									value={values.tel1}
-									onChange={(e) => dispatch({type: 'tel1', value: e.target.value})}
-									/>
-							</Grid>
-							
 							
 						</Grid>
 

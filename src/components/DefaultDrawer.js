@@ -57,9 +57,7 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                             <ListItemIcon>
                                 <HomeWorkIcon />
                             </ListItemIcon>
-                            <Badge variant="dot" color="secondary">
-                                <ListItemText primary="Configuraci&oacute;n" />
-                            </Badge>                                
+                            <ListItemText primary="Configuraci&oacute;n" />                             
                         </ListItem>
                             
                     </NavLink>
@@ -186,8 +184,11 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                         activeClassName={classes.active} 
                     >
                         <ListItem button onClick={toggle}>
+
                             <ListItemIcon>
-                                <StoreIcon />
+                                <Badge variant="dot" color="secondary">
+                                    <StoreIcon />
+                                </Badge>
                             </ListItemIcon>
                             <ListItemText primary="Compras" />
                         </ListItem>                        

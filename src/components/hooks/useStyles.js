@@ -348,9 +348,23 @@ const useStyles = makeStyles(theme => ({
     },
 
     paperBasico: {
+        margin: 6,
+        padding:15,
+    },
+
+    paperAmarillo: {
+        background : '#FFE873',
         width: '100%',
-        margin: 4,
-        padding:10,
+    },
+
+    paperVerde: {
+        background : '#2CF6B3',
+        width: '100%',
+    },
+
+    paperGris: {
+        background : '#BABABA',
+        width: '100%',      
     },
 
     borderInferior: {

@@ -22,7 +22,7 @@ export default function DatosGenerales(props){
                                 <MenuItem onClick={(e) => openDialogProvedor()} value="">Nuevo...</MenuItem>
                             {provedors.map((option, index) => (
                                 <MenuItem key={index} value={option}>
-                                    {option.clave} - {option.nombre}
+                                    {option.nombre} {option.ref}
                                 </MenuItem>
                             ))}
                         </TextField>

@@ -1,22 +1,24 @@
 import React, {useEffect, useState} from 'react'
 import { Dialog, DialogContent, Divider, Grid, IconButton, LinearProgress, Slide, 
-    Typography, Tooltip } from '@material-ui/core'
+    Typography, Tooltip, Badge } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import LockIcon from '@material-ui/icons/Lock';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import ListIcon from '@material-ui/icons/List';
+import DescriptionIcon from '@material-ui/icons/Description';
 import useStyles from '../hooks/useStyles'
 import ResumenVentas from '../ventas/ResumenVentas'
 import EgresoBasic from '../egresos/EgresoBasic'
 import {sumImporte, formatNumber} from '../Tools'
 import ListaVentas from '../ventas/ListaVentas';
+import Liquidacion from '../liquidacion/Liquidacion';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 export default function Compra({open, close, compra, compras}){
     const classes = useStyles()
     const [dialogListaVentas, setDialog] = useState(false)
-    
+    const [liquidacionDialog, setLiquidacionDialog] = useState(false)
     const [laCompra, setLaCompra] = useState(null)
     const [totalVenta, setTotalVenta] = useState(0)
     const [totalGastos, setTotalGastos] = useState(0)
@@ -55,12 +57,6 @@ export default function Compra({open, close, compra, compras}){
         setResultado(0)
     }
 
-    // const calculaTotal = (data) => {
-    //     let s = 0
-    //     s = sumImporte(data.ventas) - sumImporte(data.egresos)
-    //     return s
-    // }
-
     const cerrarComp = (id) => {
         compras.cerrarCompra(id)
         close()
@@ -81,14 +77,29 @@ export default function Compra({open, close, compra, compras}){
                             <Typography className={classes.textoMiniFacheron} >Remision: {laCompra.remision}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6} container justifyContent="flex-end">
-                            <Tooltip title="Ver ventas" arrow placement="left">
+
+                            <Tooltip title="Crear Liquidaci&oacute;n" arrow>
+                                <IconButton
+                                    onClick={()=>setLiquidacionDialog(true)}>
+                                    <Badge color="secondary" variant="dot">
+                                        <DescriptionIcon />
+                                    </Badge>
+                                </IconButton>
+                            </Tooltip>
+
+                            <Liquidacion open={liquidacionDialog} close={()=>{setLiquidacionDialog(false)}} compra={laCompra}/>
+                            
+                            <Tooltip title="Ver ventas" arrow >
                                 <IconButton
                                     aria-label="Ver ventas"
                                     onClick={()=>setDialog(true)}
                                 >
-                                    <ListIcon />
+                                    <Badge color="secondary" variant="dot">
+                                        <ListIcon />
+                                    </Badge>
                                 </IconButton>
                             </Tooltip>
+
                             <Tooltip title="Cerrar" arrow>
                                 <IconButton
                                     aria-label="Cerrar"
@@ -97,12 +108,14 @@ export default function Compra({open, close, compra, compras}){
                                    { laCompra.status === "ACTIVO" ?  <LockOpenIcon /> : <LockIcon /> }
                                 </IconButton>
                             </Tooltip>
+
                             <IconButton
                                 aria-label="close"
                                 onClick={close}
                             >
                                 <CloseIcon />
                             </IconButton>
+
                         </Grid>
                         <Grid item xs={12}>
                             <ResumenVentas items={laCompra.items} ventas={laCompra.ventaItems}/>
@@ -180,7 +193,7 @@ export default function Compra({open, close, compra, compras}){
                             }
                         </Grid>
                         <Grid item xs={12}>
-                            <ListaVentas ventas={laCompra.ventaItems} open={dialogListaVentas} close={()=>setDialog(false)} />
+                            <ListaVentas ventas={laCompra.ventaItems} open={dialogListaVentas} close={()=>setDialog(false)} />                            
                         </Grid>
                         
                     </Grid>

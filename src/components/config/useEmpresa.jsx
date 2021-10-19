@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { getEmpresa, saveEmpresa, updateEmpresa } from '../api'
 export default function useEmpresa(){
     const [data, setData] = useState(null)

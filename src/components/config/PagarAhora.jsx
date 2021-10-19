@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Dialog, DialogContent, Typography } from '@material-ui/core'
 import codiPay from '../../img/codiPay.jpg'
 import codi from '../../img/codi.png'

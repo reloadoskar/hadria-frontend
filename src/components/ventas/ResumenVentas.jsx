@@ -76,12 +76,12 @@ export default function ResumenVentas({items,ventas}){
                             ))}
                             <Divider />
                             { !isMobile ?
-                                <Grid item xs={12} container>
-                                    <Grid sm={4}>
+                                <Grid item container classes={{root: classes.paperClaro}}>
+                                    <Grid sm={3}>
                                         <Typography align="right" >Totales:</Typography>
                                     </Grid>
-                                    <Grid item xs={6} sm={2}>
-                                        <Typography align="right">{ formatNumber(sumCantidad(losItems),2)} | { formatNumber(sumEmpaques(losItems),1) }</Typography>
+                                    <Grid item xs={6} sm={3}>
+                                        <Typography align="center">{ formatNumber(sumCantidad(losItems),2)} | { formatNumber(sumEmpaques(losItems),1) }</Typography>
                                     </Grid>
                                     <Grid item xs={6} sm={2}>
                                         <Typography align="center">{ formatNumber(sumStock(losItems),2)} | { formatNumber(sumEmpStock(losItems),1) }</Typography>

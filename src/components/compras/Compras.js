@@ -37,7 +37,7 @@ meses[12] = "Diciembre";
 
 function Compras({ubicacions}) {
     const compras = useCompras()
-    const {products, addProduct } = useProducts()
+    const  Productos = useProducts()
     const {provedors, addProvedor} = useProvedors()
     // const {ubicacions} = useUbicacions();
     const {tipoCompras, addTipoCompra} = useTipoCompras();
@@ -58,6 +58,7 @@ function Compras({ubicacions}) {
 
     useEffect(()=>{
         compras.loadCompras(month)
+        Productos.loadProducts()
     },[month])
 
     
@@ -141,8 +142,8 @@ function Compras({ubicacions}) {
                         closeP={closeDialogP}
                         showMessage={showMessage}
                         crear={crear}
-                        products={products}
-                        addProduct={addProduct}
+                        products={Productos.products}
+                        addProduct={Productos.addProduct}
                         provedors={provedors}
                         tipoCompras={tipoCompras}
                         ubicacions={ubicacions}
@@ -150,37 +151,6 @@ function Compras({ubicacions}) {
                         addProvedor={addProvedor}
                     />
                 </Grid>
-                {/* <Grid item xs={4}>
-                        <Button 
-                            fullWidth
-                            onClick={handleClick}
-                            className={classes.botonsoteGenerico} 
-                            children={
-                                meses[month]
-                        }/>
-                        <Menu 
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={Boolean(anchorEl)}
-                            getContentAnchorEl={null}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                              }}
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'center',
-                              }}
-                            onClose={handleClose}
-                        >
-                            {meses.map((mes,i)=>(
-                                <MenuItem onClick={()=>onChangeMonth(i)} key={i}>{mes}</MenuItem>
-                            ))}
-                        </Menu>
-                </Grid>
-                <Grid item xs={4}>
-                    <Typography variant="h2">{compras.compras ? compras.compras.length : 0}</Typography>
-                </Grid> */}
                 <ListaCompras 
                     compras={compras.compras} 
                     editCompra={editCompra} 
@@ -199,7 +169,7 @@ function Compras({ubicacions}) {
                 close={closeCompra} 
                 showMessage={showMessage} 
                 ubicacions={ubicacions}
-                products={products}
+                products={Productos.products}
                 provedors={provedors}
             />
             <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelar}/>

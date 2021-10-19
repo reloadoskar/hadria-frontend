@@ -19,12 +19,12 @@ export default function Empleados(){
     }
 
     const crear = (empleado) =>{
-        if(Empleados.empleados.length <10){
+        if(Empleados.empleados.length <12){
             Empleados.crearEmpleado(empleado).then(res => {
                 // console.log(res)
             })
         }else{
-            alert('Maximo de empleados alcanzado')
+            alert('M&aacute;ximo de empleados alcanzado')
         }
     }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Divider, Grid, IconButton, Typography } from '@material-ui/core'
+import { Badge, Divider, Grid, IconButton, Typography } from '@material-ui/core'
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit'
 // import RefreshIcon from '@material-ui/icons/Refresh'
@@ -146,12 +146,14 @@ export default function CompraBasic(props){
                             >
                             <RefreshIcon />
                         </IconButton> */}
+                        <Badge variant="dot" color="secondary">
                         <IconButton
                             size="small"
                             onClick={() => handleVerCompra(compra)}
                             >
                             <VisibilityIcon />
                         </IconButton>
+                        </Badge>
                         <IconButton
                             size="small"
                             onClick={() => editCompra(compra)}
