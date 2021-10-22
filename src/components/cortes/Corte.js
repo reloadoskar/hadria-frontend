@@ -153,7 +153,7 @@ export default function Corte(props){
                                 {elcorte.resumenVentas.map((el, i)=>(
                                     <React.Fragment key={i}>
                                     <Grid container >
-                                        <Grid item xs={2} sm={2}><Typography variant="body2" className={classes.textoMirame} >#{el.compra.folio} | {moment(el.item.createdAt).format("DD/MM")}</Typography></Grid>
+                                        <Grid item xs={2} sm={2}><Typography variant="body2" className={classes.textoMirame} >#{el.compra.folio} | {moment(el._id[0].createdAt).format("DD/MM")}</Typography></Grid>
                                         <Grid item xs={10} sm={3}>
                                             <Typography variant="body2" >{el.producto.descripcion}</Typography></Grid>
                                         <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(el.empaques,2)}</Typography></Grid>
