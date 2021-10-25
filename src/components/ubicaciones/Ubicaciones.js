@@ -12,7 +12,7 @@ function Ubicaciones({ubicacions}) {
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     function addUbicacion(ubicacion) {
-        if(ubicacions.ubicacions.length<5){
+        if(ubicacions.ubicacions.length<11){
             ubicacions.add(ubicacion)
         }else{
             showMessage('Limite de ubicaciones alcanzado, actualice su servicio', 'error')

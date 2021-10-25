@@ -64,10 +64,10 @@ export default function Ubicacion({ubicacion, update}){
                     </React.Fragment>
                 :
                 <React.Fragment>
-                    <Typography className={classes.textoMiniFacheron} align="right" >
+                    <Typography className={classes.textoMiniFacheron}>
                         {laUbic.tipo}
                     </Typography>
-                    <Typography align="right" >
+                    <Typography >
                         {laUbic.nombre}
                     </Typography>
                 </React.Fragment>
