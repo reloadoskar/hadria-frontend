@@ -37,6 +37,7 @@ export default function Dashboard({ubicacions}) {
     const now = moment()
     useEffect(()=>{
         egresos.loadEgresos(fecha)
+        egresos.loadCuentas()
     },[fecha])
     useEffect(() => {
         let hoy = moment().format("YYYY-MM-DD")
@@ -133,6 +134,7 @@ export default function Dashboard({ubicacions}) {
 
     const crearTraspaso = (traspaso) => {
         let eg = {
+            compra: 1,
             ubicacion: traspaso.origen._id,
             tipo: "TRASPASO",
             concepto: "TRASPASO",
