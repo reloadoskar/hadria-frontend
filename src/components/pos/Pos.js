@@ -17,7 +17,8 @@ export default function Pos(props){
     const inventario = useInventario()
     const {clientes} = useClientes()
     const {addVenta, cxcPdv, addPagoCxc} = useIngresos()
-    const {cuentasxPagar, addPagoCxp} = useEgresos()
+    // const {cuentasxPagar, addPagoCxp} = useEgresos()
+    const Egresos = useEgresos()
     const cortes = useCortes()
     
     const [accesando, setAccesando] = useState(false)
@@ -26,6 +27,9 @@ export default function Pos(props){
     
     const [dialogPos, setDialogPos] = useState(false)
     
+    useEffect(() => {
+        Egresos.loadCuentas()
+    },[])
     useEffect(() => {
         if(user.ubicacion ){
             setUbicacion(user.ubicacion)
@@ -92,8 +96,8 @@ export default function Pos(props){
                 addVenta={addVenta}
                 cxcPdv={cxcPdv}
                 addPagoCxc={addPagoCxc}
-                cuentasxPagar={cuentasxPagar}
-                addPagoCxp={addPagoCxp}
+                cuentasxPagar={Egresos.cuentasxPagar}
+                addPagoCxp={Egresos.addPagoCxp}
             />
 
 

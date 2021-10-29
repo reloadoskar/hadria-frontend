@@ -113,7 +113,7 @@ export default function Corte(props){
                 <DialogTitle disableTypography>
                     <Grid container >
                         <Grid item xs={12} sm={4}>
-                            <Typography variant="h6">{elcorte.ubicacion.nombre}</Typography>
+                            {/* <Typography variant="h6">{elcorte.ubicacion.nombre}</Typography> */}
                             <Typography className={classes.textoMiniFacheron} color={ elcorte.status === "CERRADO" ? "secondary" : "primary"} >
                                 {elcorte.status}
                             </Typography>

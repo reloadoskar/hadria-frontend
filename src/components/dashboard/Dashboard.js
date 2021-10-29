@@ -38,7 +38,7 @@ export default function Dashboard({ubicacions}) {
     useEffect(()=>{
         egresos.loadEgresos(fecha)
         egresos.loadCuentas()
-    },[fecha])
+    },[])
     useEffect(() => {
         let hoy = moment().format("YYYY-MM-DD")
         setFecha(hoy)
@@ -85,12 +85,13 @@ export default function Dashboard({ubicacions}) {
     }
 
     function verCorte(ub){
-        setCorteDialog(true)
         getCorte(ub._id, fecha).then(res=>{
+            setCorteDialog(true)
             if(res.status === "error"){
                 showMessage(res.message, res.status)
                 setCorteDialog(false)
             }else{
+                // console.log(res)
                 setCorte(res)
             }
         })

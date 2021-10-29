@@ -350,6 +350,7 @@ const useStyles = makeStyles(theme => ({
     paperBasico: {
         margin: 6,
         padding:15,
+        width: '100%'
     },
 
     paperAmarillo: {
