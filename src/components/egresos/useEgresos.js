@@ -6,6 +6,10 @@ import { sumImporte, sumSaldo } from '../Tools'
 const useEgresos = () => {
 	const [egresos, setEgresos] = useState([])
 	const [totalEgresos, setTotalEgresos] = useState(null)
+	
+	const [cuentasxPagar, setCuentas] = useState([])
+	const [totalCxp, setTotalCxp] = useState(0)
+
 	const [updating, setUpdating] = useState(false)
 
 	async function loadEgresos(fecha) {
@@ -21,31 +25,14 @@ const useEgresos = () => {
 			setTotalEgresos(sumImporte(egresos))
 		}
 	}, [egresos])
-
-	// useEffect(()=>{
-    //     getDisponiblexUbicacion().then(res=>{
-    //         let disp = []
-    //         res.forEach(el => {
-    //             disp.push({ubicacion: el.nombre, disponible: (sumImporte(el.ingresos) - sumImporte(el.egresos))})
-    //         })
-    //         setDisp(disp)
-    //     })
-    //     return () => setDisp([])
-    // }, [updating])
 	
-	const [cuentasxPagar, setCuentas] = useState([])
-	useEffect(() => {
-		async function loadCuentas() {
-			const res = await getCuentasPorPagar()
-			if(res !== undefined){
-				setCuentas(res.cuentas)
-			}
+	async function loadCuentas() {
+		const res = await getCuentasPorPagar()
+		if(res !== undefined){
+			setCuentas(res.cuentas)
 		}
-		loadCuentas()
-		return () => setCuentas([])
-	}, [updating])
-
-	const [totalCxp, setTotalCxp] = useState(0)
+	}
+	
 	useEffect(() => {
 		var tt=0
 		if (cuentasxPagar !== []){
@@ -88,6 +75,7 @@ const useEgresos = () => {
 		totalCxp,
 		addEgreso, 
 		loadEgresos,
+		loadCuentas,
 		addPagoCxp,
 		delEgreso
 	}

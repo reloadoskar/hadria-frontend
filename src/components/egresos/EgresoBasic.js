@@ -10,6 +10,7 @@ export default function EgresoBasic(props){
     const [egreso, setEgreso] = useState(null)
     const [confirm, setConfirm] = useState(false)
     const classes = useStyles()
+
     useEffect(()=>{
         setEgreso(props.egreso)
         return () => {
@@ -26,11 +27,9 @@ export default function EgresoBasic(props){
     return (
         <div>
             {egreso === null ? null :
-                <Grid container spacing={1}>
-                    <Grid item xs={12} sm={1}>
-                        <Typography>{egreso.fecha}</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
+                <Grid container spacing={1} alignItems="center">
+                    <Grid item xs={12} sm={5}>
+                        <Typography className={classes.textoMiniFacheron}>{egreso.fecha}</Typography>
                         <Typography>{egreso.concepto}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={4}>
