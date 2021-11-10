@@ -11,6 +11,7 @@ import useEgresos from '../egresos/useEgresos'
 import moment from 'moment'
 import DialogPos from './DialogPos'
 export default function Pos(props){
+    const now = moment()
     const {user, ubicacions}=props
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
@@ -23,7 +24,7 @@ export default function Pos(props){
     
     const [accesando, setAccesando] = useState(false)
     const [ubicacion, setUbicacion] = useState("")
-    const [fecha, setFecha] = useState("")
+    const [fecha, setFecha] = useState(moment().format("YYYY-MM-DD"))
     
     const [dialogPos, setDialogPos] = useState(false)
     
@@ -42,8 +43,12 @@ export default function Pos(props){
             return setUbicacion(value)
         }
         if(type === 'fecha'){
-            var f = moment(value).format('YYYY-MM-DD')
-            return setFecha(f)
+            if(moment(value) > now){
+                showMessage('No se puede ver el futuro.', 'warning')
+            }else{
+                var f = moment(value).format('YYYY-MM-DD')
+                return setFecha(f)
+            }
         }
     }
     const access = () => {
@@ -64,7 +69,6 @@ export default function Pos(props){
         setDialogPos(false)
     }
 
-    
     return(
         <Container>
             {user === null ?
@@ -99,8 +103,6 @@ export default function Pos(props){
                 cuentasxPagar={Egresos.cuentasxPagar}
                 addPagoCxp={Egresos.addPagoCxp}
             />
-
-
         </Container>
     )
 }
