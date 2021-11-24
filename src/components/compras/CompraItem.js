@@ -28,6 +28,7 @@ export default function CompraItem(props){
                             : item.ubicacion.nombre ? item.ubicacion.nombre : null
                         }</Typography>
                                 <Typography align="left">{item.producto.descripcion}</Typography>
+                    <Typography align="left" className={classes.textoMiniFacheron}>{item._id}</Typography>
                             </Grid>
                             <Grid item xs={6} sm={2}>
                                 <Typography align="right" className={classes.textoMiniFacheron} >{item.producto.empaque ? item.producto.empaque.abr : item.productoempaque.abr}:</Typography>
