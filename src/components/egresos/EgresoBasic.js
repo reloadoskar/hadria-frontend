@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Grid, IconButton, Typography } from '@material-ui/core'
 import CancelIcon from '@material-ui/icons/Cancel';
 import { formatNumber } from '../Tools'
 import useStyles from '../hooks/useStyles'
-import useEgresos from './useEgresos'
+import { EgresoContext } from "../egresos/EgresoContext"
 import Confirm from '../dialogs/Confirm';
 export default function EgresoBasic(props){
-    const Egresos = useEgresos()
+    const { removeEgreso } = useContext(EgresoContext)
     const [egreso, setEgreso] = useState(null)
     const [confirm, setConfirm] = useState(false)
     const classes = useStyles()
@@ -19,7 +19,7 @@ export default function EgresoBasic(props){
     }, [props])
 
     const onConfirm = () =>{
-        Egresos.delEgreso(egreso._id)
+        removeEgreso(egreso._id)
             .then(()=>{
                 setEgreso(null)
             })

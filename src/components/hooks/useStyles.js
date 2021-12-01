@@ -1,14 +1,14 @@
 
 import { makeStyles } from '@material-ui/core/styles';
 const drawerWidth = 240;
-// const getRandomColor =() => {
-//     var letters = '0123456789ABCDEF';
-//     var color = '#';
-//     for (var i = 0; i < 6; i++) {
-//       color += letters[Math.floor(Math.random() * 16)];
-//     }
-//     return color;
-//   }
+const getRandomColor =() => {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 const useStyles = makeStyles(theme => ({ 
     
     root: {
@@ -98,8 +98,8 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
     backgroundCustom: {
-        // background: 'linear-gradient(30deg,'+ getRandomColor()+','+getRandomColor()+')',
-        background: 'linear-gradient(45deg, #2CF6B3 30%, #2DEFF6 90%)',
+        background: 'linear-gradient(30deg, #4B1431 40%, #5B2441 90%)',
+        // background: 'linear-gradient(45deg, #2CF6B3 30%, #2DEFF6 90%)',
         backgroundPosition: 'center',
         position: 'absolute',
         left: 0,

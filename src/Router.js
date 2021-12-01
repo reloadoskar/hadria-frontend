@@ -5,7 +5,7 @@ import Produccions from './components/produccions/Produccions'
 import Empleados from './components/empleados/Empleados'
 import Productos from './components/productos/Productos';
 import Clientes from './components/clientes/Clientes';
-import Provedores from './components/Provedores';
+import Productors from './components/productors/Productors';
 import Ubicaciones from './components/ubicaciones/Ubicaciones';
 import Compras from './components/compras/Compras';
 import Inventario from './components/inventario/Inventario';
@@ -18,6 +18,7 @@ import useUbicacions from './components/ubicaciones/useUbicacions'
 import useStyles from './components/hooks/useStyles'
 import { useAuth } from "./components/auth/use_auth.js"
 import Config from './components/config/Config';
+import Inversions from './components/inversions/Inversions';
 
 export default function Router(props){
     const auth = useAuth()
@@ -67,10 +68,13 @@ export default function Router(props){
                                     <Route exact path={`${path}/produccions`} component={Produccions}></Route>
                                 }
                                 {auth.user.level > 2 ? null :
+                                    <Route exact path={`${path}/inversions`} component={Inversions}></Route>
+                                }
+                                {auth.user.level > 2 ? null :
                                     <Route exact path={`${path}/clientes`} component={Clientes}></Route>
                                 }
                                 {auth.user.level > 2 ? null :
-                                    <Route exact path={`${path}/provedores`} component={Provedores}></Route>
+                                    <Route exact path={`${path}/productors`} component={Productors}></Route>
                                 }
                                 {auth.user.level > 2 ? null :
                                     <Route exact path={`${path}/ubicaciones`}>

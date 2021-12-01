@@ -10,6 +10,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import FolderIcon from '@material-ui/icons/Folder';
 import TocIcon from '@material-ui/icons/Toc';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 
 import GroupIcon from '@material-ui/icons/Group';
 import HomeWorkIcon from '@material-ui/icons/HomeWork';
@@ -131,7 +132,7 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                                 }
 
                                 {user.level > 2 ? null :
-                                    <NavLink exact to={`${url}/provedores`} 
+                                    <NavLink exact to={`${url}/productors`} 
                                         className={classes.link} 
                                         activeClassName={classes.active} 
                                         >
@@ -139,7 +140,7 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                                             <ListItemIcon>
                                                 <GroupIcon />
                                             </ListItemIcon>
-                                            <ListItemText primary="Proveedores" />
+                                            <ListItemText primary="Productores" />
                                         </ListItem>                                
                                     </NavLink>
                                 }
@@ -208,6 +209,22 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                         </ListItem>
                     </NavLink>
                 }
+
+                { user.level > 2 ? null :
+                    <NavLink exact to={`${url}/inversions`} 
+                        className={classes.link} 
+                        activeClassName={classes.active} 
+                    >
+                        <ListItem button onClick={toggle}>
+                            <ListItemIcon>
+                                <Badge variant="dot" color="secondary">
+                                    <MonetizationOnIcon />
+                                </Badge>
+                            </ListItemIcon>
+                            <ListItemText primary="Inversiones" />
+                        </ListItem>
+                    </NavLink>
+                }   
 
                 { user.level > 3 ? null :
 

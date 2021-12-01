@@ -1632,3 +1632,47 @@ export const updateEmpresa = (empresa) => {
         console.log(err)
     }
 }
+
+// INVERSIONES
+
+export const saveInversion = (inversion) => {
+    try{
+        if(decoded){
+            return axios
+                .post(url + decoded.database + '/inversion/save/', inversion)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const getInversions = (mes) => {
+    try{
+        if(decoded){
+            return axios
+                .get(url + decoded.database + `/inversions/${mes}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const deleteInversion = (id) => {
+    try{
+        if(decoded){
+            return axios
+                .delete( url + decoded.database + `/inversion/delete/${id}`)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}

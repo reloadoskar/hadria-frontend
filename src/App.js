@@ -9,7 +9,9 @@ import Register from './components/Register'
 import NotFound from './components/404'
 import {PrivateRoute} from './privateRoute'
 import { ProvideAuth } from "./components/auth/use_auth"
-
+import ProductorContextProvider from './components/productors/ProductorContext';
+import InversionContextProvider from './components/inversions/InversionContext';
+import EgresoContextProvider  from './components/egresos/EgresoContext';
 function App() {
     
 	return (
@@ -22,9 +24,15 @@ function App() {
                     <Route exact path="/register">
                         <Register />
                     </Route>
-                    <PrivateRoute path="/app" >
-                        <Router />
-                    </PrivateRoute>
+                    <ProductorContextProvider>
+                    <InversionContextProvider>
+                        <EgresoContextProvider>
+                        <PrivateRoute path="/app" >
+                            <Router />
+                        </PrivateRoute>
+                        </EgresoContextProvider>
+                    </InversionContextProvider>
+                    </ProductorContextProvider>
                     <Route path="*" component={NotFound} />
                 </Switch>            
             </BrowserRouter>			
