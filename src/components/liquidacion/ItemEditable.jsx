@@ -43,7 +43,7 @@ export default function ItemEditable ({elItem, editMode, sumar, eliminar, id}){
                 </Typography>
             </Grid>
             <Grid item xs={3}>
-                <Typography className={classes.textoMiniFacheron} align="right">Comprado</Typography>
+                <Typography className={classes.textoMiniFacheron} align="right">Cant. | Emp.</Typography>
                 <Typography align="right">
                     {formatNumber(item.cantidad,2)} {item.producto.unidad.abr} | {formatNumber(item.empaques)} {item.producto.empaque.abr}
                 </Typography>
@@ -52,7 +52,7 @@ export default function ItemEditable ({elItem, editMode, sumar, eliminar, id}){
                 <Typography className={classes.textoMiniFacheron} align="right">Precio</Typography>
                 
                 {editMode ? 
-                    <Typography align="right" >
+                    // <Typography align="right" >
                         <TextField
                             fullWidth
                             type="number" 
@@ -60,10 +60,10 @@ export default function ItemEditable ({elItem, editMode, sumar, eliminar, id}){
                             onChange={(e)=> handleChange('precio',e.target.value)}
                             variant="outlined"
                             />
-                    </Typography>
+                    // {/* </Typography> */}
                     :
                     <Typography align="right" >$
-                        {formatNumber(item.precio,1)}
+                        {item.precio ? formatNumber(item.precio,1) : 0}
                     </Typography>
                 }
             </Grid>
