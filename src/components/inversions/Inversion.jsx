@@ -9,9 +9,12 @@ import useStyles from '../hooks/useStyles';
 import EgresoBasic from '../egresos/EgresoBasic'
 import CreateCapital from './CreateCapital';
 import { formatNumber, sumImporte } from '../Tools';
+import EgresosList from '../egresos/EgresosList';
+import { EgresoContext } from '../egresos/EgresoContext';
 export default function Inversion({inversion, open}){
     const [verAddCapital, setVerAdd] = useState(false)
     const {removeInversion} = useContext(InversionContext)
+    const {egresos} = useContext(EgresoContext)
     const [verInversion, setVerInversion] = useState(false)
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }    
@@ -23,12 +26,12 @@ export default function Inversion({inversion, open}){
 
     useEffect(()=>{
         if(inversion){
-            let ti = sumImporte(inversion.gastos)
+            let ti = sumImporte(egresos)
             setTotalInv(ti)
             let re = totalVenta - ti
             setResultado(re)
         }
-    },[inversion])
+    },[inversion, egresos])
     
     const cancelarInversion = (id) => {
         removeInversion(id).then(res=>{
@@ -98,9 +101,10 @@ export default function Inversion({inversion, open}){
                                     </Grid>
                                     <Grid item xs={12}>
                                     {inversion.gastos.length > 0 ?
-                                        inversion.gastos.map((gasto, i)=>(
-                                            <EgresoBasic egreso={gasto} key={i} />
-                                        ))
+                                        <EgresosList data={inversion.gastos} />
+                                        // inversion.gastos.map((gasto, i)=>(
+                                        //     <EgresoBasic egreso={gasto} key={i} />
+                                        // ))
                                     : <Typography>No se encontraron datos</Typography>}
                                     </Grid>
                                     <Grid item xs={12}></Grid>

@@ -237,7 +237,7 @@ export default function Liquidacion({ open, close, items, ventas, compra }) {
             {!losItems ?
               <CircularProgress />
               :
-              <Grid item container xs={12} >
+              <Grid container spacing={2}>
                 {losItems.length === 0 ?
                   <Typography align="center">No se han registrado ventas.</Typography>
                   :

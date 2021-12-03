@@ -19,10 +19,7 @@ export default function EgresoBasic(props){
     }, [props])
 
     const onConfirm = () =>{
-        removeEgreso(egreso._id)
-            .then(()=>{
-                setEgreso(null)
-            })
+        removeEgreso(egreso._id)            
     }
     return (
         <div>

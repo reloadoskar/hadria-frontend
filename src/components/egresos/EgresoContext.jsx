@@ -19,7 +19,8 @@ const EgresoContextProvider = (props) => {
 
   const removeEgreso = async (id) => {
 		const res = await deleteEgreso(id)
-			return res
+    setEgresos(egresos.filter(egreso => egreso._id !== id))
+    return res
 	}
 
   const loadEgresos = async (fecha) => {
@@ -29,7 +30,7 @@ const EgresoContextProvider = (props) => {
 	}
 
   return (
-    <EgresoContext.Provider value={{addEgreso, removeEgreso, loadEgresos}}>
+    <EgresoContext.Provider value={{addEgreso, removeEgreso, loadEgresos, setEgresos, egresos}}>
       {props.children}
     </EgresoContext.Provider>
   )
