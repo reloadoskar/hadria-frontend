@@ -1,8 +1,8 @@
 import { Button, Grid, Menu, MenuItem, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import useStyles from '../hooks/useStyles';
-import Inversion from './Inversion';
-export default function InversionsList({inversions, meses, mes}){
+import InversionBasic from './InversionBasic';
+export default function InversionsList({inversions, meses, mes, onChangeMonth}){
     const [anchorEl, setAnchorEl] = useState(null)
     const classes = useStyles()
     const handleClick = (e) => {
@@ -11,7 +11,8 @@ export default function InversionsList({inversions, meses, mes}){
     const handleClose = () => {
         setAnchorEl(null)
     }
-    const handleChange = (mes) =>{
+    const handleChange = (mes) => {
+        onChangeMonth(mes)
         handleClose()
     }
     return (
@@ -46,7 +47,7 @@ export default function InversionsList({inversions, meses, mes}){
             <Grid item xs={12} sm={2}></Grid>
             <Grid item xs={12} sm={1}></Grid>
             {inversions.map( (inversion, i) => (
-                <Inversion inversion={inversion} />
+                 <InversionBasic data={inversion} key={i}/>                 
             ))}
         </Grid>
     )

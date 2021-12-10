@@ -62,13 +62,24 @@ export default function InversionCreate({open, close, create}){
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>
+                            <TextField
+                            id="fecha"
+                            label="Fecha"
+                            type="date"
+                            fullWidth
+                            value={inversion.fecha}
+                            variant="outlined"
+                            onChange={(e) => handleChange('fecha', e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
                             <TextField 
                                 id="descripcion"
                                 fullWidth
                                 label="Descripcion"
                                 type="text"
                                 variant="outlined"
-                                value={inversion.descripcion}
+                                value={inversion.descripcion.toUpperCase()}
                                 onChange={(e) => handleChange('descripcion', e.target.value)}
                             />
                         </Grid>

@@ -197,6 +197,11 @@ const useStyles = makeStyles(theme => ({
         position: 'relative',
         backgroundColor: '#FF715B'
     },
+    inversionsBar: {
+        position: 'relative',
+        backgroundColor: '#FF715B',
+        height: 72,
+    },
     
     
     hide: {

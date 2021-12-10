@@ -5,28 +5,29 @@ import { formatNumber } from '../Tools'
 import useStyles from '../hooks/useStyles'
 import { EgresoContext } from "../egresos/EgresoContext"
 import Confirm from '../dialogs/Confirm';
-export default function EgresoBasic(props){
+export default function EgresoBasic({data}){
     const { removeEgreso } = useContext(EgresoContext)
     const [egreso, setEgreso] = useState(null)
     const [confirm, setConfirm] = useState(false)
     const classes = useStyles()
 
     useEffect(()=>{
-        setEgreso(props.egreso)
+        setEgreso(data)
         return () => {
             setEgreso(null)
         }
-    }, [props])
+    }, [data])
 
     const onConfirm = () =>{
-        removeEgreso(egreso._id)            
+        removeEgreso(egreso._id)   
+        setEgreso(null)         
     }
     return (
         <div>
             {egreso === null ? null :
                 <Grid container spacing={1} alignItems="center">
                     <Grid item xs={12} sm={5}>
-                        <Typography className={classes.textoMiniFacheron}>{egreso.fecha}</Typography>
+                        <Typography className={classes.textoMiniFacheron}>{egreso.fecha} | {egreso.ubicacion.nombre}</Typography>
                         <Typography>{egreso.concepto}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={4}>

@@ -29,7 +29,7 @@ const InversionContextProvider = (props) => {
         setInversion(invSelected)
     }
 return (
-    <InversionContext.Provider value={{inversions, inversion, loadInversions, addInversion, removeInversion, selectInversion}}>
+    <InversionContext.Provider value={{inversions, inversion, loadInversions, addInversion, removeInversion, selectInversion, setInversions}}>
         {props.children}
     </InversionContext.Provider>
 )

@@ -10,11 +10,7 @@ if(token !== false){
     try{
         decoded = jwt.verify(token, "muffintop")
     }catch(err){
-        // return {
-        //     message: "Error de token.",
-        //     status: "error",
-        //     err
-        // }
+        console.log(err)
     }
 }
 const url = URL;
