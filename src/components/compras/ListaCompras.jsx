@@ -3,6 +3,7 @@ import { CircularProgress, Grid, Typography, Button, Menu, MenuItem, Divider } f
 import CompraBasic from './CompraBasic'
 import { sumImporte, formatNumber } from '../Tools'
 import useStyles  from '../hooks/useStyles'
+import CountUpAnimation from '../tools/CountUpAnimation'
 export default function ListaCompras({compras, editCompra, verCompra, recuperarVentas, recuperarGastos, meses, month, onChangeMonth}){
     const classes = useStyles()
     const [lasCompras, setLasCompras] = useState(null)
@@ -87,27 +88,27 @@ export default function ListaCompras({compras, editCompra, verCompra, recuperarV
                         </Menu>
                 </Grid>
                 <Grid item xs={12} sm={1}>
-                    <Typography variant="h2" align="center">{lasCompras ? lasCompras.length : null}</Typography>
+                    <Typography variant="h2" align="center">{lasCompras ? <CountUpAnimation num={lasCompras.length} temp={300} /> : null}</Typography>
                     <Typography align="center">Operaciones</Typography>
                 </Grid>
                 <Grid item xs={12} sm={2}>
                     <Typography align="right">Venta total</Typography>
-                    <Typography variant="h5" align="right">${formatNumber(tVentas,2)}</Typography>
+                    <Typography variant="h5" align="right">$ <CountUpAnimation num={tVentas} temp={650} /></Typography>
                 </Grid>
                 <Grid item xs={12} sm={2}>
                     <Typography align="right">Costo total</Typography>
-                    <Typography align="right" variant="h5" className={classes.textoMirameSangron}>${formatNumber(tCosto,2)}</Typography>
-                    <Typography align="right" variant="h6">Pagos: -${formatNumber(tPagos,2)}</Typography>
+                    <Typography align="right" variant="h5" className={classes.textoMirameSangron}>$<CountUpAnimation num={tCosto} temp={900} /></Typography>
+                    <Typography align="right" variant="h6">Pagos: -$<CountUpAnimation num={tPagos} temp={520} /></Typography>
                     <Divider />
-                    <Typography align="right" variant="h6">Saldo: ${formatNumber(tCosto-tPagos,2)}</Typography>
+                    <Typography align="right" variant="h6">Saldo: $<CountUpAnimation num={tCosto-tPagos} temp={500} /></Typography>
                 </Grid>
                 <Grid item xs={12} sm={2}>
                     <Typography align="right">Gasto total</Typography>
-                    <Typography variant="h5" align="right">-${formatNumber(tGastos,2)}</Typography>
+                    <Typography variant="h5" align="right">-$<CountUpAnimation num={tGastos} temp={560}/></Typography>
                 </Grid>
                 <Grid item xs={12} sm={2}>
                     <Typography align="right">Resultado</Typography>
-                    <Typography align="right" variant="h5" className={tResultado > 0 ? classes.textoMirameExito : classes.textoMirameSangron}>${formatNumber(tResultado,2)}</Typography>
+                    <Typography align="right" variant="h5" className={tResultado > 0 ? classes.textoMirameExito : classes.textoMirameSangron}>$<CountUpAnimation num={tResultado} temp={230} /></Typography>
                 </Grid>
             {lasCompras === null ?
                 <Grid item xs={12}>

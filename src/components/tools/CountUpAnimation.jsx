@@ -11,7 +11,7 @@ function easeOutSine(x){
   }
 const frameDuration = 1000 / 60;
 
-export default function CountUpAnimation ( {num , temp} ) {
+export default function CountUpAnimation ( {num , temp=2000} ) {
 	const countTo = num 
 	const [ count, setCount ] = useState( 0 );
 
@@ -28,7 +28,5 @@ export default function CountUpAnimation ( {num , temp} ) {
 		}, frameDuration );
 	}, [num] );
 
-	return (
-		<Typography variant="h6" align='right'>$ {formatNumber(count,1)}</Typography>
-	)
+	return formatNumber(count,1)
 };

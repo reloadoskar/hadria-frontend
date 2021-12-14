@@ -219,7 +219,7 @@ export default function Liquidacion({ open, close, items, ventas, compra }) {
               :
               <Grid item xs={12}>
                 <Box displayPrint="none">
-                  <Typography align="right" component="div" displayPrint="none">
+                  <Typography align="right" component="div" >
                     <IconButton onClick={handlePrint}>
                       <PrintIcon />
                     </IconButton>
@@ -282,8 +282,8 @@ export default function Liquidacion({ open, close, items, ventas, compra }) {
                     <Divider />
                     {!isMobile ?
                       <React.Fragment>
-                        <Grid item xs={12} container >
-                          <Grid xs={5}>
+                        <Grid container >
+                          <Grid item xs={5}>
                             <Divider />
                             <Typography className={classes.textoMirame} align="right" >Totales:</Typography>
                           </Grid>

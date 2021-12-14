@@ -20,8 +20,8 @@ export default function ProductorBasic({ productor }) {
       })
   }
   return !productor ? null :
-    <Grid item container xs={12}>
-      <Grid ite xs={2}>
+    <Grid container >
+      <Grid item xs={2}>
         <img src={avatarh} width="150" />
       </Grid>
       <Grid item xs={9}>

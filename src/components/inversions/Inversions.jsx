@@ -4,7 +4,6 @@ import { InversionContext } from './InversionContext'
 import { useSnackbar } from 'notistack'
 import useStyles from '../hooks/useStyles'
 import moment from 'moment'
-import InversionsList from './InversionsList'
 import InversionCreate from './InversionCreate'
 import Inversion from './Inversion'
 import InversionBasic from './InversionBasic'
@@ -27,7 +26,7 @@ meses[12] = "Diciembre";
 export default function Inversions(props) {
   let now = new Date()
   const [anchorEl, setAnchorEl] = useState(null)
-  const { inversions, inversion, loadInversions, addInversion, removeInversion, setInversions } = useContext(InversionContext)
+  const { inversions, inversion, loadInversions, addInversion, setInversions } = useContext(InversionContext)
   const { enqueueSnackbar } = useSnackbar()
   const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
   const classes = useStyles()

@@ -125,8 +125,8 @@ export default function Compra({open, close, compra, compras}){
                                 <Grid item xs={12}>
                                     <Typography align="center" className={classes.textoMirame} >Gastos</Typography>
                                     <Divider />
-                                {laCompra.gastos.map((gasto, i) => (
-                                    <EgresoBasic egreso={gasto} key={i} />
+                                {laCompra.gastos.filter(gasto => gasto.importe > 0).map((gasto, i) => (
+                                    <EgresoBasic data={gasto} key={i} />
                                 ))}
                                     <Divider />
                                 </Grid>
@@ -147,8 +147,8 @@ export default function Compra({open, close, compra, compras}){
                                 <Grid item xs={12}>
                                     <Typography align="center" className={classes.textoMirame} >Pagos</Typography>
                                     <Divider />
-                                {laCompra.pagos.map((gasto, i) => (
-                                    <EgresoBasic egreso={gasto} key={i} />
+                                {laCompra.pagos.filter(gasto => gasto.importe > 0).map((gasto, i) => (
+                                    <EgresoBasic data={gasto} key={i} />
                                 ))}
                                     <Divider />
                                 </Grid>

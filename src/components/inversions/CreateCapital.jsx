@@ -4,6 +4,7 @@ import useUbicacions from "../ubicaciones/useUbicacions"
 import useStyles from "../hooks/useStyles"
 import { EgresoContext } from "../egresos/EgresoContext"
 import moment from 'moment'
+import { UbicacionContext } from '../ubicaciones/UbicacionContext';
 
 export default function CreateCapital({ open, close, inversion }) {
   const hoy = moment().format("YYYY-MM-DD")
@@ -20,7 +21,7 @@ export default function CreateCapital({ open, close, inversion }) {
     tipo: "INVERSION"
   }
   const { addEgreso } = useContext(EgresoContext)
-  const { ubicacions } = useUbicacions()
+  const { ubicacions } = useContext(UbicacionContext)
   const classes = useStyles()
   const [newCapital, setNewCaptial] = useState(init)
   const [guardando, setGuardando] = useState(false)
