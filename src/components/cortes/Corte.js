@@ -291,7 +291,7 @@ export default function Corte(props){
                             <Grid item xs={12}>
                                 <Typography variant="h6" align="center">EGRESOS</Typography>
                                 {elcorte.egresos.map((egreso, i) => (
-                                        <EgresoBasic egreso={egreso} key={i}/>
+                                        <EgresoBasic data={egreso} key={i}/>
                                 ))}
                                 <Divider />
                                 <Typography className={classes.textoMirame} color="secondary" align="right">-${formatNumber(elcorte.tegresos,2)}</Typography>
