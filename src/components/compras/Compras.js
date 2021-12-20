@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { useSnackbar } from 'notistack'
-// import moment from 'moment'
+import React, { useEffect, useState, useContext } from 'react'
 import {
     Button,
     Container,
     Grid,
 } from '@material-ui/core';
+import { ComprasContext } from './CompraContext'
+import { useSnackbar } from 'notistack'
+// import moment from 'moment'
 import AddIcon from '@material-ui/icons/Add'
-import useCompras from '../compras/useCompras';
 import useProducts from '../productos/useProducts'
 import useProvedors from '../hooks/useProvedors';
 // import useUbicacions from '../hooks/useUbicacions';
@@ -19,24 +19,11 @@ import ConfirmDialog from './ConfirmDialog'
 import Compra from './Compra';
 import ListaCompras from './ListaCompras';
 import DetalleCompra from './DetalleCompra'
-
-var meses = []
-meses[0] = "";
-meses[1] = "Enero";
-meses[2] = "Febrero";
-meses[3] = "Marzo";
-meses[4] = "Abril";
-meses[5] = "Mayo";
-meses[6] = "Junio";
-meses[7] = "Julio";
-meses[8] = "Agosto";
-meses[9] = "Septiembre";
-meses[10] = "Octubre";
-meses[11] = "Noviembre";
-meses[12] = "Diciembre";
+import { Meses } from '../tools/Meses'
 
 function Compras({ubicacions}) {
-    const compras = useCompras()
+    // const compras = useCompras()
+    const {compras, loadCompras } = useContext(ComprasContext)
     const  Productos = useProducts()
     const {provedors, addProvedor} = useProvedors()
     // const {ubicacions} = useUbicacions();
@@ -57,7 +44,7 @@ function Compras({ubicacions}) {
     const [month, setMonth] = useState(now.getMonth() + 1)
 
     useEffect(()=>{
-        compras.loadCompras(month)
+        loadCompras(month)
         Productos.loadProducts()
     },[month])
 
@@ -152,12 +139,12 @@ function Compras({ubicacions}) {
                     />
                 </Grid>
                 <ListaCompras 
-                    compras={compras.compras} 
+                    compras={compras} 
                     editCompra={editCompra} 
                     verCompra={showVerCompra} 
                     recuperarVentas={compras.recuperarVentas} 
                     recuperarGastos={compras.recuperarGastos}
-                    meses={meses}
+                    meses={Meses}
                     month={month}
                     onChangeMonth={onChangeMonth}
                     />

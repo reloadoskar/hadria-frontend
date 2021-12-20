@@ -2,16 +2,12 @@ import React, { useState, useContext, useEffect } from 'react';
 import { InversionContext } from './InversionContext'
 import { EgresoContext } from "../egresos/EgresoContext"
 import { useSnackbar } from 'notistack'
-import { Card, Slide, CardContent, Dialog, Grid, Typography, Badge, IconButton, Button, Collapse, DialogContent, TextField, ClickAwayListener, Box, Menu, MenuItem, Container } from '@material-ui/core';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import AddIcon from '@material-ui/icons/Add';
+import { Card, Slide, CardContent, Dialog, Grid, Typography, Button, DialogContent, Box, Menu, MenuItem, Container } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import useStyles from '../hooks/useStyles';
 import EgresoBasic from '../egresos/EgresoBasic'
 import CreateCapital from './CreateCapital';
-import { formatNumber, sumImporte } from '../Tools';
-import EgresosList from '../egresos/EgresosList';
+import { sumImporte } from '../Tools';
 import CountUpAnimation from '../tools/CountUpAnimation'
 
 const Transition = React.forwardRef(function Transition(props, ref) {

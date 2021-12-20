@@ -1,27 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { Button, Container, Grid, Typography, Menu, MenuItem } from '@material-ui/core'
 import { InversionContext } from './InversionContext'
 import { useSnackbar } from 'notistack'
 import useStyles from '../hooks/useStyles'
-import moment from 'moment'
 import InversionCreate from './InversionCreate'
 import Inversion from './Inversion'
 import InversionBasic from './InversionBasic'
-
-var meses = []
-meses[0] = "";
-meses[1] = "Enero";
-meses[2] = "Febrero";
-meses[3] = "Marzo";
-meses[4] = "Abril";
-meses[5] = "Mayo";
-meses[6] = "Junio";
-meses[7] = "Julio";
-meses[8] = "Agosto";
-meses[9] = "Septiembre";
-meses[10] = "Octubre";
-meses[11] = "Noviembre";
-meses[12] = "Diciembre";
+import { Meses } from '../tools/Meses'
 
 export default function Inversions(props) {
   let now = new Date()
@@ -35,10 +20,6 @@ export default function Inversions(props) {
   const [verCrearInv, setVerCrear] = useState(false)
   const [verInversion, setVerInv] = useState(false)
 
-  useEffect(() => {
-    loadInversions(month)
-  }, [month])
-
   const openCrearInversion = () => {
     setVerCrear(true)
   }
@@ -46,6 +27,7 @@ export default function Inversions(props) {
   const onChangeMonth = (mes) => {
     setInversions([])
     setMonth(mes)
+    loadInversions(mes)
   }
 
   const handleClick = (e) => {
@@ -76,7 +58,7 @@ export default function Inversions(props) {
               onClick={handleClick}
               className={classes.botonsoteGenerico}
               children={
-                meses[month]
+                Meses[month]
               }
             />
             <Menu
@@ -86,7 +68,7 @@ export default function Inversions(props) {
               getContentAnchorEl={null}
               onClose={handleClose}
             >
-              {meses.map((mes, i) => (
+              {Meses.map((mes, i) => (
                 <MenuItem onClick={() => handleChange(i)} key={i} children={mes} />
               ))}
             </Menu>

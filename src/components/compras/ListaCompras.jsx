@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { CircularProgress, Grid, Typography, Button, Menu, MenuItem, Divider } from '@material-ui/core'
 import CompraBasic from './CompraBasic'
-import { sumImporte, formatNumber } from '../Tools'
+import { sumImporte } from '../Tools'
 import useStyles  from '../hooks/useStyles'
 import CountUpAnimation from '../tools/CountUpAnimation'
 export default function ListaCompras({compras, editCompra, verCompra, recuperarVentas, recuperarGastos, meses, month, onChangeMonth}){
