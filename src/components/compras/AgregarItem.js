@@ -158,7 +158,7 @@ export default function AgregarItem(props){
                             />
                         </Grid>
                         <Grid item xs>
-                            <Grid container justify="flex-end">
+                            <Grid container justifyContent="flex-end">
                                 <Button className={classes.botonGenerico} fullWidth type="submit" variant="contained" color="primary">
                                     Agregar
                                 </Button>

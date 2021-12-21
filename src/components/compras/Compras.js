@@ -3,6 +3,7 @@ import {
     Button,
     Container,
     Grid,
+    Typography
 } from '@material-ui/core';
 import { ComprasContext } from './CompraContext'
 import { useSnackbar } from 'notistack'
@@ -12,7 +13,7 @@ import useProducts from '../productos/useProducts'
 import useProvedors from '../hooks/useProvedors';
 // import useUbicacions from '../hooks/useUbicacions';
 import useTipoCompras from '../hooks/useTipoCompras';
-import Buscador from './Buscador'
+// import Buscador from './Buscador'
 import useStyles from '../hooks/useStyles'
 import CrearCompra from './CrearCompra';
 import ConfirmDialog from './ConfirmDialog'
@@ -20,10 +21,11 @@ import Compra from './Compra';
 import ListaCompras from './ListaCompras';
 import DetalleCompra from './DetalleCompra'
 import { Meses } from '../tools/Meses'
+// import CompraCreate from './CompraCreate';
 
 function Compras({ubicacions}) {
     // const compras = useCompras()
-    const {compras, loadCompras } = useContext(ComprasContext)
+    const {compras, loadCompras, addCompra } = useContext(ComprasContext)
     const  Productos = useProducts()
     const {provedors, addProvedor} = useProvedors()
     // const {ubicacions} = useUbicacions();
@@ -50,7 +52,7 @@ function Compras({ubicacions}) {
 
     
     const crear = (compra) => {
-        return compras.crearCompra(compra).then(res => {
+        return addCompra(compra).then(res => {
             closeDialog()
             return res
         })
@@ -114,13 +116,12 @@ function Compras({ubicacions}) {
     return (
         <Container maxWidth="xl">
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                    <Buscador />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Button className={classes.botonSimplon} fullWidth onClick={() => openDialog('comprasDialog')}>
+                <Grid item xs={12}><Typography variant="h6" align="center">Compras</Typography></Grid>
+                <Grid item xs={12}>
+                    <Button className={classes.botonGenerico} onClick={() => openDialog('comprasDialog')}>
                         <AddIcon /> Crear Compra
       		        </Button>
+                    {/* <CompraCreate open={showDialog} close={closeDialog} create={crear} /> */}
                     <CrearCompra
                         open={showDialog}
                         dialogP={showDialogP}
