@@ -355,7 +355,22 @@ const useStyles = makeStyles(theme => ({
     paperBasico: {
         margin: 6,
         padding:15,
-        width: '100%'
+        width: '100%',
+        boxShadow: 'rgba(0, 0, 0, 0.09) 0px 3px 12px'
+    },
+
+    paperSutil: {
+        margin: 6,
+        padding:15,
+        width: '100%',
+        boxShadow: 'rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px'
+    },
+
+    paperContorno: {
+        margin: 6,
+        padding:15,
+        width: '100%',
+        boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px'
     },
 
     paperAmarillo: {

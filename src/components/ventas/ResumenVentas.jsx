@@ -77,7 +77,7 @@ export default function ResumenVentas({items,ventas}){
                             <Divider />
                             { !isMobile ?
                                 <Grid item container classes={{root: classes.paperClaro}}>
-                                    <Grid sm={3}>
+                                    <Grid item sm={3}>
                                         <Typography align="right" >Totales:</Typography>
                                     </Grid>
                                     <Grid item xs={6} sm={3}>

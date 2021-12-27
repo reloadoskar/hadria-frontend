@@ -100,17 +100,17 @@ export default function EgresoBasic({ data }) {
           </Grid>
           :
           <Grid container spacing={1} alignItems="center">
-            <Grid item xs={12} sm={5}>
+            <Grid item xs={5}>
               <Typography className={classes.textoMiniFacheron}>{egreso.fecha} | {egreso.ubicacion.nombre}</Typography>
               <Typography>{egreso.concepto}</Typography>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={4}>
               <Typography>{egreso.descripcion}</Typography>
             </Grid>
-            <Grid item xs={12} sm={2}>
+            <Grid item xs={2}>
               <Typography className={classes.textoSangron} align="right">-{formatNumber(egreso.importe, 2)}</Typography>
             </Grid>
-            <Grid item xs={12} sm={1}>
+            <Grid item xs={1}>
               <Typography align="right">
                 <IconButton size="small" onClick={() => setEditMode(true)}>
                   <EditIcon />

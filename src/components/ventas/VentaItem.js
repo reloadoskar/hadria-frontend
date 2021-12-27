@@ -22,7 +22,7 @@ export default function VentaItem(props){
             <React.Fragment>
                 <Grid container spacing={2}>
                     { basic ? null :
-                        <Grid item xs={12} sm={2}>
+                        <Grid item xs={12} sm={3}>
                             <Typography variant="body2">
                                 {item.ventaFolio} : {moment(item.venta.createdAt).format("hh:mm:ss A")}
                             </Typography>
