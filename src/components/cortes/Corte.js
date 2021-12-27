@@ -35,9 +35,6 @@ export default function Corte(props){
         if(elcorte !== null){
             let cuenta = 0
             elcorte.items.map((el)=>{
-                // if(el.empaques > 0 && el.empaques < 1){
-                //     return cuenta++
-                // }
                 if(!Number.isInteger(el.empaques)){
                     return cuenta++
                 }
@@ -80,7 +77,6 @@ export default function Corte(props){
         setWorking(true)
         guardar(elcorte)
         .then(res=>{
-            // showMessage(res.message, res.status)
             setWorking(false)
             close()
         })
@@ -113,7 +109,7 @@ export default function Corte(props){
                 <DialogTitle disableTypography>
                     <Grid container >
                         <Grid item xs={12} sm={4}>
-                            {/* <Typography variant="h6">{elcorte.ubicacion.nombre}</Typography> */}
+                            <Typography variant="h6">{elcorte.ubicacion.nombre}</Typography>
                             <Typography className={classes.textoMiniFacheron} color={ elcorte.status === "CERRADO" ? "secondary" : "primary"} >
                                 {elcorte.status}
                             </Typography>
