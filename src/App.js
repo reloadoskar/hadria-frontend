@@ -14,6 +14,7 @@ import InversionContextProvider from './components/inversions/InversionContext';
 import EgresoContextProvider from './components/egresos/EgresoContext';
 import UbicacionContextProvider from './components/ubicaciones/UbicacionContext';
 import ComprasContextProvider from './components/compras/CompraContext';
+import ProductosContextProvider from './components/productos/ProductosContext';
 function App() {
 
     return (
@@ -32,7 +33,9 @@ function App() {
                                 <EgresoContextProvider>
                                     <PrivateRoute path="/app" >
                                         <ComprasContextProvider>
-                                            <Router />
+                                            <ProductosContextProvider>
+                                                <Router />
+                                            </ProductosContextProvider>
                                         </ComprasContextProvider>
                                     </PrivateRoute>
                                 </EgresoContextProvider>
