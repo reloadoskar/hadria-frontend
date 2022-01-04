@@ -3,7 +3,7 @@ import {
     Button,
     Container,
     Grid,
-    Typography, Menu, MenuItem,
+    Typography, Menu, MenuItem, TextField,
 } from '@material-ui/core';
 import { ComprasContext } from './CompraContext'
 import { ProductosContext } from '../productos/ProductosContext'
@@ -50,7 +50,7 @@ function Compras({ubicacions}) {
     useEffect(()=>{
         loadCompras(month, year)
         loadProductos()
-    },[month])
+    },[month, year])
 
     
     const crear = (compra) => {
@@ -129,6 +129,16 @@ function Compras({ubicacions}) {
             <Grid container spacing={2}>
                 <Grid item xs={12}><Typography variant="h6" align="center">Compras</Typography></Grid>
                 <Grid item xs={12} sm={3}>
+                    <TextField
+                        id="year"
+                        select
+                        value={year}
+                        fullWidth
+                        onChange={(e) => setYear(e.target.value)}
+                    >
+                        <MenuItem value={2021}>2021</MenuItem>
+                        <MenuItem value={2022}>2022</MenuItem>
+                    </TextField>
                     <Button
                         fullWidth
                         onClick={handleClick}
