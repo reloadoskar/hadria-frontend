@@ -21,7 +21,7 @@ import Compra from './Compra';
 import ListaCompras from './ListaCompras';
 import DetalleCompra from './DetalleCompra'
 import { Meses } from '../tools/Meses'
-import CompraCreate from './CompraCreate';
+// import CompraCreate from './CompraCreate';
 
 function Compras({ubicacions}) {
     const {compras, loadCompras, addCompra, clearCompras } = useContext(ComprasContext)
