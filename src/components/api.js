@@ -326,12 +326,12 @@ export const getComprasActivas = () => {
     }
 }
 
-export const getCompras = (mes) => {
+export const getCompras = (mes, year) => {
 
     try{
         if (decoded){
             return axios
-                .get(url + decoded.database + '/compras/mes/'+mes)
+                .get(url + decoded.database + '/compras/'+mes+'/'+year)
                 .then(res => {
                     return res.data
                 })
@@ -1667,6 +1667,18 @@ export const deleteInversion = (id) => {
                 .then( res => {
                     return res.data
                 })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const updtInversion = async (inversion) => {
+    try{
+        if(decoded){
+            const res = await axios
+                .put(url + decoded.database + '/inversion/update/', inversion);
+            return res.data;
         }
     }catch(err){
         console.log(err)

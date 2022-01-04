@@ -3,51 +3,53 @@ import {
     Button,
     Container,
     Grid,
-    Typography
+    Typography, Menu, MenuItem,
 } from '@material-ui/core';
 import { ComprasContext } from './CompraContext'
+import { ProductosContext } from '../productos/ProductosContext'
 import { useSnackbar } from 'notistack'
-// import moment from 'moment'
+
 import AddIcon from '@material-ui/icons/Add'
-import useProducts from '../productos/useProducts'
 import useProvedors from '../hooks/useProvedors';
-// import useUbicacions from '../hooks/useUbicacions';
 import useTipoCompras from '../hooks/useTipoCompras';
-// import Buscador from './Buscador'
+
 import useStyles from '../hooks/useStyles'
+
 import CrearCompra from './CrearCompra';
 import ConfirmDialog from './ConfirmDialog'
 import Compra from './Compra';
 import ListaCompras from './ListaCompras';
 import DetalleCompra from './DetalleCompra'
 import { Meses } from '../tools/Meses'
-// import CompraCreate from './CompraCreate';
+import CompraCreate from './CompraCreate';
 
 function Compras({ubicacions}) {
-    // const compras = useCompras()
-    const {compras, loadCompras, addCompra } = useContext(ComprasContext)
-    const  Productos = useProducts()
+    const {compras, loadCompras, addCompra, clearCompras } = useContext(ComprasContext)
+    
+    // const  Productos = useProducts()
+    const {productos, loadProductos, addProducto} = useContext(ProductosContext)
     const {provedors, addProvedor} = useProvedors()
-    // const {ubicacions} = useUbicacions();
     const {tipoCompras, addTipoCompra} = useTipoCompras();
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
-
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+    
+    const [anchorEl, setAnchorEl] = React.useState(null);
     const [showDialog, setShowDialog] = useState(false)
     const [showDialogP, setShowDialogP] = useState(false)
     const [detCompra, setDetCompra] = useState(false)
     const [compra, setCompra] = useState(null)
     const [verCompra, setVerCompra] = useState(false)
     const [confirm, setConfirm] = useState(false)
-    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
-
     let now = new Date()
-    
     const [month, setMonth] = useState(now.getMonth() + 1)
+    const [year, setYear] = useState(now.getFullYear())
+
+    
 
     useEffect(()=>{
-        loadCompras(month)
-        Productos.loadProducts()
+        loadCompras(month, year)
+        loadProductos()
     },[month])
 
     
@@ -111,13 +113,50 @@ function Compras({ubicacions}) {
     }
 
     const onChangeMonth = (mes) => {
+        clearCompras()
         setMonth(mes)
+        handleClose()
     }
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Container maxWidth="xl">
             <Grid container spacing={2}>
                 <Grid item xs={12}><Typography variant="h6" align="center">Compras</Typography></Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={3}>
+                    <Button
+                        fullWidth
+                        onClick={handleClick}
+                        className={classes.botonsoteGenerico}
+                        children={
+                            Meses[month]
+                        } />
+                    <Menu
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        getContentAnchorEl={null}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        onClose={handleClose}
+                    >
+                        {Meses.map((mes, i) => (
+                            <MenuItem onClick={() => onChangeMonth(i)} key={i}>{mes}</MenuItem>
+                        ))}
+                    </Menu>
+                </Grid>
+                <Grid item xs={12} sm={3}>
                     <Button className={classes.botonGenerico} onClick={() => openDialog('comprasDialog')}>
                         <AddIcon /> Crear Compra
       		        </Button>
@@ -130,8 +169,8 @@ function Compras({ubicacions}) {
                         closeP={closeDialogP}
                         showMessage={showMessage}
                         crear={crear}
-                        products={Productos.products}
-                        addProduct={Productos.addProduct}
+                        products={productos}
+                        addProduct={addProducto}
                         provedors={provedors}
                         tipoCompras={tipoCompras}
                         ubicacions={ubicacions}
@@ -143,13 +182,8 @@ function Compras({ubicacions}) {
                     compras={compras} 
                     editCompra={editCompra} 
                     verCompra={showVerCompra} 
-                    recuperarVentas={compras.recuperarVentas} 
-                    recuperarGastos={compras.recuperarGastos}
-                    meses={Meses}
-                    month={month}
-                    onChangeMonth={onChangeMonth}
+        
                     />
-
             </Grid>
             <DetalleCompra 
                 compra={compra} 
@@ -157,7 +191,7 @@ function Compras({ubicacions}) {
                 close={closeCompra} 
                 showMessage={showMessage} 
                 ubicacions={ubicacions}
-                products={Productos.products}
+                products={productos}
                 provedors={provedors}
             />
             <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelar}/>
