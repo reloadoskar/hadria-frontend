@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Button, Container, Grid, Typography } from '@material-ui/core';
 import {ProductorContext} from './ProductorContext'
-import ProductorsList from './ProductorsList'
+import ProductorBasic from './ProductorBasic';
 import useStyles from '../hooks/useStyles';
 import ProductorCreate from './ProductorCreate';
 export default function Productors(){
@@ -18,16 +18,18 @@ export default function Productors(){
         <Container maxWidth="lg">
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Typography variant="h6" align="center">Productores</Typography>
-                </Grid>
-                <Grid item xs={12}>
                     <Button className={classes.botonGenerico} onClick={()=>crearProductor()}>
                         + Nuevo Productor
                     </Button>
                     <ProductorCreate open={openCreate} close={()=>setOpenCreate(false)}/>
                 </Grid>
                 <Grid item xs={12}>
-                    <ProductorsList productors={productors} />
+                    <Grid container spacing={2} >
+                        {productors.map((productor, i)=>(
+                            <ProductorBasic data={productor} key={i}/>
+                            )
+                        )}
+                    </Grid>
                 </Grid>
             </Grid>
         </Container>

@@ -208,6 +208,20 @@ export const saveProvedor = (provedor) => {
     }
 }
 
+export const updateProvedor = (productor) => {
+    try{
+        if(decoded){
+            return axios
+                .put(url + decoded.database + '/provedor/update/' , productor)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
 export const deleteProvedor = (id) => {
     try{
         if(decoded){
@@ -1645,11 +1659,11 @@ export const saveInversion = (inversion) => {
     }
 }
 
-export const getInversions = (mes) => {
+export const getInversions = (mes, year) => {
     try{
         if(decoded){
             return axios
-                .get(url + decoded.database + `/inversions/${mes}`)
+                .get(url + decoded.database + `/inversions/${mes}/${year}`)
                 .then(res => {
                     return res.data
                 })

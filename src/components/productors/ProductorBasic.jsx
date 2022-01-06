@@ -1,7 +1,10 @@
-import React, { useState, useContext } from 'react';
-import { Grid, Typography, Badge, IconButton, Avatar } from '@material-ui/core';
+import React, { useState, useContext, useEffect } from 'react';
+import { Grid, Typography, Badge, IconButton, Avatar, TextField } from '@material-ui/core';
 import avatarh from '../../img/avatarH5.png'
 import avatarm from '../../img/avatarM3.png'
+import EditIcon from '@material-ui/icons/Edit';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import EmailIcon from '@material-ui/icons/Email';
@@ -9,22 +12,74 @@ import HomeIcon from '@material-ui/icons/Home';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { ProductorContext } from './ProductorContext'
 import Confirm from '../dialogs/Confirm';
-
-export default function ProductorBasic({ productor }) {
-  const { removeProductor } = useContext(ProductorContext)
+import useStyles from '../hooks/useStyles'
+export default function ProductorBasic({ data }) {
+  const classes = useStyles()
+  const [productor, setProductor] = useState(null)
+  const { removeProductor, editProductor } = useContext(ProductorContext)
   const [confirm, setConfirm] = useState(false)
+  const [editMode, setEditMode] = useState(false)
+
+  useEffect(()=>{
+    setProductor(data)
+  },[data])
+
   const onConfirm = () => {
     removeProductor(productor._id)
       .then(() => {
 
       })
   }
+
+  const handleChange = (field, value) => {
+    setProductor({...productor, [field]: value})
+  }
+
+  const actualizarProductor = () => {
+    editProductor(productor).then(()=>{
+      setEditMode(false)
+    })
+  }
   return !productor ? null :
-    <Grid container >
-      <Grid item xs={2}>
-        <img src={avatarh} width="150" />
+    editMode ? 
+      <Grid container className={classes.paperContorno}>
+        <Grid item xs={12} sm={2}>
+          <img src={avatarh} width="150" alt="productor img"/>
+        </Grid>
+        <Grid item container xs={12} sm={9}>
+          <Grid item xs={12}>
+            <TextField label="clave" id="clave" value={productor.clave} onChange={(e) => handleChange('clave', e.target.value)}/>
+            <TextField label="nombre" id="nombre" value={productor.nombre} onChange={(e) => handleChange('nombre', e.target.value)}/>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField fullWidth label="Dirección" id="direccion" value={productor.direccion} onChange={(e) => handleChange('direccion', e.target.value)}/>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField label="Teléfono" id="tel1" value={productor.tel1} onChange={(e) => handleChange('tel1', e.target.value)}/>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField label="email" id="email" value={productor.email} onChange={(e) => handleChange('email', e.target.value)}/>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} sm={1}>
+          <Typography align="right">
+            <IconButton size="small" onClick={() => actualizarProductor()}>
+              <CheckIcon />
+            </IconButton>
+            <IconButton size="small" onClick={() => setEditMode(false)}>
+              <CloseIcon />
+            </IconButton>
+          </Typography>
+        </Grid>
       </Grid>
-      <Grid item xs={9}>
+    :
+    <Grid container className={classes.paperContorno}>
+      <Grid item xs={12} sm={2}>
+        <Typography align="center">
+          <img src={avatarh} width="150" alt="productor img"/>
+        </Typography>
+      </Grid>
+      <Grid item xs={12} sm={9}>
         <Typography variant="h6">
           {productor.clave} - {productor.nombre}
         </Typography>
@@ -32,13 +87,16 @@ export default function ProductorBasic({ productor }) {
         <Typography><PhoneAndroidIcon /> {productor.tel1}</Typography>
         <Typography><EmailIcon /> {productor.email.toLowerCase()}</Typography>
       </Grid>
-      <Grid item xs={1}>
+      <Grid item xs={12} sm={1}>
         <Typography align='right'>
-          <Badge variant="dot" color="secondary">
+          <IconButton size="small" onClick={()=>setEditMode(true)}>
+            <EditIcon />
+          </IconButton>
+          {/* <Badge variant="dot" color="secondary">
             <IconButton size="small">
               <VisibilityIcon />
             </IconButton>
-          </Badge>
+          </Badge> */}
           <IconButton size="small" onClick={() => setConfirm(true)} >
             <CancelIcon />
           </IconButton>

@@ -1,5 +1,5 @@
 import React, {createContext, useState} from 'react';
-import { getProvedors, saveProvedor, deleteProvedor } from '../api'
+import { getProvedors, saveProvedor, deleteProvedor, updateProvedor } from '../api'
 
 export const ProductorContext = createContext()
 
@@ -28,8 +28,13 @@ const ProductorContextProvider = (props) => {
         return res
     }
 
+    const editProductor = async (productor) => {
+        const res = await updateProvedor(productor)
+        return res
+    }
+
     return ( 
-        <ProductorContext.Provider value={{productors, addProductor, removeProductor, loadProductors}}>
+        <ProductorContext.Provider value={{productors, addProductor, removeProductor, loadProductors, editProductor}}>
             {props.children}
         </ProductorContext.Provider>
      );
