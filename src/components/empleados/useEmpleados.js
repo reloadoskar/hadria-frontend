@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {getEmpleados, addEmpleado, delEmpleado, updateEmpleado} from '../api'
+import {getEmpleados, saveEmpleado, delEmpleado, updateEmpleado} from '../api'
 const useEmpleados = () => {
     const [empleados, setEmpleados] = useState([])
     const [updating, setUpdating] = useState(false)
@@ -18,7 +18,7 @@ const useEmpleados = () => {
     }
 
     const crearEmpleado = async (empleado) =>{
-        const res = await addEmpleado(empleado)
+        const res = await saveEmpleado(empleado)
         setUpdating(!updating)
         return res
     }

@@ -1,26 +1,30 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Button, Container, Grid, Typography } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
-import useEmpleados from './useEmpleados'
+// import useEmpleados from './useEmpleados'
+import {EmpleadoContext} from './EmpleadoContext'
 import CrearEmpleado from './CrearEmpleado'
 import Empleado from './Empleado'
 import useUbicacions from '../ubicaciones/useUbicacions';
 import { sumSueldo } from '../Tools'
 export default function Empleados(){
     const classes = useStyles()
-    const Empleados = useEmpleados()
+    // const Empleados = useEmpleados()
+    const {empleados, loadEmpleados, addEmpleado} = useContext(EmpleadoContext)
     const [dialogOpen, setDialogOpen] = useState(false)
     const {ubicacions} = useUbicacions()
+    
     useEffect(()=>{
-        Empleados.fetchEmpleados()
-    },[])
+        loadEmpleados()
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
+
     const closeDialog = () =>{
         setDialogOpen(false)
     }
 
     const crear = (empleado) =>{
-        if(Empleados.empleados.length <12){
-            Empleados.crearEmpleado(empleado).then(res => {
+        if(empleados.length <12){
+            addEmpleado(empleado).then(res => {
                 // console.log(res)
             })
         }else{
@@ -29,7 +33,7 @@ export default function Empleados(){
     }
 
 
-    return Empleados.empleados.length > 0 ?
+    return empleados.length > 0 ?
         <Container>
             <Grid container justifyContent="center" spacing={2}>
                 <Grid item xs={8}>
@@ -40,12 +44,12 @@ export default function Empleados(){
                 </Grid>
                 <Grid item xs={12} >
                     <Typography align="right" className={classes.textoMiniFacheron}>Nomina menual</Typography>
-                    <Typography align="right" className={classes.textoMirame}>${sumSueldo(Empleados.empleados)}</Typography>
+                    <Typography align="right" className={classes.textoMirame}>${sumSueldo(empleados)}</Typography>
                 </Grid>
                 <Grid container spacing={2}>
                 {
-                    Empleados.empleados.filter(e=>e.level !== 0).map((empleado, i) => (
-                        <Empleado data={empleado} key={i} index={i} update={Empleados.update} del={Empleados.eliminarEmpleado} ubicacions={ubicacions} />
+                    empleados.filter(e=>e.level !== 0).map((empleado, i) => (
+                        <Empleado data={empleado} key={i} />
                     ))
                 }
                 </Grid>

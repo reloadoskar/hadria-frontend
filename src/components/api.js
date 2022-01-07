@@ -1558,7 +1558,7 @@ export const getEmpleados = () => {
     }
 }
 
-export const addEmpleado = (empleado) => {
+export const saveEmpleado = (empleado) => {
     try{
         if(decoded){
             return axios
