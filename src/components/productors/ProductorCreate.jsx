@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, Grid, TextField, Button } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, Grid, TextField, Button, MenuItem } from '@material-ui/core';
 import useStyles from "../hooks/useStyles"
 import { useSnackbar } from 'notistack'
 import {ProductorContext} from './ProductorContext'
 const initProductor = {
   nombre: '',
+  sexo: "H",
   clave: '',
   rfc: '',
   direccion: '',
@@ -44,7 +45,7 @@ export default function ProductorCreate({ add, open, close }) {
         :
           <DialogContent>
           	<Grid container spacing={2}>
-          		<Grid item xs={12} md={12}>
+          		<Grid item xs={10} md={10}>
           			<TextField
           				autoFocus
           				required
@@ -55,6 +56,22 @@ export default function ProductorCreate({ add, open, close }) {
           				value={productor.nombre}
           				onChange={(e) => handleChange('nombre', e.target.value)}
           				/>
+          		</Grid>
+          		<Grid item xs={2} md={2}>
+          			<TextField          				
+						required
+						select
+          				id="sexo"
+          				label="Sexo"
+          				fullWidth
+          				variant="outlined"
+          				value={productor.sexo}
+          				onChange={(e) => handleChange('sexo', e.target.value)}
+          				>
+						<MenuItem value="H">Hombre</MenuItem>
+						<MenuItem value="M">Mujer</MenuItem>
+						<MenuItem value="O">LGBT+</MenuItem>
+					</TextField>
           		</Grid>
           		<Grid item xs={12} md={6}>
           			<TextField
@@ -112,7 +129,18 @@ export default function ProductorCreate({ add, open, close }) {
           				onChange={(e) => handleChange('email', e.target.value)}
           				/>
           		</Grid>
-          		<Grid item xs={12} md={12}>
+          		<Grid item xs={12} md={6}>
+          			<TextField
+          				required
+          				fullWidth
+          				id="banco1"
+          				label="Banco"
+          				variant="outlined"
+          				value={productor.banco1}
+          				onChange={(e) => handleChange('banco1', e.target.value)}
+          				/>
+          		</Grid>
+          		<Grid item xs={12} md={6}>
           			<TextField
           				required
           				fullWidth
