@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link } from "react-router-dom";
-import { Grid, Typography, Card, CardContent, CardMedia, CardActions, IconButton, TextField, MenuItem, Button } from '@material-ui/core'
+import { Grid, Typography, IconButton, TextField, MenuItem } from '@material-ui/core'
 import avatarh from '../../img/avatarH1.png'
 import avatarm from '../../img/avatarM2.png'
 import avataro from '../../img/avatarM1.png'
@@ -18,10 +18,9 @@ import { UbicacionContext } from '../ubicaciones/UbicacionContext'
 import Confirm from '../dialogs/Confirm';
 export default function Empleado({ data }) {
   const { removeEmpleado, editEmpleado } = useContext(EmpleadoContext)
-  const { ubicacions } = useContext(UbicacionContext)
+  const { ubicacions, loadUbicacions } = useContext(UbicacionContext)
   const [empleado, setEmpleado] = useState(false)
   const [editMode, setEditMode] = useState(false)
-  const [confirmMode, setConfirmMode] = useState(false)
   const classes = useStyles()
   const [confirm, setConfirm] = useState(false)
   const areas = ["GOD", "SUPERVISOR DEL SISTEMA", "ADMINISTRADOR", "ALMACEN", "CAJAS", "GENERAL"]
@@ -47,9 +46,13 @@ export default function Empleado({ data }) {
     removeEmpleado(empleado._id).then(
       res => {
         setEditMode(false)
-        setConfirmMode(false)
       }
     )
+  }
+
+  const handleEdit = () => {
+    setEditMode(true)
+    loadUbicacions()
   }
   return !empleado ? null :
     !editMode ?
@@ -87,7 +90,7 @@ export default function Empleado({ data }) {
         </Grid>
         <Grid item xs={1}>
         <Typography align='right'>
-          <IconButton size="small" onClick={()=>setEditMode(true)}>
+          <IconButton size="small" onClick={()=>handleEdit()}>
             <EditIcon />
           </IconButton>
           <IconButton size="small" onClick={() => setConfirm(true)} >

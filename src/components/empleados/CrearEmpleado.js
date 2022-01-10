@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField } from '@material-ui/core'
 import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import useStyles from '../hooks/useStyles'
-import useUbicacions from '../ubicaciones/useUbicacions';
+import {UbicacionContext} from '../ubicaciones/UbicacionContext'
 const nempleado = {
     nombre: '',
     area: "",
@@ -34,8 +34,12 @@ const periodos = [
 const CrearEmpleado = (props) =>{
     const {open, close, crear} = props
     const classes = useStyles()
-    const {ubicacions} = useUbicacions()
+    const {ubicacions, loadUbicacions} = useContext(UbicacionContext)
     const [empleado, setEmpleado] = useState(nempleado)
+    
+    useEffect(()=>{
+        loadUbicacions()
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     
     const handleSubmit = (e) =>{
         e.preventDefault()
@@ -55,6 +59,7 @@ const CrearEmpleado = (props) =>{
                     let smensual = empleado.sueldo * 2
                     setEmpleado({...empleado, sueldo: smensual, periodo: "MENSUAL"})
                 }
+                setEmpleado({...empleado, periodo: value})
                 break
             case 'area':
                 return setEmpleado({...empleado, area: value, level: value.level})
@@ -107,6 +112,7 @@ const CrearEmpleado = (props) =>{
                             >
                                 <MenuItem key="h" value="H">HOMBRE</MenuItem>
                                 <MenuItem key="m" value="M">MUJER</MenuItem>
+                                <MenuItem key="o" value="O">LGBT+</MenuItem>
                             </TextField>
 
                         </Grid>
