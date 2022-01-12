@@ -16,6 +16,7 @@ import UbicacionContextProvider from './components/ubicaciones/UbicacionContext'
 import ComprasContextProvider from './components/compras/CompraContext';
 import ProductosContextProvider from './components/productos/ProductosContext';
 import EmpleadoContextProvider from './components/empleados/EmpleadoContext';
+import ProductoContextProvider from './components/productos/ProductoContext'
 function App() {
 
     return (
@@ -36,7 +37,9 @@ function App() {
                                         <ComprasContextProvider>
                                             <ProductosContextProvider>
                                                 <EmpleadoContextProvider>
-                                                    <Router />
+                                                    <ProductoContextProvider>
+                                                        <Router />
+                                                    </ProductoContextProvider>
                                                 </EmpleadoContextProvider>
                                             </ProductosContextProvider>
                                         </ComprasContextProvider>

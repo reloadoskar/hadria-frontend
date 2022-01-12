@@ -80,6 +80,20 @@ export const getProducts = () => {
         console.log(err)
     }
 }
+export const getProductosMasVendidos = (year, month) => {
+    try{
+        if (decoded){
+            return axios
+                .get(url + decoded.database + '/productos/masvendidos/'+year+'/'+month)
+                .then(res => {
+                    return res.data
+                })
+        }
+
+    }catch(err){
+        console.log(err)
+    }
+}
 
 export const saveProduct = (producto) => {
     try{
@@ -95,11 +109,11 @@ export const saveProduct = (producto) => {
     }
 }
 
-export const updateProduct = (id, data) => {
+export const updateProduct = (data) => {
     try{
         if(decoded){
             return axios
-                .put(url + decoded.database + '/producto/update/' + id, data)
+                .put(url + decoded.database + '/producto/update/', data)
                 .then(res => {
                     return res.data
                 })

@@ -36,7 +36,7 @@ export default function ProductorBasic({ data }) {
   const handleChange = (field, value) => {
     switch (field) {
       case "clave":
-        setProductor({...productor, clave: value.substring(0,5).toUpperCase()})
+        setProductor({...productor, clave: value.substring(0,5).replace(/[^a-zA-Z0-9]/g, '').toUpperCase()})
         break;
       case "nombre":
         setProductor({...productor, nombre: value.toUpperCase()})

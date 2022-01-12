@@ -8,9 +8,11 @@ export default function Productors(){
     const classes = useStyles()
     const [openCreate, setOpenCreate] = useState(false)
     const {productors, loadProductors} = useContext(ProductorContext)
+    
     useEffect(()=>{
         loadProductors()
-    },[])
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
+    
     const crearProductor = () => {
         setOpenCreate(true)
     }

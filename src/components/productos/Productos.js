@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 // COMPONENTES DE INTERFAZ // MATERIAL-UI
 import { 
     MenuItem, 
@@ -8,50 +8,49 @@ import {
     } from '@material-ui/core';
 
 // HOOKS
-import useProducts from './useProducts';
+import { ProductoContext } from '../productos/ProductoContext'
 import { useSnackbar } from 'notistack';
 import useStyles from '../hooks/useStyles';
 import {searchBy} from '../Tools'
+import useUnidades from '../hooks/useUnidades'
+import useEmpaques from '../hooks/useEmpaques'
 
 // COMPONENTES EXTERNOS
-import CrearProducto from './CrearProducto';
+import ProductoCreate from './ProductoCreate';
 import Producto from './Producto';
 
 //COMPONENTE 
 function Productos() {
+    const { productos, loadProductos, findProductoBy } = useContext(ProductoContext)
+    const [resultadoBusqueda, setResultado] = useState([])
     const classes = useStyles()
-    const { products, addProduct, updateProducto } = useProducts()
-    const [dialog, setDialog] = useState(false)
+    const {unidades} = useUnidades()
+    const {empaques} = useEmpaques()
+    const [openCreate, setOpenCreate] = useState(false)
     const fields = ["clave", "descripcion"]
     const [fieldSelected, setFieldSelected] = useState('descripcion')
     const [searchField, setSearchField] = useState('')
-    const [resultado, setResultado] = useState([])
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
-    const showDialog = () => {
-        setDialog(true)
-    }
+    useEffect(()=>{
+        loadProductos()
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const closeDialog = () => {
-        setDialog(false)
+    const crearProducto = () => {
+        setOpenCreate(true)
     }
-
-    function addProducto(producto) {
-        showMessage("Agregando...", "info")
-        closeDialog()
-        addProduct(producto).then(res => {
-            showMessage(res.message, res.status)
-        })
-    }
-
     function handleChange(field, value){
         switch(field)
         {
             case "field":
                 return setFieldSelected(value)
             case "search":
-                setResultado( searchBy(fieldSelected, value.toUpperCase(), products) )
+                if(value=== ''){ 
+                    setResultado([])
+                }else{
+                    setResultado(findProductoBy( fieldSelected, value.toUpperCase() ) )
+                }
                 return setSearchField(value)
             default: 
                 return setSearchField(value)
@@ -61,12 +60,13 @@ function Productos() {
     return (
         <React.Fragment>
             <Grid container justifyContent="center" spacing={2}>
-                <Grid item xs={8}>
-                    <Button fullWidth className={classes.botonGenerico} onClick={showDialog}>Agregar</Button>
-                    <CrearProducto addProduct={addProducto} open={dialog} close={closeDialog} search={searchBy} />
+                <Grid item xs={12}>
+                    <Button className={classes.botonGenerico} onClick={() => crearProducto() }>+ nuevo producto</Button>
+                    <ProductoCreate open={openCreate} close={() => setOpenCreate(false)} unemp={{unidades, empaques}}/>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField 
+                        id="field"
                         variant="outlined"
                         fullWidth
                         label="Buscar por:"
@@ -88,14 +88,16 @@ function Productos() {
                         onChange={(e) => handleChange('search', e.target.value)}
                     />
                 </Grid>
-                <Grid item xs={12}>
-                    {resultado.length === 0 ?
-                        null
+                <Grid item container spacing={2} xs={12}>
+                    { resultadoBusqueda.length > 0 ? 
+                        resultadoBusqueda.map((producto, i) =>(
+                            <Producto producto={producto} key={i} unemp={{unidades, empaques}}/>
+                            ))
                         :
-                        resultado.map((producto, i) =>(
-                            <Producto producto={producto} update={updateProducto} key={i} />
-                        ))
-                    }                
+                        productos.map((producto, i) =>(
+                            <Producto producto={producto} key={i} unemp={{unidades, empaques}}/>
+                            ))
+                    }
                 </Grid>
             </Grid>
         </React.Fragment>

@@ -16,7 +16,7 @@ const initProductor = {
   comision: 10,
 }
 
-export default function ProductorCreate({ add, open, close }) {
+export default function ProductorCreate({ open, close }) {
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
@@ -180,8 +180,8 @@ export default function ProductorCreate({ add, open, close }) {
           </DialogContent>
         }
         <DialogActions>
-          <Button className={classes.botonSimplon} onClick={close}>Cancelar</Button>
-					<Button className={classes.botonGenerico} type="submit">Guardar</Button>
+          	<Button className={classes.botonSimplon} onClick={close}>Cancelar</Button>
+			<Button className={classes.botonGenerico} type="submit">Guardar</Button>
         </DialogActions>
       </form>
 
