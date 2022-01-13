@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@material-ui/core'
 import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import useStyles from '../hooks/useStyles'
+import {ClienteContext} from './ClienteContext'
+import { useSnackbar } from 'notistack'
 const ncliente = {
     nombre: "",
     rfc: "",
@@ -15,15 +17,19 @@ const ncliente = {
     credito_disponible: 0
 }
 
-const CrearCliente = (props) =>{
-    const {open, close, crear} = props
+const CrearCliente = ({open, close}) =>{
+    const {addCliente} = useContext(ClienteContext)
     const classes = useStyles()
     const [cliente, setCliente] = useState(ncliente)
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     
     const handleSubmit = (e) =>{
         e.preventDefault()
-        crear(cliente)
-        handleClose()
+        addCliente(cliente).then(res=>{
+            showMessage(res.message, res.status)
+            handleClose()
+        })
     }
 
     const handleChange = (field, value) => {

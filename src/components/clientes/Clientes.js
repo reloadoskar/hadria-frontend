@@ -1,40 +1,63 @@
-import React, {useState} from 'react'
-import { Button, Container, Grid} from '@material-ui/core'
+import React, {useState, useContext, useEffect} from 'react'
+import { Button, Container, Grid, TextField} from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
-import useClientes from './useClientes'
 import CrearCliente from './CrearCliente'
 import { useSnackbar } from 'notistack'
 import Cliente from './Cliente'
+import {ClienteContext} from './ClienteContext'
 export default function Clientes(){
+    const {clientes, loadClientes, findCliente} = useContext(ClienteContext)
     const classes = useStyles()
+    const [resultadoBusqueda, setResultado] = useState([])
     const { enqueueSnackbar } = useSnackbar()
-    const Client = useClientes()
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [searchField, setSearchField] = useState('')
+
+    useEffect(()=> {
+        loadClientes()
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     const closeDialog = () =>{
         setDialogOpen(false)
     }
-
-    const crear = (cliente) =>{
-        Client.crearCliente(cliente).then(res => {
-            if(res.status === 'success'){
-                enqueueSnackbar(res.message, { variant: res.status })
-                closeDialog()
-            }
-        })
+    const handleChange = (field, value) => { 
+        switch (field){
+            case "search":
+                if(value=== ''){ 
+                    setResultado([])
+                }else{
+                    setResultado(findCliente( searchField.toUpperCase() ) )
+                }
+                return setSearchField(value)
+            default:
+                return setSearchField(value)
+        }
     }
     return(
         <Container>
             <Grid container justifyContent="center" spacing={2}>
-                <Grid item xs={8}>
-                    <Button fullWidth className={classes.botonGenerico} onClick={() => setDialogOpen(true)}>
-                        Agregar
+                <Grid item xs={6}>
+                    <Button className={classes.botonGenerico} onClick={() => setDialogOpen(true)}>
+                        + Nuevo Cliente
                     </Button>
-                    <CrearCliente open={dialogOpen} close={closeDialog} crear={crear}/>
+                    <CrearCliente open={dialogOpen} close={closeDialog} />
+                </Grid>
+                <Grid item xs={6}>
+                    <TextField 
+                        fullWidth 
+                        variant="outlined"
+                        label="Buscar Cliente." 
+                        value={searchField} 
+                        onChange={(e) => handleChange('search', e.target.value)}
+                    />
                 </Grid>
                 <Grid container spacing={2}>
-                    {
-                        Client.clientes.map((cliente, i) => (
-                            <Cliente key={i} cliente={cliente} update={Client.updCliente} />
+                    {resultadoBusqueda.length > 0 ? 
+                        resultadoBusqueda.map((cliente, i) => (
+                            <Cliente key={i} data={cliente} />
+                        ))
+                        :
+                        clientes.map((cliente, i) => (
+                            <Cliente key={i} data={cliente} />
                         ))
                     }
                 </Grid>

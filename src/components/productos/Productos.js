@@ -9,9 +9,7 @@ import {
 
 // HOOKS
 import { ProductoContext } from '../productos/ProductoContext'
-import { useSnackbar } from 'notistack';
 import useStyles from '../hooks/useStyles';
-import {searchBy} from '../Tools'
 import useUnidades from '../hooks/useUnidades'
 import useEmpaques from '../hooks/useEmpaques'
 
@@ -30,8 +28,6 @@ function Productos() {
     const fields = ["clave", "descripcion"]
     const [fieldSelected, setFieldSelected] = useState('descripcion')
     const [searchField, setSearchField] = useState('')
-    const { enqueueSnackbar } = useSnackbar()
-    const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
     useEffect(()=>{
         loadProductos()

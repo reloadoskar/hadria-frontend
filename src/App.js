@@ -17,6 +17,7 @@ import ComprasContextProvider from './components/compras/CompraContext';
 import ProductosContextProvider from './components/productos/ProductosContext';
 import EmpleadoContextProvider from './components/empleados/EmpleadoContext';
 import ProductoContextProvider from './components/productos/ProductoContext'
+import ClienteContextProvider from './components/clientes/ClienteContext'
 function App() {
 
     return (
@@ -29,25 +30,27 @@ function App() {
                     <Route exact path="/register">
                         <Register />
                     </Route>
+                                    <PrivateRoute path="/app" >
                     <UbicacionContextProvider>
                         <ProductorContextProvider>
                             <InversionContextProvider>
                                 <EgresoContextProvider>
-                                    <PrivateRoute path="/app" >
                                         <ComprasContextProvider>
                                             <ProductosContextProvider>
                                                 <EmpleadoContextProvider>
                                                     <ProductoContextProvider>
-                                                        <Router />
+                                                        <ClienteContextProvider>
+                                                            <Router />
+                                                        </ClienteContextProvider>
                                                     </ProductoContextProvider>
                                                 </EmpleadoContextProvider>
                                             </ProductosContextProvider>
                                         </ComprasContextProvider>
-                                    </PrivateRoute>
                                 </EgresoContextProvider>
                             </InversionContextProvider>
                         </ProductorContextProvider>
                     </UbicacionContextProvider>
+                                    </PrivateRoute>
                     <Route path="*" component={NotFound} />
                 </Switch>
             </BrowserRouter>
