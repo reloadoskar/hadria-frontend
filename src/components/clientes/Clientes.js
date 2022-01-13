@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack'
 import Cliente from './Cliente'
 import {ClienteContext} from './ClienteContext'
 export default function Clientes(){
-    const {clientes, loadClientes, findCliente} = useContext(ClienteContext)
+    const {clientes, loadClientes, findCliente, loadCuentasxCliente, cuentasxCliente} = useContext(ClienteContext)
     const classes = useStyles()
     const [resultadoBusqueda, setResultado] = useState([])
     const { enqueueSnackbar } = useSnackbar()
@@ -15,6 +15,7 @@ export default function Clientes(){
 
     useEffect(()=> {
         loadClientes()
+        loadCuentasxCliente()
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
     const closeDialog = () =>{
         setDialogOpen(false)
@@ -53,11 +54,11 @@ export default function Clientes(){
                 <Grid container spacing={2}>
                     {resultadoBusqueda.length > 0 ? 
                         resultadoBusqueda.map((cliente, i) => (
-                            <Cliente key={i} data={cliente} />
+                            <Cliente key={i} data={cliente} cuenta={cuentasxCliente.filter(cuenta=>cuenta._id === cliente._id)}/>
                         ))
                         :
                         clientes.map((cliente, i) => (
-                            <Cliente key={i} data={cliente} />
+                            <Cliente key={i} data={cliente} cuenta={cuentasxCliente.filter(cuenta=>cuenta._id === cliente._id)}/>
                         ))
                     }
                 </Grid>

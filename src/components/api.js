@@ -152,6 +152,19 @@ export const getClientes = () => {
         console.log(err)
     }
 }
+export const getCuentasxCliente = () => {
+    try{
+        if(decoded){
+            return axios
+                .get(url + decoded.database + '/ingresos/cuentas/clientes')
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch(err){
+        console.log(err)
+    }
+}
 export const saveCliente = (cliente) => {
     try{
         if(decoded){

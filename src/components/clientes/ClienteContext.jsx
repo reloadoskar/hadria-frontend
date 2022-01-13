@@ -1,9 +1,10 @@
 import React, {createContext, useState} from 'react'
-import { getClientes, saveCliente, deleteCliente, updateCliente } from '../api'
+import { getClientes, saveCliente, deleteCliente, updateCliente, getCuentasxCliente } from '../api'
 export const ClienteContext = createContext()
 
 const ClienteContextProvider = (props) => {
     const [clientes, setClientes] = useState([])
+    const [cuentasxCliente, setCuentas] = useState([])
 
     const loadClientes = async () => {
         const res = await getClientes()
@@ -13,6 +14,12 @@ const ClienteContextProvider = (props) => {
 
     const findCliente = (search) => {
         return clientes.filter(cliente=>cliente.nombre.indexOf(search) !== -1)
+    }
+
+    const loadCuentasxCliente = async () => {
+        const res = await getCuentasxCliente()
+        setCuentas(res.cuentas)
+        return res
     }
 
     const addCliente = async (cliente) => {
@@ -39,6 +46,8 @@ const ClienteContextProvider = (props) => {
             removeCliente,
             editCliente,
             findCliente,
+            loadCuentasxCliente,
+            cuentasxCliente
         }}>
             {props.children}
         </ClienteContext.Provider>

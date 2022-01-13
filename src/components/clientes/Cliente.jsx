@@ -16,7 +16,7 @@ import {ClienteContext} from './ClienteContext'
 import Confirm from '../dialogs/Confirm';
 import { useSnackbar } from 'notistack'
 import {formatNumber} from '../Tools'
-export default function Cliente({data}){
+export default function Cliente({data, cuenta}){
     const {removeCliente, editCliente} = useContext(ClienteContext)
     const classes = useStyles()
     const [editMode, setEditMode] = useState(false)
@@ -73,9 +73,16 @@ export default function Cliente({data}){
                     {elCliente.limite_de_credito > 0 ?
                         <React.Fragment>
                             <Typography className={classes.textoMiniFacheron}>l&iacute;mite </Typography>
-                            <Typography className={classes.textoMirame}>{formatNumber(elCliente.limite_de_credito)}</Typography>
+                            <Typography className={classes.textoMirame}>${formatNumber(elCliente.limite_de_credito)}</Typography>
                             <Typography className={classes.textoMiniFacheron}>Disponible </Typography>
-                            <Typography className={classes.textoMirame}>{formatNumber(elCliente.credito_disponible)}</Typography>
+                            <Typography className={classes.textoMirame}>${formatNumber(elCliente.credito_disponible)}</Typography>
+                            {cuenta  && cuenta.length > 0? 
+                                <React.Fragment>
+                                    <Typography className={classes.textoMiniFacheron}>Saldo </Typography>
+                                    <Typography className={classes.textoMirameSangron}>${formatNumber(cuenta[0].saldo)}</Typography>
+                                </React.Fragment>
+                                : null
+                            }
                         </React.Fragment>
                         : null
                     }
