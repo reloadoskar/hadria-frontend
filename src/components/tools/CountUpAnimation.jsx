@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { formatNumber } from '../Tools';
 
 const easeOutQuad = t => t * ( 2 - t );

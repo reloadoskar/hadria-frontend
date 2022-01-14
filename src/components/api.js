@@ -221,6 +221,19 @@ export const getProvedors = () => {
         console.log(err)
     }
 }
+export const getComprasMesProvedor = (year, month) => {
+    try{
+        if(decoded){
+            return axios
+                .get(url + decoded.database + `/compras/provedor/${year}/${month}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
 export const saveProvedor = (provedor) => {
     try{
         if(decoded){

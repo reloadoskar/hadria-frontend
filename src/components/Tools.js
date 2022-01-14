@@ -205,6 +205,18 @@ export const formatNumber = (num, dec=0) => {
     }
 }
 
+export const reduceNumber = (number, dec=1) => {
+    let formatedNumber = ''
+    if(number > 1000000){
+
+        formatedNumber = formatNumber( (number / 1000000) , dec ) + " M"
+    }else{
+        formatedNumber = formatNumber((number / 1000),dec) + " K"
+    }
+
+    return formatedNumber
+}
+
 export const searchBy = (field, search, array) => {
     var found = []
     if (array ){

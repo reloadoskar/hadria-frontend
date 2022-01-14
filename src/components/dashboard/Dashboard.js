@@ -10,7 +10,6 @@ import { Grid,
 } from '@material-ui/core'
 // componentes
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
-import CuentasxPagar from '../cxp/CuentasxPagar'
 import Pagar from './Pagar'
 import Traspasar from './Traspasar'
 import {ticketTraspaso} from '../api'
@@ -27,6 +26,7 @@ import useEgresos from '../egresos/useEgresos'
 import { useSnackbar } from 'notistack';
 
 import moment from 'moment'
+import ComprasMesProductor from '../compras/ComprasMesProductor'
 
 export default function Dashboard({ubicacions}) {
     const auth = useAuth()
@@ -259,10 +259,10 @@ export default function Dashboard({ubicacions}) {
                 </Grid>
                 {/* INFO CUENTAS POR COBRAR */}
                 <Grid item xs={12}>
-                    <CuentasxCobrar cuentas={ingresos.cuentasxCobrar} total={ingresos.totalCxc}/>
+                    <ComprasMesProductor />
                 </Grid>
                 <Grid item xs={12}>
-                    <CuentasxPagar cuentas={egresos.cuentasxPagar} total={egresos.totalCxp}/>
+                    <CuentasxCobrar cuentas={ingresos.cuentasxCobrar} total={ingresos.totalCxc}/>
                 </Grid>
             </Grid>                
         </Container>
