@@ -123,7 +123,10 @@ export default function ProductorBasic({ data }) {
         </Typography>
         <Typography><HomeIcon /> {productor.direccion}</Typography>
         <Typography><PhoneAndroidIcon /> {productor.tel1}</Typography>
-        <Typography><EmailIcon /> {productor.email.toLowerCase()}</Typography>
+        { productor.email ? 
+          <Typography><EmailIcon /> {productor.email.toLowerCase()}</Typography>
+          : null
+        }
         <Typography><AccountBalanceIcon /> {productor.banco1} {productor.cta1}</Typography>
       </Grid>
       <Grid item xs={12} sm={1}>
