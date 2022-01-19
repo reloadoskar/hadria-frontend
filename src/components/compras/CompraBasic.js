@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Badge, Divider, Grid, IconButton, Typography } from '@material-ui/core'
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit'
 // import RefreshIcon from '@material-ui/icons/Refresh'
+import CancelIcon from '@material-ui/icons/Cancel';
+import Confirm from '../dialogs/Confirm';
 import { formatNumber, sumImporte, sumStock, sumEmpStock } from '../Tools';
 import useStyles from '../hooks/useStyles';
+import {ComprasContext} from '../compras/CompraContext'
 export default function CompraBasic(props){
     const {compra, 
         editCompra, 
@@ -12,6 +15,9 @@ export default function CompraBasic(props){
         // recuperarVentas, 
         // recuperarGastos
     } = props
+
+    const {removeCompra} = useContext(ComprasContext)
+
     const [compraLocal, setCompraLocal] = useState(null)
     const [totalVenta, setTotalVenta] = useState(0)
     const [totalGastos, setTotalGastos] = useState(0)
@@ -19,6 +25,9 @@ export default function CompraBasic(props){
     const [resultado, setResultado] = useState(0)
     const [tEmpaques, setEmpaques] = useState(0)
     const [tCantidad, setCantidad] = useState(0)
+
+    const [confirm, setConfirm] = useState(false)
+
     const classes = useStyles()
     useEffect(() => {
         if(compra !== null){
@@ -58,6 +67,11 @@ export default function CompraBasic(props){
         verCompra(compra)
     }
 
+    const onConfirm = () => {
+        removeCompra(compra._id)
+        // setCompra(null)
+      }
+
     // const handleRecuperarVentas = (compraId) => {
     //     recuperarVentas(compraId).then(res=>{
     //         setCompraLocal(res.compra)
@@ -88,6 +102,13 @@ export default function CompraBasic(props){
                             onClick={() => editCompra(compra)}
                             >
                             <EditIcon />
+                        </IconButton>
+                        <IconButton
+                            size="small"
+                            onClick={() => setConfirm(true)}
+                            >
+                            <CancelIcon />
+                            <Confirm open={confirm} close={() => setConfirm(false)} onConfirm={onConfirm} />
                         </IconButton>
                     </Typography>
                 </Grid>
