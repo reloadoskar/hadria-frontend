@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { Badge, Divider, Grid, IconButton, Typography } from '@material-ui/core'
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit'
-// import RefreshIcon from '@material-ui/icons/Refresh'
+import { useSnackbar } from 'notistack';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Confirm from '../dialogs/Confirm';
 import { formatNumber, sumImporte, sumStock, sumEmpStock } from '../Tools';
@@ -17,6 +17,9 @@ export default function CompraBasic(props){
     } = props
 
     const {removeCompra} = useContext(ComprasContext)
+
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
     const [compraLocal, setCompraLocal] = useState(null)
     const [totalVenta, setTotalVenta] = useState(0)
@@ -68,9 +71,10 @@ export default function CompraBasic(props){
     }
 
     const onConfirm = () => {
-        removeCompra(compra._id)
-        // setCompra(null)
-      }
+        removeCompra(compra._id).then(res => {
+            showMessage(res.message, res.status)
+        })
+    }
 
     // const handleRecuperarVentas = (compraId) => {
     //     recuperarVentas(compraId).then(res=>{

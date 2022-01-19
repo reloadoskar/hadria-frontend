@@ -1,6 +1,5 @@
-import React, { createContext, useState, useEffect } from 'react'
+import React, { createContext, useState } from 'react'
 import { getCompras, cancelCompra, closeCompra, saveCompra, getCompra, getComprasActivas } from '../api'
-import {sumImporte} from '../Tools'
 
 export const ComprasContext = createContext()
 
