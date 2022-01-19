@@ -18,6 +18,8 @@ import ProductosContextProvider from './components/productos/ProductosContext';
 import EmpleadoContextProvider from './components/empleados/EmpleadoContext';
 import ProductoContextProvider from './components/productos/ProductoContext'
 import ClienteContextProvider from './components/clientes/ClienteContext'
+import EmpresaContextProvider from './components/empresa/EmpresaContext'
+import IngresoContextProvider from './components/ingresos/IngresoContext'
 function App() {
 
     return (
@@ -30,27 +32,31 @@ function App() {
                     <Route exact path="/register">
                         <Register />
                     </Route>
-                                    <PrivateRoute path="/app" >
-                    <UbicacionContextProvider>
-                        <ProductorContextProvider>
-                            <InversionContextProvider>
-                                <EgresoContextProvider>
-                                        <ComprasContextProvider>
-                                            <ProductosContextProvider>
-                                                <EmpleadoContextProvider>
-                                                    <ProductoContextProvider>
-                                                        <ClienteContextProvider>
-                                                            <Router />
-                                                        </ClienteContextProvider>
-                                                    </ProductoContextProvider>
-                                                </EmpleadoContextProvider>
-                                            </ProductosContextProvider>
-                                        </ComprasContextProvider>
-                                </EgresoContextProvider>
-                            </InversionContextProvider>
-                        </ProductorContextProvider>
-                    </UbicacionContextProvider>
-                                    </PrivateRoute>
+                    <PrivateRoute path="/app" >
+                        <EmpresaContextProvider>
+                            <UbicacionContextProvider>
+                                <ProductorContextProvider>
+                                    <InversionContextProvider>
+                                        <IngresoContextProvider>
+                                            <EgresoContextProvider>
+                                                <ComprasContextProvider>
+                                                    <ProductosContextProvider>
+                                                        <EmpleadoContextProvider>
+                                                            <ProductoContextProvider>
+                                                                <ClienteContextProvider>
+                                                                    <Router />
+                                                                </ClienteContextProvider>
+                                                            </ProductoContextProvider>
+                                                        </EmpleadoContextProvider>
+                                                    </ProductosContextProvider>
+                                                </ComprasContextProvider>
+                                            </EgresoContextProvider>
+                                        </IngresoContextProvider>
+                                    </InversionContextProvider>
+                                </ProductorContextProvider>
+                            </UbicacionContextProvider>
+                        </EmpresaContextProvider>
+                    </PrivateRoute>
                     <Route path="*" component={NotFound} />
                 </Switch>
             </BrowserRouter>

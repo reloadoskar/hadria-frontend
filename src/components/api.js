@@ -836,6 +836,33 @@ export const getIngresos = (fecha) => {
         console.log(err)
     }
 }
+export const getIngresosxMes = (year, month) => {
+    try{
+        if(decoded){
+            return axios
+                .get(url + decoded.database+  '/ingresos/' + year + '/'+ month)
+                .then( res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
+export const delIngreso = (id) => {
+    try{
+        if(decoded){
+            return axios
+                .delete(url + decoded.database + `/ingreso/${id}`)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
 
 // RETIRO
 

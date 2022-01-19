@@ -86,7 +86,7 @@ const Venta = (props) => {
                                 {ventaLocal.items.map((item, index) => (
                                     <Grid container key={index}>
                                         <Grid item xs={12} sm={8}>
-                                            <Typography>{item.producto.descripcion}</Typography>
+                                <Typography>#{item.compra.folio} - {item.producto.descripcion}</Typography>
                                         </Grid>
                                         <Grid item xs={12} sm={2}>
                                             <Typography align="right">
