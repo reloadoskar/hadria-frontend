@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, } from 'react'
 import { Grid, Button, Dialog, Typography } from '@material-ui/core'
 import CrearVenta from '../ventas/CrearVenta'
 import Reloj from '../herramientas/reloj'
@@ -7,6 +7,7 @@ import useStyles from '../hooks/useStyles'
 import CobroDialog from './CobroDialog'
 import EgresoDialog from './EgresoDialog'
 import PagarDialog from './PagarDialog'
+import IngresoCreate from '../ingresos/IngresoCreate'
 export default function DialogPos(props){
     const {open, close, clientes, inventario, ubicacion, ubicacions, fecha, showMessage, user, cortes, cxcPdv, addPagoCxc, addPagoCxp, cuentasxPagar} = props
     
@@ -17,6 +18,8 @@ export default function DialogPos(props){
     const [cxcDialog, setCxcDialog] = useState(false)
     const [egresoDialog, setEgresoDialog] = useState(false)
     const [pagoDialog, setPagoDialog] = useState(false)
+
+    const [verCrearIngreso, setVerCrearIngreso] = useState(false)
     
     const toggleCxcDialog = () => {
         setCxcDialog(!cxcDialog)
@@ -102,6 +105,22 @@ export default function DialogPos(props){
                         lafecha={fecha}
                         showMessage={showMessage}
                         addVenta={props.addVenta}
+                    />
+                </Grid>
+
+                <Grid item xs={8}>
+                    <Button
+                        fullWidth
+                        onClick={()=>setVerCrearIngreso(true)}
+                        className={classes.botonCosmico}
+                    >
+                        Nuevo ingreso +
+                    </Button>
+                    <IngresoCreate 
+                        open={verCrearIngreso} 
+                        close={() => setVerCrearIngreso(false)} 
+                        ubicacion={ubicacion}
+                        fecha={fecha}
                     />
                 </Grid>
                 
