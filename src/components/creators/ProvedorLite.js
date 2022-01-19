@@ -8,15 +8,27 @@ import { TextField, Grid, Button, Dialog, Slide, DialogContent, DialogTitle, Dia
 //REDUCER
 import reducer from '../reducers/ProvedorsReducer';
 import useStyles from '../hooks/useStyles';
-
+const generadorDeClaves = (longitud)=>{	
+	var resultado           = '';
+	var caracteres       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	var longitudCaracteres = caracteres.length;
+	for ( var i = 0; i < longitud; i++ ) {
+		resultado += caracteres.charAt(Math.floor(Math.random() * 
+	longitudCaracteres));
+	}
+	return resultado;
+	
+}
 const initialState = {
 	nombre: '',
-    clave: '',
+	sexo: 'H',
+    clave: generadorDeClaves(5),
     rfc: '',
-    direccion: 'NO DISP',
-    tel1: '',
-    email: '',
-    cta1: '1234567890',
+    direccion: 'NO DISPONIBLE',
+    tel1: '5500009999',
+	email: '',
+	banco: "SIN BANCO",
+    cta1: '111XX00000000',
     diasDeCredito: '10',
     comision: '10',
 	ref: ''
