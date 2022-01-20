@@ -26,7 +26,7 @@ const initialState = {
     tel1: '5500009999',
 	email: '',
 	banco: "SIN BANCO",
-    cta1: '111XX00000000',
+    cta1: '1112200000000',
     diasDeCredito: '10',
     comision: '10',
 	ref: ''
