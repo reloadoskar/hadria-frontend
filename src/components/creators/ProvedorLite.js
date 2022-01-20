@@ -3,8 +3,6 @@ import React, {useReducer}from 'react';
 // Material UI
 import { TextField, Grid, Button, Dialog, Slide, DialogContent, DialogTitle, DialogActions } from '@material-ui/core';
 
-//HOOKS
-
 //REDUCER
 import reducer from '../reducers/ProvedorsReducer';
 import useStyles from '../hooks/useStyles';
@@ -22,7 +20,7 @@ const generadorDeClaves = (longitud)=>{
 const initialState = {
 	nombre: '',
 	sexo: 'H',
-    clave: generadorDeClaves(5),
+    clave: generadorDeClaves(5), 
     rfc: '',
     direccion: 'NO DISPONIBLE',
     tel1: '5500009999',
