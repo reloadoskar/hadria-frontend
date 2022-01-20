@@ -7,16 +7,15 @@ import { Accordion, AccordionDetails, AccordionSummary, Avatar, Card, CardConten
 import EstadoDeCuenta from '../cxp/EstadoDeCuenta'
 import PersonIcon from '@material-ui/icons/Person';
 import {formatNumber, sumSaldo} from '../Tools'
-export default function CuentasxPagar(props) {
-    const {cuentas=null, total} = props
 
+export default function CuentasxPagar({cuentas, total}) {
     return (
         <Card>
             <CardHeader title="Deudas" />
                 {cuentas === null ?
                     <LinearProgress variant="query" />
                     :
-                    <CardContent>              
+                    <CardContent>
                         {cuentas.filter(prov=> sumSaldo(prov.cuentas) > 0)
                         .map((prov,i) =>(
                             <Accordion key={i}>

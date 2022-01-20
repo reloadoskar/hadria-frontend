@@ -11,22 +11,28 @@ import { UbicacionContext } from '../ubicaciones/UbicacionContext';
 import Confirm from '../dialogs/Confirm';
 export default function EgresoBasic({ data }) {
   const { removeEgreso } = useContext(EgresoContext)
-  const {ubicacions} = useContext(UbicacionContext)
+  const {ubicacions, loadUbicacions} = useContext(UbicacionContext)
   const [egreso, setEgreso] = useState(null)
   const [confirm, setConfirm] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const classes = useStyles()
 
   useEffect(() => {
-    setEgreso(data)
-    return () => {
-      setEgreso(null)
+    let isMounted = true
+    if(isMounted){
+      setEgreso(data)
     }
+    return () => isMounted = false
   }, [data])
 
   const onConfirm = () => {
     removeEgreso(egreso._id)
     setEgreso(null)
+  }
+
+  const handleEdit = () => {
+    setEditMode(true)
+    loadUbicacions()
   }
 
   const handleChange = (field, value) => {
@@ -58,6 +64,7 @@ export default function EgresoBasic({ data }) {
                 value={egreso.ubicacion}
                 onChange={(e) => handleChange('ubicacion', e.target.value)}
               >
+                  <MenuItem value={egreso.ubicacion}>{egreso.ubicacion.nombre}</MenuItem>
                 {ubicacions.map((option, index) => (
                   <MenuItem key={index} value={option}>
                     {option.nombre}
@@ -112,7 +119,7 @@ export default function EgresoBasic({ data }) {
             </Grid>
             <Grid item xs={1}>
               <Typography align="right">
-                <IconButton size="small" onClick={() => setEditMode(true)}>
+                <IconButton size="small" onClick={() => handleEdit()}>
                   <EditIcon />
                 </IconButton>
                 <IconButton size="small" onClick={() => setConfirm(true)}>

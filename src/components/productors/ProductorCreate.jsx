@@ -3,10 +3,11 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, Grid, Te
 import useStyles from "../hooks/useStyles"
 import { useSnackbar } from 'notistack'
 import {ProductorContext} from './ProductorContext'
+import {generadorDeClaves} from '../Tools'
 const initProductor = {
   nombre: '',
   sexo: "H",
-  clave: '',
+  clave: generadorDeClaves(5),
   rfc: '',
   direccion: '',
   tel1: '',
@@ -107,7 +108,6 @@ export default function ProductorCreate({ open, close }) {
           		</Grid>
           		<Grid item xs={12} md={12}>
           			<TextField
-          				required
           				fullWidth
           				id="direccion"
           				label="Dirección"
@@ -118,7 +118,6 @@ export default function ProductorCreate({ open, close }) {
           		</Grid>
           		<Grid item xs={12} md={6}>
           			<TextField
-          				required
           				fullWidth
           				id="tel1"
           				label="Teléfono"
@@ -130,7 +129,6 @@ export default function ProductorCreate({ open, close }) {
           		</Grid>
           		<Grid item xs={12} md={6}>
           			<TextField
-          				required
           				fullWidth
           				id="email"
           				label="email"
@@ -142,7 +140,6 @@ export default function ProductorCreate({ open, close }) {
           		</Grid>
           		<Grid item xs={12} md={6}>
           			<TextField
-          				required
           				fullWidth
           				id="banco1"
           				label="Banco"
@@ -153,7 +150,6 @@ export default function ProductorCreate({ open, close }) {
           		</Grid>
           		<Grid item xs={12} md={6}>
           			<TextField
-          				required
           				fullWidth
           				id="cta1"
           				label="Cuenta Bancaria"

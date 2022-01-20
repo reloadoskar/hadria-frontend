@@ -12,6 +12,17 @@ export const objectIsNull = (obj) => {
     return isNull
 }
 
+export const generadorDeClaves = (longitud)=>{	
+	var resultado           = '';
+	var caracteres       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	var longitudCaracteres = caracteres.length;
+	for ( var i = 0; i < longitud; i++ ) {
+		resultado += caracteres.charAt(Math.floor(Math.random() * 
+	longitudCaracteres));
+	}
+	return resultado;
+}
+
 export const capitalize = (s) => {
     if (typeof s !== 'string') return ''
     return s.charAt(0).toUpperCase() + s.slice(1)

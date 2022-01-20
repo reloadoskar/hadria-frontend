@@ -36,7 +36,7 @@ export default function Dashboard({ubicacions}) {
     const [fecha, setFecha] = useState(null)
     const now = moment()
     useEffect(()=>{
-        egresos.loadEgresos(fecha)
+        egresos.loadEgresos(moment().format("YYYY-MM-DD"))
         egresos.loadCuentas()
     },[])
     useEffect(() => {

@@ -14,6 +14,7 @@ import VentaItem from '../ventas/VentaItem'
 import useStyles from '../hooks/useStyles'
 import { useReactToPrint } from 'react-to-print';
 import { useSnackbar } from 'notistack';
+import IngresosList from '../ingresos/IngresosList';
 export default function Corte(props) {
   const { user, open, close, corte, fecha, onChangeFecha, guardar, reabrir } = props
   const classes = useStyles()
@@ -285,15 +286,9 @@ export default function Corte(props) {
               }
 
               {elcorte.ingresos.length === 0 ? null :
-                <Grid item xs={12} className={classes.paperContorno}>
-                  <Typography variant="h6" align="center">INGRESOS</Typography>
-                  {elcorte.ingresos.map((ingreso, i) => (
-                    <IngresoBasic ingreso={ingreso} key={i} />
-                  ))}
-                  <Divider />
-                  <Typography className={classes.textoMirame} align="right">${formatNumber(elcorte.tingresos, 2)}</Typography>
-                </Grid>
+                <IngresosList data={elcorte.ingresos} />
               }
+              
               {elcorte.egresos.length === 0 ? null :
                 <Grid item xs={12} className={classes.paperContorno}>
                   <Typography variant="h6" align="center">EGRESOS</Typography>

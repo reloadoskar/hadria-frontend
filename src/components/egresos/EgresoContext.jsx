@@ -27,10 +27,14 @@ const EgresoContextProvider = (props) => {
 		const res = await getEgresos(fecha)
 		setEgresos(res.egresos)		
 		return res
-	}
+  }
+  
+  const selectEgresos = (egresos) => {
+    setEgresos(egresos)
+  }
 
   return (
-    <EgresoContext.Provider value={{addEgreso, removeEgreso, loadEgresos, setEgresos, egresos}}>
+    <EgresoContext.Provider value={{addEgreso, removeEgreso, loadEgresos, selectEgresos, egresos}}>
       {props.children}
     </EgresoContext.Provider>
   )

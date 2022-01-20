@@ -6,17 +6,8 @@ import { TextField, Grid, Button, Dialog, Slide, DialogContent, DialogTitle, Dia
 //REDUCER
 import reducer from '../reducers/ProvedorsReducer';
 import useStyles from '../hooks/useStyles';
-const generadorDeClaves = (longitud)=>{	
-	var resultado           = '';
-	var caracteres       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-	var longitudCaracteres = caracteres.length;
-	for ( var i = 0; i < longitud; i++ ) {
-		resultado += caracteres.charAt(Math.floor(Math.random() * 
-	longitudCaracteres));
-	}
-	return resultado;
-	
-}
+
+import {generadorDeClaves} from '../Tools'
 const initialState = {
 	nombre: '',
 	sexo: 'H',

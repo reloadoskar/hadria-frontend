@@ -36,7 +36,7 @@ export default function Empleado({ data }) {
         break;
     }
   }
-  const actualizaEmpleado = (empleado) => {
+  const actualizaEmpleado = () => {
     editEmpleado(empleado).then(() => {
       setEditMode(false)
     })
