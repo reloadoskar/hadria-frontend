@@ -14,6 +14,7 @@ const initProductor = {
   cta1: '0123456789',
   diasDeCredito: 7,
   comision: 10,
+  ref: ''
 }
 
 export default function ProductorCreate({ open, close }) {
@@ -72,6 +73,16 @@ export default function ProductorCreate({ open, close }) {
 						<MenuItem value="M">Mujer</MenuItem>
 						<MenuItem value="O">LGBT+</MenuItem>
 					</TextField>
+          		</Grid>
+          		<Grid item xs={12}>
+          			<TextField
+          				id="ref"
+          				label="Referencia"
+          				fullWidth
+          				variant="outlined"
+          				value={productor.ref.substring(0,4)}
+          				onChange={(e) => handleChange('ref',e.target.value)}
+          				/>
           		</Grid>
           		<Grid item xs={12} md={6}>
           			<TextField

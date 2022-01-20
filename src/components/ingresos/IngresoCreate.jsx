@@ -1,8 +1,8 @@
-import React, {useContext, useState, useEffect} from 'react'
+import React, {useContext, useState} from 'react'
 import useStyles from '../hooks/useStyles'
 import { useSnackbar } from 'notistack'
 import {IngresoContext} from '../ingresos/IngresoContext'
-import { Dialog, Button, DialogContent, Grid, TextField, MenuItem, DialogTitle, DialogActions } from '@material-ui/core'
+import { Dialog, Button, DialogContent, Grid, TextField, DialogTitle, DialogActions } from '@material-ui/core'
 const IngresoCreate = ({open, close, ubicacion, fecha}) => {
     const classes = useStyles()
 
@@ -19,6 +19,8 @@ const IngresoCreate = ({open, close, ubicacion, fecha}) => {
 
     const handleChange = (field, value) => {
         switch (field) {
+            case "descripcion":
+                return setIngreso({...ingreso, descripcion: value.toUpperCase()})
             default:
                 return setIngreso({...ingreso, [field]: value})
         }
@@ -51,6 +53,7 @@ const IngresoCreate = ({open, close, ubicacion, fecha}) => {
                                 label="Descripción"
                                 fullWidth
                                 value={ingreso.descripcion}
+                                variant="outlined"
                                 onChange={(e) => handleChange('descripcion', e.target.value)}
                             />
                         </Grid>
@@ -61,6 +64,7 @@ const IngresoCreate = ({open, close, ubicacion, fecha}) => {
                                 type="number"
                                 fullWidth
                                 value={ingreso.importe}
+                                variant="outlined"
                                 onChange={(e) => handleChange('importe', e.target.value)}
                             />
                         </Grid>
