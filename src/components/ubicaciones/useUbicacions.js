@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
-import { getUbicacion, getUbicacions, saveUbicacion, deleteUbicacion, editUbicacion } from '../api'
+import { getUbicacion, getUbicacions, saveUbicacion, deleteUbicacion, updateUbicacion } from '../api'
 const useUbicacions = () => {
 	const [ubicacions, setUbicacions] = useState([])
 	// const [ubicacionsSaldo, setUbicacionsSaldo] = useState([])
@@ -49,7 +49,7 @@ const useUbicacions = () => {
 	}
 
 	function editUbic(ubicacion){
-		return editUbicacion(ubicacion)
+		return updateUbicacion(ubicacion)
 			.then(res=>{
 				return res
 			})
