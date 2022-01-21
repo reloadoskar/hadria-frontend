@@ -3,7 +3,7 @@ import {
     Button,
     Container,
     Grid,
-    Typography, Menu, MenuItem, TextField,
+    Menu, MenuItem, TextField,
 } from '@material-ui/core';
 import { ComprasContext } from './CompraContext'
 import { ProductosContext } from '../productos/ProductosContext'
@@ -26,7 +26,6 @@ import { Meses } from '../tools/Meses'
 function Compras({ubicacions}) {
     const {compras, loadCompras, addCompra, clearCompras } = useContext(ComprasContext)
     
-    // const  Productos = useProducts()
     const {productos, loadProductos, addProducto} = useContext(ProductosContext)
     const {provedors, addProvedor} = useProvedors()
     const {tipoCompras, addTipoCompra} = useTipoCompras();
@@ -45,14 +44,11 @@ function Compras({ubicacions}) {
     const [month, setMonth] = useState(now.getMonth() + 1)
     const [year, setYear] = useState(now.getFullYear())
 
-    
-
     useEffect(()=>{
         loadCompras(month, year)
         loadProductos()
-    },[month, year])
+    },[month, year]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    
     const crear = (compra) => {
         return addCompra(compra).then(res => {
             closeDialog()
@@ -127,7 +123,6 @@ function Compras({ubicacions}) {
     return (
         <Container maxWidth="xl">
             <Grid container spacing={2}>
-                <Grid item xs={12}><Typography variant="h6" align="center">Compras</Typography></Grid>
                 <Grid item xs={12} sm={3}>
                     <TextField
                         id="year"

@@ -38,7 +38,7 @@ export default function Dashboard({ubicacions}) {
     useEffect(()=>{
         egresos.loadEgresos(moment().format("YYYY-MM-DD"))
         egresos.loadCuentas()
-    },[])
+    },[])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         let hoy = moment().format("YYYY-MM-DD")
         setFecha(hoy)
@@ -184,10 +184,11 @@ export default function Dashboard({ubicacions}) {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <ButtonGroup  size="small">
-
                             <Button
                                 onClick={() => showPagar()}
-                            >Pagar</Button>
+                                >
+                                Pagar
+                            </Button>
                             <Pagar 
                                 cuentas={egresos.cuentasxPagar} 
                                 ubicacions={ubicacions}
