@@ -31,8 +31,8 @@ export default function CobroDialog(props) {
     const handleChange = (type, value) => {
         if (type === 'importe') {
             if (value > values.cuenta.saldo) {
-                showMessage("El importe es mayor al saldo de la cuenta.", "warning")
-                setValues({ ...values, importe: '' })
+                // showMessage("El importe es mayor al saldo de la cuenta.", "warning")
+                setValues({ ...values, importe: values.cuenta.saldo })
                 return false
             }
         }
@@ -122,7 +122,7 @@ export default function CobroDialog(props) {
                                                             <Typography>#{cta.venta.folio}</Typography>
                                                         </Grid>
                                                         <Grid item xs={4}>
-                                                            <Typography align="right">${formatNumber(cta.saldo)}</Typography>
+                                                            <Typography align="right">${formatNumber(cta.saldo,2)}</Typography>
                                                         </Grid>
                                                     </Grid>
                                                 </MenuItem>
