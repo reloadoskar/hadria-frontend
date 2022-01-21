@@ -292,7 +292,7 @@ export const getUbicacion = (id) => {
         console.log(err)
     }
 }
-export const editUbicacion = (data) => {
+export const updateUbicacion = (data) => {
     try{
         if(decoded){
             return axios

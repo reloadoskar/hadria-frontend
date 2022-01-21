@@ -4,7 +4,7 @@ import Slide from '@material-ui/core/Slide'
 import Zoom from '@material-ui/core/Zoom'
 import useStyles from '../hooks/useStyles'
 import Pesadas from '../inventario/Pesadas'
-
+import {formatNumber,} from '../Tools'
 export default function CrearVentaItem(props){
     const classes = useStyles()
     const {open, close, elitem, add} = props
@@ -128,7 +128,7 @@ export default function CrearVentaItem(props){
         >
             {item === null ? null :
                 <form onSubmit={handleSubmit}>
-                    <DialogTitle>{item.producto.descripcion} {item.empaquesStock}/{item.stock}</DialogTitle>
+                    <DialogTitle>{item.producto.descripcion} {item.empaquesStock}/{ formatNumber(item.stock,2)}</DialogTitle>
                     {guardando === true ? 
                         <Zoom in={guardando}>
                             <Typography variant="h6" align="center">Agregando al carrito...</Typography>

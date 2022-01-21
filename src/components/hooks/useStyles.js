@@ -40,6 +40,26 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 'bolder',
         color: '#1EAE98'
     },
+    textoMirameFondoAmarillo: {
+        fontWeight: 'bolder',
+        color: '#1EAE98',
+        backgroundColor: '#C77711'
+    },
+    textoSubrayado: {
+        fontWeight: 'bolder',
+        fontSize: '30px',
+        backgroundImage: 'linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '120% 0.4em',
+        backgroundPosition: '0 88%',
+        transition: theme.transitions.create('background-size', {
+            easing: theme.transitions.easing.easeIn,
+            duration: theme.transitions.duration.standard,
+        }),
+        '&:hover': {
+            backgroundSize: '100% 88%'
+        }
+    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),

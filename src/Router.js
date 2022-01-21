@@ -17,7 +17,7 @@ import Ventas from './components/ventas/Ventas';
 import useUbicacions from './components/ubicaciones/useUbicacions'
 import useStyles from './components/hooks/useStyles'
 import { useAuth } from "./components/auth/use_auth.js"
-import Config from './components/config/Config';
+import Empresa from './components/empresa/Empresa';
 import Inversions from './components/inversions/Inversions';
 
 export default function Router(props){
@@ -52,10 +52,7 @@ export default function Router(props){
                                         path={path} 
                                         render={
                                             (props) => ( 
-                                                <Dashboard auth={auth.autenticado}  
-                                                    user={auth.user}
-                                                    ubicacions={useUbic.ubicacions}
-                                                /> 
+                                                <Dashboard ubicacions={useUbic.ubicacions}/> 
                                             )
                                         }
                                     />
@@ -110,11 +107,8 @@ export default function Router(props){
                                     />
                                 </Route>
                                 <Route exact path={`${path}/configuracion`}>
-                                    <Config 
-                                        user={auth.user}
-                                    />
-                                </Route>
-                                 
+                                    <Empresa />
+                                </Route>                                 
                             </Switch>
                         </main>
                 </React.Fragment>

@@ -1,5 +1,5 @@
 import React, {createContext, useState} from 'react'
-import { getEmpresa, saveEmpresa, updateEmpresa } from '../api'
+import { getEmpresa, updateEmpresa } from '../api'
 export const EmpresaContext = createContext()
 
 const EmpresaContextProvider = (props) => {
