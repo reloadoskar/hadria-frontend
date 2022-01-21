@@ -30,7 +30,7 @@ export default function CobroDialog(props) {
 
     const handleChange = (type, value) => {
         if (type === 'importe') {
-            if (value > values.cuenta.saldo) {
+            if (value > values.cuenta.saldo + 1) {
                 // showMessage("El importe es mayor al saldo de la cuenta.", "warning")
                 setValues({ ...values, importe: values.cuenta.saldo })
                 return false
