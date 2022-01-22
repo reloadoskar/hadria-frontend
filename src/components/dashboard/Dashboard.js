@@ -37,7 +37,7 @@ import useStyles from '../hooks/useStyles'
 export default function Dashboard({ubicacions}) {
     const auth = useAuth()
     const {empresa, loadEmpresa} = useContext(EmpresaContext)
-    const [verPlanStatus, setVerPlanStatus] = useState(true)
+    const [verPlanStatus, setVerPlanStatus] = useState(false)
     const [bodyPlanStatus, setBody] = useState(null)
 
     const classes = useStyles()
@@ -66,22 +66,27 @@ export default function Dashboard({ubicacions}) {
             if(dias>1){ descuento = 10}
             if(dias>5){ descuento = 30}
             if(dias>8){ descuento = 40}
-            setBody(
-                <React.Fragment>
-                    <Typography align="center">Tu Plan vence:</Typography>
-                    <Typography variant="h6" align="center">{vence}</Typography>
-                    <Typography align="center">Renueva ahora y obten hasta un {descuento} % de descuento</Typography>
-                    <NavLink exact to="app/configuracion" 
-                        className={classes.link} 
-                        >
-                        <Typography align="center">ver planes</Typography>
-                    </NavLink>
-                    <Typography align="center">
-                        <Button className={classes.botonGenerico} onClick={()=>setVerPlanStatus(false)}>entendido</Button>
-                    </Typography>
-
-                </React.Fragment>
-            )
+            if(dias>31){
+                setBody(null)
+            }else{
+                setVerPlanStatus(true)
+                setBody(
+                    <React.Fragment>
+                        <Typography align="center">Tu Plan vence:</Typography>
+                        <Typography variant="h6" align="center">{vence}</Typography>
+                        <Typography align="center">Renueva ahora y obten hasta un {descuento} % de descuento</Typography>
+                        <NavLink exact to="app/configuracion" 
+                            className={classes.link} 
+                            >
+                            <Typography align="center">ver planes</Typography>
+                        </NavLink>
+                        <Typography align="center">
+                            <Button className={classes.botonGenerico} onClick={()=>setVerPlanStatus(false)}>entendido</Button>
+                        </Typography>
+    
+                    </React.Fragment>
+                )
+            }
         }
     },[empresa])
     const { enqueueSnackbar } = useSnackbar()
