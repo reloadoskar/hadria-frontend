@@ -45,9 +45,6 @@ export default function Empresa(){
         })
     }
 
-    const handleEdit = () => {
-        setEditMode(true)
-    }
     return !empresa ? null : !editMode ? 
         <React.Fragment>
             <Grid container spacing ={2}>

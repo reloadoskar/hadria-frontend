@@ -420,6 +420,15 @@ const useStyles = makeStyles(theme => ({
         width: '100%',      
     },
 
+    paperAlerta: {
+        position: 'absolute',
+        width: 400,
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+
     borderInferior: {
         border: 1,
         borderRadius: 3,
@@ -429,7 +438,7 @@ const useStyles = makeStyles(theme => ({
     rootPagination: {
         flexShrink: 0,
         marginLeft: theme.spacing(2.5),
-      },
+    },
 
 }));
 

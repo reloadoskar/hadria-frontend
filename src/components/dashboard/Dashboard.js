@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 // UI
 import { Grid, 
     Typography, 
@@ -8,6 +8,7 @@ import { Grid,
     Tabs,
     Tab,
 } from '@material-ui/core'
+import { NavLink } from 'react-router-dom';
 // componentes
 import CuentasxCobrar from '../cxc/CuentasxCobrar'
 import Pagar from './Pagar'
@@ -18,6 +19,7 @@ import Corte from '../cortes/Corte'
 import Cobrar from './Cobrar'
 import CrearEgreso from '../egresos/CrearEgreso'
 import GraficaInventario from '../inventario/GraficaInventario'
+import PlanStatus from '../avisos/PlanStatus'
 // HOOKS
 import {useAuth} from '../auth/use_auth'
 import useCortes from '../cortes/useCortes'
@@ -25,11 +27,21 @@ import useIngresos from '../ingresos/useIngresos'
 import useEgresos from '../egresos/useEgresos'
 import { useSnackbar } from 'notistack';
 
+// CONTEXTOS
+import {EmpresaContext} from '../empresa/EmpresaContext'
+
 import moment from 'moment'
 import ComprasMesProductor from '../compras/ComprasMesProductor'
+import useStyles from '../hooks/useStyles'
 
 export default function Dashboard({ubicacions}) {
     const auth = useAuth()
+    const {empresa, loadEmpresa} = useContext(EmpresaContext)
+    const [verPlanStatus, setVerPlanStatus] = useState(true)
+    const [bodyPlanStatus, setBody] = useState(null)
+
+    const classes = useStyles()
+
     const ingresos = useIngresos()
     const egresos = useEgresos()
     const [corte, setCorte] = useState(null)
@@ -38,12 +50,40 @@ export default function Dashboard({ubicacions}) {
     useEffect(()=>{
         egresos.loadEgresos(moment().format("YYYY-MM-DD"))
         egresos.loadCuentas()
+        loadEmpresa()
     },[])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         let hoy = moment().format("YYYY-MM-DD")
         setFecha(hoy)
         return () => setFecha(null)
     },[])
+
+    useEffect(()=>{
+        if(empresa){
+            let dias = moment(empresa.fechaFinal).diff(moment(), 'days')
+            let vence = moment().to(moment(empresa.fechaFinal))
+            let descuento = 0
+            if(dias>1){ descuento = 10}
+            if(dias>5){ descuento = 30}
+            if(dias>8){ descuento = 40}
+            setBody(
+                <React.Fragment>
+                    <Typography align="center">Tu Plan vence:</Typography>
+                    <Typography variant="h6" align="center">{vence}</Typography>
+                    <Typography align="center">Renueva ahora y obten hasta un {descuento} % de descuento</Typography>
+                    <NavLink exact to="app/configuracion" 
+                        className={classes.link} 
+                        >
+                        <Typography align="center">ver planes</Typography>
+                    </NavLink>
+                    <Typography align="center">
+                        <Button className={classes.botonGenerico} onClick={()=>setVerPlanStatus(false)}>entendido</Button>
+                    </Typography>
+
+                </React.Fragment>
+            )
+        }
+    },[empresa])
     const { enqueueSnackbar } = useSnackbar()
     // const{ubicacions} = useUbicacions()
     const {getCorte, reOpen, guardarCorte} = useCortes()
@@ -265,7 +305,8 @@ export default function Dashboard({ubicacions}) {
                 <Grid item xs={12}>
                     <CuentasxCobrar cuentas={ingresos.cuentasxCobrar} total={ingresos.totalCxc}/>
                 </Grid>
-            </Grid>                
+            </Grid>     
+            <PlanStatus open={verPlanStatus} close={() => setVerPlanStatus(false)} body={bodyPlanStatus} />
         </Container>
     )
 }

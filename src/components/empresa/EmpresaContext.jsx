@@ -7,7 +7,7 @@ const EmpresaContextProvider = (props) => {
 
     const loadEmpresa = async () => {
         const res = await getEmpresa()
-        setEmpresa(res)
+        setEmpresa(res.empresa)
         return res
     }
 
