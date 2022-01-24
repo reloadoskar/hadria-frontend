@@ -26,8 +26,6 @@ export default function CompraBasic(props){
     const [totalGastos, setTotalGastos] = useState(0)
     const [totalPagos, setTotalPagos] = useState(0)
     const [resultado, setResultado] = useState(0)
-    const [tEmpaques, setEmpaques] = useState(0)
-    const [tCantidad, setCantidad] = useState(0)
     const [compraStatus, setStatus] = useState("EN ESPERA")
 
     const [confirm, setConfirm] = useState(false)
@@ -61,8 +59,6 @@ export default function CompraBasic(props){
                 setResultado(re)
                 compraLocal.resultado = re
             }
-            setEmpaques(sumEmpStock(compraLocal.items))
-            setCantidad(sumStock(compraLocal.items))
             if( compraLocal.items.length > 0 && sumEmpStock(compraLocal.items) < 1 && sumStock(compraLocal.items) < 1 ){ setStatus('TERMINADO') } else{ setStatus(compraLocal.status) }
         }
         return () => setTotalVenta(0) 
@@ -75,6 +71,7 @@ export default function CompraBasic(props){
     const onConfirm = () => {
         removeCompra(compra._id).then(res => {
             showMessage(res.message, res.status)
+            setConfirm(false)
         })
     }
 
@@ -113,7 +110,7 @@ export default function CompraBasic(props){
                         </IconButton>
                         <IconButton
                             size="small"
-                            disabled={compraStatus === "CANCELADO" ? true : false}
+                            disabled={compraStatus !== "ACTIVO" ? true : false}
                             onClick={() => setConfirm(true)}
                             >
                             <CancelIcon />
