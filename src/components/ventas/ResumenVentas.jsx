@@ -35,34 +35,35 @@ export default function ResumenVentas({items,ventas}){
                                 <Typography className={classes.textoMirame} align="center" children="Resumen" />
                             </Grid>
                             <Divider />
-                            {losItems.map((item, index)=> (
+                            {losItems.map((itm, index)=> (
                                 <Grid key={index} item xs={12} container alignItems="center">
                                     <Grid item xs={12} sm={3}>
                                         <Typography>
-                                            {item.producto.descripcion}
+                                            {itm.producto.descripcion}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
                                         <Typography className={classes.textoMiniFacheron} align="center">Comprado</Typography>
                                         <Typography align="center">
-                                            {formatNumber(item.cantidad,2)} {item.producto.unidad.abr} | {formatNumber(item.empaques)} {item.producto.empaque.abr}
+                                            {formatNumber(itm.cantidad,2)} {itm.producto.unidad.abr} | {formatNumber(itm.empaques)} {itm.producto.empaque.abr}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={6} sm={2}>
                                         <Typography className={classes.textoMiniFacheron} align="center">En Inventario</Typography>
                                         <Typography align="center">
-                                            {formatNumber(item.stock,2)} {item.producto.unidad.abr} | {formatNumber(item.empaquesStock)} {item.producto.empaque.abr}
+                                            { itm.cantidad - sumCantidad( lasVentas.filter(v => v.producto._id === itm.id) ) < 0 ? "0.."
+                                                : formatNumber( itm.cantidad - sumCantidad( lasVentas.filter(v => v.producto._id === itm.id) ), 2 )} {itm.producto.unidad.abr} | {formatNumber(itm.empaquesStock)} {itm.producto.empaque.abr}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12} sm={2}>
-                                        <Typography className={classes.textoMiniFacheron} align="center">Vendido {formatNumber(( ( (item.stock*100)/item.cantidad ) -100 ) * -1)} %</Typography>
-                                        <LinearProgress variant="determinate" value={( ( (item.stock*100)/item.cantidad ) -100 ) * -1} />
+                                        <Typography className={classes.textoMiniFacheron} align="center">Vendido {formatNumber(( ( (itm.stock*100)/itm.cantidad ) -100 ) * -1)} %</Typography>
+                                        <LinearProgress variant="determinate" value={( ( (itm.stock*100)/itm.cantidad ) -100 ) * -1} />
                                     </Grid>
                                     <Grid item xs={6} sm={1}>
                                         <Typography className={classes.textoMiniFacheron} align="right">Precio promedio</Typography>
                                         <Typography align="right" >$
-                                            {lasVentas.filter(vnta => vnta.producto._id === item.id).length > 0 ?
-                                                formatNumber( sumImporte(lasVentas.filter(vnta => vnta.producto._id === item.id) ) / (item.cantidad - item.stock) ,2) 
+                                            {lasVentas.filter(vnta => vnta.producto._id === itm.id).length > 0 ?
+                                                formatNumber( sumImporte(lasVentas.filter(vnta => vnta.producto._id === itm.id) ) / (itm.cantidad - itm.stock) ,2) 
                                                 :
                                                 0
                                             }
@@ -70,7 +71,7 @@ export default function ResumenVentas({items,ventas}){
                                     </Grid>
                                     <Grid item xs={6} sm={1}>
                                         <Typography className={classes.textoMiniFacheron} align="right">Total Venta</Typography>
-                                        <Typography align="right" >${formatNumber( sumImporte(lasVentas.filter(vnta => vnta.producto._id === item.id), 1))}</Typography>
+                                        <Typography align="right" >${formatNumber( sumImporte(lasVentas.filter(vnta => vnta.producto._id === itm.id), 1))}</Typography>
                                     </Grid>
                                 </Grid>
                             ))}

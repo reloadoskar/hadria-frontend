@@ -28,6 +28,7 @@ export default function CompraBasic(props){
     const [resultado, setResultado] = useState(0)
     const [tEmpaques, setEmpaques] = useState(0)
     const [tCantidad, setCantidad] = useState(0)
+    const [compraStatus, setStatus] = useState("EN ESPERA")
 
     const [confirm, setConfirm] = useState(false)
 
@@ -62,6 +63,7 @@ export default function CompraBasic(props){
             }
             setEmpaques(sumEmpStock(compraLocal.items))
             setCantidad(sumStock(compraLocal.items))
+            if( compraLocal.items.length > 0 && sumEmpStock(compraLocal.items) < 1 && sumStock(compraLocal.items) < 1 ){ setStatus('TERMINADO') } else{ setStatus(compraLocal.status) }
         }
         return () => setTotalVenta(0) 
     },[compraLocal])
@@ -96,6 +98,7 @@ export default function CompraBasic(props){
                         <Badge variant="dot" color="secondary">
                         <IconButton
                             size="small"
+                            disabled={compraStatus === "CANCELADO" ? true : false}
                             onClick={() => handleVerCompra(compra)}
                             >
                             <VisibilityIcon />
@@ -103,12 +106,14 @@ export default function CompraBasic(props){
                         </Badge>
                         <IconButton
                             size="small"
+                            disabled={compraStatus === "CANCELADO" ? true : false}
                             onClick={() => editCompra(compra)}
                             >
                             <EditIcon />
                         </IconButton>
                         <IconButton
                             size="small"
+                            disabled={compraStatus === "CANCELADO" ? true : false}
                             onClick={() => setConfirm(true)}
                             >
                             <CancelIcon />
@@ -121,8 +126,8 @@ export default function CompraBasic(props){
                     <Typography className={classes.textoMirame} >#{compraLocal.folio}</Typography>
                     <Typography 
                         align="center" 
-                        className={ ` ${classes.textoMiniFacheron}  ${tEmpaques < 1 && tCantidad < 1 ? classes.suspended : classes.pro }` }>
-                            {tEmpaques < 1 && tCantidad < 1 ? "TERMINADO" : compraLocal.status}
+                        className={ ` ${classes.textoMiniFacheron}  ${compraStatus === "ACTIVO" ? classes.pro : classes.suspended }` }>
+                            {compraStatus}
                     </Typography>
                     <Typography className={classes.textoMiniFacheron}>{compraLocal.fecha}</Typography>
                 </Grid>
