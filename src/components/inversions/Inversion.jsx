@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { InversionContext } from './InversionContext'
 import { EgresoContext } from "../egresos/EgresoContext"
-import { useSnackbar } from 'notistack'
+// import { useSnackbar } from 'notistack'
 import { Card, Slide, CardContent, Dialog, Grid, Typography, Button, DialogContent, Box, Menu, MenuItem, Container } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import useStyles from '../hooks/useStyles';
@@ -15,10 +15,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Inversion({ data, open, close }) {
-  const { removeInversion, selectInversion } = useContext(InversionContext)
+  const { 
+    // removeInversion, 
+    selectInversion 
+  } = useContext(InversionContext)
   const { egresos, setEgresos } = useContext(EgresoContext)
-  const { enqueueSnackbar } = useSnackbar()
-  const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+  // const { enqueueSnackbar } = useSnackbar()
+  // const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null);
   const openMenu = Boolean(anchorEl)
@@ -29,7 +32,7 @@ export default function Inversion({ data, open, close }) {
   const [resultado, setResultado] = useState(0)
 
   const [verAddCapital, setVerAdd] = useState(false)
-  const [verMas, setVerMas] = useState(false)
+  // const [verMas, setVerMas] = useState(false)
 
   useEffect(() => {
     if (data) {
@@ -37,7 +40,7 @@ export default function Inversion({ data, open, close }) {
       setEgresos(data.gastos)
     }
     return () => limpiarComponente(null)
-  }, [data])
+  }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
   
   useEffect(() => {
     if(egresos){
@@ -49,7 +52,7 @@ export default function Inversion({ data, open, close }) {
     return () => {
       
     }
-  }, [egresos])
+  }, [egresos]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if(!open){
@@ -58,7 +61,7 @@ export default function Inversion({ data, open, close }) {
     return () => {
       limpiarComponente()
     }
-  }, [open])
+  }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const limpiarComponente = () => {
     setInversion(null)
@@ -67,14 +70,14 @@ export default function Inversion({ data, open, close }) {
     setTotalInv(0)
   }
 
-  const cancelarInversion = (id) => {
-    removeInversion(id).then(res => {
-      showMessage(res.message, res.status)
-    })
-  }
-  const handleClick = () => {
-    setVerMas(!verMas)
-  }
+  // const cancelarInversion = (id) => {
+  //   removeInversion(id).then(res => {
+  //     showMessage(res.message, res.status)
+  //   })
+  // }
+  // const handleClick = () => {
+  //   setVerMas(!verMas)
+  // }
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget)
   }

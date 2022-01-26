@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { getProducts, saveProduct, deleteProduct, updateProduct} from '../api'
 const useProducts = () => {
 	const [products, setProducts] = useState([])
-	const [updating, setUpdating] = useState(false)
 
 	async function loadProducts() {
 		const res = await getProducts()
@@ -18,10 +17,8 @@ const useProducts = () => {
 	}
 
 	function del(productoId) {
-		setUpdating(true)
 		return deleteProduct(productoId).then(res => {
 			if(res.status === 'success'){
-				setUpdating(false)
 				return res
 			}
 		})

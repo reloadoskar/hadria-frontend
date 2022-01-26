@@ -1,12 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { InversionContext } from './InversionContext'
 import { useSnackbar } from 'notistack'
-import { Card, CardContent, Dialog, Grid, Typography, Badge, IconButton, Button, Collapse, DialogContent, TextField, ClickAwayListener } from '@material-ui/core';
+import { Card, CardContent, Grid, Typography, Badge, IconButton } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import AddIcon from '@material-ui/icons/Add';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import useStyles from '../hooks/useStyles';
-import EgresoBasic from '../egresos/EgresoBasic'
 import { formatNumber, sumImporte } from '../Tools';
 
 export default function InversionBasic({ data, verInversion }) {
@@ -20,8 +18,8 @@ export default function InversionBasic({ data, verInversion }) {
   const [totalVenta, setTotalVenta] = useState(0)
   const [resultado, setResultado] = useState(0)
   
-  const [verAddCapital, setVerAdd] = useState(false)
-  const [verMas, setVerMas] = useState(false)
+  // const [verAddCapital, setVerAdd] = useState(false)
+  // const [verMas, setVerMas] = useState(false)
 
   useEffect(() => {
     if(data){
@@ -32,7 +30,7 @@ export default function InversionBasic({ data, verInversion }) {
       setResultado(re)
     }
     return () => limpiarComponente(null)
-  }, [data])
+  }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const limpiarComponente = () => {
     setInversion(null)

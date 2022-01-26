@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useContext, useState } from 'react'
 
-import { Card, Input, CardContent, Grid, Typography, IconButton, Divider, Paper, Button, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
+import { Card, Input, CardContent, Grid, Typography, IconButton, Paper, Button, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 import { EmpresaContext } from './EmpresaContext'
 
@@ -23,7 +23,7 @@ export default function Empresa(){
     const [editMode, setEditMode] = useState(false)
     const classes = useStyles()
     
-    const [pagarAhora, setPagar] = useState(false)
+    // const [pagarAhora, setPagar] = useState(false)
 
     useEffect(()=>{
         loadEmpresa().then(res=>{
@@ -119,7 +119,7 @@ export default function Empresa(){
                             <Button 
                                 className={classes.botonCosmico}
                                 fullWidth
-                                onClick={()=>setPagar(true)}
+                                // onClick={()=>setPagar(true)}
                                 >
                                 Pagar ahora
                             </Button>

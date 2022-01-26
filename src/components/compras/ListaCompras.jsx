@@ -42,13 +42,13 @@ export default function ListaCompras({ compras, editCompra, verCompra }) {
         return () => isLoaded = false
     }, [lasCompras])
 
-    const clearComponent = () => {
-        setCosto(0)
-        setVentas(0)
-        setPagos(0)
-        setGastos(0)
-        setResultado(0)
-    }
+    // const clearComponent = () => {
+    //     setCosto(0)
+    //     setVentas(0)
+    //     setPagos(0)
+    //     setGastos(0)
+    //     setResultado(0)
+    // }
     
     return (
         <Grid item container xs={12} spacing={2} >

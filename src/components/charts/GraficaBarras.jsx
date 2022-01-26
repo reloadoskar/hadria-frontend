@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { VictoryBar, VictoryChart,VictoryLabel, VictoryAxis, VictoryTooltip } from 'victory';
+import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
 import {formatNumber} from '../Tools'
 export default function GraficaBarras({losDatos}){
     const [data, setData] = useState(null)

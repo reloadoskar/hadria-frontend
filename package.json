@@ -2,7 +2,7 @@
   "name": "hadria",
   "version": "2.0.0",
   "engines": {
-    "node": "12.x"
+    "node": ">=12.x"
   },
   "private": true,
   "dependencies": {
@@ -11,7 +11,7 @@
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/pickers": "^3.2.9",
-    "axios": "^0.21.1",
+    "axios": ">=0.21.2",
     "bcrypt": "5.0.0",
     "bootstrap": "^4.5.2",
     "jsonwebtoken": "^8.5.1",

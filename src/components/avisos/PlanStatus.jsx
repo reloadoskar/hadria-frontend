@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Modal, Typography } from '@material-ui/core'
+import { Modal } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
 function rand() {
     return Math.round(Math.random() * 20) - 10;

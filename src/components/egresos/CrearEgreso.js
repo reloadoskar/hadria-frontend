@@ -25,7 +25,7 @@ export default function CrearEgreso(props) {
     const [guardando, setGuardando] = useState(false)
     useEffect(() => {
         Compra.getCompActivas()
-    },[])
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     const resetFields = () => {
         setEgreso(init)
     }

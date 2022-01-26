@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { formatNumber } from '../Tools';
 
-const easeOutQuad = t => t * ( 2 - t );
-function easeInSine(x){
-    return 1 - Math.cos((x * Math.PI) / 2);
-}
+// const easeOutQuad = t => t * ( 2 - t );
+// function easeInSine(x){
+//     return 1 - Math.cos((x * Math.PI) / 2);
+// }
 function easeOutSine(x){
 	return Math.sin((x * Math.PI) / 2);
   }
@@ -25,7 +25,7 @@ export default function CountUpAnimation ( {num , temp=2000} ) {
 				clearInterval( counter );
 			}
 		}, frameDuration );
-	}, [num] );
+	}, [num] ) // eslint-disable-line react-hooks/exhaustive-deps
 
 	return formatNumber(count,1)
 };

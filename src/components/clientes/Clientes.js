@@ -2,14 +2,12 @@ import React, {useState, useContext, useEffect} from 'react'
 import { Button, Container, Grid, TextField} from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
 import CrearCliente from './CrearCliente'
-import { useSnackbar } from 'notistack'
 import Cliente from './Cliente'
 import {ClienteContext} from './ClienteContext'
 export default function Clientes(){
     const {clientes, loadClientes, findCliente, loadCuentasxCliente, cuentasxCliente} = useContext(ClienteContext)
     const classes = useStyles()
     const [resultadoBusqueda, setResultado] = useState([])
-    const { enqueueSnackbar } = useSnackbar()
     const [dialogOpen, setDialogOpen] = useState(false)
     const [searchField, setSearchField] = useState('')
 

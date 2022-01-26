@@ -30,7 +30,7 @@ export default function Pos(props){
     
     useEffect(() => {
         Egresos.loadCuentas()
-    },[])
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         if(user.ubicacion ){
             setUbicacion(user.ubicacion)

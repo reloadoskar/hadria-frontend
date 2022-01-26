@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Container, Grid, Typography } from '@material-ui/core';
+import { Button, Container, Grid } from '@material-ui/core';
 import {ProductorContext} from './ProductorContext'
 import ProductorBasic from './ProductorBasic';
 import useStyles from '../hooks/useStyles';

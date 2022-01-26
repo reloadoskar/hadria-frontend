@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { Grid, TextField, Dialog, DialogContent, MenuItem, DialogActions, Button, DialogTitle, Typography } from '@material-ui/core';
-import useUbicacions from "../ubicaciones/useUbicacions"
 import useStyles from "../hooks/useStyles"
 import { EgresoContext } from "../egresos/EgresoContext"
 import moment from 'moment'

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Grid, Typography, Badge, IconButton, Avatar, TextField, MenuItem } from '@material-ui/core';
+import { Grid, Typography, IconButton, TextField, MenuItem } from '@material-ui/core';
 import avatarh from '../../img/avatarH2.png'
 import avatarm from '../../img/avatarM3.png'
 import avataro from '../../img/avatarM1.png'
@@ -7,7 +7,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import EmailIcon from '@material-ui/icons/Email';
 import HomeIcon from '@material-ui/icons/Home';

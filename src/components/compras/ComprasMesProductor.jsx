@@ -2,9 +2,9 @@ import React, {useState, useEffect, useContext} from 'react'
 import { Card, CardContent, CardHeader, Grid, MenuItem, TextField, Typography } from '@material-ui/core'
 import GraficaBarras from '../charts/GraficaBarras'
 import useStyles from '../hooks/useStyles'
-import { sumImporte, formatNumber, reduceNumber, sumSaldo } from '../Tools'
+import { sumImporte, reduceNumber, sumSaldo } from '../Tools'
 import {ProductorContext} from '../productors/ProductorContext'
-import CountUpAnimation from '../tools/CountUpAnimation'
+// import CountUpAnimation from '../tools/CountUpAnimation'
 import {Meses} from '../tools/Meses'
 export default function ComprasMesProductor(){
     const {loadComprasMesProductor, comprasMesProductor} = useContext(ProductorContext)
@@ -14,7 +14,7 @@ export default function ComprasMesProductor(){
     const [year, setYear] = useState(now.getFullYear())
     useEffect(()=>{
         loadComprasMesProductor(year, month)
-    },[year, month])
+    },[year, month]) // eslint-disable-line react-hooks/exhaustive-deps
     return comprasMesProductor === [] ? null :
         <Card>
             <CardHeader title="Compras del mes" />
@@ -39,7 +39,7 @@ export default function ComprasMesProductor(){
                             onChange={(e)=>setMonth(e.target.value)}
                         >
                             {Meses.map((mes, i) => (
-                                <MenuItem value={i} id={i}>{mes}</MenuItem>
+                                <MenuItem value={i} id={i} key={i}>{mes}</MenuItem>
                             ))}
                         </TextField>
                         

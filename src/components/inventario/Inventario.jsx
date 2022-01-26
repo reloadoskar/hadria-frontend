@@ -20,7 +20,7 @@ export default function Inventario({ubicacions}){
     useEffect(() => {
         inventario.getInventarioGeneral()
         inventario.getInventarioXUbic()
-    },[])
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     // function toggleVerFolios(){
     //     setVerFolios(!verFolios)
     // }

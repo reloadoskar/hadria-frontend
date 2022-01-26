@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent } from '@material-ui/core'
-import { VictoryPie, VictoryChart} from 'victory';
+import { VictoryPie} from 'victory';
 export default function ReportexPrecio({data}){
     const [barData, setBardata] = useState(false)
     useEffect(()=>{

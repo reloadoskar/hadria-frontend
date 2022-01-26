@@ -1,5 +1,14 @@
 import React, {createContext, useState} from 'react'
-import { getIngresos, getIngresosxMes, saveIngreso, delIngreso, getCuentasPorCobrar, getCxcPdv, getCxcCliente, savePagoACuentaPorCobrar, saveVenta } from '../api'
+import { getIngresos, 
+    getIngresosxMes,
+    saveIngreso, 
+    delIngreso, 
+    // getCuentasPorCobrar, 
+    // getCxcPdv, 
+    // getCxcCliente, 
+    // savePagoACuentaPorCobrar, 
+    // saveVenta 
+} from '../api'
 export const IngresoContext = createContext()
 const IngresoContextProvider = (props) => {
     const [ingresos, setIngresos] = useState([])

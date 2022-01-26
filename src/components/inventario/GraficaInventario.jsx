@@ -1,20 +1,18 @@
 import React, {useEffect, useState} from 'react'
 import { Grid, CircularProgress, Card, CardContent, Typography } from '@material-ui/core'
-import { VictoryBar, VictoryChart,VictoryLabel, VictoryAxis, VictoryTooltip } from 'victory';
+import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
 import {sumStock, sumEmpStock, formatNumber} from "../Tools"
 import useInventario from './useInventario'
-import useStyles from '../hooks/useStyles';
-export default function GraficaInventario({data}){
+export default function GraficaInventario(){
     const Inventario = useInventario()
     const [inventario, setInventario] = useState(false)
     const [barData, setBarData] = useState(null)
-    const classes = useStyles()
     
     useEffect(() => {
         Inventario.getInventarioXUbic().then(res=>{
             setInventario(res.inventario)
         })
-    },[])
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     
     useEffect(()=>{
         if(inventario){
@@ -28,7 +26,7 @@ export default function GraficaInventario({data}){
             })
             setBarData(dataf)
         }
-    },[inventario])
+    },[inventario]) // eslint-disable-line react-hooks/exhaustive-deps
     return (
         <Card>
             <CardContent>

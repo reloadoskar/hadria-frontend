@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Dialog, DialogContent, Grid, Typography, CircularProgress, Divider, Paper, TextField, Box, IconButton, Container, DialogActions, Button } from '@material-ui/core'
+import { Dialog, DialogContent, Grid, Typography, CircularProgress, Divider, Paper, TextField, Box, IconButton } from '@material-ui/core'
 import { useMediaQuery } from '@material-ui/core';
 import { useReactToPrint } from 'react-to-print';
 import { formatNumber, sumImporte, agrupaItems, sumCantidad, sumEmpaques } from '../Tools'
@@ -25,7 +25,7 @@ export default function Liquidacion({ open, close, items, ventas, compra }) {
   const [laCompra, setLaCompra] = useState(null)
 
   const [losItems, setLosItems] = useState(null)
-  const [lasVentas, setLasVentas] = useState(null)
+  // const [lasVentas, setLasVentas] = useState(null)
   const [losGastos, setLosGastos] = useState([])
   const [losPagos, setLosPagos] = useState([])
 
@@ -51,7 +51,7 @@ export default function Liquidacion({ open, close, items, ventas, compra }) {
     return () => {
       setEmpresa(null)
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (compra) {
@@ -68,7 +68,7 @@ export default function Liquidacion({ open, close, items, ventas, compra }) {
         item.precio = item.importe / (item.cantidad - item.stock)
       });
       setLosItems(grupo)
-      setLasVentas(laCompra.ventaItems)
+      // setLasVentas(laCompra.ventaItems)
       setTventas(sumImporte(laCompra.ventaItems))
       setLosPagos(laCompra.pagos)
       setLosGastos(laCompra.gastos)
@@ -143,7 +143,7 @@ export default function Liquidacion({ open, close, items, ventas, compra }) {
     setLosItems(null)
     setLosGastos(null)
     setLosPagos(null)
-    setLasVentas(null)
+    // setLasVentas(null)
     setSaldo(0)
   }
   const removeGasto = (gastoIndex) => {

@@ -22,7 +22,7 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
     const [guardando, setGuardando] = useState(false)
     useEffect(() => {
         Compra.getCompActivas()
-    },[])
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     function hasNull(target) {
         for (var member in target) {
             if (target[member] === null || target[member] === '')

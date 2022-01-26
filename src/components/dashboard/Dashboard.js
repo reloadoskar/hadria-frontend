@@ -88,7 +88,7 @@ export default function Dashboard({ubicacions}) {
                 )
             }
         }
-    },[empresa])
+    },[empresa]) // eslint-disable-line react-hooks/exhaustive-deps
     const { enqueueSnackbar } = useSnackbar()
     // const{ubicacions} = useUbicacions()
     const {getCorte, reOpen, guardarCorte} = useCortes()

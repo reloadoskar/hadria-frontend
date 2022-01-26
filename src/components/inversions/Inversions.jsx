@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Button, Container, Grid, Typography, Menu, MenuItem } from '@material-ui/core'
 import { InversionContext } from './InversionContext'
-import { useSnackbar } from 'notistack'
 import useStyles from '../hooks/useStyles'
 import InversionCreate from './InversionCreate'
 import Inversion from './Inversion'
@@ -12,8 +11,6 @@ export default function Inversions(props) {
   let now = new Date()
   const [anchorEl, setAnchorEl] = useState(null)
   const { inversions, inversion, loadInversions, addInversion, setInversions } = useContext(InversionContext)
-  const { enqueueSnackbar } = useSnackbar()
-  const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
   const classes = useStyles()
 
   const [month, setMonth] = useState(now.getMonth() + 1)
