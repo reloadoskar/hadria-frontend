@@ -924,6 +924,21 @@ export const deleteEgreso = (id) => {
     }
 }
 
+export const updateEgreso = (egreso) => {
+    try{
+        if(decoded){
+            return axios
+                .put(url + decoded.database + '/egreso/update/', egreso)
+                .then( res => {
+                    return res.data
+                })
+
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
 // API CORTES
 
 export const getDataFrom = (ubicacion, fecha) => {
