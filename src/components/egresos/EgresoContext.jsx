@@ -4,7 +4,9 @@ import {
   saveEgreso, 
   // getCuentasPorPagar, 
   // savePagoACuentaPorPagar, 
-  deleteEgreso} from '../api'
+  deleteEgreso,
+  updateEgreso
+} from '../api'
 
 export const EgresoContext = createContext()
 
@@ -33,8 +35,20 @@ const EgresoContextProvider = (props) => {
     setEgresos(egresos)
   }
 
+  const editEgreso = async (egreso) => {
+    let res = await updateEgreso(egreso)
+    return res
+  }
+
   return (
-    <EgresoContext.Provider value={{addEgreso, removeEgreso, loadEgresos, selectEgresos, egresos}}>
+    <EgresoContext.Provider value={{
+      egresos,
+      addEgreso, 
+      removeEgreso, 
+      loadEgresos, 
+      selectEgresos,
+      editEgreso
+      }}>
       {props.children}
     </EgresoContext.Provider>
   )

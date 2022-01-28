@@ -9,9 +9,14 @@ import useStyles from '../hooks/useStyles'
 import { EgresoContext } from "../egresos/EgresoContext"
 import { UbicacionContext } from '../ubicaciones/UbicacionContext';
 import Confirm from '../dialogs/Confirm';
+import { useSnackbar } from 'notistack';
 export default function EgresoBasic({ data }) {
-  const { removeEgreso } = useContext(EgresoContext)
+  const { removeEgreso, editEgreso } = useContext(EgresoContext)
   const {ubicacions, loadUbicacions} = useContext(UbicacionContext)
+
+  const { enqueueSnackbar } = useSnackbar()
+  const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
+
   const [egreso, setEgreso] = useState(null)
   const [confirm, setConfirm] = useState(false)
   const [editMode, setEditMode] = useState(false)
@@ -26,8 +31,10 @@ export default function EgresoBasic({ data }) {
   }, [data])
 
   const onConfirm = () => {
-    removeEgreso(egreso._id)
-    setEgreso(null)
+    removeEgreso(egreso._id).then(res=>{
+      showMessage(res.message, res.status)
+      setEgreso(null)
+    })
   }
 
   const handleEdit = () => {
@@ -37,6 +44,13 @@ export default function EgresoBasic({ data }) {
 
   const handleChange = (field, value) => {
     setEgreso({ ...egreso, [field]: value })
+  }
+
+  const updateEgreso = () => {
+    editEgreso(egreso).then(res=>{
+      showMessage(res.message, res.status)
+      setEditMode(false)
+    })
   }
   return (
     <div>
@@ -95,7 +109,7 @@ export default function EgresoBasic({ data }) {
             </Grid>
             <Grid item xs={12} sm={1}>
               <Typography align="right">
-                <IconButton size="small" onClick={() => setEditMode(true)}>
+                <IconButton size="small" onClick={() => updateEgreso()}>
                   <CheckIcon />
                 </IconButton>
                 <IconButton size="small" onClick={() => setEditMode(false)}>
