@@ -68,7 +68,7 @@ const Register = (props) => {
                         <CardHeader title="Registro:"></CardHeader>
                         <form onSubmit={handleSubmit}>
                         <CardContent>
-                            <Grid container spacing={2} direction="row" justify="center" alignItems="center">
+                            <Grid container spacing={2} direction="row" justifyContent="center" alignItems="center">
                                 <Grid item xs={12}>
                                     <TextField
                                         id="nombre"
@@ -143,7 +143,7 @@ const Register = (props) => {
                             </Grid>
                         </CardContent>
                         <CardActions>
-                            <Grid container justify="flex-end"  >
+                            <Grid container justifyContent="flex-end"  >
                                 <Button 
                                     variant="contained" 
                                     color="secondary" 

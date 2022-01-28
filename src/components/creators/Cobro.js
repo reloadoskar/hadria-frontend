@@ -122,7 +122,7 @@ export default function Cobro({ cuentas, ubicacions, open, close, showMessage, s
                                                         <Typography>{cliente.nombre}</Typography>
                                                     </Grid>
                                                     <Grid item xs={6}>
-                                                        <Grid container justify="flex-end">
+                                                        <Grid container justifyContent="flex-end">
                                                             <Typography>${formatNumber(sumSaldo(cliente.cuentas))}</Typography>
                                                         </Grid>
                                                     </Grid>

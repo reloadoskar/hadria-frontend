@@ -25,7 +25,7 @@ export default function Produccions() {
     return (
         <Paper>
             <Container maxWidth="lg">
-                <Grid container justify="flex-end">
+                <Grid container justifyContent=''="flex-end">
                     <Button variant="contained" color="secondary" onClick={createProduccion}>
                         + Crear Producción
       		        </Button>

@@ -61,7 +61,7 @@ const Unidades = () => {
                         </Grid>
                     </CardContent>
                     <CardActions>
-                        <Grid container justify="flex-end">
+                        <Grid container justifyContent="flex-end">
                             <Grid item>
                                 <Button className={classes.botonGenerico} onClick={() => addUnidad(values)} disabled={ values.unidad === '' || values.abr === '' ? true : false}>Agregar</Button>
                             </Grid>

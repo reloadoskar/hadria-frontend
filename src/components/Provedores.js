@@ -26,7 +26,7 @@ function Provedors() {
     return (
         <Paper>
             <Container maxWidth="lg">
-                <Grid container justify="flex-end">
+                <Grid container justifyContent="flex-end">
                     <ProvedorsDialog addProvedor={add} isShowing={isShowing} toggle={toggle} />
                 </Grid>
 

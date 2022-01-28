@@ -35,7 +35,7 @@ export default function GraficaBarras({losDatos}){
                 name="ComprasMes"
                 data={data}
                 labels={({ datum }) => `${formatNumber(datum.importe)} `}
-                x="provedor.nombre"
+                x="provedor.clave"
                 y="importe"
                 style={{
                     data: {fill: "#ffd369", fillOpacity: 0.8},

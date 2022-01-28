@@ -87,7 +87,7 @@ export default function ConfirmaDialog(props) {
                         </Grid>
                 </Grid>
                 <Divider />
-                <Grid container justify="flex-end">
+                <Grid container justifyContent="flex-end">
                     <Typography align="right" variant="h6">$ {formatNumber(data.total,2)}</Typography>
                 </Grid>
                 <Grid container >

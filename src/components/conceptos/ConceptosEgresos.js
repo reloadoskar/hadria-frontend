@@ -49,7 +49,7 @@ const ConceptosEgresos = () => {
                         </Grid>
                     </CardContent>
                     <CardActions>
-                        <Grid container justify="flex-end">
+                        <Grid container justifyContent="flex-end">
                             <Grid item>
                                 <Button className={classes.botonGenerico} onClick={() => addConcepto(concepto)} disabled={concepto === '' ? true : false}>Agregar</Button>
                             </Grid>

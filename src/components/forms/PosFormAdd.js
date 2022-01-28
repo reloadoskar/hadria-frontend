@@ -97,7 +97,7 @@ export default function PosFormAdd({ item, closeDialog, add, compraId }) {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                        <Grid container  justify="flex-end">
+                        <Grid container  justifyContent="flex-end">
                             <Button onClick={() => closeDialog('addDialog')} type="button" color="secondary" size="large" >Cancelar</Button>
                             <Button type="submit" variant="contained" color="primary" size="large" >Agregar</Button>
                         </Grid>

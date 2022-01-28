@@ -11,7 +11,7 @@ export function ListaPesadas({open, close, pesadas, handleDelete}){
                 <Fragment>
                     <DialogContent>
                         <Grid container 
-                        justify="flex-start"
+                        justifyContent="flex-start"
                         alignItems="flex-start"                                  
                         spacing={2}>
                             {pesadas.map((itm, i) => (

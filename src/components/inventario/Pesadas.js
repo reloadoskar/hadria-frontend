@@ -70,7 +70,7 @@ export default function Pesadas(props){
                                 {/* <Dialog open={verPesadas} onClose={()=>setVerPesadas(false)} maxWidth="sm" fullWidth className={classes.pesadasList}>
                                     <DialogContent>
                                         <Grid container 
-                                        justify="flex-start"
+                                        justifyContent="flex-start"
                                         alignItems="flex-start"                                  
                                         spacing={2}>
                                             {pesadas.map((itm, i) => (

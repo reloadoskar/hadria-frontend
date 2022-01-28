@@ -71,7 +71,7 @@ export default function Items({inventario, selectItem}){
         <Grid container spacing ={2} className={classes.paperBasico}>
             {
                 resultadoBusqueda.length > 0 ? 
-                    resultadoBusqueda.map((item, i) => (
+                    resultadoBusqueda.filter(item => item.stock > 0.01 ).map((item, i) => (
                         <CompraItem elitem={item} key={i} action={selectItem} />
                     ))
                     :

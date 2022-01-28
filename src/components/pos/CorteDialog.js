@@ -115,7 +115,7 @@ export default function CorteDialog({isOpen, close, corteData, data, showMessage
                             <Typography variant="h6" >{ubicacion._id.nombre} </Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Grid container justify="flex-end">
+                            <Grid container justifyContent="flex-end">
                                 <Typography variant="h6" >{data.fecha}</Typography>
                             </Grid>
                         </Grid>
