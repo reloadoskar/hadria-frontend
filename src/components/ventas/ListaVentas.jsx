@@ -14,7 +14,7 @@ export default function ListaVentas({ventas, items, open, close}){
     const classes = useStyles()
     const [tabSelected, setTab] = useState(1)
 
-    const selectTab = (selected) => {
+    const selectTab = (event, selected) => {
         setTab(selected)
     }
 
@@ -129,14 +129,7 @@ export default function ListaVentas({ventas, items, open, close}){
                                 { productos.map((producto, index) => (
                                     <VentaItemPrecios item={producto} precios={agrupaVentas( lasVentas.filter(vta => vta.producto._id === producto.id ), "precio")} key={index}/>                                    
                                 ))}
-                                {/* <ReportexFecha data={ventasxfecha}/> */}
-                            </Grid>
-                            {/* <Grid item xs={12} >
-                                <ReportexFecha data={ventasxfecha}/>
-                            </Grid>
-                            <Grid item xs={12} >
-                                <ReportexPrecio data={ventasxprecio}/>
-                            </Grid> */}
+                            </Grid>                           
                         </div>
                     </Grid>
                 </Grid>
