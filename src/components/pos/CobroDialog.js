@@ -85,7 +85,7 @@ export default function CobroDialog(props) {
                                     <Typography variant="h6" >Cobranza en:</Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Grid container justify="flex-end">
+                                    <Grid container justifyContent="flex-end">
                                         <Typography variant="h6" >{ubicacion.nombre}</Typography>
                                     </Grid>
                                 </Grid>

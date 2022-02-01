@@ -1,44 +1,55 @@
 import React, { useEffect, useState } from 'react'
-import { Paper, Button, Dialog, DialogActions, DialogContent, Grid, LinearProgress, Table, TableCell, TableHead, TableRow, TableBody, Typography, TableFooter, Tabs, Tab, TableContainer, Divider } from '@material-ui/core'
+import { Paper, Dialog, DialogContent, Grid, LinearProgress, Table, TableCell, TableHead, TableRow, TableBody, Typography, TableFooter, Tabs, Tab, TableContainer, Divider, AppBar, Toolbar } from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import VentaGrouped from '../ventas/VentaGrouped'
-import {agrupaVentas, formatNumber, sumImporte, sumCantidad, sumEmpaques} from '../Tools'
+import {agrupaVentas, agrupaItems, formatNumber, sumImporte, sumCantidad, sumEmpaques} from '../Tools'
 import useStyles from '../hooks/useStyles'
-import ReportexFecha from './ReporteVentasxFecha'
-import ReportexPrecio from './ReportexPrecio'
 import PaginationTable from '../paggination/PaginationTable'
-export default function ListaVentas({ventas, open, close}){
+import VentaItemPrecios from './VentaItemPrecios'
+export default function ListaVentas({ventas, items, open, close}){
     const [lasVentas, setLasVentas] = useState([])  
-    const [ventasxfecha, setVxf] = useState([])
-    const [ventasxprecio, setVxpr] = useState([])
+    const [productos, setProductos] = useState([])
+    
     const classes = useStyles()
     const [tabSelected, setTab] = useState(1)
-    // const [ventasxubicacion, setVxu] = useState([])
-    // const [ventasxproducto, setVxp] = useState([])
 
-    const selectTab = (event, selected) => {
+    const selectTab = (selected) => {
         setTab(selected)
     }
+
     useEffect(()=>{
-        if(ventas){
+        if(ventas && items){
             setLasVentas(ventas)
-            // setVxp(agrupaVentas(ventas, "compraItem"))
-            setVxf(agrupaVentas(ventas, "fecha"))
-            // setVxu(agrupaVentas(ventas, "ubicacion"))
-            setVxpr(agrupaVentas(ventas, "precio"))
+            setProductos( agrupaItems(items, "producto") )
         }
         return ()=> {
             setLasVentas([])
-            // setVxp([])
-            setVxf([])
-            // setVxu([])
-            // setVxpr([])
         }
-    },[ventas])
+    },[ventas, items])
+
     return (
         <Dialog 
             fullScreen
             open={open}
             onClose={()=>close()}>
+            <AppBar position="static" className={classes.comprasBar}>
+                <Toolbar>
+                    <Grid container>
+                        <Grid item xs={10}>
+                            <Typography variant='h6'>Ventas</Typography>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Typography align='right'>
+                                <IconButton color="inherit" onClick={()=>close()}>
+                                    <CloseIcon />
+                                </IconButton>
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Toolbar>
+
+            </AppBar>
             <DialogContent>
             {lasVentas.length > 0 ?
                 <Grid container spacing={3}>
@@ -111,16 +122,21 @@ export default function ListaVentas({ventas, open, close}){
                             }
                         </div>
                         <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
-                            <Grid item xs={12} >
-                                <Typography align="center">texto</Typography>
-                                <ReportexFecha data={ventasxfecha}/>
+                            <Grid container spacing={2} >
+                                <Grid item xs={12}>
+                                    <Typography align="center" variant ="h4">Ventas por Precio</Typography>
+                                </Grid>
+                                { productos.map((producto, index) => (
+                                    <VentaItemPrecios item={producto} precios={agrupaVentas( lasVentas.filter(vta => vta.producto._id === producto.id ), "precio")} key={index}/>                                    
+                                ))}
+                                {/* <ReportexFecha data={ventasxfecha}/> */}
                             </Grid>
                             {/* <Grid item xs={12} >
                                 <ReportexFecha data={ventasxfecha}/>
-                            </Grid> */}
+                            </Grid>
                             <Grid item xs={12} >
                                 <ReportexPrecio data={ventasxprecio}/>
-                            </Grid>
+                            </Grid> */}
                         </div>
                     </Grid>
                 </Grid>
@@ -128,9 +144,6 @@ export default function ListaVentas({ventas, open, close}){
                     <LinearProgress variant="query" />
             }
             </DialogContent>
-            <DialogActions>
-                <Button onClick={()=>close()} className={classes.botonSimplon} color="secondary">salir</Button>
-            </DialogActions>
         </Dialog>
     )
 }

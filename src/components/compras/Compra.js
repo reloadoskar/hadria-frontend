@@ -193,7 +193,7 @@ export default function Compra({open, close, compra, compras}){
                             }
                         </Grid>
                         <Grid item xs={12}>
-                            <ListaVentas ventas={laCompra.ventaItems} open={dialogListaVentas} close={()=>setDialog(false)} />                            
+                            <ListaVentas ventas={laCompra.ventaItems} items={laCompra.items} open={dialogListaVentas} close={()=>setDialog(false)} />                            
                         </Grid>
                         
                     </Grid>

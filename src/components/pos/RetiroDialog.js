@@ -65,7 +65,7 @@ export default function EgresoDialog({ ubicacion, fecha, isOpen, close, showMess
                         <Typography variant="h6" >Retiro de caja:</Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Grid container justify="flex-end">
+                        <Grid container justifyContent="flex-end">
                             <Typography variant="h6" >{ubicacion.nombre}</Typography>
                         </Grid>
                     </Grid>

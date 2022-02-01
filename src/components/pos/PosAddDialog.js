@@ -31,7 +31,7 @@ export default function PosAddDialog({ closeDialog, add, itemToAdd, isOpen, comp
                             <Typography variant="h6" >{itemToAdd.item.producto.descripcion}</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Grid container justify="flex-end">
+                            <Grid container justifyContent="flex-end">
                                 <Typography variant="h6" >Disponible: {itemToAdd.item.stock}</Typography>
                             </Grid>
                         </Grid>

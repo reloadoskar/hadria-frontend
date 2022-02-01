@@ -56,7 +56,7 @@ export default function Insumos(props) {
                                                                             null
                                                                         :
                                                                         <Grid item xs={2}>
-                                                                            <Grid container direction="row-reverse" justify="flex-end">
+                                                                            <Grid container direction="row-reverse" justifyContent="flex-end">
                                                                                 <Grid item xs>                                                                                
                                                                                     <IconButton onClick={() => eliminar(insumo)} align="right">
                                                                                         <DeleteIcon color="secondary"/>

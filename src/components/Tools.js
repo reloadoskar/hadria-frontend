@@ -282,16 +282,17 @@ export function esDecimal(n){
 //         groups[val].items.push(item);
 //         return groups;
 //     }, []);
+
 export function agrupaVentas(ventas, filtro) {
-    return ventas.reduce(function(grupos, venta) {
-        (grupos[venta[filtro]] = grupos[venta[filtro]] || {[filtro]: venta[filtro], timporte:0, tcantidad:0,tempaques:0, items:[]})
-        // var grupo = venta[filtro]
-        // console.log("grupo:"+grupo)
+    let reduce = ventas.reduce(function(grupos, venta) {
+        (grupos[venta[filtro]] = grupos[venta[filtro]] || {[filtro]: venta[filtro], timporte:0, tcantidad:0,tempaques:0})        
         grupos[venta[filtro]].timporte += venta.importe
         grupos[venta[filtro]].tcantidad += venta.cantidad
         grupos[venta[filtro]].tempaques += venta.empaques
         return grupos;
-    }, {});
+    }, []);
+
+    return Object.keys(reduce).map(key => reduce[key])
 }
 
 export function agrupaItems(items, filtro){

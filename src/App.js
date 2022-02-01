@@ -20,6 +20,7 @@ import ProductoContextProvider from './components/productos/ProductoContext'
 import ClienteContextProvider from './components/clientes/ClienteContext'
 import EmpresaContextProvider from './components/empresa/EmpresaContext'
 import IngresoContextProvider from './components/ingresos/IngresoContext'
+import InventarioContextProvider from './components/inventario/InventarioContext';
 function App() {
 
     return (
@@ -44,7 +45,9 @@ function App() {
                                                         <EmpleadoContextProvider>
                                                             <ProductoContextProvider>
                                                                 <ClienteContextProvider>
-                                                                    <Router />
+                                                                    <InventarioContextProvider>
+                                                                        <Router />
+                                                                    </InventarioContextProvider>
                                                                 </ClienteContextProvider>
                                                             </ProductoContextProvider>
                                                         </EmpleadoContextProvider>

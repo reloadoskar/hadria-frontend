@@ -194,7 +194,7 @@ export default function ProductosDialog({ addProducto, isShowing, close }) {
 									onChange={(e) => dispatch({type: 'precio3', value: e.target.value})}
 									/>
 							</Grid>
-							<Grid container justify="flex-end">
+							<Grid container justifyContent="flex-end">
                     			<Button type="submit" variant="contained" color="primary" >Guardar</Button>
 							</Grid>
 						</Grid>

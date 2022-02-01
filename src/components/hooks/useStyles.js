@@ -60,6 +60,14 @@ const useStyles = makeStyles(theme => ({
             backgroundSize: '100% 88%'
         }
     },
+    textoSubrayadoNice: {
+        // display: 'inline',
+        // borderBottom: '3px solid #f9dd94'
+        background: 'linear-gradient(to left, #f69ec4, #f9dd94 100%)',
+        backgroundPosition: '0 100%',
+        backgroundSize: '100% 2px',
+        backgroundRepeat: 'repeat-x'
+    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
@@ -207,7 +215,7 @@ const useStyles = makeStyles(theme => ({
     },
     comprasBar: {
         position: 'relative',
-        backgroundColor: '#0E34A0'
+        backgroundColor: '#6f686d'
     },
     produccionBar: {
         position: 'relative',
