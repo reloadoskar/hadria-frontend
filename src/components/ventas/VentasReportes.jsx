@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react'
 import { Grid, Tab, Tabs } from '@material-ui/core'
-import {agrupaVentas, agrupaItems, formatNumber, sumImporte, sumCantidad, sumEmpaques} from '../Tools'
+import {agrupaVentas,} from '../Tools'
 import VentaItemPrecios from './VentaItemPrecios'
 import VentaUbicacionPrecios from './VentaUbicacionPrecios'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
