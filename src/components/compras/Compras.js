@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react'
 import {
+    Backdrop,
     Button,
+    CircularProgress,
     Container,
     Grid,
-    Menu, MenuItem, TextField,
+    Menu, MenuItem, TextField, Typography,
 } from '@material-ui/core';
 import { ComprasContext } from './CompraContext'
 import { ProductosContext } from '../productos/ProductosContext'
@@ -43,9 +45,13 @@ function Compras({ubicacions}) {
     let now = new Date()
     const [month, setMonth] = useState(now.getMonth() + 1)
     const [year, setYear] = useState(now.getFullYear())
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(()=>{
-        loadCompras(month, year)
+        setIsLoading(true)
+        loadCompras(month, year).then(()=>{
+            setIsLoading(false)
+        })
         loadProductos()
     },[month, year]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -182,13 +188,23 @@ function Compras({ubicacions}) {
                         addTipoCompra={addTipoCompra}
                         addProvedor={addProvedor}
                     />
-                </Grid>
-                <ListaCompras 
-                    compras={compras} 
-                    editCompra={editCompra} 
-                    verCompra={showVerCompra} 
-        
-                    />
+                </Grid> {
+                    !isLoading ? 
+                        compras.length > 0 ?
+                            <ListaCompras 
+                                compras={compras} 
+                                editCompra={editCompra} 
+                                verCompra={showVerCompra} 
+                            /> 
+                            :
+                            <Grid item xs={12}>
+                                <Typography variant='h6' align="center"> No hay compras registradas en {Meses[month]} {year}.</Typography>
+                            </Grid>
+                    :  
+                        <Backdrop open={isLoading} onClick={()=> setIsLoading(false)}>
+                            <CircularProgress />
+                        </Backdrop>
+                }
             </Grid>
             <DetalleCompra 
                 compra={compra} 

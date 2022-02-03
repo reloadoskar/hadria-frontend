@@ -3,10 +3,10 @@ import { Paper, Dialog, DialogContent, Grid, LinearProgress, Table, TableCell, T
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import VentaGrouped from '../ventas/VentaGrouped'
-import {agrupaVentas, agrupaItems, formatNumber, sumImporte, sumCantidad, sumEmpaques} from '../Tools'
+import {agrupaItems, formatNumber, sumImporte, sumCantidad, sumEmpaques} from '../Tools'
 import useStyles from '../hooks/useStyles'
 import PaginationTable from '../paggination/PaginationTable'
-import VentaItemPrecios from './VentaItemPrecios'
+import VentasReportes from './VentasReportes'
 export default function ListaVentas({ventas, items, open, close}){
     const [lasVentas, setLasVentas] = useState([])  
     const [productos, setProductos] = useState([])
@@ -122,14 +122,7 @@ export default function ListaVentas({ventas, items, open, close}){
                             }
                         </div>
                         <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
-                            <Grid container spacing={2} >
-                                <Grid item xs={12}>
-                                    <Typography align="center" variant ="h4">Ventas por Precio</Typography>
-                                </Grid>
-                                { productos.map((producto, index) => (
-                                    <VentaItemPrecios item={producto} precios={agrupaVentas( lasVentas.filter(vta => vta.producto._id === producto.id ), "precio")} key={index}/>                                    
-                                ))}
-                            </Grid>                           
+                            <VentasReportes productos={productos} ventas={lasVentas} />
                         </div>
                     </Grid>
                 </Grid>
