@@ -1,6 +1,6 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken'
-const URL = process.env.REACT_APP_API_URL
+const URL = process.env.REACT_APP_API_TEST
 let token = false 
 let decoded = false
 if(localStorage.usertoken){
@@ -442,7 +442,7 @@ export const closeCompra = (id) => {
     try{
         if(decoded){
             return axios
-                .put(url + decoded.database + `/compra/${id}`)
+                .put(url + decoded.database + `/close/compra/${id}`)
                 .then( res => {
                     return res.data
                 })

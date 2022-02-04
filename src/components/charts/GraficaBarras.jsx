@@ -11,8 +11,9 @@ export default function GraficaBarras({losDatos}){
             domainPadding={20}
             height={280}
             animate={{
-                duration: 1850,
-                easing: "elastic",
+                duration: 2500,
+                delay: 500,
+                easing: "bounce",
             }}>
             <VictoryAxis key="x" dependentAxis
                 style={{

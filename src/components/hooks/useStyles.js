@@ -414,7 +414,9 @@ const useStyles = makeStyles(theme => ({
     },
 
     paperAmarillo: {
-        background : '#FFE873',
+        margin: 6,
+        padding: 15,
+        background : '#F9E6C8',
         width: '100%',
     },
 

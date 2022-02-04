@@ -37,7 +37,8 @@ export default function VentasReportes({productos, ventas}){
                 { ubicacions.filter(ubicacion => ubicacion.tipo === 'SUCURSAL').map((ubicacion, i) => (
                     <VentaUbicacionPrecios 
                         ubicacion={ubicacion}
-                        precios={agrupaVentas( ventas.filter(vta => vta.ubicacion._id === ubicacion._id ), "precio")} 
+                        ventas={ ventas.filter(vta => vta.ubicacion._id === ubicacion._id )}
+                        productos={productos}
                         key={i}
                     />
 

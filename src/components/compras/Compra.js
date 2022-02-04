@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import { Dialog, DialogContent, Divider, Grid, IconButton, LinearProgress, Slide, 
     Typography, Tooltip, Badge } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
@@ -12,10 +12,13 @@ import EgresoBasic from '../egresos/EgresoBasic'
 import {sumImporte, formatNumber} from '../Tools'
 import ListaVentas from '../ventas/ListaVentas';
 import Liquidacion from '../liquidacion/Liquidacion';
+import { useSnackbar } from 'notistack'
+import { ComprasContext } from './CompraContext'
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 export default function Compra({open, close, compra, compras}){
+    const {cerrarCompra } = useContext(ComprasContext)
     const classes = useStyles()
     const [dialogListaVentas, setDialog] = useState(false)
     const [liquidacionDialog, setLiquidacionDialog] = useState(false)
@@ -24,6 +27,9 @@ export default function Compra({open, close, compra, compras}){
     const [totalGastos, setTotalGastos] = useState(0)
     const [totalPagos, setTotalPagos] = useState(0)
     const [resultado, setResultado] = useState(0)
+
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
     useEffect(() => {
         if(compra){
@@ -58,8 +64,10 @@ export default function Compra({open, close, compra, compras}){
     }
 
     const cerrarComp = (id) => {
-        compras.cerrarCompra(id)
         close()
+        cerrarCompra(id).then(res=>{
+            showMessage(res.message, res.status)
+        })
     }
     return (
         <Dialog

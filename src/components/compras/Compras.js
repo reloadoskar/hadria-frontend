@@ -46,13 +46,14 @@ function Compras({ubicacions}) {
     const [month, setMonth] = useState(now.getMonth() + 1)
     const [year, setYear] = useState(now.getFullYear())
     const [isLoading, setIsLoading] = useState(true)
-
+    useEffect(()=>{
+        loadProductos()
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     useEffect(()=>{
         setIsLoading(true)
         loadCompras(month, year).then(()=>{
             setIsLoading(false)
         })
-        loadProductos()
     },[month, year]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const crear = (compra) => {

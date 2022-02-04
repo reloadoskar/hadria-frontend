@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { Dialog, DialogContent, Grid, Typography, CircularProgress, Divider, Paper, TextField, Box, IconButton } from '@material-ui/core'
 import { useMediaQuery } from '@material-ui/core';
 import { useReactToPrint } from 'react-to-print';
 import { formatNumber, sumImporte, agrupaItems, sumCantidad, sumEmpaques } from '../Tools'
-import useEmpresa from '../config/useEmpresa'
+
 import useStyles from '../hooks/useStyles'
 import Switch from '@material-ui/core/Switch';
 import DoneIcon from '@material-ui/icons/Done';
@@ -14,14 +14,14 @@ import CloseIcon from '@material-ui/icons/Close';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ItemEditable from './ItemEditable'
 import GastoEditable from './GastoEditable'
+import {EmpresaContext} from '../empresa/EmpresaContext'
 export default function Liquidacion({ open, close, items, ventas, compra }) {
-  const Empresa = useEmpresa()
+  const {empresa} = useContext(EmpresaContext)
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   })
 
-  const [empresa, setEmpresa] = useState(null)
   const [laCompra, setLaCompra] = useState(null)
 
   const [losItems, setLosItems] = useState(null)
@@ -43,15 +43,6 @@ export default function Liquidacion({ open, close, items, ventas, compra }) {
   const isMobile = useMediaQuery('(max-width: 720px)')
   const [editMode, setEditMode] = useState(true)
   const classes = useStyles()
-
-  useEffect(() => {
-    Empresa.get().then(res => {
-      setEmpresa(res.empresa)
-    })
-    return () => {
-      setEmpresa(null)
-    }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (compra) {
