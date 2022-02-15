@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react'
-import { getCompras, cancelCompra, closeCompra, saveCompra, getCompra, getComprasActivas } from '../api'
+import { getCompras, cancelCompra, closeCompra, saveCompra, getCompra, getComprasActivas, updateCompra } from '../api'
 
 export const ComprasContext = createContext()
 
@@ -48,9 +48,26 @@ const ComprasContextProvider = (props) => {
         setCompras([])
     }
 
+    const editCompra = async (compra) =>{
+        const res = await updateCompra(compra)
+        return res
+    }
+
     return (
         <ComprasContext.Provider
-            value={{compras, compra, loadCompras, addCompra, removeCompra, selectCompra, cerrarCompra, comprasActivas, findCompra, clearCompras}}
+            value={{
+                compras, 
+                compra, 
+                loadCompras, 
+                addCompra, 
+                removeCompra, 
+                selectCompra, 
+                cerrarCompra, 
+                comprasActivas, 
+                findCompra, 
+                clearCompras,
+                editCompra
+            }}
         >
             {props.children}
         </ComprasContext.Provider>

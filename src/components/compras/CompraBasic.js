@@ -59,7 +59,11 @@ export default function CompraBasic(props){
                 setResultado(re)
                 compraLocal.resultado = re
             }
-            if( compraLocal.items.length > 0 && sumEmpStock(compraLocal.items) < 1 && sumStock(compraLocal.items) < 1 ){ setStatus('TERMINADO') } else{ setStatus(compraLocal.status) }
+            if( compraLocal.status === 'ACTIVO'){
+                if( compraLocal.items.length > 0 && sumEmpStock(compraLocal.items) < 1 && sumStock(compraLocal.items) < 1 ){ setStatus('TERMINADO') } else{ setStatus(compraLocal.status) }
+            }else{
+                setStatus(compraLocal.status)
+            }
         }
         return () => setTotalVenta(0) 
     },[compraLocal])

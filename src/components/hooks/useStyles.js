@@ -9,6 +9,16 @@ const drawerWidth = 240;
 //     }
 //     return color;
 //   }
+export const escalaDeColores = [
+    "#9A031E", 
+    "#BFACB5", 
+    "#76717A", 
+    "#2C363F", 
+    "#AABD8C", 
+    "#F2F3AE", 
+    "#EDAE49",
+    "#EFD6AC",
+];
 const useStyles = makeStyles(theme => ({ 
     
     root: {
@@ -381,13 +391,13 @@ const useStyles = makeStyles(theme => ({
     },
 
     paperBasico: {
-        margin: 6,
         padding:15,
         width: '100%',
         boxShadow: 'rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px'
     },
 
     paperSingle: {
+        padding: 15,
         width: '100%',
         boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'
     },

@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react'
-import { Dialog, DialogContent, Divider, Grid, IconButton, LinearProgress, Slide, 
+import { Dialog, DialogContent, Divider, Grid, IconButton, Slide, 
     Typography, Tooltip, Badge } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import LockIcon from '@material-ui/icons/Lock';
@@ -64,67 +64,75 @@ export default function Compra({open, close, compra, compras}){
     }
 
     const cerrarComp = (id) => {
-        close()
-        cerrarCompra(id).then(res=>{
+        showMessage("Cerrando...", "info")
+        cerrarCompra(id)
+        .then(res=>{
+            close()
+            setLaCompra({...laCompra, status: 'CERRADO'})
             showMessage(res.message, res.status)
         })
+        .catch(err=>{
+            showMessage("No se pudo cerrar la compra \n" + err, "error")
+        })
     }
-    return (
+    return laCompra === null ? null :
         <Dialog
             fullScreen
             TransitionComponent={Transition}
             open={open}
             onClose={close}
         >
-            <DialogContent>
-                {laCompra===null ? <LinearProgress variant="query" /> :
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <Typography className={classes.textoMiniFacheron} >{laCompra.fecha}</Typography>
-                            <Typography variant ="h6">#{laCompra.folio} {laCompra.clave} | {laCompra.provedor.nombre} | {laCompra.tipoCompra.tipo}</Typography>
-                            <Typography className={classes.textoMiniFacheron} >Remision: {laCompra.remision}</Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6} container justifyContent="flex-end">
-
-                            <Tooltip title="Crear Liquidaci&oacute;n" arrow>
-                                <IconButton
-                                    onClick={()=>setLiquidacionDialog(true)}>
-                                    <Badge color="secondary" variant="dot">
-                                        <DescriptionIcon />
-                                    </Badge>
-                                </IconButton>
-                            </Tooltip>
-
-                            <Liquidacion open={liquidacionDialog} close={()=>{setLiquidacionDialog(false)}} compra={laCompra}/>
-                            
-                            <Tooltip title="Ver ventas" arrow >
-                                <IconButton
-                                    aria-label="Ver ventas"
-                                    onClick={()=>setDialog(true)}
-                                >
-                                    <Badge color="secondary" variant="dot">
-                                        <ListIcon />
-                                    </Badge>
-                                </IconButton>
-                            </Tooltip>
-
-                            <Tooltip title="Cerrar" arrow>
-                                <IconButton
-                                    aria-label="Cerrar"
-                                    onClick={()=>cerrarComp(laCompra._id)}
-                                >
-                                   { laCompra.status === "ACTIVO" ?  <LockOpenIcon /> : <LockIcon /> }
-                                </IconButton>
-                            </Tooltip>
-
+            <DialogContent>                
+                <Grid container spacing={2} className={classes.paperContorno}>
+                    <Grid item xs={12} className={ laCompra.status === "ACTIVO" ? classes.pro : classes.suspended }>
+                        <Typography variant='h6' align="center">{laCompra.status}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Typography className={classes.textoMiniFacheron} >{laCompra.fecha}</Typography>
+                        <Typography variant ="h6">#{laCompra.folio} {laCompra.clave} | {laCompra.provedor.nombre} | {laCompra.tipoCompra.tipo}</Typography>
+                        <Typography className={classes.textoMiniFacheron} >Remision: {laCompra.remision}</Typography>
+                    </Grid>
+                    
+                    <Grid item xs={12} sm={6} container justifyContent="flex-end">
+                        <Tooltip title="Crear Liquidaci&oacute;n" arrow>
                             <IconButton
-                                aria-label="close"
-                                onClick={close}
-                            >
-                                <CloseIcon />
+                                onClick={()=>setLiquidacionDialog(true)}>
+                                <Badge color="secondary" variant="dot">
+                                    <DescriptionIcon />
+                                </Badge>
                             </IconButton>
+                        </Tooltip>
 
-                        </Grid>
+                        <Liquidacion open={liquidacionDialog} close={()=>{setLiquidacionDialog(false)}} compra={laCompra}/>
+                            
+                        <Tooltip title="Ver ventas" arrow >
+                            <IconButton
+                                aria-label="Ver ventas"
+                                onClick={()=>setDialog(true)}
+                            >
+                                <Badge color="secondary" variant="dot">
+                                    <ListIcon />
+                                </Badge>
+                            </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="Cerrar" arrow>
+                            <IconButton
+                                aria-label="Cerrar"
+                                onClick={()=>cerrarComp(laCompra._id)}
+                            >
+                                { laCompra.status === "ACTIVO" ?  <LockOpenIcon /> : <LockIcon /> }
+                            </IconButton>
+                        </Tooltip>
+
+                        <IconButton
+                            aria-label="close"
+                            onClick={close}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+
+                    </Grid>
                         <Grid item xs={12}>
                             <ResumenVentas items={laCompra.items} ventas={laCompra.ventaItems}/>
                         </Grid>
@@ -205,8 +213,7 @@ export default function Compra({open, close, compra, compras}){
                         </Grid>
                         
                     </Grid>
-                }
+
             </DialogContent>
         </Dialog>
-    )
 }
