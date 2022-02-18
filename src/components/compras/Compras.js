@@ -9,10 +9,10 @@ import {
 } from '@material-ui/core';
 import { ComprasContext } from './CompraContext'
 import { ProductosContext } from '../productos/ProductosContext'
+import { ProductorContext } from '../productors/ProductorContext';
 import { useSnackbar } from 'notistack'
 
 import AddIcon from '@material-ui/icons/Add'
-import useProvedors from '../hooks/useProvedors';
 import useTipoCompras from '../hooks/useTipoCompras';
 
 import useStyles from '../hooks/useStyles'
@@ -29,7 +29,7 @@ function Compras({ubicacions}) {
     const {compras, loadCompras, addCompra, clearCompras } = useContext(ComprasContext)
     
     const {productos, loadProductos, addProducto} = useContext(ProductosContext)
-    const {provedors, addProvedor} = useProvedors()
+    const {productors, addProductor} = useContext(ProductorContext)
     const {tipoCompras, addTipoCompra} = useTipoCompras();
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
@@ -183,11 +183,11 @@ function Compras({ubicacions}) {
                         crear={crear}
                         products={productos}
                         addProduct={addProducto}
-                        provedors={provedors}
+                        provedors={productors}
                         tipoCompras={tipoCompras}
                         ubicacions={ubicacions}
                         addTipoCompra={addTipoCompra}
-                        addProvedor={addProvedor}
+                        addProvedor={addProductor}
                     />
                 </Grid> {
                     !isLoading ? 
@@ -214,7 +214,7 @@ function Compras({ubicacions}) {
                 showMessage={showMessage} 
                 ubicacions={ubicacions}
                 products={productos}
-                provedors={provedors}
+                provedors={productors}
             />
             <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelar}/>
             <Compra compra={compra} open={verCompra} close={closeVerCompra} compras={compras} />

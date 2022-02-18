@@ -1,15 +1,27 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import { Grid, Tab, Tabs } from '@material-ui/core'
 import {agrupaVentas,} from '../Tools'
 import VentaItemPrecios from './VentaItemPrecios'
 import VentaUbicacionPrecios from './VentaUbicacionPrecios'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
-export default function VentasReportes({productos, ventas}){
+import {agrupaItems} from '../Tools'
+
+export default function VentasReportes({items, ventas}){
+    const [productos, setProductos] = useState([])
     const [tabSelected, setTab] = useState(1)
     const {ubicacions} = useContext(UbicacionContext)
     const handleChange =(event, value) => {
         setTab(value)
     }
+
+    useEffect(()=>{
+        if(ventas && items){
+            setProductos( agrupaItems(items, "producto") )
+        }
+        return ()=> {
+            setProductos([])
+        }
+    },[ventas, items])
     return(
         <Grid container spacing={2}>
             <Grid item xs={12}>

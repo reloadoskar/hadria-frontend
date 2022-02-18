@@ -2,8 +2,8 @@ import React, { useState, createContext } from 'react';
 import { 
   getEgresos, 
   saveEgreso, 
-  // getCuentasPorPagar, 
-  // savePagoACuentaPorPagar, 
+  getCuentasPorPagar, 
+  savePagoACuentaPorPagar, 
   deleteEgreso,
   updateEgreso
 } from '../api'
@@ -12,12 +12,18 @@ export const EgresoContext = createContext()
 
 const EgresoContextProvider = (props) => {
   const [egresos, setEgresos] = useState([])
+  const [cuentasPorPagar, setCuentasPorPagar] = useState([])
   
   const addEgreso = async (egreso) => {
     const res = await saveEgreso(egreso)
     setEgresos([...egresos, res.egreso])
     return res
   }
+
+  const addPagoCxp = async (pago) => {
+		let res = await savePagoACuentaPorPagar(pago)
+    return res
+	}
 
   const removeEgreso = async (id) => {
 		const res = await deleteEgreso(id)
@@ -30,6 +36,12 @@ const EgresoContextProvider = (props) => {
 		setEgresos(res.egresos)		
 		return res
   }
+
+  const loadCuentasPorPagar = async () =>{
+		const res = await getCuentasPorPagar()
+    setCuentasPorPagar(res.cuentas)
+    return res		
+	}
   
   const selectEgresos = (egresos) => {
     setEgresos(egresos)
@@ -43,12 +55,15 @@ const EgresoContextProvider = (props) => {
   return (
     <EgresoContext.Provider value={{
       egresos,
+      cuentasPorPagar,
       addEgreso, 
       removeEgreso, 
       loadEgresos, 
       selectEgresos,
-      editEgreso
-      }}>
+      editEgreso, 
+      addPagoCxp, 
+      loadCuentasPorPagar
+    }}>
       {props.children}
     </EgresoContext.Provider>
   )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import clsx from 'clsx';
 import Produccions from './components/produccions/Produccions'
@@ -20,14 +20,29 @@ import { useAuth } from "./components/auth/use_auth.js"
 import Empresa from './components/empresa/Empresa';
 import Inversions from './components/inversions/Inversions';
 
+import { EmpresaContext } from './components/empresa/EmpresaContext';
+import { UbicacionContext } from './components/ubicaciones/UbicacionContext';
+import { ClienteContext } from './components/clientes/ClienteContext';
+import { ProductorContext } from './components/productors/ProductorContext';
+
 export default function Router(props){
     const auth = useAuth()
+    const {loadEmpresa} = useContext(EmpresaContext)
+    const {loadUbicacions} = useContext(UbicacionContext)
+    const {loadClientes} = useContext(ClienteContext)
+    const {loadProductors} = useContext(ProductorContext)
     let { path, url } = useRouteMatch();
     const classes = useStyles()
 
     const useUbic = useUbicacions()
     const [open, setOpen] = useState(false)
 
+    useEffect(()=>{
+        loadEmpresa()
+        loadUbicacions()
+        loadClientes()
+        loadProductors()
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     const toggle = () => {
         setOpen(!open)
     };
@@ -52,7 +67,7 @@ export default function Router(props){
                                         path={path} 
                                         render={
                                             (props) => ( 
-                                                <Dashboard ubicacions={useUbic.ubicacions}/> 
+                                                <Dashboard /> 
                                             )
                                         }
                                     />

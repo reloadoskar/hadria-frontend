@@ -11,12 +11,12 @@ const drawerWidth = 240;
 //   }
 export const escalaDeColores = [
     "#9A031E", 
+    "#2C363F", 
+    "#EDAE49",
+    "#AABD8C", 
     "#BFACB5", 
     "#76717A", 
-    "#2C363F", 
-    "#AABD8C", 
     "#F2F3AE", 
-    "#EDAE49",
     "#EFD6AC",
 ];
 const useStyles = makeStyles(theme => ({ 
@@ -44,11 +44,11 @@ const useStyles = makeStyles(theme => ({
     },
     textoMirameSangron: {
         fontWeight: 'bolder',
-        color: '#c70039'
+        color: '#F64740'
     },
     textoMirameExito: {
         fontWeight: 'bolder',
-        color: '#1EAE98'
+        color: '#68B68A'
     },
     textoMirameFondoAmarillo: {
         fontWeight: 'bolder',
@@ -431,7 +431,7 @@ const useStyles = makeStyles(theme => ({
     },
 
     paperVerde: {
-        background : '#2CF6B3',
+        background : '#68B68A',
         width: '100%',
     },
 

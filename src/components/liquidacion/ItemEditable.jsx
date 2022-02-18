@@ -38,6 +38,7 @@ export default function ItemEditable ({elItem, editMode, sumar, eliminar, id}){
                 : null 
             }
             <Grid item xs={ editMode ? 4 : 5}>
+                <Typography className={classes.textoMiniFacheron} >Producto</Typography>
                 <Typography>
                     {item.producto.descripcion}
                 </Typography>

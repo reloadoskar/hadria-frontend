@@ -28,7 +28,7 @@ export default function PaginationTable({data}){
 
     return (
         <TableContainer component={Paper}>
-            <Table stickyHeader>
+            <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
                   <TableCell>Folio</TableCell>

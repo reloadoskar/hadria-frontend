@@ -21,22 +21,25 @@ import CrearEgreso from '../egresos/CrearEgreso'
 import GraficaInventario from '../inventario/GraficaInventario'
 import PlanStatus from '../avisos/PlanStatus'
 // HOOKS
-import {useAuth} from '../auth/use_auth'
 import useCortes from '../cortes/useCortes'
 import useIngresos from '../ingresos/useIngresos'
 import useEgresos from '../egresos/useEgresos'
 import { useSnackbar } from 'notistack';
 
-// CONTEXTOS
-import {EmpresaContext} from '../empresa/EmpresaContext'
-
 import moment from 'moment'
 import ComprasMesProductor from '../compras/ComprasMesProductor'
 import useStyles from '../hooks/useStyles'
 
-export default function Dashboard({ubicacions}) {
+// CONTEXTOS
+import {useAuth} from '../auth/use_auth'
+import {EmpresaContext} from '../empresa/EmpresaContext'
+import { UbicacionContext } from '../ubicaciones/UbicacionContext'
+import {EgresoContext} from '../egresos/EgresoContext'
+export default function Dashboard() {
     const auth = useAuth()
-    const {empresa, loadEmpresa} = useContext(EmpresaContext)
+    const {empresa } = useContext(EmpresaContext)
+    const {loadEgresos, loadCuentasPorPagar} = useContext(EgresoContext)
+    const {ubicacions} = useContext(UbicacionContext)
     const [verPlanStatus, setVerPlanStatus] = useState(false)
     const [bodyPlanStatus, setBody] = useState(null)
 
@@ -48,9 +51,8 @@ export default function Dashboard({ubicacions}) {
     const [fecha, setFecha] = useState(null)
     const now = moment()
     useEffect(()=>{
-        egresos.loadEgresos(moment().format("YYYY-MM-DD"))
-        egresos.loadCuentas()
-        loadEmpresa()
+        loadEgresos(moment().format("YYYY-MM-DD"))
+        loadCuentasPorPagar()
     },[])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         let hoy = moment().format("YYYY-MM-DD")
@@ -90,7 +92,6 @@ export default function Dashboard({ubicacions}) {
         }
     },[empresa]) // eslint-disable-line react-hooks/exhaustive-deps
     const { enqueueSnackbar } = useSnackbar()
-    // const{ubicacions} = useUbicacions()
     const {getCorte, reOpen, guardarCorte} = useCortes()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
@@ -156,16 +157,6 @@ export default function Dashboard({ubicacions}) {
     async function muestrameEsteCorte(ubicacion, fecha){
         const res = await getCorte(ubicacion, fecha)
         setCorte(res)
-    }
-
-    const crearPago = (pago) => {
-        return egresos.addPagoCxp(pago).then(res => {
-            showMessage(res.message, res.status)
-            ingresos.setUpdating(res)
-        })
-        .catch(err => {
-            showMessage("No se pudo guardar el pago "+ err, "error")
-        })
     }
 
     const crearCobro = (cobro) => {
@@ -235,12 +226,8 @@ export default function Dashboard({ubicacions}) {
                                 Pagar
                             </Button>
                             <Pagar 
-                                cuentas={egresos.cuentasxPagar} 
-                                ubicacions={ubicacions}
                                 open={pagar}
                                 close={closePagar}
-                                save={crearPago}
-                                showMessage={showMessage}
                             />
 
                             <Button
@@ -282,7 +269,6 @@ export default function Dashboard({ubicacions}) {
                                 ubicacions={ubicacions}
                                 showMessage={showMessage}
                             />
-
                         </ButtonGroup>
                     </Grid>
                 </Grid>
