@@ -112,7 +112,7 @@ export default function CobroDialog(props) {
                                             value={values.cuenta}
                                             onChange={(e) => handleChange('cuenta', e.target.value)}
                                             >
-                                            {cuentas.map((cta, i) => (
+                                            {cuentas.filter(cta=>cta.saldo>1).sort((a,b)=>a.cliente - b.cliente).map((cta, i) => (
                                                 <MenuItem key={i} value={cta}>
                                                     <Grid container >
                                                         <Grid item xs={4}>
