@@ -108,23 +108,24 @@ export default function PagarDialog({ubicacion, isOpen, close, showMessage, fech
                 })
         
               }
+              i++
         }
         
+        setGuardando(false)
+        close('pagarDialog')
+        setPago({
+            provedor: '',
+            cuenta: '',
+            tipoPago: 'EFECTIVO',
+            importe: '',
+        })
         // addPagoCxp(pago).then(res =>{
-        //     setGuardando(false)
         //     showMessage(res.message, res.status)
-        //     setPago({
-        //         provedor: '',
-        //         cuenta: '',
-        //         tipoPago: 'EFECTIVO',
-        //         importe: '',
-        //     })
         //     ticketPago(pago).then(res => {
         //         if(res.status === 'warning'){
         //             showMessage(res.message, res.status)
         //         }
         //     })
-        //     close('pagarDialog')
         // })
     }
 
