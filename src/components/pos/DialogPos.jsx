@@ -9,6 +9,7 @@ import EgresoDialog from './EgresoDialog'
 import PagarDialog from './PagarDialog'
 import IngresoCreate from '../ingresos/IngresoCreate'
 import { EgresoContext } from '../egresos/EgresoContext'
+import { IngresoContext } from '../ingresos/IngresoContext'
 export default function DialogPos(props){
     const {open, close, clientes, 
         // inventario, 
@@ -20,6 +21,7 @@ export default function DialogPos(props){
         cortes, 
         cxcPdv, addPagoCxc, addPagoCxp} = props
     const {loadCuentasPorPagar} = useContext(EgresoContext)
+    const {loadCuentasPorCobrarPdv} = useContext(IngresoContext)
     const classes = useStyles()
     const [corte, setCorte] = useState(null)
     const [corteDialog, setCorteDialog] = useState(false)
@@ -32,6 +34,7 @@ export default function DialogPos(props){
 
     useEffect(()=>{
         loadCuentasPorPagar()
+        loadCuentasPorCobrarPdv()
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
     
     const toggleCxcDialog = () => {

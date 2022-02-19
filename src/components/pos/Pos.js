@@ -5,13 +5,14 @@ import Acceso from './Acceso'
 import useStyles from '../hooks/useStyles'
 // import useInventario from '../inventario/useInventario'
 import useCortes from '../cortes/useCortes'
-import useClientes from '../clientes/useClientes'
+// import useClientes from '../clientes/useClientes'
 // import useIngresos from '../ingresos/useIngresos'
 import moment from 'moment'
 import DialogPos from './DialogPos'
 import { InventarioContext } from '../inventario/InventarioContext';
 import { IngresoContext } from '../ingresos/IngresoContext'
 import { UbicacionContext } from  '../ubicaciones/UbicacionContext'
+import { ClienteContext } from '../clientes/ClienteContext'
 export default function Pos({user}){
     const now = moment()
     const classes = useStyles()
@@ -19,8 +20,9 @@ export default function Pos({user}){
     const {ubicacions} = useContext(UbicacionContext)
     const {loadInventarioUbicacion} = useContext(InventarioContext)
     const {addVenta, cxcPdv,  addPagoCxc} = useContext(IngresoContext)
+    const {clientes} = useContext(ClienteContext)
     // const  = useIngresos()
-    const {clientes} = useClientes()
+    // const {clientes} = useClientes()
     const cortes = useCortes()
     
     const [accesando, setAccesando] = useState(false)
