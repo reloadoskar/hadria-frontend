@@ -5,19 +5,19 @@ import { Card, CardContent,
     MenuItem,
     CircularProgress,
 } from '@material-ui/core'
-import {formatNumber} from '../Tools'
+import {formatNumber, sumImporte} from '../Tools'
 import useStyles from '../hooks/useStyles'
 import GraficaVentas from './GraficaVentas';
 
 export default function Disponible(props){
-    const {ubicacions, ingresos, egresos} = props
+    const {ubicacions = [], ingresos, egresos} = props
     const classes = useStyles()
     
     const [totalDisp, setTotalDisp] = useState(null)
     const [dispxubic, setDispxubic] = useState(null)
     useEffect(() => {
         if(ingresos && egresos && ubicacions){
-            let tdisp = ingresos.totalIngresos - egresos.totalEgresos
+            let tdisp = sumImporte(ingresos) - sumImporte(egresos)
             let disp = []
             ubicacions.forEach(ubicacion => {
                 let el = {}
@@ -26,13 +26,13 @@ export default function Disponible(props){
                 el.ubicacion = ubicacion
                 el.ingresos = []
                 el.egresos = []
-                ingresos.ingresos.forEach(ingreso => {
+                ingresos.forEach(ingreso => {
                     if(ubicacion._id === ingreso.ubicacion._id){
                         el.ingresos.push(ingreso)
                         ti += ingreso.importe
                     }
                 });  
-                egresos.egresos.forEach(egreso => {
+                egresos.forEach(egreso => {
                     if(ubicacion._id === egreso.ubicacion._id){
                         el.egresos.push(egreso)
                         te += egreso.importe

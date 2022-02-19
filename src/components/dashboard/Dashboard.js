@@ -40,7 +40,7 @@ export default function Dashboard() {
     const auth = useAuth()
     const {empresa } = useContext(EmpresaContext)
     const { ingresos, addIngreso, addPagoCxc, loadIngresosxFecha, loadCuentasPorCobrarPdv, cxcPdv } = useContext(IngresoContext)
-    const {loadEgresos, loadCuentasPorPagar} = useContext(EgresoContext)
+    const {egresos, loadEgresos, loadCuentasPorPagar, addEgreso} = useContext(EgresoContext)
     const {ubicacions} = useContext(UbicacionContext)
     const [verPlanStatus, setVerPlanStatus] = useState(false)
     const [bodyPlanStatus, setBody] = useState(null)
@@ -48,7 +48,7 @@ export default function Dashboard() {
     const classes = useStyles()
 
     // const ingresos = useIngresos()
-    const egresos = useEgresos()
+    // const egresos = useEgresos()
     const [corte, setCorte] = useState(null)
     const [fecha, setFecha] = useState(null)
     const now = moment()
@@ -193,7 +193,7 @@ export default function Dashboard() {
             importe: traspaso.importe
         }
 
-        egresos.addEgreso(eg)
+        addEgreso(eg)
         .then(() => {
             
             addIngreso(ing)
@@ -286,9 +286,9 @@ export default function Dashboard() {
                         <Tab label="Inventario" value={2}/>
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
-                        {/* <Disponible verCorte={verCorte} ubicacions={ubicacions} 
+                        <Disponible verCorte={verCorte} ubicacions={ubicacions} 
                         ingresos={ingresos} 
-                        egresos={egresos} /> */}
+                        egresos={egresos} />
                         <Corte user={auth.user} open={corteDialog} close={closeCorteDialog} corte={corte} fecha={now.format("YYYY-MM-DD")} onChangeFecha={onChangeFecha}  ubicacions={ubicacions} reabrir={reOpen} guardar={guardarCorte}/>
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
