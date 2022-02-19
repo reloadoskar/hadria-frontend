@@ -1,77 +1,131 @@
-import React, { useState} from 'react';
+import React, { useState, useContext, useEffect} from 'react';
 
 import {ticketPago} from '../api'
-
+import moment from 'moment'
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
 import { formatNumber } from '../Tools';
 import useStyles from '../hooks/useStyles';
-
-
-export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, showMessage, fecha}) {
+import {EgresoContext} from '../egresos/EgresoContext'
+import { ProductorContext } from '../productors/ProductorContext'
+export default function PagarDialog({ubicacion, isOpen, close, showMessage, fecha}) {
+    const {cuentasPorPagar, addEgreso, editEgreso} = useContext(EgresoContext)
+    const {productors} = useContext(ProductorContext)
+    const [productoresConSaldo, setProductoresSaldo] = useState([])
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const classes = useStyles()
-    const [values, setValues] = useState({
+    const [pago, setPago] = useState({
+        fecha: moment().format("YYYY-MM-DD"),
+        ubicacion: ubicacion,
         provedor: '',
-        cuenta: '',
         tipoPago: 'EFECTIVO',
-        importe: '',
+        importe: 0,
         referencia: '',
+        cuentasSeleccionadas: []
     })
     const [guardando, setGuardando] = useState(false)
+
+    useEffect(()=>{
+        let conSaldo = []
+        productors.forEach(productor => {
+          if(cuentasPorPagar.filter(cuenta => cuenta.compra.provedor._id === productor._id).reduce((acc, cta) => acc += cta.saldo, 0) > 0 ){
+            conSaldo.push({...productor, cuentas: cuentasPorPagar.filter(cta => cta.compra.provedor._id === productor._id), saldo: cuentasPorPagar.filter(cuenta => cuenta.compra.provedor._id === productor._id).reduce((acc, cta) => acc += cta.saldo, 0) })
+          }
+        });
+        setProductoresSaldo(conSaldo)
+      },[productors, cuentasPorPagar])
+
     const handleChange = (type, value) => {
         switch(type){
             case 'importe':             
-                if(value > values.cuenta.saldo){
+                if(value > pago.provedor.saldo){
                     showMessage("El importe es mayor al saldo de la cuenta.", "warning")
-                    setValues({...values, importe: 0})
+                    setPago({...pago, importe: pago.provedor.saldo})
                     return false
                 }else{
-                    return setValues({...values, [type]: value})    
+                    return setPago({...pago, [type]: value})    
                 }
 
             default:
-                return setValues({...values, [type]: value})
+                return setPago({...pago, [type]: value})
         }        
     }
 
     const handleClose = (dialog) => {
-        setValues({...values, cuenta: '', importe: '', referencia: ''})
+        setPago({...pago, cuenta: '', importe: '', referencia: ''})
         close(dialog)
     }
 
 
 
     const handleSubmit = (e) => {
-        setGuardando(true)
         e.preventDefault()
-        var pago = {
-            provedor: values.provedor,
-            ubicacion: ubicacion,
-            cuenta: values.cuenta,
-            tipoPago: values.tipoPago,
-            importe: values.importe,
-            referencia: values.referencia,
-            fecha: fecha
+        setGuardando(true)
+        let i = 0
+        let cuentas = pago.provedor.cuentas
+        let importeDePago = pago.importe
+
+        while(importeDePago > 0){
+            let saldo = cuentas[i].saldo
+            if(saldo>=importeDePago){ 
+                addEgreso({
+                  tipo: 'PAGO',
+                  concepto: "PAGO",
+                  descripcion: "PAGO A: " + cuentas[i].concepto + " #"+ cuentas[i].compra.folio,
+                  fecha: fecha,
+                  ubicacion: pago.ubicacion,
+                  importe: importeDePago,
+                  compra: cuentas[i].compra._id,
+                  saldo: 0,
+                }).then(res=>{
+                  showMessage(res.message, res.status)
+                })
+                cuentas[i].saldo-=importeDePago
+                editEgreso(cuentas[i]).then(res=>{
+                  showMessage(res.message, 'info')
+                })
+                importeDePago=0; 
+              }else{
+                importeDePago-=cuentas[i].saldo;
+                cuentas[i].saldo=0;
+        
+                addEgreso({
+                  tipo: 'PAGO',
+                  concepto: "PAGO",
+                  descripcion: "PAGO A: " + cuentas[i].concepto + " #"+ cuentas[i].compra.folio,
+                  fecha: pago.fecha,
+                  ubicacion: pago.ubicacion,
+                  importe: saldo,
+                  compra: cuentas[i].compra._id,
+                  saldo: 0,
+                }).then(res=>{
+                  showMessage(res.message, res.status)
+                })
+                editEgreso(cuentas[i]).then(res=>{
+                  showMessage(res.message, 'info')
+                })
+        
+              }
         }
-        pagar(pago).then(res =>{
-            setGuardando(false)
-            showMessage(res.message, res.status)
-            setValues({
-                provedor: '',
-                cuenta: '',
-                tipoPago: 'EFECTIVO',
-                importe: '',
-            })
-            ticketPago(pago).then(res => {
-                if(res.status === 'warning'){
-                    showMessage(res.message, res.status)
-                }
-            })
-            close('pagarDialog')
-        })
+        
+        // addPagoCxp(pago).then(res =>{
+        //     setGuardando(false)
+        //     showMessage(res.message, res.status)
+        //     setPago({
+        //         provedor: '',
+        //         cuenta: '',
+        //         tipoPago: 'EFECTIVO',
+        //         importe: '',
+        //     })
+        //     ticketPago(pago).then(res => {
+        //         if(res.status === 'warning'){
+        //             showMessage(res.message, res.status)
+        //         }
+        //     })
+        //     close('pagarDialog')
+        // })
     }
 
     return (
@@ -82,7 +136,7 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
             open={isOpen} 
             onClose={() => handleClose('pagarDialog')} >
                 {
-                    cuentas.length > 0 &&
+                    cuentasPorPagar.length > 0 &&
                     <form onSubmit={handleSubmit}>
                 
                     <DialogTitle id="form-dialog-title">
@@ -114,28 +168,26 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
                                             required
                                             fullWidth
                                             label="Selecciona una Proveedor"
-                                            value={values.provedor}
+                                            value={pago.provedor}
                                             onChange={(e) => handleChange('provedor', e.target.value)}
                                         >
-                                            {cuentas.map((cta, i) => {
-                                                if(cta.cuentas.length > 0){
-                                                    return (
-                                                        <MenuItem key={i} value={cta}>                                                
-                                                            <Grid container>
-                                                                <Grid item xs={6}>
-                                                                    <Typography>{cta.nombre}</Typography>
-                                                                </Grid>                                        
-                                                            </Grid>                           
-                                                        </MenuItem>
-                                                    )
-                                                }else{
-                                                    return false
-                                                }
-                                            })} 
+                                            {productoresConSaldo.map((productor, i) => (
+                                                <MenuItem key={i} value={productor}>
+                                                    <Grid container alignItems='center'>
+                                                    <Grid item xs={6}>
+                                                        <Typography>{productor.nombre}</Typography>
+                                                    </Grid>
+                                                    <Grid item xs={6}>
+                                                        <Typography align="right" className={classes.textoMiniFacheron}>saldo:</Typography>
+                                                        <Typography align='right'>${formatNumber(productor.saldo, 1)}</Typography>
+                                                    </Grid>
+                                                    </Grid>
+                                                </MenuItem>
+                                            ))}    
                                         </TextField>
                                     </Grid>
                                     {
-                                    values.provedor !== '' ?
+                                    pago.provedor !== '' ?
                                         <Grid item xs={12}>
                                             <TextField
                                                 id="cuenta"
@@ -144,11 +196,11 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
                                                 variant="outlined"
                                                 required
                                                 fullWidth
-                                                value={values.cuenta}
+                                                value={pago.cuenta}
                                                 onChange={(e) => handleChange('cuenta', e.target.value)}
                                             >
                                                 {
-                                                    values.provedor.cuentas.map((cta,index)=>(
+                                                    pago.provedor.cuentas.map((cta,index)=>(
                                                         <MenuItem key={index} value={cta}>
                                                             <Grid container>
                                                                 <Grid item xs={6}>
@@ -173,7 +225,7 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
                                             required
                                             fullWidth
                                             label="Tipo de pago"
-                                            value={values.tipoPago}
+                                            value={pago.tipoPago}
                                             onChange={(e) => handleChange('tipoPago', e.target.value)}
                                         >
                                             {tipos.map((option, index) => (
@@ -188,18 +240,18 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
             
                                         <Grid item xs={6}>
                                             <TextField 
-                                                disabled={values.compra !== null ? false : true}
+                                                disabled={pago.compra !== null ? false : true}
                                                 id="importe"
                                                 variant="outlined"
                                                 label="Importe"
                                                 required
                                                 fullWidth
                                                 type="number"
-                                                value={values.importe}
+                                                value={pago.importe}
                                                 onChange={(e) => handleChange('importe', e.target.value)}
                                                 />
                                         </Grid>
-                                        {values.tipoPago !== 'EFECTIVO' &&
+                                        {pago.tipoPago !== 'EFECTIVO' &&
                                             <Grid item xs={12}>
                                                 <TextField 
                                                     id="referencia"
@@ -207,7 +259,7 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
                                                     variant="outlined"
                                                     required
                                                     fullWidth
-                                                    value={values.referencia}
+                                                    value={pago.referencia}
                                                     onChange={(e) => handleChange('referencia', e.target.value)}
                                                     />
                                             </Grid>
@@ -222,7 +274,7 @@ export default function PagarDialog({cuentas, pagar, ubicacion, isOpen, close, s
                         <Button className={classes.botonSimplon} onClick={() => handleClose('pagarDialog')}>
                             Cancel
                         </Button>
-                        <Button className={classes.botonGenerico} type="submit" disabled={values.importe === 0 || guardando === true ? true : false}>
+                        <Button className={classes.botonGenerico} type="submit" disabled={pago.importe === 0 || guardando === true ? true : false}>
                             Registrar
                         </Button>
                     </DialogActions>

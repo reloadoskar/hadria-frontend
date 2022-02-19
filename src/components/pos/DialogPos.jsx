@@ -1,4 +1,4 @@
-import React, {useState, } from 'react'
+import React, {useState, useContext, useEffect } from 'react'
 import { Grid, Button, Dialog, Typography } from '@material-ui/core'
 import CrearVenta from '../ventas/CrearVenta'
 import Reloj from '../herramientas/reloj'
@@ -8,9 +8,18 @@ import CobroDialog from './CobroDialog'
 import EgresoDialog from './EgresoDialog'
 import PagarDialog from './PagarDialog'
 import IngresoCreate from '../ingresos/IngresoCreate'
+import { EgresoContext } from '../egresos/EgresoContext'
 export default function DialogPos(props){
-    const {open, close, clientes, inventario, ubicacion, ubicacions, fecha, showMessage, user, cortes, cxcPdv, addPagoCxc, addPagoCxp, cuentasxPagar} = props
-    
+    const {open, close, clientes, 
+        // inventario, 
+        ubicacion, 
+        ubicacions, 
+        fecha, 
+        showMessage, 
+        user, 
+        cortes, 
+        cxcPdv, addPagoCxc, addPagoCxp} = props
+    const {loadCuentasPorPagar} = useContext(EgresoContext)
     const classes = useStyles()
     const [corte, setCorte] = useState(null)
     const [corteDialog, setCorteDialog] = useState(false)
@@ -20,6 +29,10 @@ export default function DialogPos(props){
     const [pagoDialog, setPagoDialog] = useState(false)
 
     const [verCrearIngreso, setVerCrearIngreso] = useState(false)
+
+    useEffect(()=>{
+        loadCuentasPorPagar()
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     
     const toggleCxcDialog = () => {
         setCxcDialog(!cxcDialog)
@@ -100,7 +113,7 @@ export default function DialogPos(props){
                         open={crearVenta}
                         close={closeCrearVenta}
                         clientes={clientes} 
-                        elinventario={inventario.inventario}
+                        // elinventario={inventario.inventario}
                         laubicacion={ubicacion}
                         lafecha={fecha}
                         showMessage={showMessage}
@@ -153,7 +166,6 @@ export default function DialogPos(props){
                     </Button>
                     <PagarDialog 
                         fecha={fecha}
-                        cuentas={cuentasxPagar}
                         pagar={addPagoCxp}
                         ubicacion={ubicacion}
                         isOpen={pagoDialog}
