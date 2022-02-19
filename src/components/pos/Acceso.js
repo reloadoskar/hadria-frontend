@@ -76,7 +76,7 @@ export default function Acceso({accesando, ubicacions, ubicacion, fecha, access,
                                     </React.Fragment>
                                     :
                                     <React.Fragment>
-                                        <Typography variant="h5" align="center" >{ubicacion === '' ? null : ubicacion.nombre}</Typography>
+                                        <Typography variant="h5" align="center" >{!ubicacion ? null : ubicacion.nombre}</Typography>
                                         <Typography variant="h5" align="center" >{fecha === '' ? null : fecha}</Typography>
                                     </React.Fragment>
                                 }

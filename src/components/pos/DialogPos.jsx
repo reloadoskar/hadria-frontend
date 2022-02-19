@@ -93,7 +93,7 @@ export default function DialogPos(props){
             <Grid container spacing={2} justifyContent="center">
                 <Grid item xs={8} container>
                     <Grid item xs={6} sm={4}>
-                        <Typography variant="h6" align="center">{ubicacion.nombre}</Typography>
+                        <Typography variant="h6" align="center">{ubicacion ? ubicacion.nombre :  "ups!"}</Typography>
                     </Grid>
                     <Grid item xs={6} sm={4}>
                         <Typography variant="h6" align="center">{fecha}</Typography>

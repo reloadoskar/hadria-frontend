@@ -117,7 +117,6 @@ export default function Router(props){
                                 </Route>
                                 <Route exact path={`${path}/pos`}>
                                     <Pos 
-                                        ubicacions={useUbic.ubicacions}
                                         user={auth.user}
                                     />
                                 </Route>

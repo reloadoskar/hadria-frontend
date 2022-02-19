@@ -22,7 +22,7 @@ import GraficaInventario from '../inventario/GraficaInventario'
 import PlanStatus from '../avisos/PlanStatus'
 // HOOKS
 import useCortes from '../cortes/useCortes'
-import useIngresos from '../ingresos/useIngresos'
+// import useIngresos from '../ingresos/useIngresos'
 import useEgresos from '../egresos/useEgresos'
 import { useSnackbar } from 'notistack';
 
@@ -35,9 +35,11 @@ import {useAuth} from '../auth/use_auth'
 import {EmpresaContext} from '../empresa/EmpresaContext'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
 import {EgresoContext} from '../egresos/EgresoContext'
+import {IngresoContext} from '../ingresos/IngresoContext'
 export default function Dashboard() {
     const auth = useAuth()
     const {empresa } = useContext(EmpresaContext)
+    const { ingresos, addIngreso, addPagoCxc, loadIngresosxFecha, loadCuentasPorCobrarPdv, cxcPdv } = useContext(IngresoContext)
     const {loadEgresos, loadCuentasPorPagar} = useContext(EgresoContext)
     const {ubicacions} = useContext(UbicacionContext)
     const [verPlanStatus, setVerPlanStatus] = useState(false)
@@ -45,14 +47,16 @@ export default function Dashboard() {
 
     const classes = useStyles()
 
-    const ingresos = useIngresos()
+    // const ingresos = useIngresos()
     const egresos = useEgresos()
     const [corte, setCorte] = useState(null)
     const [fecha, setFecha] = useState(null)
     const now = moment()
     useEffect(()=>{
         loadEgresos(moment().format("YYYY-MM-DD"))
+        loadIngresosxFecha(moment().format("YYYY-MM-DD"))
         loadCuentasPorPagar()
+        loadCuentasPorCobrarPdv()
     },[])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         let hoy = moment().format("YYYY-MM-DD")
@@ -160,7 +164,7 @@ export default function Dashboard() {
     }
 
     const crearCobro = (cobro) => {
-        return ingresos.addPagoCxc(cobro).then(res => {
+        addPagoCxc(cobro).then(res => {
             showMessage(res.message, res.status)
 
         })
@@ -192,7 +196,7 @@ export default function Dashboard() {
         egresos.addEgreso(eg)
         .then(() => {
             
-            ingresos.addIngreso(ing)
+            addIngreso(ing)
             .then(()=>{
                 showMessage("Traspaso guardado", "success")
                 ticketTraspaso(traspaso).then(res => {
@@ -247,7 +251,7 @@ export default function Dashboard() {
                                 Cobrar
                             </Button>
                             <Cobrar                           
-                                cuentas={ingresos.cxcPdv}
+                                cuentas={cxcPdv}
                                 open={cobrar}
                                 close={closeCobrar}
                                 fecha={fecha}
@@ -262,7 +266,7 @@ export default function Dashboard() {
                                 Traspasar
                             </Button>
                             <Traspasar                           
-                                cuentas={ingresos.cxcPdv}
+                                cuentas={cxcPdv}
                                 open={traspasar}
                                 close={closeTraspasar}
                                 save={crearTraspaso}
@@ -282,7 +286,9 @@ export default function Dashboard() {
                         <Tab label="Inventario" value={2}/>
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
-                        <Disponible verCorte={verCorte} ubicacions={ubicacions} ingresos={ingresos} egresos={egresos} />
+                        {/* <Disponible verCorte={verCorte} ubicacions={ubicacions} 
+                        ingresos={ingresos} 
+                        egresos={egresos} /> */}
                         <Corte user={auth.user} open={corteDialog} close={closeCorteDialog} corte={corte} fecha={now.format("YYYY-MM-DD")} onChangeFecha={onChangeFecha}  ubicacions={ubicacions} reabrir={reOpen} guardar={guardarCorte}/>
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
@@ -294,7 +300,7 @@ export default function Dashboard() {
                     <ComprasMesProductor />
                 </Grid>
                 <Grid item xs={12}>
-                    <CuentasxCobrar cuentas={ingresos.cuentasxCobrar} total={ingresos.totalCxc}/>
+                    {/* <CuentasxCobrar cuentas={ingresos.cuentasxCobrar} total={ingresos.totalCxc}/> */}
                 </Grid>
             </Grid>     
             <PlanStatus open={verPlanStatus} close={() => setVerPlanStatus(false)} body={bodyPlanStatus} />

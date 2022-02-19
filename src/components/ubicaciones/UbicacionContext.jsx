@@ -12,11 +12,6 @@ const UbicacionContextProvider = (props) => {
         setUbicacions(res.ubicacions)
     }
 
-    useEffect(()=>{
-        loadUbicacions()
-        return () => setUbicacions(null)
-    },[])
-
     const addUbicacion = async (ubic) => {
         const res = await saveUbicacion(ubic)
         setUbicacions([...ubicacions, res.ubicacion])

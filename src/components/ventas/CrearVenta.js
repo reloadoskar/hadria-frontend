@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useState, useContext} from 'react'
 import { useMediaQuery } from '@material-ui/core';
 
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
@@ -12,9 +12,20 @@ import useStyles from '../hooks/useStyles'
 import {ticketVenta, ticketSalida} from '../api'
 import { formatNumber, sumImporte } from '../Tools'
 import Ticket from './Ticket'
-export default function CrearVenta({clientes, elinventario, laubicacion, lafecha, open, close, showMessage, addVenta}){
+import { InventarioContext } from '../inventario/InventarioContext';
+export default function CrearVenta({
+        clientes, 
+        // elinventario, 
+        laubicacion, 
+        lafecha, 
+        open, 
+        close, 
+        showMessage, 
+        addVenta
+    }){
     const classes = useStyles()
-    const [inventario, setInventario] = useState(null)
+    // const [inventario, setInventario] = useState(null)
+    const {inventario} = useContext(InventarioContext)
     const isMobile = useMediaQuery('(max-width: 720px)')
 
     const [ticket, setTicket] = useState(null)
@@ -36,12 +47,12 @@ export default function CrearVenta({clientes, elinventario, laubicacion, lafecha
             setCliente(clientes[0])
         }
     },[clientes])
-    useEffect(() => {
-        if(elinventario){
-            setInventario(elinventario)
-        }
-        return () => setInventario(null)
-    },[elinventario])
+    // useEffect(() => {
+    //     if(elinventario){
+    //         setInventario(elinventario)
+    //     }
+    //     return () => setInventario(null)
+    // },[elinventario])
     
     useEffect(() => {
         if(laubicacion){

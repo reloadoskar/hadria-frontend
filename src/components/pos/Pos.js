@@ -6,33 +6,34 @@ import useStyles from '../hooks/useStyles'
 // import useInventario from '../inventario/useInventario'
 import useCortes from '../cortes/useCortes'
 import useClientes from '../clientes/useClientes'
-import useIngresos from '../ingresos/useIngresos'
+// import useIngresos from '../ingresos/useIngresos'
 import moment from 'moment'
 import DialogPos from './DialogPos'
 import { InventarioContext } from '../inventario/InventarioContext';
-export default function Pos(props){
+import { IngresoContext } from '../ingresos/IngresoContext'
+import { UbicacionContext } from  '../ubicaciones/UbicacionContext'
+export default function Pos({user}){
     const now = moment()
-    const {user, ubicacions}=props
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
+    const {ubicacions} = useContext(UbicacionContext)
     const {loadInventarioUbicacion} = useContext(InventarioContext)
+    const {addVenta, cxcPdv,  addPagoCxc} = useContext(IngresoContext)
+    // const  = useIngresos()
     const {clientes} = useClientes()
-    const {addVenta, cxcPdv, addPagoCxc} = useIngresos()
     const cortes = useCortes()
     
     const [accesando, setAccesando] = useState(false)
-    const [ubicacion, setUbicacion] = useState("")
+    const [ubicacion, setUbicacion] = useState(null)
     const [fecha, setFecha] = useState(moment().format("YYYY-MM-DD"))
     
     const [dialogPos, setDialogPos] = useState(false)
-    
-    useEffect(() => {
-        if(user.ubicacion ){
-            setUbicacion(user.ubicacion)
-        }
-    },[user])
 
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
+
+    useEffect(()=>{
+        setUbicacion(user.ubicacion)
+    },[user]) //
     const handleChange = (type, value) => { 
         if(type === 'ubicacion'){            
             return setUbicacion(value)
