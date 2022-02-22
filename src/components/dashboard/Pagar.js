@@ -50,14 +50,15 @@ export default function Pagar({ open, close }) {
 
   useEffect(()=>{
     setSaldoProductor(sumSaldo(cuentasProductor))
+    setPago({ ...pago, importe: sumSaldo(cuentasProductor),  })
   },[cuentasProductor])
 
   const handleChange = (type, value) => {
     switch (type) {
       case 'importe':
-        if (value > pago.provedor.saldo) {
+        if (value > saldoProductor) {
           showMessage("El importe es mayor al saldo de la cuenta.", "warning")
-          return setPago({ ...pago, importe: pago.provedor.saldo,  })
+          return setPago({ ...pago, importe: saldoProductor,  })
         } else {
           return setPago({ ...pago, importe: value })
         }
@@ -173,7 +174,7 @@ export default function Pagar({ open, close }) {
                     autoFocus
                     required
                     fullWidth
-                    label="Selecciona un Produtor"
+                    label="Selecciona un Productor"
                     value={pago.provedor}
                     onChange={(e) => handleChange('provedor', e.target.value)}
                   >
