@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom, Chip, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 // import { ticketPago } from '../api'
-import { formatNumber } from '../Tools'
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom, Chip } from '@material-ui/core';
+import { formatNumber, sumSaldo } from '../Tools'
 
 import moment from 'moment'
-import useStyles from '../hooks/useStyles';
+import useStyles from '../hooks/useStyles'
+
+import CuentaPorPagar from '../cxp/CuentaPorPagar';
 
 import {EgresoContext} from '../egresos/EgresoContext'
 import { ProductorContext } from '../productors/ProductorContext'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
+import { CuentasPorPagarContext } from '../cxp/CuentasPorPagarContext';
 const init = {
   fecha: moment().format("YYYY-MM-DD"),
   ubicacion: '',
@@ -24,6 +24,7 @@ const init = {
 }
 export default function Pagar({ open, close }) {
   const {cuentasPorPagar, addEgreso, editEgreso} = useContext(EgresoContext)
+  const {cargarCuentas, cuentasProductor} = useContext(CuentasPorPagarContext)
   const {productors} = useContext(ProductorContext)
   const {ubicacions} = useContext(UbicacionContext)
   const classes = useStyles()
@@ -34,6 +35,7 @@ export default function Pagar({ open, close }) {
   const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
   const [pago, setPago] = useState(init)
   const [productoresConSaldo, setProductoresSaldo] = useState([])
+  const [saldoProductor, setSaldoProductor] = useState(0)
   const [pagando, setPagando] = useState(false)
 
   useEffect(()=>{
@@ -45,6 +47,11 @@ export default function Pagar({ open, close }) {
     });
     setProductoresSaldo(conSaldo)
   },[productors, cuentasPorPagar])
+
+  useEffect(()=>{
+    setSaldoProductor(sumSaldo(cuentasProductor))
+  },[cuentasProductor])
+
   const handleChange = (type, value) => {
     switch (type) {
       case 'importe':
@@ -55,6 +62,7 @@ export default function Pagar({ open, close }) {
           return setPago({ ...pago, importe: value })
         }
       case 'provedor':
+        cargarCuentas(value.cuentas)
         return setPago({ ...pago, provedor: value, })
       default:
         setPago({ ...pago, [type]: value })
@@ -70,7 +78,7 @@ export default function Pagar({ open, close }) {
     e.preventDefault()
     setPagando(true)
     let i = 0
-    let cuentas = pago.provedor.cuentas
+    let cuentas = cuentasProductor
     let importeDePago = pago.importe
 
     while(importeDePago > 0){
@@ -165,7 +173,7 @@ export default function Pagar({ open, close }) {
                     autoFocus
                     required
                     fullWidth
-                    label="Selecciona un Proveedor"
+                    label="Selecciona un Produtor"
                     value={pago.provedor}
                     onChange={(e) => handleChange('provedor', e.target.value)}
                   >
@@ -187,36 +195,9 @@ export default function Pagar({ open, close }) {
                 { pago.provedor !== '' ?
                   <React.Fragment>
                     <Grid item xs={12}>                      
-                          {pago.provedor.cuentas.map((cta, i) => (
-                      <Grid container key={i}>
-                                <Grid container alignItems='center'>
-                                  <Grid item xs={6}>
-                                    <Typography className={classes.textoMiniFacheron}>{cta.fecha}</Typography>
-                                    <Typography>{cta.concepto} {cta.compra.folio}:{cta.compra.clave}</Typography>
-                                  </Grid>
-                                  <Grid item xs={6}>
-                                    { moment().diff(cta.fecha, 'days') >  pago.provedor.diasDeCredito ?
-                                      <Grid container>
-                                        <Grid item xs={6}>
-                                          <Typography align='right'>
-                                            <Chip size='small' color='secondary' label='Cuenta vencida' />
-                                          </Typography>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                          <Typography align="right">
-                                            ${formatNumber(cta.saldo,1)}
-                                          </Typography>
-                                        </Grid>
-                                      </Grid>
-                                      : 
-                                      <Typography align="right">${formatNumber(cta.saldo,1)}</Typography>
-                                    }
-                                  </Grid>
-                                </Grid>
-                                
-
-                      </Grid>
-                            ))}
+                          {cuentasProductor.map((cta, i) => (
+                            <CuentaPorPagar cuenta={cta} diasDeCredito={pago.provedor.diasDeCredito} index={i} />
+                          ))}
                     </Grid>
 
                     <Grid item xs={12}>

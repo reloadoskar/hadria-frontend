@@ -21,6 +21,7 @@ import ClienteContextProvider from './components/clientes/ClienteContext'
 import EmpresaContextProvider from './components/empresa/EmpresaContext'
 import IngresoContextProvider from './components/ingresos/IngresoContext'
 import InventarioContextProvider from './components/inventario/InventarioContext';
+import CuentasPorPagarContextProvider from './components/cxp/CuentasPorPagarContext';
 function App() {
 
     return (
@@ -46,7 +47,9 @@ function App() {
                                                             <ProductoContextProvider>
                                                                 <ClienteContextProvider>
                                                                     <InventarioContextProvider>
-                                                                        <Router />
+                                                                        <CuentasPorPagarContextProvider>
+                                                                            <Router />
+                                                                        </CuentasPorPagarContextProvider>
                                                                     </InventarioContextProvider>
                                                                 </ClienteContextProvider>
                                                             </ProductoContextProvider>

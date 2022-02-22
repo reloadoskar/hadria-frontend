@@ -10,7 +10,7 @@ import { Grid,
 } from '@material-ui/core'
 import { NavLink } from 'react-router-dom';
 // componentes
-import CuentasxCobrar from '../cxc/CuentasxCobrar'
+// import CuentasxCobrar from '../cxc/CuentasxCobrar'
 import Pagar from './Pagar'
 import Traspasar from './Traspasar'
 import {ticketTraspaso} from '../api'
@@ -22,8 +22,6 @@ import GraficaInventario from '../inventario/GraficaInventario'
 import PlanStatus from '../avisos/PlanStatus'
 // HOOKS
 import useCortes from '../cortes/useCortes'
-// import useIngresos from '../ingresos/useIngresos'
-import useEgresos from '../egresos/useEgresos'
 import { useSnackbar } from 'notistack';
 
 import moment from 'moment'
@@ -33,7 +31,7 @@ import useStyles from '../hooks/useStyles'
 // CONTEXTOS
 import {useAuth} from '../auth/use_auth'
 import {EmpresaContext} from '../empresa/EmpresaContext'
-import { UbicacionContext } from '../ubicaciones/UbicacionContext'
+import {UbicacionContext} from '../ubicaciones/UbicacionContext'
 import {EgresoContext} from '../egresos/EgresoContext'
 import {IngresoContext} from '../ingresos/IngresoContext'
 export default function Dashboard() {
@@ -47,8 +45,6 @@ export default function Dashboard() {
 
     const classes = useStyles()
 
-    // const ingresos = useIngresos()
-    // const egresos = useEgresos()
     const [corte, setCorte] = useState(null)
     const [fecha, setFecha] = useState(null)
     const now = moment()
