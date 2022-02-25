@@ -33,13 +33,10 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
 
     const handleChange = (type, value) => {
         switch(type){
-            case 'importe':
-                // if(value > saldoDisponible){
-                //     showMessage("El importe es mayor al Saldo disponible.", "error")
-                //     return setValues({...values, importe: ''})
-                // }else{
-                    setValues({...values, [type]: value})
-                // }
+            case 'tipo':
+                if(value==="GASTO A COMPRA"){
+                    setValues({...values, tipo: value, concepto: "PAGOS"})
+                }
                 break;
             case 'descripcion':
                 return setValues({...values, [type]: value.toUpperCase()})
