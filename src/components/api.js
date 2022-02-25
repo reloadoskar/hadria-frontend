@@ -670,15 +670,14 @@ export const saveVenta = (venta) => {
     try{
         if(decoded){
             return axios
-                .post(url + decoded.database + '/venta/save', venta, {timeout: 5000})
+                .post(url + decoded.database + '/venta/save', venta)
                 .then(res => {
                     return res.data
                 })
                 .catch( error => {
                     return {
                         status: "error",
-                        message:"Red ocupada, intentelo de nuevo más tarde.",
-                        error: error
+                        message:"Red ocupada, intentelo de nuevo más tarde. " + error
                         }
                 })
         }
@@ -836,11 +835,11 @@ export const getIngresos = (fecha) => {
         console.log(err)
     }
 }
-export const getIngresosxMes = (year, month) => {
+export const getIngresosMonthYear = (month, year) => {
     try{
         if(decoded){
             return axios
-                .get(url + decoded.database+  '/ingresos/' + year + '/'+ month)
+                .get(url + decoded.database+  '/ingresos/' + month + '/'+ year)
                 .then( res => {
                     return res.data
                 })
@@ -907,6 +906,20 @@ export const getEgresos = (fecha) => {
         }
     }catch (err){
         console.log(err)
+    }
+}
+
+export const getEgresosMonthYear = (month, year) =>{
+    try {
+        if(decoded){
+            return axios
+                .get(url + decoded.database + '/egresos/' + month + '/'+year)
+                .then(res=>{
+                    return res.data
+                })
+        }
+    } catch (error) {
+        console.error(error)
     }
 }
 
