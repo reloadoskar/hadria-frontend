@@ -71,15 +71,16 @@ export default function VentaItemPrecios({item, precios, basic=false}){
                             <Grid item xs={3}>
                                 <Typography className={classes.textoMiniFacheron} align='right'>Importe:</Typography>
                                 <Typography className={classes.textoMirameSangron} align='right' >$ {formatNumber( (item.costo * item.cantidad) ,1) }</Typography>
-                                <Typography className={classes.textoMiniFacheron} align='right'>Utilidad: (
-                                    { formatNumber( 
-                                        ((tImporte - tCosto ) * 100) / tCosto
-                                    ,1) } %)
+                                <Typography className={classes.textoMiniFacheron} align='right'>Utilidad:
+                                    { tCosto > 1 ? 
+                                        formatNumber( ((tImporte - tCosto ) * 100) / tCosto,1 ) + "%"
+                                        : null 
+                                    }
                                 </Typography>
                                 <Typography className={ tImporte - tCosto < 0 ? classes.textoMirameSangron : classes.textoMirameExito} align='right' >$ 
                                     {formatNumber( tImporte - tCosto,1) }
                                 </Typography>
-                                {item.cantidad - (item.cantidad-item.stock) > 1 ?
+                                {item.cantidad - (item.cantidad-item.stock) > 1 && tCosto > 1  ?
                                     <React.Fragment>
                                         <Typography className={`${classes.textoMiniFacheron} ${classes.textoMirameExito}`} align='right'>Valor inventario:</Typography>
                                         <Typography className={classes.textoMirameExito} align='right' >+{formatNumber( disponible * item.costo,1)}</Typography>
