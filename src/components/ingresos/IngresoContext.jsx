@@ -1,6 +1,6 @@
 import React, {createContext, useState} from 'react'
 import { getIngresos, 
-    getIngresosxMes,
+    getIngresosMonthYear,
     saveIngreso, 
     delIngreso, 
     getCuentasPorCobrar, 
@@ -11,8 +11,8 @@ import { getIngresos,
 } from '../api'
 export const IngresoContext = createContext()
 const IngresoContextProvider = (props) => {
-    const [ingresos, setIngresos] = useState([])
-    const [cuentasxCobrar, setCuentasxCobrar] = useState([])
+    const [ingresos, setIngresos] = useState(null)
+    const [cuentasxCobrar, setCuentasxCobrar] = useState(null)
     const [cxcPdv, setCxcPdv] = useState([])
 
     const loadIngresosxFecha = async (fecha) =>{
@@ -20,8 +20,8 @@ const IngresoContextProvider = (props) => {
         setIngresos(res.ingresos)
     }
 
-    const loadIngresosxMes = async (year, month) => {
-        const res = await getIngresosxMes(year, month)
+    const loadIngresosMonthYear = async (month, year) => {
+        const res = await getIngresosMonthYear(month, year)
         setIngresos(res.ingresos)
     }
 
@@ -62,7 +62,7 @@ const IngresoContextProvider = (props) => {
         <IngresoContext.Provider value={{
             ingresos,
             loadIngresosxFecha,
-            loadIngresosxMes,
+            loadIngresosMonthYear,
             addIngreso,
             removeIngreso,
             addPagoCxc,
