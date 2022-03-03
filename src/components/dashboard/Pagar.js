@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom, Chip, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
-// import { ticketPago } from '../api'
+import { ticketPago } from '../api'
 import { formatNumber, sumSaldo } from '../Tools'
 
 import moment from 'moment'
@@ -51,7 +51,7 @@ export default function Pagar({ open, close }) {
   useEffect(()=>{
     setSaldoProductor(sumSaldo(cuentasProductor))
     setPago({ ...pago, importe: sumSaldo(cuentasProductor),  })
-  },[cuentasProductor])
+  },[cuentasProductor]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChange = (type, value) => {
     switch (type) {
@@ -85,17 +85,25 @@ export default function Pagar({ open, close }) {
     while(importeDePago > 0){
       let saldo = cuentas[i].saldo
       if(saldo>=importeDePago){ 
-        addEgreso({
-          tipo: 'PAGO',
-          concepto: "PAGO",
-          descripcion: "PAGO A: " + cuentas[i].concepto + " #"+ cuentas[i].compra.folio,
+        let data = {
+          provedor: pago.provedor,
           fecha: pago.fecha,
           ubicacion: pago.ubicacion,
+          referencia: pago.referencia,
+          tipo: 'PAGO',
+          concepto: "PAGO",
+          descripcion: "PAGO A CTA FOLIO: " + cuentas[i].folio+"|" +  cuentas[i].concepto + " #"+ cuentas[i].compra.folio,
           importe: importeDePago,
           compra: cuentas[i].compra._id,
+          cuenta: cuentas[i]._id,
           saldo: 0,
-        }).then(res=>{
+        }
+        addEgreso(data)
+        .then(res=>{
           showMessage(res.message, res.status)
+          ticketPago(pago).then(res => {
+            showMessage(res.message, res.status)
+          })
         })
         cuentas[i].saldo-=importeDePago
         editEgreso(cuentas[i]).then(res=>{
@@ -105,18 +113,23 @@ export default function Pagar({ open, close }) {
       }else{
         importeDePago-=cuentas[i].saldo;
         cuentas[i].saldo=0;
-
-        addEgreso({
-          tipo: 'PAGO',
-          concepto: "PAGO",
-          descripcion: "PAGO A: " + cuentas[i].concepto + " #"+ cuentas[i].compra.folio,
+        let data = {
+          provedor: pago.provedor,
           fecha: pago.fecha,
           ubicacion: pago.ubicacion,
+          tipo: 'PAGO',
+          concepto: "PAGO",
+          descripcion: "PAGO A CTA FOLIO: " + cuentas[i].folio+"|" + cuentas[i].concepto + " #"+ cuentas[i].compra.folio,
           importe: saldo,
           compra: cuentas[i].compra._id,
+          cuenta: cuentas[i]._id,
           saldo: 0,
-        }).then(res=>{
+        }
+        addEgreso(data).then(res=>{
           showMessage(res.message, res.status)
+          ticketPago(pago).then(res => {
+            showMessage(res.message, res.status)
+          })
         })
         editEgreso(cuentas[i]).then(res=>{
           showMessage(res.message, 'info')
@@ -197,7 +210,7 @@ export default function Pagar({ open, close }) {
                   <React.Fragment>
                     <Grid item xs={12}>                      
                           {cuentasProductor.map((cta, i) => (
-                            <CuentaPorPagar cuenta={cta} diasDeCredito={pago.provedor.diasDeCredito} index={i} />
+                            <CuentaPorPagar cuenta={cta} diasDeCredito={pago.provedor.diasDeCredito} key={i} />
                           ))}
                     </Grid>
 
