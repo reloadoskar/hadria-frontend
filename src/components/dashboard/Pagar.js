@@ -95,13 +95,13 @@ export default function Pagar({ open, close }) {
           descripcion: "PAGO A CTA FOLIO: " + cuentas[i].folio+"|" +  cuentas[i].concepto + " #"+ cuentas[i].compra.folio,
           importe: importeDePago,
           compra: cuentas[i].compra._id,
-          cuenta: cuentas[i]._id,
+          cuentas: cuentas[i],
           saldo: 0,
         }
         addEgreso(data)
         .then(res=>{
           showMessage(res.message, res.status)
-          ticketPago(pago).then(res => {
+          ticketPago(data).then(res => {
             showMessage(res.message, res.status)
           })
         })
@@ -122,12 +122,12 @@ export default function Pagar({ open, close }) {
           descripcion: "PAGO A CTA FOLIO: " + cuentas[i].folio+"|" + cuentas[i].concepto + " #"+ cuentas[i].compra.folio,
           importe: saldo,
           compra: cuentas[i].compra._id,
-          cuenta: cuentas[i]._id,
+          cuentas: cuentas[i],
           saldo: 0,
         }
         addEgreso(data).then(res=>{
           showMessage(res.message, res.status)
-          ticketPago(pago).then(res => {
+          ticketPago(data).then(res => {
             showMessage(res.message, res.status)
           })
         })
