@@ -200,6 +200,7 @@ export default function Mover(props){
                                         label={movimiento.itemsel === '' ? "Unidades" : movimiento.itemsel.productounidad.unidad}
                                         fullWidth
                                         required
+                                        type="number"
                                         variant="outlined"
                                         value={movimiento.itemselcantidad}
                                         onChange={(e) => handleChange('itemselcantidad', e.target.value)}
