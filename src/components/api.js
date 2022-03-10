@@ -156,7 +156,7 @@ export const getCuentasxCliente = () => {
     try{
         if(decoded){
             return axios
-                .get(url + decoded.database + '/ingresos/cuentas/clientes')
+                .get(url + decoded.database + '/cuentas/clientes')
                 .then(res => {
                     return res.data
                 })

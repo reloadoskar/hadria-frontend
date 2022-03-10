@@ -56,7 +56,9 @@ export default function Clientes(){
                         ))
                         :
                         clientes.map((cliente, i) => (
-                            <Cliente key={i} data={cliente} cuenta={cuentasxCliente.filter(cuenta=>cuenta._id === cliente._id)}/>
+                            <Cliente key={i} data={cliente} 
+                            cuenta={cuentasxCliente.filter(cuenta=>cuenta._id === cliente._id)}
+                            />
                         ))
                     }
                 </Grid>
