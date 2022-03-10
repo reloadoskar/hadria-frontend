@@ -309,3 +309,18 @@ export function agrupaItems(items, filtro){
         return Object.keys(reduce).map(key => reduce[key])
     }
 }
+export function agruparPor(arreglo, filtro){
+    let reduce = arreglo.reduce((grupo, item)=>{
+        (grupo[item[filtro]] =  grupo[item[filtro]] || {
+            [filtro] : item[filtro],
+            importe : 0,
+            saldo: 0
+        })
+        grupo[item[filtro]].importe += item.importe
+        if(item.saldo !== undefined){
+            grupo[item[filtro]].saldo += item.saldo
+        }
+        return grupo
+    },[])
+    return Object.keys(reduce).map(key => reduce[key])
+}

@@ -23,6 +23,7 @@ import Compra from './Compra';
 import ListaCompras from './ListaCompras';
 import DetalleCompra from './DetalleCompra'
 import { Meses } from '../tools/Meses'
+import moment from 'moment'
 // import CompraCreate from './CompraCreate';
 
 function Compras({ubicacions}) {
@@ -42,9 +43,9 @@ function Compras({ubicacions}) {
     const [compra, setCompra] = useState(null)
     const [verCompra, setVerCompra] = useState(false)
     const [confirm, setConfirm] = useState(false)
-    let now = new Date()
-    const [month, setMonth] = useState(now.getMonth() + 1)
-    const [year, setYear] = useState(now.getFullYear())
+    let now = moment()
+    const [month, setMonth] = useState(now.format("MM"))
+    const [year, setYear] = useState(now.format("YYYY"))
     const [isLoading, setIsLoading] = useState(true)
     useEffect(()=>{
         loadProductos()
@@ -146,7 +147,7 @@ function Compras({ubicacions}) {
                         onClick={handleClick}
                         className={classes.botonsoteGenerico}
                         children={
-                            Meses[month]
+                            Meses.filter(mes=>mes.id === month).map(mes=>mes.nombre)
                         } />
                     <Menu
                         anchorEl={anchorEl}
@@ -164,7 +165,7 @@ function Compras({ubicacions}) {
                         onClose={handleClose}
                     >
                         {Meses.map((mes, i) => (
-                            <MenuItem onClick={() => onChangeMonth(i)} key={i}>{mes}</MenuItem>
+                            <MenuItem onClick={() => onChangeMonth(mes.id)} key={i}>{mes.nombre}</MenuItem>
                         ))}
                     </Menu>
                 </Grid>
@@ -199,7 +200,7 @@ function Compras({ubicacions}) {
                             /> 
                             :
                             <Grid item xs={12}>
-                                <Typography variant='h6' align="center"> No hay compras registradas en {Meses[month]} {year}.</Typography>
+                                <Typography variant='h6' align="center"> No hay compras registradas en {Meses.filter(mes=>mes.id === month).map(mes=>mes.nombre)} {year}.</Typography>
                             </Grid>
                     :  
                         <Backdrop open={isLoading} onClick={()=> setIsLoading(false)}>

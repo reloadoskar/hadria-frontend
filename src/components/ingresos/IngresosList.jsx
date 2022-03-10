@@ -17,7 +17,7 @@ export default function IngresosList({data}){
     return (
         <Grid container spacing={2} className={classes.paperContorno}>
             {ingresos.map((ingreso, i) => (
-                <IngresoBasic ingreso={ingreso} key={i} />
+                <IngresoBasic data={ingreso} key={i} />
             ))}
             <Divider />
             <Grid item xs={12}>

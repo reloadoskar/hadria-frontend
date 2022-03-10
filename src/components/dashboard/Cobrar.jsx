@@ -35,6 +35,7 @@ export default function Cobrar({open, close, cuentas, ubicacions, showMessage, c
         e.preventDefault()
         setGuardando(true)
         cobrar(cobro).then(res => {
+            showMessage(res.message, res.status)
             setGuardando(false)
             setCobro(init)
             ticketCobranza(cobro).then(res=>{

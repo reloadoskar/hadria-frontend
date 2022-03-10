@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import Button from '@material-ui/core/Button';
 
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -9,13 +9,14 @@ import Dialog from '@material-ui/core/Dialog';
 import { Grid, Typography, Divider, TextField, MenuItem } from '@material-ui/core';
 import useStyles from '../hooks/useStyles';
 import {formatNumber} from '../Tools'
+import { UbicacionContext } from '../ubicaciones/UbicacionContext';
 export default function ConfirmaDialog(props) {
+    const {ubicacions} = useContext(UbicacionContext)
     const classess = useStyles()    
     const { 
         close, 
         open, 
         corte, 
-        ubicacions,
         cierraCorte} = props
     const [data, setData] = useState(null)
     const [enviarCorteA, setEnviarCorteA] = useState('')

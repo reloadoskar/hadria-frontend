@@ -129,6 +129,8 @@ export default function CrearVenta({
                 if(res.status==="error"){
                     showMessage(res.message, res.status)
                     setGuardando(false)
+                    toggleCobrarDialog()
+                    handleClose()
                 }else{
                     setGuardando(false)
                     venta.folio = res.venta.folio

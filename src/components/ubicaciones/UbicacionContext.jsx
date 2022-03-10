@@ -6,6 +6,7 @@ export const UbicacionContext = createContext()
 
 const UbicacionContextProvider = (props) => {
     const [ubicacions, setUbicacions] = useState([])
+    const [ubicacion, setUbicacion] = useState(null)
 
     const loadUbicacions = async () => {
         const res = await getUbicacions()
@@ -16,8 +17,17 @@ const UbicacionContextProvider = (props) => {
         const res = await saveUbicacion(ubic)
         setUbicacions([...ubicacions, res.ubicacion])
     }
+
+    const selectUbicacion = (ubicacion) =>{
+        setUbicacion(ubicacion)
+    }
     return(
-        <UbicacionContext.Provider value={{ubicacions, addUbicacion, loadUbicacions}} >
+        <UbicacionContext.Provider value={{
+            ubicacions, 
+            ubicacion,
+            selectUbicacion,
+            addUbicacion, 
+            loadUbicacions}} >
             {props.children}
         </UbicacionContext.Provider>
     )

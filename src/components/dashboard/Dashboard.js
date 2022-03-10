@@ -7,6 +7,8 @@ import { Grid,
     Button,
     Tabs,
     Tab,
+    Backdrop,
+    CircularProgress,
 } from '@material-ui/core'
 import { NavLink } from 'react-router-dom';
 // componentes
@@ -15,42 +17,39 @@ import Pagar from './Pagar'
 import Traspasar from './Traspasar'
 import {ticketTraspaso} from '../api'
 import Disponible from '../disponible/Disponible'
-import Corte from '../cortes/Corte'
+// import Corte from '../cortes/Corte'
 import Cobrar from './Cobrar'
 import CrearEgreso from '../egresos/CrearEgreso'
 import GraficaInventario from '../inventario/GraficaInventario'
 import PlanStatus from '../avisos/PlanStatus'
 // HOOKS
-import useCortes from '../cortes/useCortes'
 import { useSnackbar } from 'notistack';
 
 import moment from 'moment'
-import ComprasMesProductor from '../compras/ComprasMesProductor'
+// import ComprasMesProductor from '../compras/ComprasMesProductor'
 import useStyles from '../hooks/useStyles'
 
 // CONTEXTOS
-import {useAuth} from '../auth/use_auth'
 import {EmpresaContext} from '../empresa/EmpresaContext'
 import {UbicacionContext} from '../ubicaciones/UbicacionContext'
 import {EgresoContext} from '../egresos/EgresoContext'
 import {IngresoContext} from '../ingresos/IngresoContext'
+import CorteGlobal from '../cortes/CorteGlobal';
 export default function Dashboard() {
-    const auth = useAuth()
     const {empresa } = useContext(EmpresaContext)
-    const { ingresos, addIngreso, addPagoCxc, loadIngresosxFecha, loadCuentasPorCobrarPdv, cxcPdv } = useContext(IngresoContext)
-    const {egresos, loadEgresos, loadCuentasPorPagar, addEgreso} = useContext(EgresoContext)
+    const { ingresos, addIngreso, addPagoCxc, loadIngresosMonthYear, loadCuentasPorCobrarPdv, cxcPdv } = useContext(IngresoContext)
+    const {egresos, loadEgresosMonthYear, loadCuentasPorPagar, addEgreso} = useContext(EgresoContext)
     const {ubicacions} = useContext(UbicacionContext)
     const [verPlanStatus, setVerPlanStatus] = useState(false)
     const [bodyPlanStatus, setBody] = useState(null)
 
     const classes = useStyles()
 
-    const [corte, setCorte] = useState(null)
     const [fecha, setFecha] = useState(null)
     const now = moment()
     useEffect(()=>{
-        loadEgresos(moment().format("YYYY-MM-DD"))
-        loadIngresosxFecha(moment().format("YYYY-MM-DD"))
+        loadEgresosMonthYear(now.format("MM"), now.format("YYYY"))
+        loadIngresosMonthYear(now.format("MM"), now.format("YYYY"))
         loadCuentasPorPagar()
         loadCuentasPorCobrarPdv()
     },[])// eslint-disable-line react-hooks/exhaustive-deps
@@ -92,12 +91,10 @@ export default function Dashboard() {
         }
     },[empresa]) // eslint-disable-line react-hooks/exhaustive-deps
     const { enqueueSnackbar } = useSnackbar()
-    const {getCorte, reOpen, guardarCorte} = useCortes()
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
     const [gastar, setGastar] = useState(false)
     const [traspasar, setTraspasar] = useState(false)
-    const [corteDialog, setCorteDialog] = useState(false)
     const [tabSelected, setTab] = useState(1)
     const selectTab = (event, selected) => {
         setTab(selected)
@@ -130,43 +127,9 @@ export default function Dashboard() {
         setTraspasar(false)
     }
 
-    function verCorte(ub){
-        getCorte(ub._id, fecha).then(res=>{
-            setCorteDialog(true)
-            if(res.status === "error"){
-                showMessage(res.message, res.status)
-                setCorteDialog(false)
-            }else{
-                // console.log(res)
-                setCorte(res)
-            }
-        })
-    }
-
-    function closeCorteDialog(){
-        setCorte(null)
-        setCorteDialog(false)
-    }
-
-    function onChangeFecha(fecha){
-        setCorte(null)
-        muestrameEsteCorte(corte.ubicacion._id, fecha)
-        setFecha(fecha)
-    }
-
-    async function muestrameEsteCorte(ubicacion, fecha){
-        const res = await getCorte(ubicacion, fecha)
-        setCorte(res)
-    }
-
-    const crearCobro = (cobro) => {
-        addPagoCxc(cobro).then(res => {
-            showMessage(res.message, res.status)
-
-        })
-        .catch(err=>{
-            showMessage("No se pudo guardar el cobro", 'error')
-        })
+    const crearCobro = async (cobro) => {
+        let res = await addPagoCxc(cobro)
+        return res
     }
 
     const crearTraspaso = (traspaso) => {
@@ -210,7 +173,7 @@ export default function Dashboard() {
         })
 
     }
-    return (
+    return empresa && ingresos && egresos ? 
         <Container maxWidth="lg">
             <Grid container spacing={3}>
                 {/* TOP MENU */}
@@ -278,22 +241,24 @@ export default function Dashboard() {
                         value={tabSelected}
                         onChange={selectTab}
                         centered>
-                        <Tab label="Disponible" value={1}/>
-                        <Tab label="Inventario" value={2}/>
+                        <Tab label="Reporte Diario" value={1}/>
+                        <Tab label="Reporte Mensual" value={2}/>
+                        <Tab label="Inventario" value={3}/>
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
-                        <Disponible verCorte={verCorte} ubicacions={ubicacions} 
-                        ingresos={ingresos} 
-                        egresos={egresos} />
-                        <Corte user={auth.user} open={corteDialog} close={closeCorteDialog} corte={corte} fecha={now.format("YYYY-MM-DD")} onChangeFecha={onChangeFecha}  ubicacions={ubicacions} reabrir={reOpen} guardar={guardarCorte}/>
+                        <CorteGlobal />
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
+                        <Disponible />
+                        {/* <Corte user={auth.user} open={corteDialog} close={closeCorteDialog} corte={corte} fecha={now.format("YYYY-MM-DD")} onChangeFecha={onChangeFecha}  ubicacions={ubicacions} reabrir={reOpen} guardar={guardarCorte}/> */}
+                    </div>
+                    <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 3}>
                         <GraficaInventario />
                     </div>
                 </Grid>
                 {/* INFO CUENTAS POR COBRAR */}
                 <Grid item xs={12}>
-                    <ComprasMesProductor />
+                    {/* <ComprasMesProductor /> */}
                 </Grid>
                 <Grid item xs={12}>
                     {/* <CuentasxCobrar cuentas={ingresos.cuentasxCobrar} total={ingresos.totalCxc}/> */}
@@ -301,5 +266,7 @@ export default function Dashboard() {
             </Grid>     
             <PlanStatus open={verPlanStatus} close={() => setVerPlanStatus(false)} body={bodyPlanStatus} />
         </Container>
-    )
+    : <Backdrop className={classes.backdrop} open={true}>
+        <CircularProgress color="inherit" />
+    </Backdrop>
 }

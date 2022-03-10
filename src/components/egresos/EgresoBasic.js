@@ -12,7 +12,7 @@ import Confirm from '../dialogs/Confirm';
 import { useSnackbar } from 'notistack';
 export default function EgresoBasic({ data }) {
   const { removeEgreso, editEgreso } = useContext(EgresoContext)
-  const {ubicacions, loadUbicacions} = useContext(UbicacionContext)
+  const {ubicacions} = useContext(UbicacionContext)
 
   const { enqueueSnackbar } = useSnackbar()
   const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
@@ -31,6 +31,9 @@ export default function EgresoBasic({ data }) {
   }, [data])
 
   const onConfirm = () => {
+    // if(egreso.concepto==="PAGO"){
+    //   editEgreso({_id: egreso.cuenta })
+    // }
     removeEgreso(egreso._id).then(res=>{
       showMessage(res.message, res.status)
       setEgreso(null)
@@ -39,7 +42,6 @@ export default function EgresoBasic({ data }) {
 
   const handleEdit = () => {
     setEditMode(true)
-    loadUbicacions()
   }
 
   const handleChange = (field, value) => {
@@ -143,7 +145,6 @@ export default function EgresoBasic({ data }) {
               </Typography>
             </Grid>
           </Grid>
-
       }
     </div>
   )

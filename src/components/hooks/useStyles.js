@@ -290,6 +290,19 @@ const useStyles = makeStyles(theme => ({
         // backgroundColor: "#EC9A29"
     },
     
+    blurred: {
+        
+            webkitFilter: 'blur(4px)',
+            mozFilter: 'blur(4px)',
+            oFilter: 'blur(4px)',
+            msFilter: 'blur(4px)',
+            filter: 'blur(4px)',
+            width: '500px',
+            height: '50px',
+            backgroundColor: '#fff'
+          
+        
+    },
         
     // },
     // table: {

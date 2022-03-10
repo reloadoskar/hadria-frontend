@@ -156,7 +156,7 @@ export default function Liquidacion({ open, close, items, ventas, compra }) {
   return (
     <Grid container ref={componentRef}>
       {editMode ?
-        <Paper elevation={3} classes={{ root: classes.paperAmarillo }} displayPrint="none">
+        <Paper elevation={3} classes={{ root: classes.paperAmarillo }}>
           <Grid container spacing={2}>
             <Grid item xs={3} >
               <FormControlLabel

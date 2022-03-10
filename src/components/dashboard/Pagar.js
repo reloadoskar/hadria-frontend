@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom, Chip, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import { Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import { ticketPago } from '../api'
 import { formatNumber, sumSaldo } from '../Tools'

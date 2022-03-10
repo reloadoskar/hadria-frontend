@@ -4,7 +4,7 @@ import 'moment/locale/es-mx';
 import useStyles from '../hooks/useStyles'
 import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, Typography, CircularProgress, } from '@material-ui/core';
 
-export default function Acceso({accesando, ubicacions, ubicacion, fecha, access, handleChange, invUbic, user}){
+export default function Acceso({accesando, ubicacions=[], ubicacion, fecha, access, handleChange, invUbic, user}){
     const classes = useStyles();
     const handleSubmit = (e) => {
         e.preventDefault()

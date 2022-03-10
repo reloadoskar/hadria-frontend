@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton, Switch } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton, Switch, CircularProgress, Backdrop } from '@material-ui/core'
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
-import PrintIcon from '@material-ui/icons/Print';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
+import PrintIcon from '@material-ui/icons/Print';
 import VentaBasic from '../ventas/VentaBasic'
 import ConfirmDialog from './ConfirmDialog'
 import EgresoBasic from '../egresos/EgresoBasic'
@@ -14,28 +14,38 @@ import useStyles from '../hooks/useStyles'
 import { useReactToPrint } from 'react-to-print';
 import { useSnackbar } from 'notistack';
 import IngresosList from '../ingresos/IngresosList';
-export default function Corte(props) {
-  const { user, open, close, corte, fecha, onChangeFecha, guardar, reabrir } = props
+import {useAuth} from '../auth/use_auth'
+import useCortes from './useCortes';
+export default function Corte({ open, close, fecha, onChangeFecha, guardar, reabrir, ubicacion }) {
+  const auth = useAuth()
   const classes = useStyles()
-  const componentRef = useRef();
   const { enqueueSnackbar } = useSnackbar()
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  })
-  const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+  const componentRef = useRef();
+  const {getCorte} = useCortes()
+  
   const [elcorte, setElcorte] = useState(null)
-  const [lafecha, setLafecha] = useState("")
+  const [lafecha, setLafecha] = useState(fecha)
   const [mediasCajasCount, setMediasCajasCount] = useState(0)
   const [verFolios, setVerFolios] = useState(false)
   const [verDetalle, setVerDetalle] = useState(false)
   const [confirm, setConfirm] = useState(false)
   const [working, setWorking] = useState(false)
+  
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  })
+  const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+  
   useEffect(() => {
-    if (corte) {
-      setElcorte(corte)
+    if (fecha && ubicacion) {
+      setWorking(true)
+      getCorte(ubicacion._id, fecha).then(res=>{
+        setElcorte( res )
+        setWorking(false)
+      })
     }
     return () => setElcorte(null)
-  }, [corte])
+  }, [lafecha, ubicacion]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (elcorte !== null) {
@@ -103,7 +113,7 @@ export default function Corte(props) {
         close()
       })
   }
-  return (
+  return !working ?
     <Dialog
       open={open}
       onClose={close}
@@ -123,7 +133,7 @@ export default function Corte(props) {
               </Grid>
               <Grid item xs={12} sm={4}>
                 <Typography variant="h6" align="center">
-                  {user.level > 2 ? null :
+                  {auth.user.level > 2 ? null :
                     <IconButton onClick={fechaAnt}>
                       <NavigateBeforeIcon />
                     </IconButton>
@@ -134,7 +144,7 @@ export default function Corte(props) {
                     value={lafecha}
                     onChange={(e) => handleChange(e.target.value)}
                   />
-                  {user.level > 2 ? null :
+                  {auth.user.level > 2 ? null :
                     <IconButton onClick={fechaSig}>
                       <NavigateNextIcon />
                     </IconButton>
@@ -334,7 +344,7 @@ export default function Corte(props) {
                 >Cerrar
                             </Button>
                 :
-                user.level > 2 ? null :
+                auth.user.level > 2 ? null :
                   <Button
                     className={classes.botonCosmico}
                     onClick={() => handleReabrir(elcorte.ubicacion._id, lafecha)}
@@ -343,7 +353,6 @@ export default function Corte(props) {
                             </Button>
             }
             <ConfirmDialog
-              ubicacions={props.ubicacions}
               id="confirma cierre de corte"
               keepMounted
               open={confirm}
@@ -356,5 +365,8 @@ export default function Corte(props) {
         </React.Fragment>
       }
     </Dialog>
-  )
+  : <Backdrop open={true} className={classes.backdrop}>
+      <Typography>Cargando..</Typography>
+      <CircularProgress color="inherit" />
+    </Backdrop>
 }

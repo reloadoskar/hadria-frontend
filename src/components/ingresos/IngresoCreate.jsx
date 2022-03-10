@@ -14,7 +14,7 @@ const IngresoCreate = ({open, close, ubicacion, fecha}) => {
     const [ingreso, setIngreso] = useState({
         fecha: fecha,
         ubicacion: ubicacion,
-        concepto: "INGRESO A CAJA"
+        concepto: "INGRESO"
     })
 
     const handleChange = (field, value) => {

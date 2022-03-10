@@ -3,15 +3,16 @@ import { Card, CardContent, CardHeader, Grid, MenuItem, TextField, Typography } 
 import GraficaBarras from '../charts/GraficaBarras'
 import useStyles from '../hooks/useStyles'
 import { sumImporte, reduceNumber, sumSaldo } from '../Tools'
+import moment from 'moment'
 import {ProductorContext} from '../productors/ProductorContext'
 // import CountUpAnimation from '../tools/CountUpAnimation'
 import {Meses} from '../tools/Meses'
 export default function ComprasMesProductor(){
     const {loadComprasMesProductor, comprasMesProductor} = useContext(ProductorContext)
     const classes = useStyles()
-    const now = new Date()
-    const [month, setMonth] = useState(now.getMonth() + 1)
-    const [year, setYear] = useState(now.getFullYear())
+    const now = moment()
+    const [month, setMonth] = useState(now.format("M"))
+    const [year, setYear] = useState(now.format("YYYY"))
     useEffect(()=>{
         loadComprasMesProductor(year, month)
     },[year, month]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -39,7 +40,7 @@ export default function ComprasMesProductor(){
                             onChange={(e)=>setMonth(e.target.value)}
                         >
                             {Meses.map((mes, i) => (
-                                <MenuItem value={i} id={i} key={i}>{mes}</MenuItem>
+                                <MenuItem value={mes.id} key={i}>{mes.nombre}</MenuItem>
                             ))}
                         </TextField>
                         

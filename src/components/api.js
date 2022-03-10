@@ -863,6 +863,21 @@ export const delIngreso = (id) => {
     }
 }
 
+export const updateIngreso = (ingreso) => {
+    try{
+        if(decoded){
+            return axios
+                .put(url + decoded.database + '/ingreso/update/', ingreso)
+                .then( res => {
+                    return res.data
+                })
+
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
 // RETIRO
 
 export const saveRetiro = (retiro) => {

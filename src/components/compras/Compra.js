@@ -3,6 +3,7 @@ import { Dialog, DialogContent, Divider, Grid, IconButton, Slide,
     Typography, Tooltip, Badge, Tabs, Tab } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import LockIcon from '@material-ui/icons/Lock';
+import CachedIcon from '@material-ui/icons/Cached';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import DescriptionIcon from '@material-ui/icons/Description';
 import useStyles from '../hooks/useStyles'
@@ -16,14 +17,17 @@ import { useSnackbar } from 'notistack'
 import { ComprasContext } from './CompraContext'
 import VentasReportes from '../ventas/VentasReportes'
 import InventarioPorUbicacion from '../inventario/InventarioPorUbicacion';
-
+import useCompras from './useCompras';
+import { useAuth } from '../auth/use_auth';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 export default function Compra({open, close, compra}){
+    const auth = useAuth()
     const [laCompra, setLaCompra] = useState(null)
     const {cerrarCompra } = useContext(ComprasContext)
     const classes = useStyles()
+    const {recuperarVentas, recuperarGastos} = useCompras()
     const [liquidacionDialog, setLiquidacionDialog] = useState(false)
     const [costoFinal, setCostoFinal] = useState(0)
     const [totalVenta, setTotalVenta] = useState(0)
@@ -86,6 +90,16 @@ export default function Compra({open, close, compra}){
         setLaCompra(null)
         setTab(2)
     }
+
+    const handleSpecial = () =>{
+        recuperarVentas(laCompra._id).then(res=>{
+            console.log(res)
+        })
+
+        recuperarGastos(laCompra._id).then(res=>{
+            console.log(res)
+        })
+    }
     return laCompra === null ? null :
         <Dialog
             fullScreen
@@ -102,6 +116,15 @@ export default function Compra({open, close, compra}){
                         </Grid>
                         <Grid item xs={12} sm={3}>
                             <Typography component="div" align="center">
+                                {auth.user.level === 0 ?
+                                    <IconButton
+                                        aria-label="close"
+                                        onClick={handleSpecial}
+                                    >
+                                        <CachedIcon />
+                                    </IconButton>
+                                    : null
+                                }
 
                                 <Tooltip title="Crear Liquidaci&oacute;n" arrow>
                                     <IconButton

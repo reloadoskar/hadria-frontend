@@ -5,7 +5,7 @@ import { getIngresos,
     delIngreso, 
     getCuentasPorCobrar, 
     getCxcPdv, 
-    // getCxcCliente, 
+    updateIngreso,
     savePagoACuentaPorCobrar, 
     saveVenta 
 } from '../api'
@@ -58,6 +58,11 @@ const IngresoContextProvider = (props) => {
         return res
 	}
 
+    const editIngreso = async (data) =>{
+        let res = await updateIngreso(data)
+        return res
+    }
+
     return (
         <IngresoContext.Provider value={{
             ingresos,
@@ -70,7 +75,8 @@ const IngresoContextProvider = (props) => {
             cuentasxCobrar,
             cxcPdv,
             loadCuentasPorCobrarPdv,
-            addVenta
+            addVenta,
+            editIngreso
         }}>
             {props.children}
         </IngresoContext.Provider>

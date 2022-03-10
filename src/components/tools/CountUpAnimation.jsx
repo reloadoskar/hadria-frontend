@@ -10,7 +10,7 @@ function easeOutSine(x){
   }
 const frameDuration = 1000 / 60;
 
-export default function CountUpAnimation ( {num , temp=2000} ) {
+export default function CountUpAnimation ( {num , temp=100} ) {
 	const countTo = num 
 	const [ count, setCount ] = useState( 0 );
 

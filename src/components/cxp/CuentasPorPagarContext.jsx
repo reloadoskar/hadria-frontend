@@ -1,11 +1,11 @@
 import React, { createContext, useState } from 'react'
 import { 
-    getEgresos, 
+    // getEgresos, 
     saveEgreso, 
-    getCuentasPorPagar, 
-    savePagoACuentaPorPagar, 
-    deleteEgreso,
-    updateEgreso
+    // getCuentasPorPagar, 
+    // savePagoACuentaPorPagar, 
+    // deleteEgreso,
+    // updateEgreso
   } from '../api'
 export const CuentasPorPagarContext = createContext()
 

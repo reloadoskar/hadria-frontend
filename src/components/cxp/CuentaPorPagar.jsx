@@ -21,7 +21,7 @@ export default function CuentaPorPagar({cuenta, diasDeCredito}) {
                 {moment().diff(cuenta.fecha, 'days') > diasDeCredito ?
                     <Grid container>
                         <Grid item xs={6}>
-                            <Typography align='right'>
+                            <Typography align='right' component="div">
                                 <Chip size='small' color='secondary' label='Cuenta vencida' />
                             </Typography>
                         </Grid>

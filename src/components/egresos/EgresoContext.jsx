@@ -1,6 +1,7 @@
 import React, { useState, createContext } from 'react';
 import { 
   getEgresos, 
+  getEgresosMonthYear,
   saveEgreso, 
   getCuentasPorPagar, 
   savePagoACuentaPorPagar, 
@@ -11,8 +12,8 @@ import {
 export const EgresoContext = createContext()
 
 const EgresoContextProvider = (props) => {
-  const [egresos, setEgresos] = useState([])
-  const [cuentasPorPagar, setCuentasPorPagar] = useState([])
+  const [egresos, setEgresos] = useState(null)
+  const [cuentasPorPagar, setCuentasPorPagar] = useState(null)
   
   const addEgreso = async (egreso) => {
     const res = await saveEgreso(egreso)
@@ -35,6 +36,12 @@ const EgresoContextProvider = (props) => {
 		const res = await getEgresos(fecha)
 		setEgresos(res.egresos)		
 		return res
+  }
+
+  const loadEgresosMonthYear = async (month, year) =>{
+    const res = await getEgresosMonthYear(month, year)
+    setEgresos(res.egresos)
+    return res
   }
 
   const loadCuentasPorPagar = async () =>{
@@ -62,7 +69,8 @@ const EgresoContextProvider = (props) => {
       selectEgresos,
       editEgreso, 
       addPagoCxp, 
-      loadCuentasPorPagar
+      loadCuentasPorPagar,
+      loadEgresosMonthYear
     }}>
       {props.children}
     </EgresoContext.Provider>
