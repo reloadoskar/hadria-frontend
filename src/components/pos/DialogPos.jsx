@@ -203,16 +203,10 @@ export default function DialogPos(props){
                         Revisar Corte
                     </Button>
                     <Corte 
-                        user={user}
-                        ubicacions={ubicacions}
-                        fecha={fecha}
                         open={corteDialog}
                         close={closeDialogCorte}
-                        corte={corte}
-                        onChangeFecha={onChangeFecha}
-                        guardar={saveCorte}
-                        // guardar={cortes.guardarCorte}
-                        reabrir={cortes.reOpen}
+                        ubicacion={ubicacion}
+                        fecha={fecha}
                     />
                 </Grid>
                 <Grid item xs={8}>
