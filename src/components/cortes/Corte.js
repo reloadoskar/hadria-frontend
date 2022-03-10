@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton, Switch, CircularProgress, Backdrop } from '@material-ui/core'
+import { Tabs, Tab, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton, Switch, CircularProgress, Backdrop } from '@material-ui/core'
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import PrintIcon from '@material-ui/icons/Print';
@@ -14,15 +14,15 @@ import useStyles from '../hooks/useStyles'
 import { useReactToPrint } from 'react-to-print';
 import { useSnackbar } from 'notistack';
 import IngresosList from '../ingresos/IngresosList';
-import {useAuth} from '../auth/use_auth'
+import { useAuth } from '../auth/use_auth'
 import useCortes from './useCortes';
-export default function Corte({ open, close, fecha, onChangeFecha, guardar, reabrir, ubicacion }) {
+export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion }) {
   const auth = useAuth()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const componentRef = useRef();
-  const {getCorte} = useCortes()
-  
+  const { getCorte } = useCortes()
+
   const [elcorte, setElcorte] = useState(null)
   const [lafecha, setLafecha] = useState(fecha)
   const [mediasCajasCount, setMediasCajasCount] = useState(0)
@@ -30,17 +30,21 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
   const [verDetalle, setVerDetalle] = useState(false)
   const [confirm, setConfirm] = useState(false)
   const [working, setWorking] = useState(false)
-  
+
+  const [tabSelected, setTab] = useState(1)
+  const handleChangeTab =(event, value) => {
+    setTab(value)
+  }
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   })
   const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
-  
+
   useEffect(() => {
-    if (fecha && ubicacion) {
+    if (lafecha && ubicacion) {
       setWorking(true)
-      getCorte(ubicacion._id, fecha).then(res=>{
-        setElcorte( res )
+      getCorte(ubicacion._id, lafecha).then(res => {
+        setElcorte(res)
         setWorking(false)
       })
     }
@@ -70,7 +74,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
 
   function handleChange(value) {
     setLafecha(value)
-    onChangeFecha(value)
+    // onChangeFecha(value)
   }
 
   function fechaSig() {
@@ -142,7 +146,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
                     id="date"
                     type="date"
                     value={lafecha}
-                    onChange={(e) => handleChange(e.target.value)}
+                    onChange={(e) => handleChangeTab(e.target.value)}
                   />
                   {auth.user.level > 2 ? null :
                     <IconButton onClick={fechaSig}>
@@ -156,13 +160,27 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
                   <IconButton onClick={handlePrint}>
                     <PrintIcon />
                   </IconButton>
-                                Total: ${formatNumber(elcorte.total, 2)}
+                  Total: ${formatNumber(elcorte.total, 2)}
                 </Typography>
               </Grid>
             </Grid>
           </DialogTitle>
           <DialogContent ref={componentRef}>
             <Grid container spacing={2}>
+
+              <Grid item xs={12}>
+                <Tabs
+                    value={tabSelected}
+                    onChange={handleChangeTab}
+                    centered
+                >
+                    <Tab label="Resumen de venta" value={1}/>
+                    <Tab label="Ventas por producto y por precio" value={2} />
+                </Tabs>
+              </Grid>
+
+              <Grid container value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
+              
               {elcorte.resumenVentas.length === 0 ? null :
                 <Grid item xs={12} className={classes.paperContorno}>
                   <Typography variant="h6" align="center">RESUMEN VENTAS</Typography>
@@ -186,7 +204,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
                     <Grid item xs={3} sm={7}>
                       <Typography align="right" className={classes.textoMiniFacheron}>
                         Total cajas
-                                        </Typography>
+                      </Typography>
                       <Typography
                         className={classes.textoMirame}
                         align="right"
@@ -197,7 +215,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
                     <Grid item xs={3} sm={2}>
                       <Typography align="right" className={classes.textoMiniFacheron}>
                         Total kilos
-                                        </Typography>
+                      </Typography>
                       <Typography
                         className={classes.textoMirame}
                         align="right"
@@ -209,7 +227,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
                     <Grid item xs={3} sm={2}>
                       <Typography align="right" className={classes.textoMiniFacheron}>
                         Total ventas
-                                        </Typography>
+                      </Typography>
                       <Typography
                         className={classes.textoMirame}
                         align="right"
@@ -225,7 +243,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
                       align="right"
                     >
                       Cajas vacías
-                                    </Typography>
+                    </Typography>
                     <Typography
                       className={classes.textoMirame}
                       align="right"
@@ -235,17 +253,21 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
                   </Grid>
                 </Grid>
               }
+            </Grid>
+
+
+
 
               {elcorte.ventas.length > 0 ?
                 <Grid item xs={12}>
                   <Typography component="div" align="center">
                     Ver ventas
-                                    <Switch
+                    <Switch
                       checked={verFolios}
                       onChange={toggleVerFolios}
                     />
-                                    Ver detalle
-                                    <Switch
+                    Ver detalle
+                    <Switch
                       checked={verDetalle}
                       onChange={toggleVerDetalle}
                     />
@@ -276,7 +298,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
                   <Divider />
                   <Grid container spacing={1}>
                     {elcorte.items.map((item, i) => (
-                      <VentaItem item={item} key={i}/>
+                      <VentaItem item={item} key={i} />
                     ))}
                     <Grid item xs={3} sm={9}>
                       <Typography align="right">{formatNumber(sumEmpaques(elcorte.items), 1)}</Typography>
@@ -297,7 +319,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
               {elcorte.ingresos.length === 0 ? null :
                 <IngresosList data={elcorte.ingresos} />
               }
-              
+
               {elcorte.egresos.length === 0 ? null :
                 <Grid item xs={12} className={classes.paperContorno}>
                   <Typography variant="h6" align="center">EGRESOS</Typography>
@@ -342,7 +364,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
                   className={classes.botonMagico}
                   onClick={() => setConfirm(true)}
                 >Cerrar
-                            </Button>
+                </Button>
                 :
                 auth.user.level > 2 ? null :
                   <Button
@@ -350,7 +372,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
                     onClick={() => handleReabrir(elcorte.ubicacion._id, lafecha)}
                   >
                     Reabrir
-                            </Button>
+                  </Button>
             }
             <ConfirmDialog
               id="confirma cierre de corte"
@@ -365,7 +387,7 @@ export default function Corte({ open, close, fecha, onChangeFecha, guardar, reab
         </React.Fragment>
       }
     </Dialog>
-  : <Backdrop open={true} className={classes.backdrop}>
+    : <Backdrop open={true} className={classes.backdrop}>
       <Typography>Cargando..</Typography>
       <CircularProgress color="inherit" />
     </Backdrop>
