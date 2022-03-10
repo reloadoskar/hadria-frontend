@@ -146,7 +146,7 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
                     id="date"
                     type="date"
                     value={lafecha}
-                    onChange={(e) => handleChangeTab(e.target.value)}
+                    onChange={(e) => handleChange(e.target.value)}
                   />
                   {auth.user.level > 2 ? null :
                     <IconButton onClick={fechaSig}>
