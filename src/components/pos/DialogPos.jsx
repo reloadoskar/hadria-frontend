@@ -70,19 +70,19 @@ export default function DialogPos(props){
         setCorteDialog(false)
     }
 
-    function onChangeFecha(fecha){
-        setCorte(null)
-        cortes.getCorte(corte.ubicacion._id, fecha).then(res => {
-            setCorte(res)
-        })
-        // setFecha(fecha)
-    }
-    function saveCorte(corte){
-        return cortes.guardarCorte(corte).then( res => {
-            // closeDialogCorte()
-            close()
-        })
-    }
+    // function onChangeFecha(fecha){
+    //     setCorte(null)
+    //     cortes.getCorte(corte.ubicacion._id, fecha).then(res => {
+    //         setCorte(res)
+    //     })
+    //     // setFecha(fecha)
+    // }
+    // function saveCorte(corte){
+    //     return cortes.guardarCorte(corte).then( res => {
+    //         // closeDialogCorte()
+    //         close()
+    //     })
+    // }
 
     function closeDialogPago(){
         setPagoDialog(false)
@@ -202,12 +202,15 @@ export default function DialogPos(props){
                     >
                         Revisar Corte
                     </Button>
-                    <Corte 
+                    {corteDialog?
+                        <Corte 
                         open={corteDialog}
                         close={closeDialogCorte}
                         ubicacion={ubicacion}
                         fecha={fecha}
-                    />
+                        />
+                        : null
+                    }
                 </Grid>
                 <Grid item xs={8}>
                     <Button
