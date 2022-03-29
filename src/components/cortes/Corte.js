@@ -4,6 +4,7 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import PrintIcon from '@material-ui/icons/Print';
 import VentaBasic from '../ventas/VentaBasic'
+import ListaVentas from '../ventas/ListaVentas';
 import ConfirmDialog from './ConfirmDialog'
 import EgresoBasic from '../egresos/EgresoBasic'
 import CxcBasic from '../cxc/CxcBasic'
@@ -16,6 +17,8 @@ import { useSnackbar } from 'notistack';
 import IngresosList from '../ingresos/IngresosList';
 import { useAuth } from '../auth/use_auth'
 import useCortes from './useCortes';
+import VentaItemPrecios from '../ventas/VentaItemPrecios';
+import { agruparPorObjeto, agrupaVentas } from '../Tools';
 export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion }) {
   const auth = useAuth()
   const classes = useStyles()
@@ -27,9 +30,11 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
   const [lafecha, setLafecha] = useState(fecha)
   const [mediasCajasCount, setMediasCajasCount] = useState(0)
   const [verFolios, setVerFolios] = useState(false)
-  const [verDetalle, setVerDetalle] = useState(false)
+  const [verDetalle, setVerDetalle] = useState(true)
   const [confirm, setConfirm] = useState(false)
   const [working, setWorking] = useState(false)
+
+  const [productos, setProductos] = useState([])
 
   const [tabSelected, setTab] = useState(1)
   const handleChangeTab =(event, value) => {
@@ -46,6 +51,7 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
       getCorte(ubicacion._id, lafecha).then(res => {
         setElcorte(res)
         setWorking(false)
+        setProductos( agruparPorObjeto(res.items, "compraItem") )
       })
     }
     return () => setElcorte(null)
@@ -96,7 +102,7 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
   function cierraCorte() {
     setWorking(true)
     guardar(elcorte)
-      .then(res => {
+      .then(() => {
         setWorking(false)
         close()
       })
@@ -174,8 +180,9 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
                     onChange={handleChangeTab}
                     centered
                 >
-                    <Tab label="Resumen de venta" value={1}/>
-                    <Tab label="Ventas por producto y por precio" value={2} />
+                    <Tab label="Ventas" value={0}/>
+                    <Tab label="Resumen de ventas" value={1}/>
+                    <Tab label="Ventas por producto" value={2} />
                 </Tabs>
               </Grid>
 
@@ -183,8 +190,6 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
               
               {elcorte.resumenVentas.length === 0 ? null :
                 <Grid item xs={12} className={classes.paperContorno}>
-                  <Typography variant="h6" align="center">RESUMEN VENTAS</Typography>
-                  <Divider />
                   {elcorte.resumenVentas.map((el, i) => (
                     <React.Fragment key={i}>
                       <Grid container >
@@ -257,64 +262,79 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
 
 
 
+            <Grid container value={tabSelected} role="tabpanel" hidden={tabSelected!== 0}>
+                {elcorte.ventas.length > 0 ?
+                  <Grid item xs={12}>
+                    <Typography component="div" align="center">
+                      Ver ventas
+                      <Switch
+                        checked={verFolios}
+                        onChange={toggleVerFolios}
+                      />
+                      Ver detalle
+                      <Switch
+                        checked={verDetalle}
+                        onChange={toggleVerDetalle}
+                      />
+                    </Typography>
+                  </Grid>
+                  : null
+                }
 
-              {elcorte.ventas.length > 0 ?
-                <Grid item xs={12}>
-                  <Typography component="div" align="center">
-                    Ver ventas
-                    <Switch
-                      checked={verFolios}
-                      onChange={toggleVerFolios}
-                    />
-                    Ver detalle
-                    <Switch
-                      checked={verDetalle}
-                      onChange={toggleVerDetalle}
-                    />
-                  </Typography>
-                </Grid>
-                : null
-              }
-
-              {verFolios === false ? null :
-                <Grid item xs={12} className={classes.paperContorno}>
-                  <Typography variant="h6" align="center">VENTAS</Typography>
-                  <Divider />
-                  <Grid container spacing={1}>
-                    {elcorte.ventas.map((item, i) => (
-                      <VentaBasic venta={item} key={i} />
-                    ))}
-                    <Grid item xs={12}>
-                      <Divider />
-                      <Typography className={classes.textoMirame} align="right">${formatNumber(elcorte.tventas, 2)}</Typography>
+                {verFolios === false ? null :
+                  <Grid item xs={12} className={classes.paperContorno}>
+                    <Typography variant="h6" align="center">VENTAS</Typography>
+                    <Divider />
+                    <Grid container spacing={1}>
+                      {elcorte.ventas.map((item, i) => (
+                        <VentaBasic venta={item} key={i} />
+                      ))}
+                      <Grid item xs={12}>
+                        <Divider />
+                        <Typography className={classes.textoMirame} align="right">${formatNumber(elcorte.tventas, 2)}</Typography>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              }
+                }
 
-              {verDetalle === false ? null :
-                <Grid item xs={12} className={classes.paperContorno}>
-                  <Typography variant="h6" align="center">DETALLE DE VENTAS</Typography>
-                  <Divider />
-                  <Grid container spacing={1}>
-                    {elcorte.items.map((item, i) => (
-                      <VentaItem item={item} key={i} />
-                    ))}
-                    <Grid item xs={3} sm={9}>
-                      <Typography align="right">{formatNumber(sumEmpaques(elcorte.items), 1)}</Typography>
-                    </Grid>
-                    <Grid item xs={3} sm={1}>
-                      <Typography align="right">{formatNumber(sumCantidad(elcorte.items), 2)}</Typography>
-                    </Grid>
-                    <Grid item xs={3} sm={1}>
-                      <Typography align="center"> -- </Typography>
-                    </Grid>
-                    <Grid item xs={3} sm={1}>
-                      <Typography align="right">${formatNumber(elcorte.tventas, 2)}</Typography>
+                {verDetalle === false ? null :
+                  <Grid item xs={12} className={classes.paperContorno}>
+                    <Typography variant="h6" align="center">DETALLE DE VENTAS</Typography>
+                    <Divider />
+                    <Grid container spacing={1}>
+                      {elcorte.items.map((item, i) => (
+                        <VentaItem item={item} key={i} />
+                      ))}
+                      <Grid item xs={3} sm={9}>
+                        <Typography align="right">{formatNumber(sumEmpaques(elcorte.items), 1)}</Typography>
+                      </Grid>
+                      <Grid item xs={3} sm={1}>
+                        <Typography align="right">{formatNumber(sumCantidad(elcorte.items), 2)}</Typography>
+                      </Grid>
+                      <Grid item xs={3} sm={1}>
+                        <Typography align="center"> -- </Typography>
+                      </Grid>
+                      <Grid item xs={3} sm={1}>
+                        <Typography align="right">${formatNumber(elcorte.tventas, 2)}</Typography>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              }
+                }
+            </Grid>
+
+            <Grid container value={tabSelected} role="tabpanel" hidden={tabSelected!== 0}>
+              <ListaVentas ventas={elcorte.items} />  
+            </Grid>
+            <Grid container value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
+              { productos.map((producto, index) => (
+                <VentaItemPrecios item={producto} 
+                  precios={agrupaVentas( elcorte.items.filter(vta => vta.compraItem._id === producto._id ), "precio")} 
+                  key={index}
+                  basic
+                  corte
+                />  
+              ))}
+            </Grid>
 
               {elcorte.ingresos.length === 0 ? null :
                 <IngresosList data={elcorte.ingresos} />

@@ -10,12 +10,12 @@ import Corte from '../cortes/Corte'
 import moment from 'moment'
 import useStyles from "../hooks/useStyles"
 import { formatNumber, sumImporte } from "../Tools"
-export default function CorteGlobal(){
+export default function CorteGlobal({ingresos, egresos}){
     let now = moment()
     const classes = useStyles()
     const [fecha, setFecha] = useState(now.format("YYYY-MM-DD"))
-    const {ingresos} = useContext(IngresoContext)
-    const {egresos} = useContext(EgresoContext)
+    // const {ingresos} = useContext(IngresoContext)
+    // const {egresos} = useContext(EgresoContext)
     const {ubicacions, ubicacion, selectUbicacion} = useContext(UbicacionContext)
 
     const [ingresosFecha, setIngFech] = useState([])
@@ -29,7 +29,7 @@ export default function CorteGlobal(){
     useEffect(()=>{
         // setTingresosfecha(0)
         // setTegresosfecha(0)
-        if(fecha ){
+        if(fecha&& ingresos && egresos ){
             let ingresosfecha = ingresos.filter(ingreso=>ingreso.fecha===fecha)
             setIngFech(ingresosfecha)
             // setTingresosfecha(sumImporte(ingresosFecha))

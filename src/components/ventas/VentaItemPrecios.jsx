@@ -3,7 +3,8 @@ import { Container, Grid, Typography } from '@material-ui/core'
 import { formatNumber } from '../Tools'
 import useStyles from '../hooks/useStyles'
 import GraficaProductoPrecios from '../charts/GraficaProductoPrecios'
-export default function VentaItemPrecios({item, precios, basic=false}){
+import moment from 'moment'
+export default function VentaItemPrecios({item, precios, basic=false, corte=false}){
     const classes = useStyles()
     const [precioPromedio, setPrecioProm] = useState(0)
     const [tCantidad, setTcantidad] = useState(0)
@@ -22,8 +23,19 @@ export default function VentaItemPrecios({item, precios, basic=false}){
     },[precios, item])
     return precios.length > 0 ?
         <Grid container className={classes.paperBasico} alignItems='center'>
+            <Grid container alignItems='center'>
+                {corte?
+                    <Grid item xs={3}>
+                        <Typography className={classes.textoMiniFacheron} >{moment(item.compraItem.createdAt).format("DD/MM/YY")}</Typography>
+                        <Typography className={classes.textoMirame} >#{item.compra.folio}</Typography>
+                    </Grid>
+                    : null
+                }
+                <Grid item xs>
+                    <Typography className={classes.textoSubrayadoNice} variant="h6" align="center">{item.producto.descripcion}</Typography>
+                </Grid>
+            </Grid>
             <Grid item xs={12} sm={8}>
-                <Typography className={classes.textoSubrayadoNice} variant="h6" align="center">{item.producto.descripcion}</Typography>
                 <Container maxWidth="md">
                     <Grid container >
                         <Grid item xs={3}><Typography align='right' >Precio ($)</Typography></Grid>

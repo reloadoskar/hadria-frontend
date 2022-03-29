@@ -26,7 +26,7 @@ import moment from 'moment'
 import CountUpAnimation from '../tools/CountUpAnimation'
 import { agruparPor } from '../Tools'
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryPie } from 'victory'
-export default function Disponible({ verCorte }) {
+export default function Disponible() {
     const classes = useStyles()
 
     const { ubicacions } = useContext(UbicacionContext)
@@ -89,7 +89,15 @@ export default function Disponible({ verCorte }) {
 
         }
         return () => {
-            setDispxubic(null)
+            setTingresos(0)
+            setTegresos(0)
+            setTcobranza(0)
+            setPorCobrar(0)
+            setPorPagar(0)
+            setTpagos(0)
+            setResultado(0)
+            setIngresosAgrupados([])
+            setEgresosAgrupados([])
         }
     }, [ingresos, egresos, ubicacions])
 
@@ -232,8 +240,6 @@ export default function Disponible({ verCorte }) {
                         </div>
 
                     } value={3} />
-
-
 
                     <Tab label={
                         <div>

@@ -1204,7 +1204,7 @@ export const ticketCompra = (data) => {
 
                 return {
                     status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
+                    message: 'No hay impresora!!😱'
                 }
             } else {
                 return error

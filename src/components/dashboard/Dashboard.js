@@ -188,21 +188,27 @@ export default function Dashboard() {
                                 >
                                 Pagar
                             </Button>
-                            <Pagar 
-                                open={pagar}
-                                close={closePagar}
-                            />
+                            {pagar ? 
+                                <Pagar 
+                                    open={pagar}
+                                    close={closePagar}
+                                />
+                                : null
+                            }
 
                             <Button
                                 onClick={() => showGastar()}>
                                     Gastar
                             </Button>
-                            <CrearEgreso 
-                                ubicacions={ubicacions}
-                                open={gastar}
-                                close={()=>setGastar(false)}
-                                mensaje={showMessage}
-                            />
+                            {gastar ?
+                                <CrearEgreso 
+                                    ubicacions={ubicacions}
+                                    open={gastar}
+                                    close={()=>setGastar(false)}
+                                    mensaje={showMessage}
+                                />
+                                : null
+                            }
                             
                             <Button
                                 onClick={() => showCobrar()}
@@ -246,7 +252,9 @@ export default function Dashboard() {
                         <Tab label="Inventario" value={3}/>
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
-                        <CorteGlobal />
+                        {tabSelected !== 1 ? null :
+                            <CorteGlobal ingresos={ingresos} egresos={egresos} />
+                        }
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
                         <Disponible />
