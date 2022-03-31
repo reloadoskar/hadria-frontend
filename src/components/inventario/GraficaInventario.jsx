@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Grid, CircularProgress, Card, CardContent, Typography } from '@material-ui/core'
-import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryLabel, VictoryTooltip } from 'victory';
 import {sumStock, sumEmpStock, formatNumber} from "../Tools"
 import useInventario from './useInventario'
 export default function GraficaInventario(){
@@ -48,6 +48,7 @@ export default function GraficaInventario(){
                         >
                             <VictoryAxis key="x"
                                 dependentAxis
+                                label="Empaques"
                                 style={{
                                     axis: { stroke: "#524656", strokeWidth: 2 },
                                     tickLabels:{fontSize:7, fill: "#524656" },
@@ -60,16 +61,25 @@ export default function GraficaInventario(){
                             />
                             <VictoryAxis key="y"
                                 orientation="bottom"
+                                // label="Sucursales"
                                 style={{
                                     tickLabels:{fontSize: 6, fill: "#524656"},
                                     axis: { stroke: "#524656", strokeWidth: 3 },
-                                }}
+                                }}    
+                                tickLabelComponent={<VictoryLabel 
+                                    angle={90}
+                                    textAnchor="start"
+                                    dx={-5}
+                                />}                            
                             />
                             <VictoryBar
-                                // labelComponent={<VictoryTooltip />}
+                                labelComponent={<VictoryLabel
+                                    />}
                                 name="Inventario"
                                 data={barData}
-                                labels={({ datum }) => `${formatNumber(datum.totalEmpaques,1)} Cajas \n ${formatNumber(datum.totalStock,1)} Kg`}
+                                labels={({ datum }) => `
+                                    ${formatNumber(datum.totalEmpaques,1)} Cajas \n 
+                                    ${formatNumber(datum.totalStock,1)} Kg \n`}
                                 x="ubicacion"
                                 y="totalEmpaques"
                                 style={{
