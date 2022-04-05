@@ -15,9 +15,9 @@ export default function DialogPos(props) {
         ubicacion,
         fecha,
         showMessage,
-        cxcPdv, addPagoCxc, addPagoCxp } = props
-    const { loadCuentasPorPagar } = useContext(EgresoContext)
-    const { loadCuentasPorCobrarPdv } = useContext(IngresoContext)
+        cxcPdv, addPagoCxc } = props
+    const { resetEgresos, loadCuentasPorPagar } = useContext(EgresoContext)
+    const { resetIngresos, loadCuentasPorCobrarPdv } = useContext(IngresoContext)
     const classes = useStyles()
     const [corteDialog, setCorteDialog] = useState(false)
     const [crearVenta, setCrearVenta] = useState(false)
@@ -28,8 +28,18 @@ export default function DialogPos(props) {
     const [verCrearIngreso, setVerCrearIngreso] = useState(false)
 
     useEffect(() => {
-        loadCuentasPorPagar()
-        loadCuentasPorCobrarPdv()
+        const loadAll = async () =>{
+            const res = await Promise.all([                
+                resetEgresos(),
+                resetIngresos(),
+                loadCuentasPorPagar(),
+                loadCuentasPorCobrarPdv()
+            ])
+            return res
+        }
+        loadAll().then(()=>{
+
+        })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const toggleCxcDialog = () => {
@@ -134,11 +144,9 @@ export default function DialogPos(props) {
                     </Button>
                     <PagarDialog
                         fecha={fecha}
-                        pagar={addPagoCxp}
                         ubicacion={ubicacion}
-                        isOpen={pagoDialog}
+                        open={pagoDialog}
                         close={closeDialogPago}
-                        showMessage={showMessage}
                     />
                 </Grid>
 

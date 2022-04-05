@@ -14,6 +14,10 @@ export const EgresoContext = createContext()
 const EgresoContextProvider = (props) => {
   const [egresos, setEgresos] = useState(null)
   const [cuentasPorPagar, setCuentasPorPagar] = useState(null)
+
+  const resetEgresos = () =>{
+    setEgresos([])
+  }
   
   const addEgreso = async (egreso) => {
     const res = await saveEgreso(egreso)
@@ -80,7 +84,8 @@ const EgresoContextProvider = (props) => {
       addPagoCxp, 
       loadCuentasPorPagar,
       loadEgresosMonthYear,
-      editCuentaPorPagar
+      editCuentaPorPagar,
+      resetEgresos
     }}>
       {props.children}
     </EgresoContext.Provider>

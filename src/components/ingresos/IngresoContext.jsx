@@ -15,6 +15,10 @@ const IngresoContextProvider = (props) => {
     const [cuentasxCobrar, setCuentasxCobrar] = useState(null)
     const [cxcPdv, setCxcPdv] = useState([])
 
+    const resetIngresos = () =>{
+        setIngresos([])
+    }
+
     const loadIngresosxFecha = async (fecha) =>{
         const res = await getIngresos(fecha)
         setIngresos(res.ingresos)
@@ -77,7 +81,8 @@ const IngresoContextProvider = (props) => {
             cxcPdv,
             loadCuentasPorCobrarPdv,
             addVenta,
-            editIngreso
+            editIngreso,
+            resetIngresos
         }}>
             {props.children}
         </IngresoContext.Provider>
