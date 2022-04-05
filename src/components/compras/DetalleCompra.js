@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import { IconButton, MenuItem, Grid, Button, Typography, Table, TableHead, TableRow, TableCell, TableBody, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Box, } from '@material-ui/core';
 
@@ -7,19 +7,16 @@ import EditIcon from '@material-ui/icons/Edit';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
-
-// import useUbicacions from '../hooks/useUbicacions';
 import CompraAddItemsDialog from './CompraAddItemsDialog'
-
 import { formatNumber, sumImporte } from '../Tools'
-
 import { updateCompra, updateCompraItem, addCompraItem, ticketNuevoItem } from '../api'
 import useStyles from '../hooks/useStyles';
 import moment from 'moment'
-export default function DetalleCompra(props) {
-    const { compra, open, close, showMessage, ubicacions, products, provedors } = props
+import { UbicacionContext } from '../ubicaciones/UbicacionContext';
+export default function DetalleCompra({ compra, open, close, showMessage, products, provedors }){
     const classes = useStyles()
-    // const { ubicacions } = useUbicacions();
+    const {ubicacions} = useContext(UbicacionContext)
+
     const [addItem, setAdditem] = useState(false)
     const [edit, setEdit] = useState({
         item: null,

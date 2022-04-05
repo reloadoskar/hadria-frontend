@@ -6,27 +6,27 @@ import VistaPorFolio from './VistaPorFolio'
 import useStyles from '../hooks/useStyles'
 import Mover from './Mover'
 import GraficaInventario from './GraficaInventario'
-export default function Inventario({ubicacions}){
-    const inventario = useInventario()
+export default function Inventario(){
     const classes = useStyles()
-    // const [verFolios, setVerFolios] = useState(true)
-    // const [verUbicaciones, setVerUbicaciones] = useState(false)
+    const inventario = useInventario()
     const [moverDialog, setMoverDialog] = useState(false)
-    // const [isMounted, setIsmounted] = useState(false)
     const [tabSelected, setTab] = useState(1)
     const selectTab = (event, selected) => {
         setTab(selected)
     }
     useEffect(() => {
-        inventario.getInventarioGeneral()
-        inventario.getInventarioXUbic()
+        // setLoading(true)
+        const loadAll = async () =>{
+            const res = await Promise.all([
+                inventario.getInventarioGeneral(),
+                inventario.getInventarioXUbic()                
+            ])
+            return res
+        }
+        loadAll().then(res=>{
+            // setLoading(false)
+        })
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
-    // function toggleVerFolios(){
-    //     setVerFolios(!verFolios)
-    // }
-    // function toggleVerUbicaciones(){
-    //     setVerUbicaciones(!verUbicaciones)
-    // }
     const openMoverDialog = () => {
         setMoverDialog(true)
         inventario.getInventarioXUbic()
@@ -53,7 +53,6 @@ export default function Inventario({ubicacions}){
                             open={moverDialog} 
                             close={closeMoverDialog}
                             inventario={inventario.inventarioXub} 
-                            ubicacions={ubicacions}
                             mover={inventario.mover}
                             update={inventario.updating}
                         /> 
@@ -72,24 +71,7 @@ export default function Inventario({ubicacions}){
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
                         <VistaPorFolio compras={ inventario.inventarioGeneral}/>
                     </div>
-                    {/* <Typography component="div" align="center">
-                        Ver por FOLIO
-                        <Switch 
-                            checked={verFolios}
-                            onChange={toggleVerFolios}
-                        />
-                        Ver por UBICACION
-                        <Switch 
-                            checked={verUbicaciones}
-                            onChange={toggleVerUbicaciones}
-                        />
-                    </Typography> */}
-                </Grid>
-                {/* {verFolios === false ? null : 
-                    <Grid item container xs={12} spacing={2}>
-                        
-                    </Grid>
-                } */}
+                </Grid>                
             </Grid>
         </Container>
     )

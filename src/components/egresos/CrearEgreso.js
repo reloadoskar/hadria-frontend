@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Dialog, DialogActions, DialogContent, DialogTitle,  Grid, TextField, MenuItem, Button, Zoom, Typography } from '@material-ui/core'
-import {saveEgreso, ticketEgreso} from '../api'
+import {ticketEgreso} from '../api'
 import moment from 'moment'
 import useStyles from '../hooks/useStyles'
 import useCompras from '../compras/useCompras'
+import {EgresoContext} from './EgresoContext'
 const hoy = moment().format("YYYY-MM-DD")
 const init = {
     compra: 1,
@@ -16,8 +17,8 @@ const init = {
     concepto: "",
     tipo: "GASTO DE CAJA"
 }
-export default function CrearEgreso(props) {
-    const {open, close, ubicacions, disponible, mensaje} = props
+export default function CrearEgreso({open, close, ubicacions, disponible, mensaje}) {
+    const {addEgreso} = useContext(EgresoContext)
     const Compra = useCompras() 
     const tipos = ["GASTO DE CAJA", "GASTO A COMPRA"] 
     const classes = useStyles()
@@ -50,7 +51,7 @@ export default function CrearEgreso(props) {
     }
     const handleRegistrar = () => {
         setGuardando(true)
-        saveEgreso(egreso).then(res=>{
+        addEgreso(egreso).then(res=>{
             setGuardando(false)
             mensaje(res.message, res.status)
             ticketEgreso(egreso)

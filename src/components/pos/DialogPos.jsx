@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Grid, Button, Dialog, Typography } from '@material-ui/core'
 import CrearVenta from '../ventas/CrearVenta'
 import Reloj from '../herramientas/reloj'
@@ -10,20 +10,15 @@ import PagarDialog from './PagarDialog'
 import IngresoCreate from '../ingresos/IngresoCreate'
 import { EgresoContext } from '../egresos/EgresoContext'
 import { IngresoContext } from '../ingresos/IngresoContext'
-export default function DialogPos(props){
-    const {open, close, clientes, 
-        // inventario, 
-        ubicacion, 
-        ubicacions, 
-        fecha, 
-        showMessage, 
-        user, 
-        cortes, 
-        cxcPdv, addPagoCxc, addPagoCxp} = props
-    const {loadCuentasPorPagar} = useContext(EgresoContext)
-    const {loadCuentasPorCobrarPdv} = useContext(IngresoContext)
+export default function DialogPos(props) {
+    const { open, close, clientes,
+        ubicacion,
+        fecha,
+        showMessage,
+        cxcPdv, addPagoCxc, addPagoCxp } = props
+    const { loadCuentasPorPagar } = useContext(EgresoContext)
+    const { loadCuentasPorCobrarPdv } = useContext(IngresoContext)
     const classes = useStyles()
-    const [corte, setCorte] = useState(null)
     const [corteDialog, setCorteDialog] = useState(false)
     const [crearVenta, setCrearVenta] = useState(false)
     const [cxcDialog, setCxcDialog] = useState(false)
@@ -32,11 +27,11 @@ export default function DialogPos(props){
 
     const [verCrearIngreso, setVerCrearIngreso] = useState(false)
 
-    useEffect(()=>{
+    useEffect(() => {
         loadCuentasPorPagar()
         loadCuentasPorCobrarPdv()
-    },[]) // eslint-disable-line react-hooks/exhaustive-deps
-    
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
     const toggleCxcDialog = () => {
         setCxcDialog(!cxcDialog)
     }
@@ -53,50 +48,20 @@ export default function DialogPos(props){
     const closeCrearVenta = () => {
         setCrearVenta(false)
     }
-    
-    const showCorte = () => {
-        cortes.getCorte(ubicacion._id, fecha).then(res=>{
-            if(res.status === 'error'){
-                showMessage(res.message, res.status)
-                closeDialogCorte()
-            }else{
-                setCorte(res)
-                setCorteDialog(true)
-            }
-        })
-    }
 
-    const closeDialogCorte = () => {
-        setCorteDialog(false)
-    }
-
-    // function onChangeFecha(fecha){
-    //     setCorte(null)
-    //     cortes.getCorte(corte.ubicacion._id, fecha).then(res => {
-    //         setCorte(res)
-    //     })
-    //     // setFecha(fecha)
-    // }
-    // function saveCorte(corte){
-    //     return cortes.guardarCorte(corte).then( res => {
-    //         // closeDialogCorte()
-    //         close()
-    //     })
-    // }
-
-    function closeDialogPago(){
-        setPagoDialog(false)
-    }
-    return(
+    const showCorte = () => setCorteDialog(true)
+    const closeDialogCorte = () => setCorteDialog(false)
+    const closeDialogPago = () => setPagoDialog(false)
+    return (
         <Dialog
             open={open}
-            onClose={()=>{close()}}
+            onClose={() => { close() }}
             fullScreen
-            >
+        >
             <Grid container spacing={2} justifyContent="center">
                 <Grid item xs={8} container>
                     <Grid item xs={6} sm={4}>
-                        <Typography variant="h6" align="center">{ubicacion ? ubicacion.nombre :  "ups!"}</Typography>
+                        <Typography variant="h6" align="center">{ubicacion ? ubicacion.nombre : "ups!"}</Typography>
                     </Grid>
                     <Grid item xs={6} sm={4}>
                         <Typography variant="h6" align="center">{fecha}</Typography>
@@ -105,9 +70,9 @@ export default function DialogPos(props){
                 </Grid>
 
                 <Grid item xs={8}>
-                    <Button 
+                    <Button
                         fullWidth
-                        onClick={()=>openCrearVenta()}
+                        onClick={() => openCrearVenta()}
                         className={classes.botonCosmico}
                     >
                         Nueva venta +
@@ -115,7 +80,7 @@ export default function DialogPos(props){
                     <CrearVenta
                         open={crearVenta}
                         close={closeCrearVenta}
-                        clientes={clientes} 
+                        clientes={clientes}
                         // elinventario={inventario.inventario}
                         laubicacion={ubicacion}
                         lafecha={fecha}
@@ -127,28 +92,28 @@ export default function DialogPos(props){
                 <Grid item xs={8}>
                     <Button
                         fullWidth
-                        onClick={()=>setVerCrearIngreso(true)}
+                        onClick={() => setVerCrearIngreso(true)}
                         className={classes.botonCosmico}
                     >
                         Nuevo ingreso +
                     </Button>
-                    <IngresoCreate 
-                        open={verCrearIngreso} 
-                        close={() => setVerCrearIngreso(false)} 
+                    <IngresoCreate
+                        open={verCrearIngreso}
+                        close={() => setVerCrearIngreso(false)}
                         ubicacion={ubicacion}
                         fecha={fecha}
                     />
                 </Grid>
-                
+
                 <Grid item xs={8}>
-                    <Button 
+                    <Button
                         fullWidth
-                        onClick={()=>toggleCxcDialog()}
+                        onClick={() => toggleCxcDialog()}
                         className={classes.botonGenerico}
                     >
                         Cobrar +
                     </Button>
-                    <CobroDialog                                 
+                    <CobroDialog
                         open={cxcDialog}
                         fecha={fecha}
                         cuentas={cxcPdv}
@@ -160,14 +125,14 @@ export default function DialogPos(props){
                 </Grid>
 
                 <Grid item xs={8}>
-                    <Button 
+                    <Button
                         fullWidth
-                        onClick={()=>togglePagoDialog()}
+                        onClick={() => togglePagoDialog()}
                         className={classes.botonGenerico}
                     >
                         Pagar -
                     </Button>
-                    <PagarDialog 
+                    <PagarDialog
                         fecha={fecha}
                         pagar={addPagoCxp}
                         ubicacion={ubicacion}
@@ -180,12 +145,12 @@ export default function DialogPos(props){
                 <Grid item xs={8}>
                     <Button
                         fullWidth
-                        onClick={()=>toggleEgesoDialog()}
+                        onClick={() => toggleEgesoDialog()}
                         className={classes.botonGenerico}
                     >
                         Nuevo gasto -
                     </Button>
-                    <EgresoDialog 
+                    <EgresoDialog
                         fecha={fecha}
                         ubicacion={ubicacion}
                         open={egresoDialog}
@@ -196,26 +161,26 @@ export default function DialogPos(props){
 
                 <Grid item xs={8}>
                     <Button
-                        fullWidth 
-                        onClick={()=>showCorte()} 
+                        fullWidth
+                        onClick={() => showCorte()}
                         className={classes.botonGenerico}
                     >
                         Revisar Corte
                     </Button>
-                    {corteDialog?
-                        <Corte 
-                        open={corteDialog}
-                        close={closeDialogCorte}
-                        ubicacion={ubicacion}
-                        fecha={fecha}
+                    {corteDialog ?
+                        <Corte
+                            open={corteDialog}
+                            close={closeDialogCorte}
+                            ubicacion={ubicacion}
+                            fecha={fecha}
                         />
                         : null
                     }
                 </Grid>
                 <Grid item xs={8}>
                     <Button
-                        fullWidth 
-                        onClick={()=>close()} 
+                        fullWidth
+                        onClick={() => close()}
                         className={classes.botonSimplon}
                     >
                         Salir

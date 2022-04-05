@@ -12,7 +12,6 @@ import CuentaPorPagar from '../cxp/CuentaPorPagar';
 import {EgresoContext} from '../egresos/EgresoContext'
 import { ProductorContext } from '../productors/ProductorContext'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
-import { CuentasPorPagarContext } from '../cxp/CuentasPorPagarContext';
 const init = {
   fecha: moment().format("YYYY-MM-DD"),
   ubicacion: '',
@@ -23,8 +22,8 @@ const init = {
   cuentasSeleccionadas: []
 }
 export default function Pagar({ open, close }) {
-  const {cuentasPorPagar, addEgreso, editEgreso} = useContext(EgresoContext)
-  const {cargarCuentas, cuentasProductor} = useContext(CuentasPorPagarContext)
+  const {cuentasPorPagar, addEgreso, editCuentaPorPagar} = useContext(EgresoContext)
+  const [cuentasProductor, cargarCuentas] = useState([])
   const {productors} = useContext(ProductorContext)
   const {ubicacions} = useContext(UbicacionContext)
   const classes = useStyles()
@@ -39,13 +38,15 @@ export default function Pagar({ open, close }) {
   const [pagando, setPagando] = useState(false)
 
   useEffect(()=>{
-    let conSaldo = []
-    productors.forEach(productor => {
-      if(cuentasPorPagar.filter(cuenta => cuenta.compra.provedor._id === productor._id).reduce((acc, cta) => acc += cta.saldo, 0) > 0 ){
-        conSaldo.push({...productor, cuentas: cuentasPorPagar.filter(cta => cta.compra.provedor._id === productor._id), saldo: cuentasPorPagar.filter(cuenta => cuenta.compra.provedor._id === productor._id).reduce((acc, cta) => acc += cta.saldo, 0) })
-      }
-    });
-    setProductoresSaldo(conSaldo)
+    if(productors && cuentasPorPagar){
+      let conSaldo = []
+      productors.forEach(productor => {
+        if(cuentasPorPagar.filter(cuenta => cuenta.compra.provedor._id === productor._id).reduce((acc, cta) => acc += cta.saldo, 0) > 0 ){
+          conSaldo.push({...productor, cuentas: cuentasPorPagar.filter(cta => cta.compra.provedor._id === productor._id), saldo: cuentasPorPagar.filter(cuenta => cuenta.compra.provedor._id === productor._id).reduce((acc, cta) => acc += cta.saldo, 0) })
+        }
+      });
+      setProductoresSaldo(conSaldo)
+    }
   },[productors, cuentasPorPagar])
 
   useEffect(()=>{
@@ -106,7 +107,7 @@ export default function Pagar({ open, close }) {
           })
         })
         cuentas[i].saldo-=importeDePago
-        editEgreso(cuentas[i]).then(res=>{
+        editCuentaPorPagar(cuentas[i]).then(res=>{
           showMessage(res.message, 'info')
         })
         importeDePago=0; 
@@ -131,7 +132,7 @@ export default function Pagar({ open, close }) {
             showMessage(res.message, res.status)
           })
         })
-        editEgreso(cuentas[i]).then(res=>{
+        editCuentaPorPagar(cuentas[i]).then(res=>{
           showMessage(res.message, 'info')
         })
 
@@ -141,14 +142,7 @@ export default function Pagar({ open, close }) {
     setPago(init)
     setPagando(false)
     close('pagarDialog')
-    // addPagoCxp(pago).then(res => {
-    //   showMessage(res.message, res.status)
-    //   ticketPago(pago).then(res => {
-    //     if (res.status === 'warning') {
-    //       showMessage(res.message, res.status)
-    //     }
-    //   })
-    // })
+    cargarCuentas([])
   }
 
   return (

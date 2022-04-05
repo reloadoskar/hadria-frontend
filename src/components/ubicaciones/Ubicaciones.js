@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import UbicacionesDialog from './UbicacionesDialog';
 import { Container, Grid, Typography, Paper } from '@material-ui/core';
 
@@ -6,14 +6,16 @@ import { Container, Grid, Typography, Paper } from '@material-ui/core';
 import Ubicacion from './Ubicacion';
 import useStyles from '../hooks/useStyles';
 import { useSnackbar } from 'notistack';
-function Ubicaciones({ubicacions}) {
+import {UbicacionContext} from './UbicacionContext'
+function Ubicaciones() {
+    const {ubicacions, addUbicacion} = useContext(UbicacionContext)
     const [dialog, setDialog] = useState(false)
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
-    function addUbicacion(ubicacion) {
-        if(ubicacions.ubicacions.length<30){
-            ubicacions.add(ubicacion)
+    function handleAdd(ubicacion) {
+        if(ubicacions.length<30){
+            addUbicacion(ubicacion)
         }else{
             showMessage('Limite de ubicaciones alcanzado, actualice su servicio', 'error')
         }
@@ -22,7 +24,7 @@ function Ubicaciones({ubicacions}) {
     return ubicacions ?
         <Container maxWidth="md">
             <Grid container spacing={2}>
-                <UbicacionesDialog addUbicacion={addUbicacion} isShowing={dialog} open={()=>setDialog(true)} close={()=>setDialog(false)} />
+                <UbicacionesDialog addUbicacion={handleAdd} isShowing={dialog} open={()=>setDialog(true)} close={()=>setDialog(false)} />
                 { ubicacions.ubicacions.length === 0  ? 
                     <Grid item xs={12}>
                         <Typography variant="h6" align="center" gutterBottom>No hay Ubicaciones registradas.</Typography>

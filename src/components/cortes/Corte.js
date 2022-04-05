@@ -52,6 +52,9 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
         setElcorte(res)
         setWorking(false)
         setProductos( agruparPorObjeto(res.items, "compraItem") )
+      }).catch(err=>{
+        showMessage("No se cargo el corte "+err, "error")
+        close()
       })
     }
     return () => setElcorte(null)

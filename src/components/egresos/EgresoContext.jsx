@@ -59,6 +59,15 @@ const EgresoContextProvider = (props) => {
     return res
   }
 
+  const editCuentaPorPagar = async (cxp) => {
+    let cuentaActualizada = await updateEgreso(cxp)
+    let copiaCuentas = cuentasPorPagar
+    let index = copiaCuentas.findIndex(el => el._id === cxp._id)
+    copiaCuentas[index] = cxp
+    setCuentasPorPagar(copiaCuentas)
+    return cuentaActualizada
+  }
+
   return (
     <EgresoContext.Provider value={{
       egresos,
@@ -70,7 +79,8 @@ const EgresoContextProvider = (props) => {
       editEgreso, 
       addPagoCxp, 
       loadCuentasPorPagar,
-      loadEgresosMonthYear
+      loadEgresosMonthYear,
+      editCuentaPorPagar
     }}>
       {props.children}
     </EgresoContext.Provider>

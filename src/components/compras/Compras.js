@@ -26,7 +26,7 @@ import { Meses } from '../tools/Meses'
 import moment from 'moment'
 // import CompraCreate from './CompraCreate';
 
-function Compras({ubicacions}) {
+function Compras(){
     const {compras, loadCompras, addCompra, clearCompras } = useContext(ComprasContext)
     
     const {productos, loadProductos, addProducto} = useContext(ProductosContext)
@@ -48,11 +48,15 @@ function Compras({ubicacions}) {
     const [year, setYear] = useState(now.format("YYYY"))
     const [isLoading, setIsLoading] = useState(true)
     useEffect(()=>{
-        loadProductos()
-    },[]) // eslint-disable-line react-hooks/exhaustive-deps
-    useEffect(()=>{
         setIsLoading(true)
-        loadCompras(month, year).then(()=>{
+        const loadAll = async () => {
+            const res = await Promise.all([
+                loadProductos(),
+                loadCompras(month, year)                
+            ])
+            return res
+        }
+        loadAll().then(()=>{
             setIsLoading(false)
         })
     },[month, year]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -128,7 +132,11 @@ function Compras({ubicacions}) {
         setAnchorEl(null);
     };
 
-    return (
+    return isLoading ?
+        <Backdrop open={isLoading} onClick={()=> setIsLoading(false)}>
+            <CircularProgress color="inherit" />
+        </Backdrop>
+        :
         <Container maxWidth="xl">
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={3}>
@@ -186,26 +194,20 @@ function Compras({ubicacions}) {
                         addProduct={addProducto}
                         provedors={productors}
                         tipoCompras={tipoCompras}
-                        ubicacions={ubicacions}
                         addTipoCompra={addTipoCompra}
                         addProvedor={addProductor}
                     />
-                </Grid> {
-                    !isLoading ? 
-                        compras.length > 0 ?
-                            <ListaCompras 
-                                compras={compras} 
-                                editCompra={editCompra} 
-                                verCompra={showVerCompra} 
-                            /> 
-                            :
-                            <Grid item xs={12}>
-                                <Typography variant='h6' align="center"> No hay compras registradas en {Meses.filter(mes=>mes.id === month).map(mes=>mes.nombre)} {year}.</Typography>
-                            </Grid>
-                    :  
-                        <Backdrop open={isLoading} onClick={()=> setIsLoading(false)}>
-                            <CircularProgress />
-                        </Backdrop>
+                </Grid> 
+                {compras.length > 0 ?
+                    <ListaCompras 
+                        compras={compras} 
+                        editCompra={editCompra} 
+                        verCompra={showVerCompra} 
+                    /> 
+                    :
+                    <Grid item xs={12}>
+                        <Typography variant='h6' align="center"> No hay compras registradas en {Meses.filter(mes=>mes.id === month).map(mes=>mes.nombre)} {year}.</Typography>
+                    </Grid>
                 }
             </Grid>
             <DetalleCompra 
@@ -213,14 +215,12 @@ function Compras({ubicacions}) {
                 open={detCompra} 
                 close={closeCompra} 
                 showMessage={showMessage} 
-                ubicacions={ubicacions}
                 products={productos}
                 provedors={productors}
             />
             <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelar}/>
             <Compra compra={compra} open={verCompra} close={closeVerCompra} compras={compras} />
         </Container>
-    )
 }
 
 export default Compras

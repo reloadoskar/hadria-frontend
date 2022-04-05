@@ -12,12 +12,10 @@ import { Grid,
 } from '@material-ui/core'
 import { NavLink } from 'react-router-dom';
 // componentes
-// import CuentasxCobrar from '../cxc/CuentasxCobrar'
 import Pagar from './Pagar'
 import Traspasar from './Traspasar'
 import {ticketTraspaso} from '../api'
 import Disponible from '../disponible/Disponible'
-// import Corte from '../cortes/Corte'
 import Cobrar from './Cobrar'
 import CrearEgreso from '../egresos/CrearEgreso'
 import GraficaInventario from '../inventario/GraficaInventario'
@@ -26,7 +24,6 @@ import PlanStatus from '../avisos/PlanStatus'
 import { useSnackbar } from 'notistack';
 
 import moment from 'moment'
-// import ComprasMesProductor from '../compras/ComprasMesProductor'
 import useStyles from '../hooks/useStyles'
 
 // CONTEXTOS
@@ -35,6 +32,9 @@ import {UbicacionContext} from '../ubicaciones/UbicacionContext'
 import {EgresoContext} from '../egresos/EgresoContext'
 import {IngresoContext} from '../ingresos/IngresoContext'
 import CorteGlobal from '../cortes/CorteGlobal';
+import SelectorMes from '../tools/SelectorMes';
+import SelectorAnio from '../tools/SelectorAnio';
+
 export default function Dashboard() {
     const {empresa } = useContext(EmpresaContext)
     const { ingresos, addIngreso, addPagoCxc, loadIngresosMonthYear, loadCuentasPorCobrarPdv, cxcPdv } = useContext(IngresoContext)
@@ -42,22 +42,41 @@ export default function Dashboard() {
     const {ubicacions} = useContext(UbicacionContext)
     const [verPlanStatus, setVerPlanStatus] = useState(false)
     const [bodyPlanStatus, setBody] = useState(null)
-
+    const [loadingData, setLoading] = useState(false)
+    
     const classes = useStyles()
 
-    const [fecha, setFecha] = useState(null)
     const now = moment()
+    const [fecha, setFecha] = useState(now.format("YYYY-MM-DD"))    
+    const [month, setMonth] = useState(now.format("MM"))
+    const [year, setYear] = useState(now.format("YYYY"))
     useEffect(()=>{
-        loadEgresosMonthYear(now.format("MM"), now.format("YYYY"))
-        loadIngresosMonthYear(now.format("MM"), now.format("YYYY"))
-        loadCuentasPorPagar()
-        loadCuentasPorCobrarPdv()
+        setLoading(true)
+        const loadAll = async () =>{
+            const res = await Promise.all([
+                loadCuentasPorPagar(),
+                loadCuentasPorCobrarPdv()
+            ])
+            return res
+        }
+        loadAll().then(()=>{
+            setLoading(false)
+        })
     },[])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
-        let hoy = moment().format("YYYY-MM-DD")
-        setFecha(hoy)
-        return () => setFecha(null)
-    },[])
+        setLoading(true)
+        const loadData = async () =>{
+            const res = await Promise.all([
+                loadEgresosMonthYear(month,year),
+                loadIngresosMonthYear(month,year)
+            ])
+            return res
+        }
+        loadData().then(()=>{
+            setLoading(false)
+        })
+    }, [year,month]) // eslint-disable-line react-hooks/exhaustive-deps
+   
 
     useEffect(()=>{
         if(empresa){
@@ -95,7 +114,7 @@ export default function Dashboard() {
     const [pagar, setPagar] = useState(false)
     const [gastar, setGastar] = useState(false)
     const [traspasar, setTraspasar] = useState(false)
-    const [tabSelected, setTab] = useState(1)
+    const [tabSelected, setTab] = useState(2)
     const selectTab = (event, selected) => {
         setTab(selected)
     }
@@ -173,15 +192,22 @@ export default function Dashboard() {
         })
 
     }
-    return empresa && ingresos && egresos ? 
+    
+
+    return !loadingData ? 
         <Container maxWidth="lg">
             <Grid container spacing={3}>
                 {/* TOP MENU */}
-                <Grid container justifyContent="center">
-                    <Grid item xs={12} sm={6}>
-                        <Typography variant="h6" align="center">{now.format("DD MMMM, YYYY")}</Typography>
+                <Grid container justifyContent="center">   
+                    <Grid item xs={6} >                    
+                        <SelectorMes mes={month} cambiar={setMonth} />
+                    </Grid>                 
+                    <Grid item xs={6} >
+                        <SelectorAnio anio={year} cambiar={setYear} />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    
+
+                    <Grid item xs={12}>
                         <ButtonGroup  size="small">
                             <Button
                                 onClick={() => showPagar()}
@@ -257,8 +283,7 @@ export default function Dashboard() {
                         }
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
-                        <Disponible />
-                        {/* <Corte user={auth.user} open={corteDialog} close={closeCorteDialog} corte={corte} fecha={now.format("YYYY-MM-DD")} onChangeFecha={onChangeFecha}  ubicacions={ubicacions} reabrir={reOpen} guardar={guardarCorte}/> */}
+                        <Disponible ingresos={ingresos} egresos={egresos} />
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 3}>
                         <GraficaInventario />

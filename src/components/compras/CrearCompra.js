@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { 
     Button,
     Typography,
@@ -6,6 +6,7 @@ import {
 import SaveIcon from '@material-ui/icons/Save';
 
 import useStyles from '../hooks/useStyles'
+import { UbicacionContext } from '../ubicaciones/UbicacionContext';
 
 import moment from 'moment'
 import Gastos from './Gastos'
@@ -22,7 +23,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function CrearCompra(props){
-    const { open, crear, showMessage, close, provedors, addProvedor, tipoCompras, ubicacions, addTipoCompra } = props
+    const { open, crear, showMessage, close, provedors, addProvedor, tipoCompras, addTipoCompra } = props
+    const {ubicacions} = useContext(UbicacionContext)
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0)
     const steps = ["Datos generales", "Agregar productos", "Agregar Gastos", "Resumen"]
@@ -47,7 +49,7 @@ export default function CrearCompra(props){
 
     const [gastos, setGastos] = useState([])
     const [totalGastos, setTotalGastos] = useState(0)
-    const crearGasto = (gasto) => {
+    const crearGasto = (gasto) =>{
         setGastos([...gastos, gasto])
     }
     const eliminarGasto = (index) =>{
@@ -107,10 +109,6 @@ export default function CrearCompra(props){
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
     
-    // const handleReset = () => {
-    //     setActiveStep(0);
-    // };
-
     const openDialogProvedor = () => {
         setProvedorFastDialog(true)
     }
@@ -119,10 +117,6 @@ export default function CrearCompra(props){
         setTipoCompraDialog(true)
     }
     
-    // const clearItems = () => {
-    //     setItems([])
-    // }
-
     const clearAll = () => {
         setActiveStep(0)
         setProvedor('')

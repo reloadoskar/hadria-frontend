@@ -9,12 +9,11 @@ export default function Reloj(){
         let hrs = date.getHours();
         let mins = date.getMinutes();
         let secs = date.getSeconds();
-        let period = "AM";
         hrs = hrs < 10 ? "0" + hrs : hrs;
         mins = mins < 10 ? "0" + mins : mins;
         secs = secs < 10 ? "0" + secs : secs;
 
-        setTiempo(`${hrs}:${mins}:${secs} ${period}`)
+        setTiempo(`${hrs}:${mins}:${secs}`)
     },1000)
 
     function useInterval(callback, delay) {

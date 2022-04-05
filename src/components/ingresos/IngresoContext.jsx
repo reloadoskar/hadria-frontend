@@ -50,6 +50,7 @@ const IngresoContextProvider = (props) => {
 
     const addPagoCxc = async (pago) => {
 		const res = await savePagoACuentaPorCobrar(pago)
+        setIngresos([...ingresos, res.ingreso])
         return res        
     }
 

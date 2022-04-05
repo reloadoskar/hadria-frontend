@@ -22,10 +22,9 @@ export default function Cobrar({open, close, cuentas, ubicacions, showMessage, c
         switch(field){
             case 'importe': 
                 if(value > cobro.cuenta.saldo){
-                    showMessage("El importe es mayor al saldo de la cuenta.", "warning")
-                    setCobro({...cobro, [field]: 0})
+                    setCobro({...cobro, [field]: cobro.cuenta.saldo, cambio: value- cobro.cuenta.saldo, efectivo: value})
                 }else{
-                    setCobro({...cobro, [field]: value})
+                    setCobro({...cobro, [field]: value, cambio: null, efectivo: null})
                 }
                 break
             default: setCobro({...cobro, [field]: value})
@@ -50,7 +49,7 @@ export default function Cobrar({open, close, cuentas, ubicacions, showMessage, c
         })
         .catch(err=>{
             setGuardando(false)
-            showMessage("No se pudo guardar el cobro", 'error')
+            showMessage("No se pudo guardar el cobro "+err, 'error')
         })
     }
     return(
@@ -139,6 +138,8 @@ export default function Cobrar({open, close, cuentas, ubicacions, showMessage, c
                                 </Grid>
 
                                 <Grid item xs={6}>
+                                    {cobro.efectivo ? 
+                                        <Typography>Efectivo: {cobro.efectivo }</Typography> : null}
                                     <TextField
                                         id="importe"
                                         variant="outlined"
@@ -149,6 +150,9 @@ export default function Cobrar({open, close, cuentas, ubicacions, showMessage, c
                                         value={cobro.importe}
                                         onChange={(e) => handleChange('importe', e.target.value)}
                                     />
+                                    {cobro.cambio ?
+                                        <Typography>Cambio: {cobro.cambio}</Typography>
+                                     : null}
                                 </Grid>
 
                                 {cobro.tipoPago !== 'EFECTIVO' &&
