@@ -7,8 +7,7 @@ import useStyles from './hooks/useStyles'
 import {register} from './api'
 
 
-const Register = (props) => {
-    const {isLoading,} = props
+const Register = ({isLoading}) => {    
     let history = useHistory();
     const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
