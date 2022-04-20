@@ -286,7 +286,9 @@ export default function Dashboard() {
                         <Disponible ingresos={ingresos} egresos={egresos} />
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 3}>
+                    {tabSelected !== 3 ? null :
                         <GraficaInventario />
+                    }
                     </div>
                 </Grid>
                 {/* INFO CUENTAS POR COBRAR */}
