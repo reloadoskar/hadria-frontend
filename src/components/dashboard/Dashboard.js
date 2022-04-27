@@ -37,7 +37,7 @@ import SelectorAnio from '../tools/SelectorAnio';
 
 export default function Dashboard() {
     const {empresa } = useContext(EmpresaContext)
-    const { ingresos, addIngreso, addPagoCxc, loadIngresosMonthYear, loadCuentasPorCobrarPdv, cxcPdv } = useContext(IngresoContext)
+    const { ingresos, addIngreso, addPagoCxc, loadIngresosMonthYear, loadCuentasPorCobrarPdv, loadCuentasPorCobrar, cxcPdv } = useContext(IngresoContext)
     const {egresos, loadEgresosMonthYear, loadCuentasPorPagar, addEgreso} = useContext(EgresoContext)
     const {ubicacions} = useContext(UbicacionContext)
     const [verPlanStatus, setVerPlanStatus] = useState(false)
@@ -47,7 +47,7 @@ export default function Dashboard() {
     const classes = useStyles()
 
     const now = moment()
-    const [fecha, setFecha] = useState(now.format("YYYY-MM-DD"))    
+    const [fecha] = useState(now.format("YYYY-MM-DD"))    
     const [month, setMonth] = useState(now.format("MM"))
     const [year, setYear] = useState(now.format("YYYY"))
     useEffect(()=>{
@@ -55,7 +55,8 @@ export default function Dashboard() {
         const loadAll = async () =>{
             const res = await Promise.all([
                 loadCuentasPorPagar(),
-                loadCuentasPorCobrarPdv()
+                loadCuentasPorCobrarPdv(),
+                loadCuentasPorCobrar()
             ])
             return res
         }
@@ -296,7 +297,8 @@ export default function Dashboard() {
                     {/* <ComprasMesProductor /> */}
                 </Grid>
                 <Grid item xs={12}>
-                    {/* <CuentasxCobrar cuentas={ingresos.cuentasxCobrar} total={ingresos.totalCxc}/> */}
+                    {/* <CuentasxCobrar />
+                    <CuentasxPagar /> */}
                 </Grid>
             </Grid>     
             <PlanStatus open={verPlanStatus} close={() => setVerPlanStatus(false)} body={bodyPlanStatus} />

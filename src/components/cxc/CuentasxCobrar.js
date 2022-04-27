@@ -1,25 +1,24 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { Card, CardContent, CardHeader,
-    Typography,
     LinearProgress, 
 } from '@material-ui/core'
-import {formatNumber} from '../Tools'
+import {IngresoContext} from '../ingresos/IngresoContext'
+
 import CuentasxcCliente from './CuentasxcCliente';
-export default function CuentasxCobrar(props) {
-    const {cuentas, total} = props
+export default function CuentasxCobrar() {
+    const { cuentasxCobrar } = useContext(IngresoContext)
     return (
         <Card>
             <CardHeader title="Créditos" />
-                {cuentas === undefined ?
+                {cuentasxCobrar === undefined ?
                     <LinearProgress variant="query" />
                     :
                     <CardContent>
-                        {cuentas.filter(cliente => cliente.cuentas.length >0 )
+                        {cuentasxCobrar.filter(cliente => cliente.cuentas.length >0 )
                             .map((cliente, i) => (
                                 <CuentasxcCliente  cliente={cliente} key={i} />  
                             )
                         )}
-                    <Typography align="right" variant="h6" children={"$" + formatNumber(total,2)} />
                 </CardContent>
                 }
         </Card>

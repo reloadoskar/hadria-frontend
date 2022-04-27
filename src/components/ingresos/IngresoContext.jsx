@@ -31,7 +31,7 @@ const IngresoContextProvider = (props) => {
 
     const loadCuentasPorCobrar = async () => {
         let res = await getCuentasPorCobrar()
-        setCuentasxCobrar(res.cuentas)
+        setCuentasxCobrar(res.clientes)
 		return res
     }
 

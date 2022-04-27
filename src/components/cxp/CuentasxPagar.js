@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Avatar, Card, CardContent, CardHeader, 
     Grid, 
     Typography,
@@ -7,8 +7,10 @@ import { Accordion, AccordionDetails, AccordionSummary, Avatar, Card, CardConten
 import EstadoDeCuenta from '../cxp/EstadoDeCuenta'
 import PersonIcon from '@material-ui/icons/Person';
 import {formatNumber, sumSaldo} from '../Tools'
+import {EgresoContext} from '../egresos/EgresoContext'
 
-export default function CuentasxPagar({cuentas, total}) {
+export default function CuentasxPagar({cuentas=[], total=0}) {
+    const {cuentasPorPagar} = useContext(EgresoContext)
     return (
         <Card>
             <CardHeader title="Deudas" />
@@ -16,7 +18,7 @@ export default function CuentasxPagar({cuentas, total}) {
                     <LinearProgress variant="query" />
                     :
                     <CardContent>
-                        {cuentas.filter(prov=> sumSaldo(prov.cuentas) > 0)
+                        {cuentasPorPagar.filter(prov=> sumSaldo(prov.cuentas) > 0)
                         .map((prov,i) =>(
                             <Accordion key={i}>
                                 <AccordionSummary>
