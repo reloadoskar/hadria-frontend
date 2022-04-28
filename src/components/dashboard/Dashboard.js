@@ -47,7 +47,7 @@ export default function Dashboard() {
     const classes = useStyles()
 
     const now = moment()
-    const [fecha, setFecha] = useState(now.format("YYYY-MM-DD"))    
+    const [fecha] = useState(now.format("YYYY-MM-DD"))    
     const [month, setMonth] = useState(now.format("MM"))
     const [year, setYear] = useState(now.format("YYYY"))
     useEffect(()=>{
