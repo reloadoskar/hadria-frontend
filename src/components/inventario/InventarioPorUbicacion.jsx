@@ -1,29 +1,54 @@
-import React, {useEffect, useState} from 'react'
-import { Grid, Typography } from '@material-ui/core'
-export default function InventarioPorUbicacion({items}){
-    const [inventario, setInventario] = useState([])
-    // const {ubicacions} = useContext(UbicacionContext)
+import React from 'react'
+import { Card, CardHeader, Grid, Typography, CardContent } from '@material-ui/core'
+import { formatNumber } from '../Tools'
+import CoolProgressWtLabel from '../tools/CoolProgressWtLabel'
 
-    useEffect(()=>{
-        if(items){
-            setInventario(items.reduce((grupo, item) => {
-                (grupo[item.ubicacion._id] = grupo[item.ubicacion._id] || { id: item.ubicacion._id, ubicacion : item.ubicacion, stock:0, cantidad:0, empaques:0, empaquesStock:0, costo: item.costo})
-                grupo[item.ubicacion._id].stock += item.stock
-                grupo[item.ubicacion._id].cantidad += item.cantidad
-                grupo[item.ubicacion._id].empaques += item.empaques
-                grupo[item.ubicacion._id].empaquesStock += item.empaquesStock
-                return grupo
-            },[]))
-        }
-        return setInventario([])
-    },[items])
-    return inventario.map((item, i) => (
-        <Grid container key={i}>
-            <Grid item container xs={12}>
-                <Grid item xs={12}>
-                    <Typography>{item.ubicacion.nombre}</Typography>
-                </Grid>
-            </Grid>            
+export default function InventarioPorUbicacion({inventario}){
+
+    return inventario.map((ubicacion, i) => (
+        <Grid item xs={12}>
+            <Card>
+                <CardHeader 
+                    title={ubicacion.ubicacion.nombre} 
+                    subheader={"Total unidades: " + formatNumber(ubicacion.stockGlobal,1) + " Total empaques: " + formatNumber(ubicacion.empaquesStockGlobal,1)}
+                    />
+                <CardContent>
+                    {ubicacion.items.map((item,i)=>(
+                        <div key={i}>
+                            <Grid container alignItems='center'>              
+                                <Grid item xs={3}>
+                                    <Typography>{item.compra.folio}-{item.producto.descripcion}</Typography>
+                                </Grid>                       
+                                <Grid item xs={2}>
+                                    <Typography>{item.clasificacion}</Typography>
+                                </Grid>                       
+                                <Grid item xs={3}>
+                                    <Typography>
+                                    { formatNumber(item.empaquesStock,1) } de {formatNumber(item.empaques,1)}{item.producto.empaque.abr}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Typography>
+                                    { formatNumber(item.stock,1) } de {formatNumber(item.cantidad,1)}{item.producto.unidad.abr}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={1}>
+                                    <Typography align="right">
+                                        {formatNumber( item.empaquesStock * 100 / item.empaques,1)}%
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <CoolProgressWtLabel variant="determinate" value={
+                                       ( item.stock * 100 / item.cantidad)
+                                    } />
+                                </Grid>         
+                            </Grid>
+                        </div>
+                    ))}
+
+                </CardContent>
+                
+            </Card>
         </Grid>
     ))
 }

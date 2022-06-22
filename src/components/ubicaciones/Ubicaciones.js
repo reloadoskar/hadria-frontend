@@ -25,12 +25,12 @@ function Ubicaciones() {
         <Container maxWidth="md">
             <Grid container spacing={2}>
                 <UbicacionesDialog addUbicacion={handleAdd} isShowing={dialog} open={()=>setDialog(true)} close={()=>setDialog(false)} />
-                { ubicacions.ubicacions.length === 0  ? 
+                { ubicacions.length === 0  ? 
                     <Grid item xs={12}>
                         <Typography variant="h6" align="center" gutterBottom>No hay Ubicaciones registradas.</Typography>
                     </Grid>
                 :
-                    ubicacions.ubicacions.map((row, index) => (
+                    ubicacions.map((row, index) => (
                         <Paper className={classes.paperBasico} key={index}>
                             <Ubicacion ubicacion={row}  update={ubicacions.editUbic} />
                         </Paper>

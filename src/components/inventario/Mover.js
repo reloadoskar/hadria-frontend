@@ -4,21 +4,29 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, Typo
 import useStyles from '../hooks/useStyles'
 import { formatNumber } from '../Tools'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
+import { InventarioContext } from './InventarioContext'
 const init = {
     origen: '',
     origensel: '',
     destino: '',
+    clasificacion: "LINEA",
     itemsel: '',
     itemselcantidad: 0,
     itemselempaques: '',
     pesadas: []
 }
-export default function Mover({ open, close, inventario, mover }) {
+export default function Mover({ open, close, inventario }) {
     const classes = useStyles()
     const { ubicacions } = useContext(UbicacionContext)
+    const { moverInventario} = useContext(InventarioContext)
 
     const [guardando, setGuardando] = useState(false)
     const [movimiento, setMovimiento] = useState(init)
+    const [clasificacions, setClasificacions] = useState([
+        "LINEA",
+        "MAYOREO",
+        "MENUDEO",
+    ])
     const handleChange = (field, value) => {
         switch (field) {
             case "origen":
@@ -74,10 +82,15 @@ export default function Mover({ open, close, inventario, mover }) {
         e.preventDefault()
         setGuardando(true)
         if (validar(movimiento)) {
-            mover(movimiento).then(res => {
-                handleClose()
-                setGuardando(false)
-                // update(res)
+            moverInventario(movimiento).then(res => {
+                if(res.status === "success"){
+                    handleClose()
+                    setGuardando(false)
+                    // update(res)
+                }else{
+                    setGuardando(false)
+                    
+                }
             })
         } else {
             console.log("invalido")
@@ -108,7 +121,7 @@ export default function Mover({ open, close, inventario, mover }) {
                                     {inventario.map((option, index) => (
 
                                         <MenuItem key={index} value={option}>
-                                            {option._id.nombre}
+                                            {option.ubicacion.nombre}
                                         </MenuItem>
                                     ))}
                                 </TextField>
@@ -123,7 +136,7 @@ export default function Mover({ open, close, inventario, mover }) {
                                     value={movimiento.destino}
                                     onChange={(e) => handleChange('destino', e.target.value)}
                                 >
-                                    {ubicacions.map((ub, i) => (
+                                    {ubicacions.filter(ub=>ub.tipo === "SUCURSAL").map((ub, i) => (
                                         <MenuItem key={i} value={ub}>
                                             {ub.nombre}
                                         </MenuItem>
@@ -133,39 +146,56 @@ export default function Mover({ open, close, inventario, mover }) {
                             {movimiento.origen === '' ?
                                 null
                                 :
-                                <Grid item xs={12}>
-                                    <TextField
-                                        id="itemsel"
-                                        select
-                                        label="Selecciona un producto"
-                                        fullWidth
-                                        variant="outlined"
-                                        value={movimiento.itemsel}
-                                        onChange={(e) => handleChange('itemsel', e.target.value)}
-                                    >
-                                        {movimiento.origensel.items.filter(i => i.stock >= 1 && i.empaquesStock >= 1).map((itm, i) => (
-                                            // {movimiento.origensel.items.map((itm,i)=>{
-                                            // return itm.stock < 1 ? null :
-                                            <MenuItem key={i} value={itm}>
-                                                <Grid container >
-                                                    <Grid item xs={12} sm={6}>
-                                                        #{itm.compra.folio} - {itm.producto.descripcion}
+                                <Grid container spacing={2}>
+                                    <Grid item xs={8}>
+                                        <TextField
+                                            id="itemsel"
+                                            select
+                                            label="Selecciona un producto"
+                                            fullWidth
+                                            variant="outlined"
+                                            value={movimiento.itemsel}
+                                            onChange={(e) => handleChange('itemsel', e.target.value)}
+                                        >
+                                            {movimiento.origensel.items.filter(i => i.stock >= 1 && i.empaquesStock >= 1).map((itm, i) => (
+                                                <MenuItem key={i} value={itm}>
+                                                    <Grid container >
+                                                        <Grid item xs={12} sm={6}>
+                                                            #{itm.compra.folio} - {itm.producto.descripcion}
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={3}>
+                                                            <Typography variant="body2" align="right">
+                                                                {itm.producto.empaque.abr}: {formatNumber(itm.empaquesStock, 2)}
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={3}>
+                                                            <Typography variant="body2" align="right">
+                                                                {itm.producto.unidad.abr}: {formatNumber(itm.stock, 2)}
+                                                            </Typography>
+                                                        </Grid>
                                                     </Grid>
-                                                    <Grid item xs={12} sm={3}>
-                                                        <Typography variant="body2" align="right">
-                                                            {itm.productoempaque.empaque}: {formatNumber(itm.empaquesStock, 2)}
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={3}>
-                                                        <Typography variant="body2" align="right">
-                                                            {itm.productounidad.unidad}: {formatNumber(itm.stock, 2)}
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                            </MenuItem>
-                                        ))
-                                        }
-                                    </TextField>
+                                                </MenuItem>
+                                            ))
+                                            }
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <TextField
+                                            id="clasificacion"
+                                            label="Clasificaci&oacute;n"
+                                            select
+                                            fullWidth
+                                            variant="outlined"
+                                            value={movimiento.clasificacion}
+                                            onChange={(e) => handleChange('clasificacion', e.target.value)}
+                                            >
+                                            {clasificacions.map((opt,i)=>(
+                                                <MenuItem value={opt} key={i}>
+                                                    {opt}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
                                 </Grid>
                             }
                             {movimiento.itemsel === '' ?
@@ -183,7 +213,7 @@ export default function Mover({ open, close, inventario, mover }) {
                                     <Grid item xs={6} md={4}>
                                         <TextField
                                             id="itemselempaques"
-                                            label={movimiento.itemsel === '' ? "Empaques" : movimiento.itemsel.productoempaque.empaque}
+                                            label={movimiento.itemsel === '' ? "Empaques" : movimiento.itemsel.producto.empaque.abr}
                                             type="number"
                                             fullWidth
                                             required
@@ -195,7 +225,7 @@ export default function Mover({ open, close, inventario, mover }) {
                                     <Grid item xs={6} md={4}>
                                         <TextField
                                             id="itemselcantidad"
-                                            label={movimiento.itemsel === '' ? "Unidades" : movimiento.itemsel.productounidad.unidad}
+                                            label={movimiento.itemsel === '' ? "Unidades" : movimiento.itemsel.producto.unidad.abr}
                                             fullWidth
                                             required
                                             type="number"

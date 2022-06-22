@@ -1,14 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Container, Grid, Typography, Button, Tabs, Tab } from '@material-ui/core'
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows'
-import useInventario from '../inventario/useInventario'
 import VistaPorFolio from './VistaPorFolio'
 import useStyles from '../hooks/useStyles'
 import Mover from './Mover'
 import GraficaInventario from './GraficaInventario'
+import { InventarioContext } from './InventarioContext'
+import InventarioPorUbicacion from './InventarioPorUbicacion'
+import { agruparPor, agruparPorObjeto } from '../Tools'
+
 export default function Inventario(){
     const classes = useStyles()
-    const inventario = useInventario()
+    const {inventario, loadInventarioGeneral} = useContext(InventarioContext)
+    const [inventarioPorUbicacion, setIpu] = useState([])
+    const [inventarioPorFolio, setIpf] = useState([])
+
     const [moverDialog, setMoverDialog] = useState(false)
     const [tabSelected, setTab] = useState(1)
     const selectTab = (event, selected) => {
@@ -18,8 +24,7 @@ export default function Inventario(){
         // setLoading(true)
         const loadAll = async () =>{
             const res = await Promise.all([
-                inventario.getInventarioGeneral(),
-                inventario.getInventarioXUbic()                
+                loadInventarioGeneral()             
             ])
             return res
         }
@@ -27,9 +32,16 @@ export default function Inventario(){
             // setLoading(false)
         })
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(()=>{
+        if(inventario){
+            setIpu(agruparPorObjeto(inventario, 'ubicacion'))
+            setIpf(agruparPorObjeto(inventario, 'compra'))
+        }
+    },[inventario])
     const openMoverDialog = () => {
         setMoverDialog(true)
-        inventario.getInventarioXUbic()
+        // inventario.getInventarioXubic()
     }
     const closeMoverDialog = () =>{
         setMoverDialog(false)
@@ -52,9 +64,7 @@ export default function Inventario(){
                         <Mover
                             open={moverDialog} 
                             close={closeMoverDialog}
-                            inventario={inventario.inventarioXub} 
-                            mover={inventario.mover}
-                            update={inventario.updating}
+                            inventario={inventarioPorUbicacion} 
                         /> 
                     </Grid>
                 <Grid item xs={12}>
@@ -62,16 +72,19 @@ export default function Inventario(){
                         value={tabSelected}
                         onChange={selectTab}
                         centered>
-                        <Tab label="x Ubicaci&oacute;n" value={1}/>
-                        <Tab label="x Folio" value={2}/>
+                        <Tab label="Ver por Ubicaci&oacute;n" value={1}/>
+                        <Tab label="Ver por Folio" value={2}/>
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
-                        <GraficaInventario />
+                            <GraficaInventario inventario={inventarioPorUbicacion}/>
+                        <Grid container spacing={2}>
+                            <InventarioPorUbicacion inventario={inventarioPorUbicacion} />
+                        </Grid>              
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
-                        <VistaPorFolio compras={ inventario.inventarioGeneral}/>
+                        <VistaPorFolio inventario={inventarioPorFolio}/>
                     </div>
-                </Grid>                
+                </Grid>  
             </Grid>
         </Container>
     )

@@ -1808,3 +1808,28 @@ export const updtInversion = async (inversion) => {
         console.log(err)
     }
 }
+
+// LIQUIDACION
+
+export const saveLiquidacion = (liquidacion) => {
+    if(decoded){
+        try{
+            return axios
+                .post(url + decoded.database + '/liquidacion/save/', liquidacion)
+                .then(res => {
+                    return res.data
+                })
+                .catch(err=>{
+                    return {
+                        status:"error",
+                        message: err.message
+                    }
+                })
+            }catch (err){
+                return {
+                    status:"error",
+                    message: err.message
+                }
+            }
+        }
+}

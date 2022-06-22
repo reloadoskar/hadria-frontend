@@ -3,28 +3,14 @@ import { Grid, CircularProgress, Card, CardContent, Typography } from '@material
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryLabel } from 'victory';
 import {sumStock, sumEmpStock, formatNumber} from "../Tools"
 import useInventario from './useInventario'
-export default function GraficaInventario(){
-    const Inventario = useInventario()
-    const [inventario, setInventario] = useState(false)
+export default function GraficaInventario({inventario}){
+    // const Inventario = useInventario()
+    // const [inventario, setInventario] = useState(false)
     const [barData, setBarData] = useState(null)
-    
-    useEffect(() => {
-        Inventario.getInventarioXUbic().then(res=>{
-            setInventario(res.inventario)
-        })
-    },[]) // eslint-disable-line react-hooks/exhaustive-deps
-    
+        
     useEffect(()=>{
-        if(inventario){
-            let dataf = []
-            inventario.forEach(item => {
-                dataf.push({
-                    ubicacion: item._id.nombre,
-                    totalEmpaques: sumEmpStock(item.items),
-                    totalStock: sumStock(item.items)
-                })
-            })
-            setBarData(dataf)
+        if(inventario){           
+            setBarData(inventario)
         }
     },[inventario]) // eslint-disable-line react-hooks/exhaustive-deps
     return (
@@ -59,34 +45,38 @@ export default function GraficaInventario(){
                                     },
                                 }} 
                             />
-                            <VictoryAxis key="y"
-                                orientation="bottom"
+                            <VictoryBar
+                                horizontal
+                                // domain={{y: [0, 180]}}
+                                barRatio={0.8}
+                                labelComponent={<VictoryLabel
+                                    textAnchor="middle"
+                                    // dx={-10}
+                                    />}
+                                name="Inventario"
+                                data={barData}
+                                labels={({ datum }) => `${formatNumber(datum.empaquesStockGlobal,1)} Cjs`}
+                                x="ubicacion.nombre"
+                                y="empaquesStockGlobal"
+                                style={{
+                                    data: {fill: "#ffd369", fillOpacity: 0.8},
+                                    labels: {fontSize: 6, fill: "#524656"},
+                                    axis: {stroke: "#524656", strokeWidth: 12}
+                                }}
+                            />
+                            <VictoryAxis key=""
+                                // orientation="bottom"
                                 // label="Sucursales"
                                 style={{
                                     tickLabels:{fontSize: 6, fill: "#524656"},
                                     axis: { stroke: "#524656", strokeWidth: 3 },
                                 }}    
                                 tickLabelComponent={<VictoryLabel 
-                                    angle={90}
-                                    textAnchor="start"
-                                    dx={-5}
+                                    // angle={-90}
+                                    textAnchor="end"
+                                    // dx={-2}
+                                    // dy={-2}
                                 />}                            
-                            />
-                            <VictoryBar
-                                labelComponent={<VictoryLabel
-                                    />}
-                                name="Inventario"
-                                data={barData}
-                                labels={({ datum }) => `
-                                    ${formatNumber(datum.totalEmpaques,1)} Cajas \n 
-                                    ${formatNumber(datum.totalStock,1)} Kg \n`}
-                                x="ubicacion"
-                                y="totalEmpaques"
-                                style={{
-                                    data: {fill: "#ffd369", fillOpacity: 0.8},
-                                    labels: {fontSize: 6, fill: "#524656"},
-                                    axis: {stroke: "#524656", strokeWidth: 12}
-                                }}
                             />
                         </VictoryChart>
                         : 

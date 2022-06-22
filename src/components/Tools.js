@@ -328,14 +328,27 @@ export function agruparPor(arreglo, filtro){
 }
 export function agruparPorObjeto(arreglo, objeto){
     let reduce = arreglo.reduce((grupo, item)=>{
-        if(grupo.find(itm => itm._id === item[objeto]._id )){
-            
+        let guardado = grupo.find(itm=> itm._id === item[objeto]._id)
+        if(guardado){
+            guardado.stockGlobal += parseFloat(item.stock)
+            guardado.empaquesStockGlobal += parseFloat(item.empaquesStock)
+
+            let existeItem = guardado.items.find(itm=> itm._id === item._id)
+            if(existeItem && existeItem.compra === item.compra){
+                existeItem.stock += item.stock
+                existeItem.empaquesStock += item.empaquesStock
+            }else{
+                guardado.items.push(item)
+            }
         }else{
             grupo.push({
                 _id: item[objeto]._id,
                 [objeto] : item[objeto],
+                items: [item],
+                stockGlobal:item.stock,
+                empaquesStockGlobal: item.empaquesStock,
                 producto: item.producto,
-                compra: item.compra,
+                compra: item.compra
             })
         }
         return grupo
