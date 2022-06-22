@@ -26,6 +26,7 @@ export default function Mover({ open, close, inventario }) {
         "LINEA",
         "MAYOREO",
         "MENUDEO",
+        "CASCADO"
     ])
     const handleChange = (field, value) => {
         switch (field) {
