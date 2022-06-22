@@ -25,7 +25,8 @@ export default function CompraItem(props) {
                                     <Typography className={classes.textoMiniFacheron} >{
                                         item.ubicacion.nombre ? item.ubicacion.nombre : null
                                     }</Typography>
-                                    <Typography align="left">{item.compra.folio}-{item.producto.descripcion}</Typography>
+                                    <Typography align="left">
+                                        {item.compra.folio ? item.compra.folio : null} {item.producto.descripcion} {item.clasificacion}</Typography>
                                     {/* <Typography align="left" className={classes.textoMiniFacheron}>{item._id}</Typography> */}
                                 </Grid>
                                 <Grid item xs={6} sm={2}>
