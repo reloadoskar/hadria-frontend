@@ -22,7 +22,7 @@ export default function Mover({ open, close, inventario }) {
 
     const [guardando, setGuardando] = useState(false)
     const [movimiento, setMovimiento] = useState(init)
-    const [clasificacions, setClasificacions] = useState([
+    const [clasificacions] = useState([
         "LINEA",
         "MAYOREO",
         "MENUDEO",

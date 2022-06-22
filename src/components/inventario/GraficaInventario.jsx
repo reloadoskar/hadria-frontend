@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import { Grid, CircularProgress, Card, CardContent, Typography } from '@material-ui/core'
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryLabel } from 'victory';
-import {sumStock, sumEmpStock, formatNumber} from "../Tools"
-import useInventario from './useInventario'
+import {formatNumber} from "../Tools"
+// import useInventario from './useInventario'
 export default function GraficaInventario({inventario}){
     // const Inventario = useInventario()
     // const [inventario, setInventario] = useState(false)

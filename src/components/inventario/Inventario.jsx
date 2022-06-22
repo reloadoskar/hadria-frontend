@@ -7,7 +7,7 @@ import Mover from './Mover'
 import GraficaInventario from './GraficaInventario'
 import { InventarioContext } from './InventarioContext'
 import InventarioPorUbicacion from './InventarioPorUbicacion'
-import { agruparPor, agruparPorObjeto } from '../Tools'
+import { agruparPorObjeto } from '../Tools'
 
 export default function Inventario(){
     const classes = useStyles()
