@@ -12,7 +12,7 @@
 /build
 
 # misc
-.env
+# .env
 .DS_Store
 .env.local
 .env.development.local
@@ -27,3 +27,5 @@ start.bat
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+# Local Netlify folder
+.netlify
