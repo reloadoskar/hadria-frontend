@@ -13,7 +13,7 @@ export default function Inventario(){
     const classes = useStyles()
     const {inventario, loadInventarioGeneral} = useContext(InventarioContext)
     const [inventarioPorUbicacion, setIpu] = useState([])
-    const [inventarioPorFolio, setIpf] = useState([])
+    // const [inventarioPorFolio, setIpf] = useState([])
 
     const [moverDialog, setMoverDialog] = useState(false)
     const [tabSelected, setTab] = useState(1)
@@ -21,7 +21,6 @@ export default function Inventario(){
         setTab(selected)
     }
     useEffect(() => {
-        // setLoading(true)
         const loadAll = async () =>{
             const res = await Promise.all([
                 loadInventarioGeneral()             
@@ -36,7 +35,7 @@ export default function Inventario(){
     useEffect(()=>{
         if(inventario){
             setIpu(agruparPorObjeto(inventario, 'ubicacion'))
-            setIpf(agruparPorObjeto(inventario, 'compra'))
+            // setIpf(agruparPorObjeto(inventario, 'compra'))
         }
     },[inventario])
     const openMoverDialog = () => {
