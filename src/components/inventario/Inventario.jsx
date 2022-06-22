@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react'
 import { Container, Grid, Typography, Button, Tabs, Tab } from '@material-ui/core'
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows'
-import VistaPorFolio from './VistaPorFolio'
+// import VistaPorFolio from './VistaPorFolio'
 import useStyles from '../hooks/useStyles'
 import Mover from './Mover'
 import GraficaInventario from './GraficaInventario'
@@ -73,7 +73,7 @@ export default function Inventario(){
                         onChange={selectTab}
                         centered>
                         <Tab label="Ver por Ubicaci&oacute;n" value={1}/>
-                        <Tab label="Ver por Folio" value={2}/>
+                        {/* <Tab label="Ver por Folio" value={2}/> */}
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
                             <GraficaInventario inventario={inventarioPorUbicacion}/>
