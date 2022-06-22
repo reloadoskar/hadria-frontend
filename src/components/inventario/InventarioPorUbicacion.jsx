@@ -6,7 +6,7 @@ import CoolProgressWtLabel from '../tools/CoolProgressWtLabel'
 export default function InventarioPorUbicacion({inventario}){
 
     return inventario.map((ubicacion, i) => (
-        <Grid item xs={12}>
+        <Grid item xs={12} key={i}>
             <Card>
                 <CardHeader 
                     title={ubicacion.ubicacion.nombre} 

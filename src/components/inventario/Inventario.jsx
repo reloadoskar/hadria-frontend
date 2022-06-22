@@ -82,7 +82,7 @@ export default function Inventario(){
                         </Grid>              
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
-                        <VistaPorFolio inventario={inventarioPorFolio}/>
+                        {/* <VistaPorFolio inventario={inventarioPorFolio}/> */}
                     </div>
                 </Grid>  
             </Grid>
