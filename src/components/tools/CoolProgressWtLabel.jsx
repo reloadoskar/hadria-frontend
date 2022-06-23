@@ -12,8 +12,10 @@ const CoolProgressWtLabel = withStyles((theme) => ({
     },
     bar: {
         borderRadius: 5,
-        background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)',
+        background: 'linear-gradient(45deg, var(--background-start) 30%, var(--background-end) 90%)',
     },
 }))(LinearProgress)
+
+
 
 export default CoolProgressWtLabel

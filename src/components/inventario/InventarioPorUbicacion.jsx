@@ -2,9 +2,23 @@ import React from 'react'
 import { Card, CardHeader, Grid, Typography, CardContent } from '@material-ui/core'
 import { formatNumber } from '../Tools'
 import CoolProgressWtLabel from '../tools/CoolProgressWtLabel'
-
+import { useEffect } from 'react';
+const blue = {
+    '--background-start': '#2196F3',
+    '--background-end': '#21CBF3',
+    '--box-shadow': 'rgba(33, 203, 243, .3)',
+  };
+  
+const danger = {
+'--background-start': '#9A031E',
+'--background-end': '#FF8E53',
+'--box-shadow': 'rgba(255, 105, 135, .3)',
+};
 export default function InventarioPorUbicacion({inventario}){
+    // const [color, setColor] = React.useState(blue);
+    useEffect(()=>{
 
+    },[inventario])
     return inventario.map((ubicacion, i) => (
         <Grid item xs={12} key={i}>
             <Card>
@@ -16,31 +30,35 @@ export default function InventarioPorUbicacion({inventario}){
                     {ubicacion.items.map((item,i)=>(
                         <div key={i}>
                             <Grid container alignItems='center'>              
-                                <Grid item xs={3}>
+                                <Grid item xs={8} sm={3}>
                                     <Typography>{item.compra.folio}-{item.producto.descripcion}</Typography>
                                 </Grid>                       
-                                <Grid item xs={2}>
+                                <Grid item xs={4} sm={2}>
                                     <Typography>{item.clasificacion}</Typography>
                                 </Grid>                       
-                                <Grid item xs={3}>
+                                <Grid item xs={12} sm={3}>
                                     <Typography>
                                     { formatNumber(item.empaquesStock,1) } de {formatNumber(item.empaques,1)}{item.producto.empaque.abr}
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={3}>
+                                <Grid item xs={12} sm={3}>
                                     <Typography>
                                     { formatNumber(item.stock,1) } de {formatNumber(item.cantidad,1)}{item.producto.unidad.abr}
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={1}>
+                                <Grid item xs={12} sm={1}>
                                     <Typography align="right">
                                         {formatNumber( item.empaquesStock * 100 / item.empaques,1)}%
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <CoolProgressWtLabel variant="determinate" value={
-                                       ( item.stock * 100 / item.cantidad)
-                                    } />
+                                    <CoolProgressWtLabel 
+                                        variant="determinate" 
+                                        style={item.stock * 100 / item.cantidad < 30 ? danger : blue} 
+                                        value={
+                                            ( item.stock * 100 / item.cantidad)
+                                        } 
+                                    />
                                 </Grid>         
                             </Grid>
                         </div>

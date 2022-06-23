@@ -13,15 +13,17 @@ const init = {
     itemsel: '',
     itemselcantidad: 0,
     itemselempaques: '',
-    pesadas: []
+    // pesadas: []
 }
 export default function Mover({ open, close, inventario }) {
     const classes = useStyles()
+    const [movimiento, setMovimiento] = useState(init)
+    const [pesadas, setPesadas] = useState([])
     const { ubicacions } = useContext(UbicacionContext)
     const { moverInventario} = useContext(InventarioContext)
 
     const [guardando, setGuardando] = useState(false)
-    const [movimiento, setMovimiento] = useState(init)
+
     const [clasificacions] = useState([
         "LINEA",
         "MAYOREO",
@@ -54,14 +56,32 @@ export default function Mover({ open, close, inventario }) {
         }
     }
     const addPesada = (pesada) => {
-        var lista = movimiento.pesadas
+        var lista = pesadas
         lista.push(pesada)
         var emps = lista.length
         var cant = parseFloat(movimiento.itemselcantidad) + parseFloat(pesada)
-        setMovimiento({ ...movimiento, pesadas: lista, itemselcantidad: cant, itemselempaques: emps })
+        setPesadas(lista)
+
+        setMovimiento({ ...movimiento, 
+            itemselcantidad: formatNumber(cant,1), 
+            itemselempaques: formatNumber(emps,1)
+    })
     }
+
+    const delPesada = (index) => {
+        let psds = pesadas
+        psds.splice(index,1)
+        let emps = psds.length
+        let cant = psds.reduce((acc,el)=> acc+= parseFloat(el), 0)
+        setPesadas(psds)
+        setMovimiento({...movimiento,
+        itemselcantidad: cant,
+        itemselempaques: emps})
+    }
+
     const clearPesadas = () => {
-        setMovimiento({ ...movimiento, pesadas: [], itemselcantidad: 0, itemselempaques: 0 })
+        setPesadas([])
+        setMovimiento({...movimiento, itemselcantidad:0, itemselempaques:0})
     }
     const handleReset = () => {
         setMovimiento(init)
@@ -206,8 +226,9 @@ export default function Mover({ open, close, inventario }) {
                                     <Grid item xs={12} md={4}>
                                         {/* <Button fullWidth className={classes.botonGenerico} onClick={openPesadas}>Agrega Pesadas</Button> */}
                                         <Pesadas
-                                            pesadas={movimiento.pesadas}
+                                            pesadas={pesadas}
                                             addPesada={addPesada}
+                                            delPesada={delPesada}
                                             clearPesadas={clearPesadas}
                                         />
                                     </Grid>

@@ -25,10 +25,10 @@ const InventarioContextProvider = (props) => {
     }
 
     const moverInventario = async (movimiento) => {
-        console.log(movimiento.itemsel)
+        // console.log(movimiento.itemsel)
 		let mov = await moveInventario(movimiento)
         let itm = inventario.filter(it=>it._id=== movimiento.itemsel._id)
-        console.log(itm[0])
+        // console.log(itm[0])
         if(mov){
             itm[0].stock-=movimiento.itemselcantidad
             itm[0].empaquesStock-=movimiento.itemselempaques

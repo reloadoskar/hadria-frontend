@@ -26,8 +26,9 @@ export default function Pesadas(props){
         setDialog(false)
     }
 
-    const handleDelete = (pesada, i) => {
-        delPesada(pesada, i)
+    const handleDelete = (index) => {
+        delPesada(index)
+        setVerPesadas(false)
     }
     
     return (
