@@ -3,8 +3,21 @@ import { Dialog, DialogContent, DialogActions, Button, Grid, Typography, IconBut
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import useStyles from '../hooks/useStyles'
 
-export function ListaPesadas({open, close, pesadas, handleDelete}){
+const Pesada = ({data, index, deleteElement}) =>{
     const classes = useStyles()
+    return (
+        <Grid item xs={3} key={index}>
+            <Typography display="inline" className={classes.textoMiniFacheron}>{index+1 +": "}</Typography>
+            <Typography display="inline">{data}</Typography>
+            <IconButton onClick={() => deleteElement(index)}>
+                <HighlightOffIcon fontSize="small" />
+            </IconButton>
+        </Grid>
+    )
+}
+
+export function ListaPesadas({open, close, pesadas, total, handleDelete}){
+    const classes = useStyles()    
     return(
         <Dialog open={open} onClose={()=>close(false)} maxWidth="sm" fullWidth >
             {pesadas === undefined ? null :
@@ -16,14 +29,11 @@ export function ListaPesadas({open, close, pesadas, handleDelete}){
                         alignItems="flex-start"                                  
                         spacing={2}>
                             {pesadas.map((itm, i) => (
-                                <Grid item xs={3} key={i}>
-                                    <Typography display="inline" className={classes.textoMiniFacheron}>{i+1 +": "}</Typography>
-                                    <Typography display="inline">{itm}</Typography>
-                                    <IconButton onClick={() => handleDelete(i)}>
-                                        <HighlightOffIcon fontSize="small" />
-                                    </IconButton>
-                                </Grid>
-                            ))}
+                                <Pesada data={itm} index={i} key={i} deleteElement={handleDelete} />
+                            ))}                            
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography align="center" >Total = {total}</Typography>
                         </Grid>
                     </DialogContent>
                     <DialogActions>

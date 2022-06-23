@@ -13,7 +13,6 @@ const init = {
     itemsel: '',
     itemselcantidad: 0,
     itemselempaques: '',
-    // pesadas: []
 }
 export default function Mover({ open, close, inventario }) {
     const classes = useStyles()
@@ -36,7 +35,6 @@ export default function Mover({ open, close, inventario }) {
                 setMovimiento({ ...movimiento, origen: value._id, origensel: value })
                 break;
             case "itemselcantidad":
-                // console.log("cambiando cant: "+value)
                 if (parseFloat(value) > movimiento.itemsel.stock) {
                     setMovimiento({ ...movimiento, itemselcantidad: '' })
                 } else {
@@ -107,7 +105,7 @@ export default function Mover({ open, close, inventario }) {
                 if(res.status === "success"){
                     handleClose()
                     setGuardando(false)
-                    // update(res)
+                    setPesadas([])
                 }else{
                     setGuardando(false)
                     
@@ -121,7 +119,6 @@ export default function Mover({ open, close, inventario }) {
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
             <DialogTitle>Mover inventario</DialogTitle>
-            {/* <form onSubmit={handleSubmit}> */}
             <DialogContent>
                 {guardando === true ?
                     <Typography variant="h6" align="center" >Guardando...</Typography>
@@ -224,7 +221,6 @@ export default function Mover({ open, close, inventario }) {
                                 :
                                 <React.Fragment>
                                     <Grid item xs={12} md={4}>
-                                        {/* <Button fullWidth className={classes.botonGenerico} onClick={openPesadas}>Agrega Pesadas</Button> */}
                                         <Pesadas
                                             pesadas={pesadas}
                                             addPesada={addPesada}
@@ -268,11 +264,9 @@ export default function Mover({ open, close, inventario }) {
                 <Button
                     disabled={guardando === true ? true : false}
                     onClick={handleSubmit}
-                    // type="submit"
                     className={classes.botonCosmico}
                 >Mover</Button>
             </DialogActions>
-            {/* </form> */}
         </Dialog>
     )
 }

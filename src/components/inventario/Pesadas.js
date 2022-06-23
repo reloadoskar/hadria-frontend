@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Dialog, DialogActions, DialogContent, Avatar, DialogTitle, Grid, Typography, TextField, Button, Chip} from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography, TextField, Button, Chip} from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
 import { ListaPesadas } from './ListaPesadas';
+import { formatNumber } from '../Tools';
 export default function Pesadas(props){
     const{pesadas, addPesada, delPesada, clearPesadas} = props
     const [dialog, setDialog] = useState(false)
@@ -28,7 +29,7 @@ export default function Pesadas(props){
 
     const handleDelete = (index) => {
         delPesada(index)
-        setVerPesadas(false)
+        // setVerPesadas(false)
     }
     
     return (
@@ -61,13 +62,13 @@ export default function Pesadas(props){
                                 <Typography align="center" component="div" >
                                     <Chip
                                         color="primary"
-                                        avatar={<Avatar>{pesadas.length}</Avatar>}
                                         clickable
-                                        label=" Ver lista"
+                                        label={ pesadas.length + "|" + formatNumber(pesadas.reduce((acc,psd)=>acc+=parseFloat(psd),0),2) + " Ver lista"}
                                         onClick={verLista}
                                     />
+                                    
                                 </Typography>
-                                <ListaPesadas pesadas={pesadas} open={verPesadas} close={setVerPesadas} handleDelete={handleDelete}/>
+                                <ListaPesadas pesadas={pesadas} total={formatNumber(pesadas.reduce((acc,psd)=>acc+=parseFloat(psd),0),2)} open={verPesadas} close={setVerPesadas} handleDelete={handleDelete}/>
                                 {/* <Dialog open={verPesadas} onClose={()=>setVerPesadas(false)} maxWidth="sm" fullWidth className={classes.pesadasList}>
                                     <DialogContent>
                                         <Grid container 
