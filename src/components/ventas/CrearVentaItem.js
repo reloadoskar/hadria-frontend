@@ -5,16 +5,16 @@ import Zoom from '@material-ui/core/Zoom'
 import useStyles from '../hooks/useStyles'
 import Pesadas from '../inventario/Pesadas'
 import {formatNumber,} from '../Tools'
-export default function CrearVentaItem(props){
+export default function CrearVentaItem({open, close, elitem, add}){
     const classes = useStyles()
-    const {open, close, elitem, add} = props
     const [item, setItem] = useState(null)
-    const [empaques, setEmpaques] = useState(0)
-    const [cantidad, setCantidad] = useState(0)
+    const [empaques, setEmpaques] = useState('')
+    const [cantidad, setCantidad] = useState('')
     const [precio, setPrecio] = useState('')
     const [importe, setImporte] = useState('')
     const [guardando, setGuardando] = useState(false)
     const [pesadas, setPesadas] = useState([])
+    const handleFocus = (event) => event.target.select();
     useEffect(()=>{
         if(elitem){
             setItem(elitem)
@@ -32,8 +32,9 @@ export default function CrearVentaItem(props){
                 }
                 break;
             case 'cantidad':
+                if(value === ''){setCantidad(0)}
                 if(value > item.stock){
-                    setCantidad('')
+                    setCantidad(0)
                 }else{
                     setCantidad(value)
                 }
@@ -59,6 +60,7 @@ export default function CrearVentaItem(props){
         setPrecio('')
         setGuardando(false)
         setItem(null)
+        setPesadas([])
     }
 
     function handleSubmit(e){
@@ -84,18 +86,29 @@ export default function CrearVentaItem(props){
         close()
     }
     function addPesada(pesada){
-        let lista = pesadas
-        lista.push(pesada)
-        let emps = lista.length
         let cant = Number
+        if(cantidad===''){
+            console.log('iniciando cantidad en 0:')
+            cant=0
+        }else{cant=cantidad}
+        let lista = pesadas
+            lista.push(pesada)
+        let emps = lista.length
         if(emps===0){
             cant = pesada
         }else{
-            cant = parseFloat(cantidad) + parseFloat(pesada)
+            cant += parseFloat(pesada)
+            console.log(cant)
+        }
+        if(cant>item.stock){
+            setPesadas(0)
+            setEmpaques(0)
+            setCantidad(item.stock)
         }
         setPesadas(lista)
         setEmpaques(emps)
         setCantidad(cant)
+        
     }
     function delPesada(index){
         let psds = pesadas
@@ -103,14 +116,13 @@ export default function CrearVentaItem(props){
         setPesadas(psds)
         let ncant = psds.reduce((acc,el)=> acc+= parseFloat(el), 0)
         let nempq = empaques - 1
-        console.log(ncant)
         setCantidad(ncant)
         setEmpaques(nempq)        
     }
     const clearPesadas = () => {
         setPesadas([])
-        setCantidad('')
-        setEmpaques('')
+        setCantidad(0)
+        setEmpaques(0)
     }
     return (
         <Dialog
@@ -136,8 +148,9 @@ export default function CrearVentaItem(props){
                                             label="Cajas"
                                             variant="outlined"
                                             autoFocus
-                                            required
+                                            onFocus={handleFocus}
                                             fullWidth
+                                            type="number"
                                             value={empaques}
                                             onChange={(e) => handleChange('empaques',e.target.value)}
                                         />
@@ -151,6 +164,7 @@ export default function CrearVentaItem(props){
                                                     variant="outlined"
                                                     required
                                                     fullWidth
+                                                    type="number"
                                                     value={cantidad}
                                                     onChange={(e) => handleChange('cantidad',e.target.value)}
                                                 />
@@ -164,6 +178,7 @@ export default function CrearVentaItem(props){
                                             variant="outlined"
                                             required
                                             fullWidth
+                                            type="number"
                                             value={precio}
                                             onChange={(e) => handleChange('precio',e.target.value)}
                                         />
@@ -175,6 +190,7 @@ export default function CrearVentaItem(props){
                                             variant="outlined"
                                             required
                                             fullWidth
+                                            type="number"
                                             value={importe}
                                             onChange={(e) => handleChange('importe',e.target.value)}
                                             InputProps={{
