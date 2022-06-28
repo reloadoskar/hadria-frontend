@@ -15,6 +15,7 @@ const InventarioContextProvider = (props) => {
     // const [inventarioUbicacion, setInventarioUbicacion] = useState([])
     
     const loadInventarioGeneral = async () => {
+        setInventario([])
         let res = await getInventario()
         setInventario(res.inventario)
         return res
@@ -56,6 +57,10 @@ const InventarioContextProvider = (props) => {
 	    return mov
 	}
 
+    const limpiarInventario = () =>{
+        setInventario([])
+    }
+
     // useEffect(()=>{
     //     if(inventario.length>0){
     //         setInventarioUbicacion(agruparPorObjeto(inventario, "ubicacion"))
@@ -69,7 +74,8 @@ const InventarioContextProvider = (props) => {
             moverInventario,
             loadInventarioGeneral,
             loadInventarioUbicacion,
-            loadMovimientos
+            loadMovimientos,
+            limpiarInventario
         }} >
             {props.children}
         </InventarioContext.Provider>
