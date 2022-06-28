@@ -8,10 +8,14 @@ import GraficaInventario from './GraficaInventario'
 import { InventarioContext } from './InventarioContext'
 import InventarioPorUbicacion from './InventarioPorUbicacion'
 import { agruparPorObjeto } from '../Tools'
-
+import Movimientos from './Movimientos'
+import moment from 'moment'
 export default function Inventario(){
     const classes = useStyles()
-    const {inventario, loadInventarioGeneral} = useContext(InventarioContext)
+    let now = moment()
+    const [month] = useState(now.format("MM"))
+    // const [year, setYear] = useState(now.format("YYYY"))
+    const {inventario, movimientos, loadMovimientos, loadInventarioGeneral} = useContext(InventarioContext)
     const [inventarioPorUbicacion, setIpu] = useState([])
     // const [inventarioPorFolio, setIpf] = useState([])
 
@@ -23,7 +27,8 @@ export default function Inventario(){
     useEffect(() => {
         const loadAll = async () =>{
             const res = await Promise.all([
-                loadInventarioGeneral()             
+                loadInventarioGeneral(),
+                loadMovimientos(month)            
             ])
             return res
         }
@@ -72,7 +77,7 @@ export default function Inventario(){
                         onChange={selectTab}
                         centered>
                         <Tab label="Ver por Ubicaci&oacute;n" value={1}/>
-                        {/* <Tab label="Ver por Folio" value={2}/> */}
+                        <Tab label="Ver Movimientos" value={2}/>
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
                             <GraficaInventario inventario={inventarioPorUbicacion}/>
@@ -81,7 +86,7 @@ export default function Inventario(){
                         </Grid>              
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
-                        {/* <VistaPorFolio inventario={inventarioPorFolio}/> */}
+                        <Movimientos movimientos={movimientos} />
                     </div>
                 </Grid>  
             </Grid>

@@ -626,6 +626,20 @@ export const moveInventario = (move) => {
     }
 }
 
+export const getMovimientos = (month) => {
+    try{
+        if(decoded){
+            return axios
+                .get(url + decoded.database +  `/inventario/movimientos/`+month)
+                .then(res => {
+                    return res.data
+                })
+        }
+    }catch (err){
+        console.log(err)
+    }
+}
+
 // VENTAS
 export const getVenta = (folio) => {
     try{

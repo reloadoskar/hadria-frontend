@@ -44,6 +44,8 @@ export default function Pesadas(props){
                             <TextField
                                 id="pesada"
                                 required
+                                type="number"
+                                inputProps={{step: "any"}}
                                 fullWidth
                                 autoFocus
                                 label="Peso"
@@ -68,28 +70,7 @@ export default function Pesadas(props){
                                     />
                                     
                                 </Typography>
-                                <ListaPesadas pesadas={pesadas} total={formatNumber(pesadas.reduce((acc,psd)=>acc+=parseFloat(psd),0),2)} open={verPesadas} close={setVerPesadas} handleDelete={handleDelete}/>
-                                {/* <Dialog open={verPesadas} onClose={()=>setVerPesadas(false)} maxWidth="sm" fullWidth className={classes.pesadasList}>
-                                    <DialogContent>
-                                        <Grid container 
-                                        justifyContent="flex-start"
-                                        alignItems="flex-start"                                  
-                                        spacing={2}>
-                                            {pesadas.map((itm, i) => (
-                                                <Grid item xs={2} key={i}>
-                                                    <Typography display="inline" className={classes.textoMiniFacheron}>{i+1 +": "}</Typography>
-                                                    <Typography display="inline">{itm}</Typography>
-                                                    <IconButton onClick={() => handleDelete(itm, i)}>
-                                                        <HighlightOffIcon size="small" />
-                                                    </IconButton>
-                                                </Grid>
-                                            ))}
-                                        </Grid>
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={()=>setVerPesadas(false)}>Salir</Button>
-                                    </DialogActions>
-                                </Dialog> */}
+                                <ListaPesadas pesadas={pesadas} total={formatNumber(pesadas.reduce((acc,psd)=>acc+=parseFloat(psd),0),2)} open={verPesadas} close={()=>setVerPesadas(false)} handleDelete={handleDelete} />
                             </Grid>
                         }                        
                     </Grid>

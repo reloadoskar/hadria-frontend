@@ -5,6 +5,7 @@ import useStyles from '../hooks/useStyles'
 import { formatNumber } from '../Tools'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
 import { InventarioContext } from './InventarioContext'
+import { useSnackbar } from 'notistack'
 const init = {
     origen: '',
     origensel: '',
@@ -16,6 +17,8 @@ const init = {
 }
 export default function Mover({ open, close, inventario }) {
     const classes = useStyles()
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     const [movimiento, setMovimiento] = useState(init)
     const [pesadas, setPesadas] = useState([])
     const { ubicacions } = useContext(UbicacionContext)
@@ -68,10 +71,11 @@ export default function Mover({ open, close, inventario }) {
 
     const delPesada = (index) => {
         let psds = pesadas
-        psds.splice(index,1)
-        let emps = psds.length
-        let cant = psds.reduce((acc,el)=> acc+= parseFloat(el), 0)
+            psds.splice(index,1)
         setPesadas(psds)
+
+        let cant = psds.reduce((acc,el)=> acc+= parseFloat(el), 0)
+        let emps = psds.length
         setMovimiento({...movimiento,
         itemselcantidad: cant,
         itemselempaques: emps})
@@ -100,8 +104,10 @@ export default function Mover({ open, close, inventario }) {
     const handleSubmit = (e) => {
         e.preventDefault()
         setGuardando(true)
+        movimiento.pesadas=pesadas
         if (validar(movimiento)) {
             moverInventario(movimiento).then(res => {
+                showMessage(res.message,res.status)
                 if(res.status === "success"){
                     handleClose()
                     setGuardando(false)
