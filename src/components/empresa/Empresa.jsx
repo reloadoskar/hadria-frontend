@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useContext, useState } from 'react'
 
-import { Card, Input, CardContent, Grid, Typography, IconButton, Paper, Button, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
+import { Card, Input, CardContent, Grid, Typography, IconButton, Paper, Button, List, ListItem, ListItemIcon, ListItemText, Container } from '@material-ui/core'
 
 import { EmpresaContext } from './EmpresaContext'
 
@@ -14,9 +14,9 @@ import InstagramIcon from '@material-ui/icons/Instagram'
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close'
 
-import {formatNumber, sumImporte} from '../Tools'
+import {formatNumber} from '../Tools'
 import {planes} from '../empresa/Planes'
-
+import moment from 'moment'
 export default function Empresa(){
     const {editEmpresa, loadEmpresa} = useContext(EmpresaContext)
     const [empresa, setEmpresa] = useState()
@@ -46,7 +46,7 @@ export default function Empresa(){
     }
 
     return !empresa ? null : !editMode ? 
-        <React.Fragment>
+        <Container maxWidth="md">
             <Grid container spacing ={2}>
             <Grid container spacing={2} className={classes.paperContorno}>
                 <Grid item xs={11}><Typography variant="h4">Empresa</Typography> </Grid>
@@ -100,15 +100,15 @@ export default function Empresa(){
                 </Grid>
                 <Grid item xs={3}>
                     <Typography>Inici&oacute;</Typography>
-                    <Typography variant="h6">{empresa.fechaInicio}</Typography>
+                    <Typography variant="h6">{moment(empresa.fechaInicio).format("DD-MM-YYYY")}</Typography>
                 </Grid>
                 <Grid item xs={3}>
                     <Typography>Finaliza</Typography>
-                    <Typography variant="h6">{empresa.fechaFinal}</Typography>
+                    <Typography variant="h6">{moment(empresa.fechaFinal).format("DD-MM-YYYY")}</Typography>
                 </Grid>
                 <Grid item xs={3}>
                     <Typography align="right">Costo</Typography>  
-                    <Typography align="center">${ formatNumber(empresa.costo,1)} equivalente a:</Typography>                              
+                    <Typography align="right">${ formatNumber(empresa.costo,1)} equivalente a:</Typography>                              
                     <Typography align="right" variant="h6" className={classes.textoMirame}>$ {formatNumber( (empresa.costo / 12),1)} MXN / mes*</Typography>
                     <Typography align="right" className={classes.textoMiniFacheron}>* precio sujeto a cambios.</Typography>
 
@@ -128,31 +128,7 @@ export default function Empresa(){
                     }
                 </Grid>
             </Grid>
-            {empresa.pagos.length > 0 ?
-                <Grid item container xs={12}>
-                    <Grid item xs={12}>
-                        <Typography variant="h6">Pagos</Typography>
-                    </Grid>
-                    {empresa.pagos.map((pago, i) =>(
-                        <React.Fragment key={i}>
-                            <Grid item xs={2} >
-                                <Typography>{pago.fecha}</Typography>
-                            </Grid>
-                            <Grid item xs={8} >
-                                <Typography>{pago.descripcion}</Typography>
-                            </Grid>
-                            <Grid item xs={2} >
-                                <Typography align="right">$ { formatNumber(pago.importe,1)}</Typography>
-                            </Grid>
-                        </React.Fragment>
-                    ))}
-                    <Grid item xs={12}>
-                        <Typography align="right">$ {formatNumber(sumImporte(empresa.pagos),1)}</Typography>
-                    </Grid>
-                </Grid>
-                : null
-            }
-                
+                            
             <Grid container justifyContent="center" spacing={3}>
                 {planes.map((plan,i) => (
                     <Grid item container xs={4} key={i} >
@@ -195,8 +171,9 @@ export default function Empresa(){
                 ))}
             </Grid>
             </Grid>
-        </React.Fragment>
+        </Container>
         :
+        <Container>
             <Card>
                 <CardContent>
                 <Grid item xs={12}>
@@ -318,5 +295,6 @@ export default function Empresa(){
                             </Grid>
                 </CardContent>
             </Card>
+        </Container>
 
 }
