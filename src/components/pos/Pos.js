@@ -10,6 +10,7 @@ import { InventarioContext } from '../inventario/InventarioContext';
 import { IngresoContext } from '../ingresos/IngresoContext'
 import { UbicacionContext } from  '../ubicaciones/UbicacionContext'
 import { ClienteContext } from '../clientes/ClienteContext'
+import PesadasContextProvider from '../inventario/PesadasContext'
 export default function Pos({user}){
     const now = moment()
     const classes = useStyles()
@@ -63,6 +64,7 @@ export default function Pos({user}){
     }
 
     return(
+        <PesadasContextProvider>
         <Container>
             {user === null ?
                 <Backdrop className={classes.backdrop} open={true} >
@@ -93,5 +95,6 @@ export default function Pos({user}){
                 addPagoCxc={addPagoCxc}
             />
         </Container>
+        </PesadasContextProvider>
     )
 }

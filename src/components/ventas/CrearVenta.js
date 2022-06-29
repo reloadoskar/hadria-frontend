@@ -13,6 +13,7 @@ import {ticketVenta, ticketSalida} from '../api'
 import { formatNumber, sumImporte } from '../Tools'
 import Ticket from './Ticket'
 import { InventarioContext } from '../inventario/InventarioContext';
+import { PesadasContext } from '../inventario/PesadasContext';
 export default function CrearVenta({
         clientes, 
         // elinventario, 
@@ -24,8 +25,8 @@ export default function CrearVenta({
         addVenta
     }){
     const classes = useStyles()
-    // const [inventario, setInventario] = useState(null)
-    const {inventario} = useContext(InventarioContext)
+    const {lista, bruto, tara, ttara, neto, clearLista}=useContext(PesadasContext)
+    const {ubicacionInventario} = useContext(InventarioContext)
     const isMobile = useMediaQuery('(max-width: 720px)')
 
     const [ticket, setTicket] = useState(null)
@@ -94,7 +95,6 @@ export default function CrearVenta({
         item.itemOrigen.stock -= item.cantidad
         item.itemOrigen.empaquesStock -= item.empaques
     }
-
     function delItem(index, item){
         item.itemOrigen.stock += parseFloat(item.cantidad)
         item.itemOrigen.empaquesStock += parseFloat(item.empaques)
@@ -102,7 +102,6 @@ export default function CrearVenta({
         itms.splice(index, 1)
         setItems(itms)
     }
-
     const handleKeyPress = (e) => {
         if(e.key === "x" || e.key === "X"){
             toggleCobrarDialog()
@@ -124,6 +123,11 @@ export default function CrearVenta({
         venta.cliente = cliente
         venta.total = sumImporte(items)
         venta.importe = sumImporte(items)
+        venta.pesadas=lista
+        venta.tara=tara
+        venta.ttara=ttara
+        venta.bruto=bruto
+        venta.neto=neto
         try{
             addVenta(venta).then(res => {
                 if(res.status==="error"){
@@ -160,6 +164,7 @@ export default function CrearVenta({
     const handleClose = () => {
         setItemSelected(null)
         setItems([])
+        clearLista()
         setCliente(clientes[0])
         close()
     }
@@ -180,7 +185,7 @@ export default function CrearVenta({
                 maxWidth="lg"
                 fullWidth
             >
-                {inventario === null || fecha === null || ubicacion === null ? null :
+                {ubicacionInventario === null || fecha === null || ubicacion === null ? null :
                     <React.Fragment>
                         <DialogContent>                            
                             <Grid container spacing={2} justifyContent="center">
@@ -220,7 +225,7 @@ export default function CrearVenta({
                                     <Typography align="center" className={classes.textoMiniFacheron}>
                                         Productos disponibles
                                     </Typography>
-                                    <CompraItems inventario={inventario} selectItem={selectItem}/>
+                                    <CompraItems inventario={ubicacionInventario} selectItem={selectItem}/>
                                     <CrearVentaItem 
                                         open={ventaItemDialog}
                                         close={closeVentaItemDialog}

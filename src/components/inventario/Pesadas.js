@@ -1,20 +1,22 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography, TextField, Button, Chip} from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
 import { ListaPesadas } from './ListaPesadas';
 import { formatNumber } from '../Tools';
-export default function Pesadas(props){
-    const{pesadas, addPesada, delPesada, clearPesadas} = props
+import { PesadasContext } from './PesadasContext';
+export default function Pesadas({item}){
+    const {lista, addPesada, delPesada, clearLista, tara, setTara, neto}= useContext(PesadasContext)
     const [dialog, setDialog] = useState(false)
     const classes = useStyles()
-    const [peso, setPeso] = useState('')
+    const [peso, setPeso] = useState('')    
     const [verPesadas, setVerPesadas] = useState(false)
+    
     const handleChange = (value) =>{
         setPeso(value)
     } 
     const handleSubmit = (e) => {
         e.preventDefault()
-        addPesada(peso)
+        addPesada(peso)        
         setPeso('')
     }
     function verLista(){
@@ -26,10 +28,9 @@ export default function Pesadas(props){
     const closePesadas = () => {
         setDialog(false)
     }
-
-    const handleDelete = (index) => {
-        delPesada(index)
-        // setVerPesadas(false)
+    const handleReset = () => {
+        clearLista()
+        setPeso('')
     }
     
     return (
@@ -39,8 +40,8 @@ export default function Pesadas(props){
                 <DialogTitle>Agregar Pesadas</DialogTitle>
                     <form onSubmit={handleSubmit}>
                 <DialogContent>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
+                    <Grid container spacing={2} alignItems="center">
+                        <Grid item xs={12} md={8}>
                             <TextField
                                 id="pesada"
                                 required
@@ -54,29 +55,47 @@ export default function Pesadas(props){
                                 onChange={(e) => handleChange(e.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={4}>
                             <Button fullWidth type="submit" className={classes.botonGenerico} >
                                 Agregar
                             </Button>
                         </Grid>
-                        {pesadas.length <= 0 ? null :
-                            <Grid item xs={12}>
-                                <Typography align="center" component="div" >
-                                    <Chip
-                                        color="primary"
-                                        clickable
-                                        label={ pesadas.length + "|" + formatNumber(pesadas.reduce((acc,psd)=>acc+=parseFloat(psd),0),2) + " Ver lista"}
-                                        onClick={verLista}
+                        {lista.length <= 0 ? null :
+                            <Grid item container xs={12}>
+                                <Grid item xs={6}>
+                                    <TextField 
+                                        label="Destare"
+                                        id="tara"
+                                        type="number" 
+                                        value={tara}
+                                        onChange={(e)=>setTara(e.target.value)}
                                     />
-                                    
-                                </Typography>
-                                <ListaPesadas pesadas={pesadas} total={formatNumber(pesadas.reduce((acc,psd)=>acc+=parseFloat(psd),0),2)} open={verPesadas} close={()=>setVerPesadas(false)} handleDelete={handleDelete} />
+                                    {/* <Button onClick={()=>destarar(tara)}>destarar</Button> */}
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography align="center" component="div" >
+                                        <Chip
+                                            color="primary"
+                                            clickable
+                                            label={ lista.length + "|" + formatNumber(neto,2) + " Ver lista"}
+                                            onClick={verLista}
+                                        />
+                                        
+                                    </Typography>
+                                    <ListaPesadas 
+                                        pesadas={PesadasContext}
+                                        open={verPesadas}
+                                        close={()=>setVerPesadas(false)}
+                                        item={item}
+                                        delPesada={delPesada}
+                                        />
+                                </Grid>
                             </Grid>
                         }                        
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button className={classes.botonSimplon} onClick={()=>clearPesadas()}>reset</Button>
+                    <Button className={classes.botonSimplon} onClick={handleReset}>reset</Button>
                     <Button className={classes.botonGenerico} onClick={()=>closePesadas()}>Listo</Button>
                 </DialogActions>
                     </form>

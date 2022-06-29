@@ -6,24 +6,28 @@ import {
     moveInventario,
     getMovimientos
 } from '../api'
-// import { agruparPorObjeto } from '../Tools'
+import { agruparPorObjeto } from '../Tools'
 export const InventarioContext = createContext()
 
 const InventarioContextProvider = (props) => {
     const [inventario, setInventario] = useState([])
     const [movimientos, setMovimientos] = useState([])
-    // const [inventarioUbicacion, setInventarioUbicacion] = useState([])
+    const [inventarioUbicacion, setInventarioUbicacion] = useState([])
+    const [ubicacionInventario, setUbicacionInventario] = useState([])
     
     const loadInventarioGeneral = async () => {
         setInventario([])
         let res = await getInventario()
         setInventario(res.inventario)
+        let ipu = agruparPorObjeto(res.inventario, 'ubicacion')
+        setInventarioUbicacion(ipu)
         return res
     }
 
     const loadInventarioUbicacion = async (ubicacion) => {
+        // setUbicacionInventario(inventarioUbicacion.filter(inv=>inv.ubicacion._id === ubicacion._id))
         let res = await getInventarioBy(ubicacion)
-        setInventario(res.inventario)
+        setUbicacionInventario(res.inventario)
         return res
     }
 
@@ -70,6 +74,8 @@ const InventarioContextProvider = (props) => {
     return (
         <InventarioContext.Provider value={{
             inventario,
+            inventarioUbicacion,
+            ubicacionInventario,
             movimientos,
             moverInventario,
             loadInventarioGeneral,

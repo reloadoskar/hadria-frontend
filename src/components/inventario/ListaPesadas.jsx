@@ -1,55 +1,70 @@
 import React, {useRef} from 'react'
-import { Dialog, DialogContent, DialogActions, Button, Grid, Typography, IconButton, DialogTitle } from '@material-ui/core'
+import { Dialog, DialogContent, DialogActions, Button, Grid, Typography, IconButton, Box } from '@material-ui/core'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import PrintIcon from '@material-ui/icons/Print';
 import useStyles from '../hooks/useStyles'
 import { useReactToPrint } from 'react-to-print';
 import { formatNumber } from '../Tools';
-
+import { PesadasContext } from './PesadasContext';
+import { useContext } from 'react';
 const Pesada = ({data, index, deleteElement, noDelete=false}) =>{
-    const classes = useStyles()
     return (
-        <Grid item xs={2} container key={index}>
+        <Grid item xs={3} container key={index}>
             <Grid item >
-                <Typography display="inline" className={classes.textoMiniFacheron}>{index+1 +": "}</Typography>
-                <Typography display="inline">{data}</Typography>                
+                {/* <Typography display="inline" className={classes.textoMiniFacheron}>{index+1 +": "}</Typography> */}
+                <Typography display="inline">{data.pesada}</Typography>                
                 {noDelete?
                     null
                     : 
-                    <IconButton onClick={() => deleteElement(index)}>
-                        <HighlightOffIcon fontSize="small" />
-                    </IconButton>
+                    <Box displayPrint="none" display="inline">
+                        <IconButton onClick={() => deleteElement(data.id)}>
+                            <HighlightOffIcon fontSize="small" />
+                        </IconButton>
+                    </Box>
                 }
             </Grid>
         </Grid>
     )
 }
 
-export function ListaPesadas({open, close, pesadas, total, handleDelete, noDelete}){
+export function ListaPesadas({open, close, noDelete, item={}}){
+    const {lista, delPesada, bruto, tara, ttara, neto} = useContext(PesadasContext)
     const classes = useStyles()    
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
       })
-      return pesadas === undefined ? null :
-        <Dialog open={open} onClose={()=>close(false)} maxWidth="md" fullWidth ref={componentRef}>
-            <DialogTitle >Total: {pesadas.length + "|" + formatNumber(total,1) }</DialogTitle>
-            <DialogContent >
+    const handleDelete = (index) => {
+        delPesada(index)
+    // setVerPesadas(false)
+    }
+      return lista === undefined ? null :
+        <Dialog open={open} onClose={()=>close(false)} maxWidth="xs" fullWidth >
+            <DialogContent ref={componentRef}>
                 <Grid container className={classes.pesadasList}
-                    direction="column"
+                    // direction="column"
                     justifyContent="flex-start"
                     alignItems="flex-start"                                  
                 >
-                    {pesadas.map((itm, i) => (
+                    <Grid item xs={12}>
+                        <Typography align="center" className={classes.textoMirame}>{lista.length}{item.producto.empaque.abr} {item.producto?item.producto.descripcion:null }</Typography>
+                    </Grid>
+                    {lista.map((itm, i) => (
                         <Pesada data={itm} index={i} key={i} deleteElement={handleDelete} noDelete={noDelete}/>
                     ))}                            
+                </Grid>
+                <Grid item xs={12}>                    
+                    <Typography align="right" className={classes.textoMirame}>Bruto: {formatNumber(bruto,1)+item.producto.unidad.abr}</Typography>
+                    <Typography align="right" className={classes.textoMirame}>Destare: {tara + " x " + lista.length }</Typography>
+                    <Typography align="right" className={classes.textoMirame}>Tara: {ttara}</Typography>
+                    <Typography align="right" className={classes.textoMirame}>Neto: {neto}</Typography>
                 </Grid>
             </DialogContent>
             <DialogActions>
                 <IconButton onClick={handlePrint}>
                     <PrintIcon />
                 </IconButton>
-                <Button onClick={()=>close(false)}>Salir</Button>
+                <Button onClick={()=>close()}>Salir</Button>
             </DialogActions>
         </Dialog>
 }

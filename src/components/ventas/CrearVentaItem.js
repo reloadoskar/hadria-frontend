@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Dialog, DialogContent, Grid, Typography, TextField, DialogTitle, DialogActions, Button } from '@material-ui/core'
 import Slide from '@material-ui/core/Slide'
 import Zoom from '@material-ui/core/Zoom'
 import useStyles from '../hooks/useStyles'
+import { PesadasContext } from '../inventario/PesadasContext' 
 import Pesadas from '../inventario/Pesadas'
 import {formatNumber,} from '../Tools'
 export default function CrearVentaItem({open, close, elitem, add}){
+    const { lista, neto} = useContext(PesadasContext)
     const classes = useStyles()
     const [item, setItem] = useState(null)
     const [empaques, setEmpaques] = useState('')
@@ -13,8 +15,13 @@ export default function CrearVentaItem({open, close, elitem, add}){
     const [precio, setPrecio] = useState('')
     const [importe, setImporte] = useState('')
     const [guardando, setGuardando] = useState(false)
-    const [pesadas, setPesadas] = useState([])
     const handleFocus = (event) => event.target.select();
+    
+    useEffect(()=>{
+        setCantidad(neto)
+        setEmpaques(lista.length)
+    },[lista, neto]) // eslint-disable-line react-hooks/exhaustive-deps
+
     useEffect(()=>{
         if(elitem){
             setItem(elitem)
@@ -60,7 +67,6 @@ export default function CrearVentaItem({open, close, elitem, add}){
         setPrecio('')
         setGuardando(false)
         setItem(null)
-        setPesadas([])
     }
 
     function handleSubmit(e){
@@ -85,45 +91,45 @@ export default function CrearVentaItem({open, close, elitem, add}){
         clearFields()
         close()
     }
-    function addPesada(pesada){
-        let cant = Number
-        if(cantidad===''){
-            console.log('iniciando cantidad en 0:')
-            cant=0
-        }else{cant=cantidad}
-        let lista = pesadas
-            lista.push(pesada)
-        let emps = lista.length
-        if(emps===0){
-            cant = pesada
-        }else{
-            cant += parseFloat(pesada)
-            console.log(cant)
-        }
-        if(cant>item.stock){
-            setPesadas(0)
-            setEmpaques(0)
-            setCantidad(item.stock)
-        }
-        setPesadas(lista)
-        setEmpaques(emps)
-        setCantidad(cant)
+    // function addPesada(pesada){
+    //     let cant = Number
+    //     if(cantidad===''){
+    //         console.log('iniciando cantidad en 0:')
+    //         cant=0
+    //     }else{cant=cantidad}
+    //     let lista = pesadas
+    //         lista.push(pesada)
+    //     let emps = lista.length
+    //     if(emps===0){
+    //         cant = pesada
+    //     }else{
+    //         cant += parseFloat(pesada)
+    //         console.log(cant)
+    //     }
+    //     if(cant>item.stock){
+    //         setPesadas(0)
+    //         setEmpaques(0)
+    //         setCantidad(item.stock)
+    //     }
+    //     setPesadas(lista)
+    //     setEmpaques(emps)
+    //     setCantidad(cant)
         
-    }
-    function delPesada(index){
-        let psds = pesadas
-            psds.splice(index,1);
-        setPesadas(psds)
-        let ncant = psds.reduce((acc,el)=> acc+= parseFloat(el), 0)
-        let nempq = empaques - 1
-        setCantidad(ncant)
-        setEmpaques(nempq)        
-    }
-    const clearPesadas = () => {
-        setPesadas([])
-        setCantidad(0)
-        setEmpaques(0)
-    }
+    // }
+    // function delPesada(index){
+    //     let psds = pesadas
+    //         psds.splice(index,1);
+    //     setPesadas(psds)
+    //     let ncant = psds.reduce((acc,el)=> acc+= parseFloat(el), 0)
+    //     let nempq = empaques - 1
+    //     setCantidad(ncant)
+    //     setEmpaques(nempq)        
+    // }
+    // const clearPesadas = () => {
+    //     setPesadas([])
+    //     setCantidad(0)
+    //     setEmpaques(0)
+    // }
     return (
         <Dialog
             open={open} 
@@ -211,10 +217,7 @@ export default function CrearVentaItem({open, close, elitem, add}){
                 </form>
             }
             <Pesadas
-                pesadas={pesadas}
-                addPesada={addPesada}
-                delPesada={delPesada}
-                clearPesadas={clearPesadas}
+                item={elitem}    
             />
         </Dialog>
     )

@@ -1,24 +1,19 @@
 import React, {useState, useEffect, useContext} from 'react'
 import { Container, Grid, Typography, Button, Tabs, Tab } from '@material-ui/core'
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows'
-// import VistaPorFolio from './VistaPorFolio'
 import useStyles from '../hooks/useStyles'
 import Mover from './Mover'
 import GraficaInventario from './GraficaInventario'
 import { InventarioContext } from './InventarioContext'
 import InventarioPorUbicacion from './InventarioPorUbicacion'
-import { agruparPorObjeto } from '../Tools'
 import Movimientos from './Movimientos'
 import moment from 'moment'
+import PesadasContextProvider from './PesadasContext'
 export default function Inventario(){
     const classes = useStyles()
     let now = moment()
     const [month] = useState(now.format("MM"))
-    // const [year, setYear] = useState(now.format("YYYY"))
-    const {inventario, movimientos, loadMovimientos, loadInventarioGeneral} = useContext(InventarioContext)
-    const [inventarioPorUbicacion, setIpu] = useState([])
-    // const [inventarioPorFolio, setIpf] = useState([])
-
+    const {inventarioUbicacion, movimientos, loadMovimientos, loadInventarioGeneral} = useContext(InventarioContext)
     const [moverDialog, setMoverDialog] = useState(false)
     const [tabSelected, setTab] = useState(1)
     const selectTab = (event, selected) => {
@@ -32,25 +27,17 @@ export default function Inventario(){
             ])
             return res
         }
-        loadAll().then(res=>{
-            // setLoading(false)
-        })
+        loadAll()
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(()=>{
-        if(inventario){
-            setIpu(agruparPorObjeto(inventario, 'ubicacion'))
-            // setIpf(agruparPorObjeto(inventario, 'compra'))
-        }
-    },[inventario])
     const openMoverDialog = () => {
         setMoverDialog(true)
-        // inventario.getInventarioXubic()
     }
     const closeMoverDialog = () =>{
         setMoverDialog(false)
     }
     return (
+        <PesadasContextProvider>
         <Container maxWidth="lg">
             <Grid container spacing={2} >
                 <Grid item xs={6}>
@@ -68,7 +55,7 @@ export default function Inventario(){
                         <Mover
                             open={moverDialog} 
                             close={closeMoverDialog}
-                            inventario={inventarioPorUbicacion} 
+                            inventario={inventarioUbicacion} 
                         /> 
                     </Grid>
                 <Grid item xs={12}>
@@ -80,9 +67,9 @@ export default function Inventario(){
                         <Tab label="Ver Movimientos" value={2}/>
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
-                            <GraficaInventario inventario={inventarioPorUbicacion}/>
+                            <GraficaInventario inventario={inventarioUbicacion}/>
                         <Grid container spacing={2}>
-                            <InventarioPorUbicacion inventario={inventarioPorUbicacion} />
+                            <InventarioPorUbicacion inventario={inventarioUbicacion} />
                         </Grid>              
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
@@ -91,5 +78,6 @@ export default function Inventario(){
                 </Grid>  
             </Grid>
         </Container>
+        </PesadasContextProvider>
     )
 }
