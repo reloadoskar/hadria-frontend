@@ -31,15 +31,20 @@ import {EmpresaContext} from '../empresa/EmpresaContext'
 import {UbicacionContext} from '../ubicaciones/UbicacionContext'
 import {EgresoContext} from '../egresos/EgresoContext'
 import {IngresoContext} from '../ingresos/IngresoContext'
+import { InventarioContext } from '../inventario/InventarioContext'
 import CorteGlobal from '../cortes/CorteGlobal';
 import SelectorMes from '../tools/SelectorMes';
 import SelectorAnio from '../tools/SelectorAnio';
+
+import { agruparPorObjeto } from '../Tools'
 
 export default function Dashboard() {
     const {empresa } = useContext(EmpresaContext)
     const { ingresos, addIngreso, addPagoCxc, loadIngresosMonthYear, loadCuentasPorCobrarPdv, cxcPdv } = useContext(IngresoContext)
     const {egresos, loadEgresosMonthYear, loadCuentasPorPagar, addEgreso} = useContext(EgresoContext)
     const {ubicacions} = useContext(UbicacionContext)
+    const {inventario, loadInventarioGeneral} = useContext(InventarioContext)
+    const [inventarioPorUbicacion, setIpu] = useState([])
     const [verPlanStatus, setVerPlanStatus] = useState(false)
     const [bodyPlanStatus, setBody] = useState(null)
     const [loadingData, setLoading] = useState(false)
@@ -51,11 +56,17 @@ export default function Dashboard() {
     const [month, setMonth] = useState(now.format("MM"))
     const [year, setYear] = useState(now.format("YYYY"))
     useEffect(()=>{
+        if(inventario){
+            setIpu(agruparPorObjeto(inventario, 'ubicacion'))
+        }
+    },[inventario])
+    useEffect(()=>{
         setLoading(true)
         const loadAll = async () =>{
             const res = await Promise.all([
                 loadCuentasPorPagar(),
-                loadCuentasPorCobrarPdv()
+                loadCuentasPorCobrarPdv(),
+                loadInventarioGeneral()
             ])
             return res
         }
@@ -95,7 +106,7 @@ export default function Dashboard() {
                         <Typography align="center">Tu Plan vence:</Typography>
                         <Typography variant="h6" align="center">{vence}</Typography>
                         <Typography align="center">Renueva ahora y obten hasta un {descuento} % de descuento</Typography>
-                        <NavLink exact to="app/configuracion" 
+                        <NavLink exact to="/configuracion" 
                             className={classes.link} 
                             >
                             <Typography align="center">ver planes</Typography>
@@ -287,7 +298,7 @@ export default function Dashboard() {
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 3}>
                     {tabSelected !== 3 ? null :
-                        <GraficaInventario />
+                        <GraficaInventario inventario={inventarioPorUbicacion} />
                     }
                     </div>
                 </Grid>
