@@ -30,7 +30,7 @@ export default function VentaItem(props){
                     }
                     <Grid item xs={12} sm={basic ? 6 : 5}>
                         <Typography variant="body2">
-                            #{item.compra.folio} - {item.producto.descripcion}
+                            #{item.compra.folio} - {item.producto.descripcion} {item.compraItem.clasificacion}
                         </Typography>
                     </Grid>                                        
                     <Grid item xs={3} sm={1}>

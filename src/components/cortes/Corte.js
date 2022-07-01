@@ -183,8 +183,7 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
                     onChange={handleChangeTab}
                     centered
                 >
-                    <Tab label="Ventas" value={0}/>
-                    <Tab label="Resumen de ventas" value={1}/>
+                    <Tab label="Ventas" value={1}/>
                     <Tab label="Ventas por producto" value={2} />
                 </Tabs>
               </Grid>
@@ -193,12 +192,15 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
               
               {elcorte.resumenVentas.length === 0 ? null :
                 <Grid item xs={12} className={classes.paperContorno}>
+                  <Grid item xs={12}>
+                    <Typography variant="h6" align="center">RESUMEN</Typography>
+                  </Grid>
                   {elcorte.resumenVentas.map((el, i) => (
                     <React.Fragment key={i}>
                       <Grid container >
-                        <Grid item xs={2} sm={2}><Typography variant="body2" className={classes.textoMirame} >#{el.compra.folio} | {moment(el._id[0].createdAt).format("DD/MM")}</Typography></Grid>
+                        <Grid item xs={2} sm={2}><Typography variant="body2" className={classes.textoMirame} >#{el.compra.folio} | {moment(el._id.createdAt).format("DD/MM")}</Typography></Grid>
                         <Grid item xs={10} sm={3}>
-                          <Typography variant="body2" >{el.producto.descripcion}</Typography></Grid>
+                          <Typography variant="body2" >{el.producto.descripcion} {el._id.clasificacion}</Typography></Grid>
                         <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(el.empaques, 2)}</Typography></Grid>
                         <Grid item xs={3} sm={2}><Typography align="right" variant="body2" >{formatNumber(el.cantidad, 2)}</Typography></Grid>
                         <Grid item xs={3} sm={1}><Typography align="right" variant="body2" >${formatNumber((el.importe / el.cantidad), 2)}</Typography></Grid>
@@ -261,11 +263,7 @@ export default function Corte({ open, close, fecha, guardar, reabrir, ubicacion 
                   </Grid>
                 </Grid>
               }
-            </Grid>
-
-
-
-            <Grid container value={tabSelected} role="tabpanel" hidden={tabSelected!== 0}>
+            
                 {elcorte.ventas.length > 0 ?
                   <Grid item xs={12}>
                     <Typography component="div" align="center">

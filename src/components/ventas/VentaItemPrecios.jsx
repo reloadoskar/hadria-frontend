@@ -32,7 +32,7 @@ export default function VentaItemPrecios({item, precios, basic=false, corte=fals
                     : null
                 }
                 <Grid item xs>
-                    <Typography className={classes.textoSubrayadoNice} variant="h6" align="center">{item.producto.descripcion}</Typography>
+                    <Typography className={classes.textoSubrayadoNice} variant="h6" align="center">{item.producto.descripcion} {item.compraItem.clasificacion}</Typography>
                 </Grid>
             </Grid>
             <Grid item xs={12} sm={8}>
