@@ -12,7 +12,11 @@ export default function Pesadas({item}){
     const [verPesadas, setVerPesadas] = useState(false)
     
     const handleChange = (value) =>{
-        setPeso(value)
+        if(value>=100){
+            setPeso(value/10)
+        }else{
+            setPeso(value)
+        }
     } 
     const handleSubmit = (e) => {
         e.preventDefault()
