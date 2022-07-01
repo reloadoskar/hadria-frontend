@@ -11,7 +11,6 @@ const Pesada = ({data, index, deleteElement, noDelete=false}) =>{
     return (
         <Grid item xs={3} container key={index}>
             <Grid item >
-                {/* <Typography display="inline" className={classes.textoMiniFacheron}>{index+1 +": "}</Typography> */}
                 <Typography display="inline">{data.pesada}</Typography>                
                 {noDelete?
                     null
@@ -54,10 +53,10 @@ export function ListaPesadas({open, close, noDelete, item={}}){
                     ))}                            
                 </Grid>
                 <Grid item xs={12}>                    
-                    <Typography align="right" className={classes.textoMirame}>Bruto: {formatNumber(bruto,1)+item.producto.unidad.abr}</Typography>
+                    <Typography align="right" className={classes.textoMirame}>Bruto: {formatNumber(bruto,2)+item.producto.unidad.abr}</Typography>
                     <Typography align="right" className={classes.textoMirame}>Destare: {tara + " x " + lista.length }</Typography>
                     <Typography align="right" className={classes.textoMirame}>Tara: {ttara}</Typography>
-                    <Typography align="right" className={classes.textoMirame}>Neto: {neto}</Typography>
+                    <Typography align="right" className={classes.textoMirame}>Neto: {formatNumber(neto,2)}</Typography>
                 </Grid>
             </DialogContent>
             <DialogActions>

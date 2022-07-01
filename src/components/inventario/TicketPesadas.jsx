@@ -15,7 +15,7 @@ export default function TicketPesadas({data, open, close}){
             <DialogContent ref={componentRef}>
                 <Grid container >
                     <Grid item xs={12}>
-                        <Typography align="center" className={classes.textoMirame}>{data.pesadas.length}{data.item.producto.empaque.abr} {data.item.producto?data.item.producto.descripcion:null }</Typography>
+                        <Typography align="center" className={classes.textoMirame}>{data.pesadas.length}{data.item.producto.empaque.abr} {data.item.compra.folio}-{data.item.producto?data.item.producto.descripcion:null }</Typography>
                     </Grid>
                     {data.pesadas.map((item,i)=>(
                         <Grid item xs={2} container key={i}>
@@ -25,10 +25,10 @@ export default function TicketPesadas({data, open, close}){
                         </Grid>
                     ))}
                     <Grid item xs={12}>                        
-                        <Typography align="right" className={classes.textoMirame}>Bruto: { formatNumber(data.bruto,1)+data.item.producto.unidad.abr}</Typography>
+                        <Typography align="right" className={classes.textoMirame}>Bruto: { formatNumber(data.bruto,2)+data.item.producto.unidad.abr}</Typography>
                         <Typography align="right" className={classes.textoMirame}>Destare: {data.tara + " x " + data.pesadas.length }</Typography>
                         <Typography align="right" className={classes.textoMirame}>Tara: {data.ttara}</Typography>
-                        <Typography align="right" className={classes.textoMirame}>Neto: {data.neto}</Typography>
+                        <Typography align="right" className={classes.textoMirame}>Neto: { formatNumber(data.neto,2)}</Typography>
                     </Grid>
                 </Grid>
             </DialogContent>
