@@ -29,7 +29,7 @@ export default function VentaBasic(props){
     return (
         <Grid item xs ={12}>
             {venta === null ? null :
-                <Accordion>
+                <Accordion defaultExpanded>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}                        
                     >

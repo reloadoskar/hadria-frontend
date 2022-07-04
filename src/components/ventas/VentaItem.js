@@ -24,7 +24,7 @@ export default function VentaItem(props){
                     { basic ? null :
                         <Grid item xs={12} sm={3}>
                             <Typography variant="body2">
-                                {item.ventaFolio} : {moment(item.venta.createdAt).format("hh:mm:ss A")}
+                                {item.ventaFolio} : {moment(item.createdAt).format("hh:mm:ss A")}
                             </Typography>
                         </Grid>                                        
                     }
