@@ -8,14 +8,12 @@ export default function Home(props){
     const classes = useStyles()
     return (
         <React.Fragment>
-            <React.Fragment>
-                <LandingBar />
-                <div className={classes.backgroundCustom}>
-                    <Container className={classes.container}>
-                        <Login />
-                    </Container>
-                </div>
-            </React.Fragment>
+            <LandingBar />
+            <div className={classes.backgroundCustom}>
+                <Container maxWidth="xs" className={classes.container}>
+                    <Login />
+                </Container>
+            </div>
         </React.Fragment>
     )
 }
