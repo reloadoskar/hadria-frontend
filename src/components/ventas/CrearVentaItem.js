@@ -18,8 +18,13 @@ export default function CrearVentaItem({open, close, elitem, add}){
     const handleFocus = (event) => event.target.select();
     
     useEffect(()=>{
-        setCantidad(neto)
-        setEmpaques(lista.length)
+        if(lista.length>0){
+            setCantidad(formatNumber(neto,2))
+            setEmpaques(lista.length)
+        }else{
+            setCantidad('')
+            setEmpaques('')
+        }
     },[lista, neto]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(()=>{
