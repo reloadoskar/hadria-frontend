@@ -84,8 +84,8 @@ export default function Login(){
         })
     }
     return(
-        <form onSubmit={handleSubmit}>
-            <Card className={classes.cajaBonita}>
+        <Card className={classes.cajaBonita}>
+            <form onSubmit={handleSubmit}>
                 <CardHeader title="Login:"></CardHeader>
                     <CardContent>
                         {cargando === true ? 
@@ -136,7 +136,7 @@ export default function Login(){
                             </Grid>
                         </CardActions>
                     }
-            </Card>
-        </form>
+            </form>
+        </Card>
     )
 }
