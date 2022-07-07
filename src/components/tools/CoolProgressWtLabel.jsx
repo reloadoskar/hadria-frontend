@@ -4,8 +4,8 @@ import { LinearProgress } from '@material-ui/core'
 
 const CoolProgressWtLabel = withStyles((theme) => ({
     root: {
-        height: 40,
-        borderRadius: 5
+        height: 15,
+        borderRadius: 2
     },
     colorPrimary: {
         backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],

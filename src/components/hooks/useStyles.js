@@ -19,6 +19,18 @@ export const escalaDeColores = [
     "#F2F3AE", 
     "#EFD6AC",
 ];
+
+export const blue = {
+    '--background-start': '#2196F3',
+    '--background-end': '#21CBF3',
+    '--box-shadow': 'rgba(33, 203, 243, .3)',
+  };
+  
+export const danger = {
+'--background-start': '#9A031E',
+'--background-end': '#FF8E53',
+'--box-shadow': 'rgba(255, 105, 135, .3)',
+};
 const useStyles = makeStyles(theme => ({ 
     
     root: {
@@ -242,6 +254,7 @@ const useStyles = makeStyles(theme => ({
     },
     
     
+    
     hide: {
         display: 'none',
     },
@@ -403,6 +416,10 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
     },
 
+    paperPaginaConSalto:{
+        pageBreakAfter:"always"
+    },
+
     paperBasico: {
         padding:15,
         width: '100%',
@@ -536,7 +553,19 @@ const useStyles = makeStyles(theme => ({
         marginBottom: "50px",
         color: "#FFF",
         backgroundColor: "#2C363F" 
-      }
+      },
+
+      blue: {
+        '--background-start': '#2196F3',
+        '--background-end': '#21CBF3',
+        '--box-shadow': 'rgba(33, 203, 243, .3)',
+      },
+      
+    danger: {
+        '--background-start': '#9A031E',
+        '--background-end': '#FF8E53',
+        '--box-shadow': 'rgba(255, 105, 135, .3)',
+    }
 
 }));
 

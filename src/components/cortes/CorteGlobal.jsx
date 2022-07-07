@@ -4,7 +4,7 @@ import { Grid, Typography, IconButton, TextField, MenuItem } from "@material-ui/
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { UbicacionContext } from "../ubicaciones/UbicacionContext"
-import Corte from '../cortes/Corte'
+import Corte from './Corte'
 import moment from 'moment'
 import useStyles from "../hooks/useStyles"
 import { formatNumber, sumImporte } from "../Tools"
@@ -140,6 +140,7 @@ export default function CorteGlobal({ingresos, egresos}){
             
             <Grid item xs={12}>
                 {verCorte ?
+                    // <Corte open={verCorte} close={()=>setVercorte(false)} ubicacion={ubicacion} fecha={fecha} />
                     <Corte open={verCorte} close={()=>setVercorte(false)} ubicacion={ubicacion} fecha={fecha} />
                     : null
                 }

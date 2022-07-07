@@ -23,7 +23,6 @@ export default function CrearVentaItem({open, close, elitem, add}){
             setEmpaques(lista.length)
         }else{
             setCantidad('')
-            setEmpaques('')
         }
     },[lista, neto]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -171,11 +170,12 @@ export default function CrearVentaItem({open, close, elitem, add}){
                                             <Grid item xs={12}>
                                                 <TextField 
                                                     id="cantidad"
+                                                    // type="number"
                                                     label="Kilos"
                                                     variant="outlined"
                                                     required
                                                     fullWidth
-                                                    type="number"
+                                                    InputProps={{step: '1'}}
                                                     value={cantidad}
                                                     onChange={(e) => handleChange('cantidad',e.target.value)}
                                                 />

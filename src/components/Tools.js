@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const objectIsNull = (obj) => {
     let isNull = true
     for (const prop in obj){
@@ -351,6 +353,22 @@ export function agruparPorObjeto(arreglo, objeto){
                 compra: item.compra
             })
         }
+        return grupo
+    },[])
+    return Object.keys(reduce).map(key => reduce[key])
+}
+export function agruparPorHora(arreglo){
+    let reduce = arreglo.reduce((grupo, item)=>{
+        (grupo[moment(item.createdAt).format("HH")] =  grupo[moment(item.createdAt).format("HH")] || {
+            hora : moment(item.createdAt).format("HH"),
+            cantidad:0,
+            importe : 0,
+            empaques: 0
+        })
+        grupo[moment(item.createdAt).format("HH")].importe += item.importe
+        grupo[moment(item.createdAt).format("HH")].cantidad += item.cantidad
+        grupo[moment(item.createdAt).format("HH")].empaques += item.empaques
+
         return grupo
     },[])
     return Object.keys(reduce).map(key => reduce[key])

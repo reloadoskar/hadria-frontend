@@ -176,7 +176,7 @@ export default function DialogPos(props) {
                         Revisar Corte
                     </Button>
                     {corteDialog ?
-                        <Corte
+                        <Corte 
                             open={corteDialog}
                             close={closeDialogCorte}
                             ubicacion={ubicacion}

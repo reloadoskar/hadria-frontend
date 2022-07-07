@@ -11,30 +11,32 @@ const useCortes = () => {
     const [corte, setCorte] = useState([])
 
     async function getCorte(ubicacion, fecha){
-        let elcorte = []
         const crte = await getDataFrom(ubicacion, fecha)
-
+        .then(res=>{
+            if(res.status==="info"){
+                setCorte(res.corte)
+                return res.corte
+            }else{
+                    let elcorte = res.corte
+                    var tven = sumImporte(elcorte.ventaItems)
+                    var ting = sumImporte(res.corte.ingresos)
+                    var tcre = sumImporte(res.corte.creditos)
+                    var tacu = sumAcuenta(res.corte.creditos)
+                    var tegr = sumImporte(res.corte.egresos)
+                    var total = (tven + ting + tacu - tcre - tegr)
         
-        elcorte = crte.corte
-        
-
-        var tven = sumImporte(crte.corte.ventas)
-        var ting = sumImporte(crte.corte.ingresos)
-        var tcre = sumImporte(crte.corte.creditos)
-        var tacu = sumAcuenta(crte.corte.creditos)
-        var tegr = sumImporte(crte.corte.egresos)
-        var total = (tven + ting + tacu - tcre - tegr)
-
-        elcorte.tventas = tven
-        elcorte.tingresos = ting
-        elcorte.tcreditos = tcre
-        elcorte.tacuenta = tacu
-        elcorte.tegresos = tegr
-        elcorte.total = total
-
-        setCorte(elcorte)
-        return elcorte
-        
+                    elcorte.tventas = tven
+                    elcorte.tingresos = ting
+                    elcorte.tcreditos = tcre
+                    elcorte.tacuenta = tacu
+                    elcorte.tegresos = tegr
+                    elcorte.total = total
+            
+                    setCorte(elcorte)
+                    return elcorte
+                }
+            })
+            return crte
     }
 
     async function existeCorte(ubicacion, fecha){

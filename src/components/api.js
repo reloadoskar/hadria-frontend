@@ -987,7 +987,7 @@ export const getDataFrom = (ubicacion, fecha) => {
     try{
         if(decoded){
             return axios
-                .get(url + decoded.database + `/corte/${ubicacion}/${fecha}`)
+                .get(url + decoded.database + `/corte/${ubicacion._id}/${fecha}`)
                 .then( res => {
                     return res.data
                 })
@@ -1405,6 +1405,23 @@ export const ticketTraspaso = (traspaso) => {
         .catch( error => {
             if (!error.response) {
 
+                return {
+                    status: 'warning',
+                    message: 'No hay conectividad con la impresora de tickets'
+                }
+            } else {
+                return error
+            }
+        })
+}
+export const ticketMovimiento = (movimiento) => {
+    return axios
+        .post('http://localhost:8002/pesadas', movimiento)
+        .then( res => {
+            return res
+        })
+        .catch( error => {
+            if (!error.response) {
                 return {
                     status: 'warning',
                     message: 'No hay conectividad con la impresora de tickets'
