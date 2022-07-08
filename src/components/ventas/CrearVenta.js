@@ -205,17 +205,32 @@ export default function CrearVenta({
                                         onClose={closeSelect}
                                         >
                                         {clientes !== undefined ? 
-                                            clientes.map(cliente => (
-                                                <MenuItem 
-                                                    key={cliente._id} 
-                                                    onClick={() =>{
-                                                        seleccionaCliente(cliente)
-                                                        closeSelect()
-                                                }}
-                                                >
-                                                {cliente.nombre}
-                                                </MenuItem>
-                                            ))
+                                            <React.Fragment>
+                                                {clientes.filter(clnt=>clnt.ubicacion === undefined).map(cliente => (
+                                                    <MenuItem 
+                                                        key={cliente._id} 
+                                                        onClick={() =>{
+                                                            seleccionaCliente(cliente)
+                                                            closeSelect()
+                                                    }}
+                                                    >
+                                                    {cliente.nombre}
+                                                    </MenuItem>
+                                                ))}
+                                                {clientes.filter(clnt=>clnt.ubicacion !== undefined)
+                                                    .filter(cl=>cl.ubicacion === ubicacion._id)
+                                                    .map(cliente => (
+                                                    <MenuItem 
+                                                        key={cliente._id} 
+                                                        onClick={() =>{
+                                                            seleccionaCliente(cliente)
+                                                            closeSelect()
+                                                    }}
+                                                    >
+                                                    {cliente.nombre}
+                                                    </MenuItem>
+                                                ))}
+                                            </React.Fragment>
                                             :
                                             null
                                         }        

@@ -4,6 +4,7 @@ import avatarh from '../../img/avatarH1.png'
 import avatarm from '../../img/avatarM2.png'
 import avataro from '../../img/avatarM1.png'
 import EditIcon from '@material-ui/icons/Edit'
+import StoreIcon from '@material-ui/icons/Store'
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
@@ -13,11 +14,13 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import useStyles from '../hooks/useStyles'
 import {ClienteContext} from './ClienteContext'
+import {UbicacionContext} from '../ubicaciones/UbicacionContext'
 import Confirm from '../dialogs/Confirm';
 import { useSnackbar } from 'notistack'
 import {formatNumber} from '../Tools'
 export default function Cliente({data, cuenta}){
     const {removeCliente, editCliente} = useContext(ClienteContext)
+    const {ubicacions}= useContext(UbicacionContext)
     const classes = useStyles()
     const [editMode, setEditMode] = useState(false)
     const [elCliente, setElCliente] = useState(false)
@@ -63,6 +66,7 @@ export default function Cliente({data, cuenta}){
                         {elCliente.nombre}
                     </Typography>
                     <Typography className={classes.textoMirame}>{elCliente.rfc}</Typography>
+                    <Typography><StoreIcon /> {elCliente.ubicacion?elCliente.ubicacion.nombre:"No se ha definido ubicación, este cliente es visible en todas las sucursales. 🤖🤟"}</Typography>
                     <Typography><HomeIcon /> {elCliente.direccion}</Typography>
                     <Typography><PhoneAndroidIcon /> {elCliente.tel1}</Typography>
                     {elCliente.email ?
@@ -140,7 +144,24 @@ export default function Cliente({data, cuenta}){
                             onChange={(e) => handleChange('rfc',e.target.value)}
                         />  
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
+                        <TextField
+                            id="ubicacion"
+                            label="Ubicaci&oacute;n"
+                            select
+                            fullWidth
+                            value={elCliente.ubicacion}
+                            variant="outlined"
+                            onChange={(e) => handleChange('ubicacion',e.target.value)}
+                        > 
+                            {ubicacions.map((ubicacion,i)=>(
+                                <MenuItem value={ubicacion} key={i} >
+                                    {ubicacion.nombre}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={6}>
                         <TextField
                             fullWidth
                             id="direccion"

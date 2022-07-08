@@ -1,14 +1,16 @@
 import React, { useState, useContext } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@material-ui/core'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField } from '@material-ui/core'
 import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import useStyles from '../hooks/useStyles'
 import {ClienteContext} from './ClienteContext'
+import { UbicacionContext } from '../ubicaciones/UbicacionContext'
 import { useSnackbar } from 'notistack'
 const ncliente = {
     nombre: "",
     rfc: "",
     direccion: "",
+    ubicacion: "",
     tel1: "",
     tel2: "",
     email: "",
@@ -19,6 +21,7 @@ const ncliente = {
 
 const CrearCliente = ({open, close}) =>{
     const {addCliente} = useContext(ClienteContext)
+    const {ubicacions} = useContext(UbicacionContext)
     const classes = useStyles()
     const [cliente, setCliente] = useState(ncliente)
     const { enqueueSnackbar } = useSnackbar()
@@ -76,6 +79,24 @@ const CrearCliente = ({open, close}) =>{
                                 value={cliente.rfc}
                                 onChange={(e) => handleChange('rfc', e.target.value)}
                             />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField 
+                                id="ubicacion"
+                                select
+                                fullWidth
+                                label="Ubicación"
+                                type="text"
+                                variant="outlined"
+                                value={cliente.ubicacion}
+                                onChange={(e) => handleChange('ubicacion', e.target.value)}
+                            >
+                                {ubicacions.map((ubicacion, i)=>(
+                                    <MenuItem key={i} value={ubicacion}>
+                                        {ubicacion.nombre}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField 

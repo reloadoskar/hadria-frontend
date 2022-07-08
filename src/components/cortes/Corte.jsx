@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react"
-import { Tabs, Tab, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton, CircularProgress, Backdrop, Box } from '@material-ui/core'
+import { Tabs, Tab, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton, CircularProgress, Backdrop, Box, Link } from '@material-ui/core'
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import PrintIcon from '@material-ui/icons/Print';
@@ -16,6 +16,7 @@ import { useSnackbar } from 'notistack';
 import IngresosList from '../ingresos/IngresosList';
 import { useAuth } from '../auth/use_auth'
 import useCortes from './useCortes';
+import Venta from "../ventas/Venta";
 
 export default function Corte({ open, close, fecha, guardar, ubicacion }){
     const { getCorte, guardarCorte, reOpen } = useCortes()
@@ -28,7 +29,8 @@ export default function Corte({ open, close, fecha, guardar, ubicacion }){
     const [confirm, setConfirm] = useState(false)
     const [working, setWorking] = useState(false) 
     const [tabSelected, setTab] = useState(1)
-
+    const [ventaSelected, setVentaSel] = useState(null)
+    const [verVenta, setVerVenta] = useState(null)
     const [corte, setCorte]=useState(null)
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     useEffect(() => {
@@ -49,10 +51,12 @@ export default function Corte({ open, close, fecha, guardar, ubicacion }){
       }, [corte])
 
     useEffect(()=>{
-        getCorte(ubicacion, lafecha).then(res=>{
-            console.log(res)
-            setCorte(res)
-        })
+        if(ubicacion && lafecha){
+            getCorte(ubicacion, lafecha).then(res=>{
+                // console.log(res)
+                setCorte(res)
+            })
+        }
     },[ubicacion, lafecha]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function handleChange(value) {
@@ -113,7 +117,11 @@ export default function Corte({ open, close, fecha, guardar, ubicacion }){
         ant.subtract(1, "days")
         handleChange(ant.format("YYYY-MM-DD"))
     }
-
+    
+    const handleVerVenta = (vta) =>{
+        setVentaSel(vta[0])
+        setVerVenta(true)
+    }
 
     return corte ?
         <Dialog 
@@ -299,7 +307,12 @@ export default function Corte({ open, close, fecha, guardar, ubicacion }){
                                             {el.ventas.map((vta,i)=>(
                                                 <React.Fragment key={i}>
                                                 <Grid item xs={2}>
-                                                    <Typography variant="body2" >#{vta.ventaFolio} {moment(vta.createdAt).format("HH:mm")}</Typography>
+                                                    <Typography variant="body2" display="inline">
+                                                        {auth.user.level > 2 ? vta.ventaFolio :
+                                                            <Link onClick={()=>handleVerVenta(corte.ventas.filter(v=>v.id===vta.ventaFolio))} > #{vta.ventaFolio} </Link>
+                                                        }
+                                                        {moment(vta.createdAt).format("HH:mm")}
+                                                    </Typography>
                                                 </Grid>
                                                 <Grid item xs={4}>
                                                     <Typography variant="body2" >{vta.venta.cliente.nombre}</Typography>
@@ -326,6 +339,7 @@ export default function Corte({ open, close, fecha, guardar, ubicacion }){
                                         <Grid item xs={2}><Typography align="right" variant="body2" className={classes.textoMirame}>${formatNumber(el.importe, 2)}</Typography></Grid>
                                     </Grid>
                                 ))}
+                                <Venta open={verVenta} close={()=>setVerVenta(false)} venta={ventaSelected} />
                             </Grid> 
                         </React.Fragment>                       
                         }
