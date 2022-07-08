@@ -1,9 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import BlockIcon from '@material-ui/icons/Block';
-import CloseIcon from '@material-ui/icons/Close';
-// import EditIcon from '@material-ui/icons/Edit';
-import ReceiptIcon from '@material-ui/icons/Receipt';
-import useStyles from '../hooks/useStyles'
+import { useSnackbar } from 'notistack';
 import { 
     Dialog,
     DialogContent,
@@ -14,19 +10,26 @@ import {
     IconButton, 
     // IconButton, 
 } from '@material-ui/core';
+import BlockIcon from '@material-ui/icons/Block';
+import CloseIcon from '@material-ui/icons/Close';
+import PollIcon from '@material-ui/icons/Poll';
+import ReceiptIcon from '@material-ui/icons/Receipt';
+import useStyles from '../hooks/useStyles'
+import ConfirmDialog from '../compras/ConfirmDialog';
 
 import { 
-    // existCorte, 
-    ticketVenta 
+    existCorte, 
+    ticketVenta,
+    cancelVenta
 } from '../api'
 import {formatNumber, 
     // sumImporte
 } from '../Tools'
-// import ConfirmDialog from '../compras/ConfirmDialog';
 const Venta = ({open, close, venta, cancel}) => {
     const classes = useStyles()
-    // const showMessage = props.showMessage
-    // const [confirm, setConfirm] = useState(false)
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+    const [confirm, setConfirm] = useState(false)
     const [ventaLocal, setVentaLocal] = useState(null)
     useEffect(() => {
         setVentaLocal(venta)
@@ -36,40 +39,39 @@ const Venta = ({open, close, venta, cancel}) => {
     },[venta])
     function rePrint(venta){
         ticketVenta(venta).then(res=>{
-            // showMessage(res.message, res.status)
+            showMessage(res.message, res.status)
         })
     }
 
     function openConfirm(){
-        // setConfirm(true)
+        setConfirm(true)
     }
-    // function closeConfirm(){
-    //     setConfirm(false)
-    // }
-    // function cancelarVenta(){
-    //     if(venta.pagos.length > 0 ){
-    //         // showMessage('No se puede eliminar la venta, hay PAGOS registrados.', 'error')
-    //     }else{
-    //         close()
-    //         // showMessage("Cancelando...", "info")
-    //         existCorte(venta.ubicacion._id, venta.fecha).then(res => {
-    //             if (res.corte.length > 0) {
-    //                 // showMessage('No se puede eliminar la venta, el corte de caja esta CERRADO', 'error')
-    //             }
-    //             else {
-                    
-    //                 cancel(venta._id).then(res => {
-    //                     if(res.status === "error"){
-    //                         // showMessage(res.message, res.status)
-    //                     }
-    //                     else{
-    //                         // showMessage(res.message, res.status)
-    //                     }
-    //                 })
-    //             }
-    //         })
-    //     }
-    // }
+    function closeConfirm(){
+        setConfirm(false)
+    }
+    function cancelarVenta(){
+        if(ventaLocal.venta.pagos.length > 0 ){
+            showMessage('No se puede eliminar la venta, hay PAGOS registrados.', 'error')
+        }else{
+            showMessage("Cancelando...", "info")
+            existCorte(ventaLocal.venta.ubicacion._id, ventaLocal.venta.fecha).then(res => {
+                if (res.corte.length > 0) {
+                    showMessage('No se puede eliminar la venta, el corte de caja esta CERRADO', 'error')
+                }
+                else {                    
+                    cancelVenta(venta.venta._id).then(res =>{
+                        if(res.status === "error"){
+                            showMessage(res.message, res.status)
+                        }
+                        else{
+                            close()
+                            showMessage(res.message, res.status)
+                        }
+                    })
+                }
+            })
+        }
+    }
     return (
         <Dialog open={open} onClose={close}>
             {ventaLocal === null ? null :
@@ -181,11 +183,17 @@ const Venta = ({open, close, venta, cancel}) => {
                             null
                         }
                     </Grid>
-                    <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelarVenta}/> 
                 */}
+                <ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelarVenta}/> 
                 </DialogContent>
                 <DialogActions>
                     <Typography component="div" align="right">
+                        {ventaLocal.venta.pesadas.length>0?
+                            <IconButton onClick={()=>null}>
+                                <PollIcon />
+                            </IconButton>
+                            : null
+                        }
                         <IconButton onClick={()=>rePrint(ventaLocal)}>
                             <ReceiptIcon />
                         </IconButton>

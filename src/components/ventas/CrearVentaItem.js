@@ -7,7 +7,7 @@ import { PesadasContext } from '../inventario/PesadasContext'
 import Pesadas from '../inventario/Pesadas'
 import {formatNumber,} from '../Tools'
 export default function CrearVentaItem({open, close, elitem, add}){
-    const { lista, neto} = useContext(PesadasContext)
+    const { lista, neto, tara, ttara, bruto} = useContext(PesadasContext)
     const classes = useStyles()
     const [item, setItem] = useState(null)
     const [empaques, setEmpaques] = useState('')
@@ -85,7 +85,12 @@ export default function CrearVentaItem({open, close, elitem, add}){
             cantidad: cantidad,
             empaques: empaques,
             precio: precio,
-            importe: importe 
+            importe: importe,
+            pesadas: lista,
+            tara: tara,
+            ttara: ttara,
+            bruto: bruto,
+            neto: neto
         }
         add(newItem)
         return handleClose()
@@ -95,45 +100,7 @@ export default function CrearVentaItem({open, close, elitem, add}){
         clearFields()
         close()
     }
-    // function addPesada(pesada){
-    //     let cant = Number
-    //     if(cantidad===''){
-    //         console.log('iniciando cantidad en 0:')
-    //         cant=0
-    //     }else{cant=cantidad}
-    //     let lista = pesadas
-    //         lista.push(pesada)
-    //     let emps = lista.length
-    //     if(emps===0){
-    //         cant = pesada
-    //     }else{
-    //         cant += parseFloat(pesada)
-    //         console.log(cant)
-    //     }
-    //     if(cant>item.stock){
-    //         setPesadas(0)
-    //         setEmpaques(0)
-    //         setCantidad(item.stock)
-    //     }
-    //     setPesadas(lista)
-    //     setEmpaques(emps)
-    //     setCantidad(cant)
-        
-    // }
-    // function delPesada(index){
-    //     let psds = pesadas
-    //         psds.splice(index,1);
-    //     setPesadas(psds)
-    //     let ncant = psds.reduce((acc,el)=> acc+= parseFloat(el), 0)
-    //     let nempq = empaques - 1
-    //     setCantidad(ncant)
-    //     setEmpaques(nempq)        
-    // }
-    // const clearPesadas = () => {
-    //     setPesadas([])
-    //     setCantidad(0)
-    //     setEmpaques(0)
-    // }
+    
     return (
         <Dialog
             open={open} 
