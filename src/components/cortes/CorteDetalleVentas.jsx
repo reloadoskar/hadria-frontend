@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Grid, Typography, Box, Tabs, Tab } from '@material-ui/core'
+import { Grid, Typography, Box, Tabs, Tab, Link } from '@material-ui/core'
 import useStyles, { blue, danger }from '../hooks/useStyles'
 import moment from 'moment'
 import { formatNumber } from '../Tools'
@@ -8,9 +8,15 @@ import CoolProgressWtLabel from '../tools/CoolProgressWtLabel'
 
 export default function CorteDetalleVentas({corte}) {
 	const classes = useStyles()
+		const [ventaSelected, setVentaSel] = useState(null)
+		const [verVenta, setVerVenta] = useState(null)
 	const [tabSelected, setTab] = useState(1)
 	const handleChangeTab = (event, value) => {
 		setTab(value)
+	}
+	const handleVerVenta = (vta) => {
+		setVentaSel(vta)
+		setVerVenta(true)
 	}
 	return (		
 		<Grid item xs={12} className={classes.paperContorno}>
@@ -107,7 +113,8 @@ export default function CorteDetalleVentas({corte}) {
 				{corte.ventas.length > 0 ?
 					corte.ventas.sort((a,b)=>a.folio - b.folio).map((vta, i) => (
 						<React.Fragment key={i}>
-							<Grid xs={2}>#{vta.folio} {moment(vta.createdAt).format("HH:mm")}</Grid>
+							<Grid xs={2}>
+								<Link onClick={()=>handleVerVenta(vta)}>#{vta.folio} </Link> {moment(vta.createdAt).format("HH:mm")}</Grid>
 							<Grid xs={6}>{vta.cliente.nombre}</Grid>
 							<Grid xs={2}>{vta.tipoPago}</Grid>
 							<Grid xs={2}><Typography align="right" variant="body2">$ {formatNumber(vta.importe,2)}</Typography></Grid>
@@ -130,7 +137,7 @@ export default function CorteDetalleVentas({corte}) {
 					: null
 				}
 			</Grid>
-			{/* <Venta open={verVenta} close={() => setVerVenta(false)} venta={ventaSelected} /> */}
+			<Venta open={verVenta} close={() => setVerVenta(false)} venta={ventaSelected} />
 		</Grid>
 	)
 }

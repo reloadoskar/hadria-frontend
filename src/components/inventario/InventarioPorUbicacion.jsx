@@ -2,7 +2,6 @@ import React from 'react'
 import { Card, CardHeader, Grid, Typography, CardContent } from '@material-ui/core'
 import { formatNumber } from '../Tools'
 import CoolProgressWtLabel from '../tools/CoolProgressWtLabel'
-import { useEffect } from 'react';
 const blue = {
     '--background-start': '#2196F3',
     '--background-end': '#21CBF3',

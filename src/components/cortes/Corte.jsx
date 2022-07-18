@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from "react"
-import { Tabs, Tab, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton, CircularProgress, Backdrop, Box, Link } from '@material-ui/core'
+import { Tabs, Tab, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField, Typography, Button, IconButton, CircularProgress, Backdrop, Box } from '@material-ui/core'
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import PrintIcon from '@material-ui/icons/Print';
@@ -7,16 +7,14 @@ import GraficaHorasDeVenta from "./GraficaHorasDeVenta";
 import ConfirmDialog from './ConfirmDialog'
 import EgresoBasic from '../egresos/EgresoBasic'
 import CxcBasic from '../cxc/CxcBasic'
-import CoolProgressWtLabel from '../tools/CoolProgressWtLabel'
-import { formatNumber, sumCantidad, sumEmpaques, sumImporte } from '../Tools'
+import { formatNumber } from '../Tools'
 import moment from 'moment'
-import useStyles, { blue, danger } from '../hooks/useStyles'
+import useStyles from '../hooks/useStyles'
 import { useReactToPrint } from 'react-to-print';
 import { useSnackbar } from 'notistack';
 import IngresosList from '../ingresos/IngresosList';
 import { useAuth } from '../auth/use_auth'
 import useCortes from './useCortes';
-import Venta from "../ventas/Venta";
 import CorteResumenVentas from "./CorteResumenVentas";
 import CorteDetalleVentas from "./CorteDetalleVentas";
 import { InventarioContext } from "../inventario/InventarioContext";
@@ -34,8 +32,6 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 	const [confirm, setConfirm] = useState(false)
 	const [working, setWorking] = useState(false)
 	const [tabSelected, setTab] = useState(1)
-	const [ventaSelected, setVentaSel] = useState(null)
-	const [verVenta, setVerVenta] = useState(null)
 	const [corte, setCorte] = useState(null)
 	const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 	useEffect(() => {
@@ -123,11 +119,6 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 		let ant = moment(lafecha)
 		ant.subtract(1, "days")
 		handleChange(ant.format("YYYY-MM-DD"))
-	}
-
-	const handleVerVenta = (vta) => {
-		setVentaSel(vta[0])
-		setVerVenta(true)
 	}
 
 	return corte ?
