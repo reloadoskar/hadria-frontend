@@ -15,11 +15,7 @@ const danger = {
 '--box-shadow': 'rgba(255, 105, 135, .3)',
 };
 export default function InventarioPorUbicacion({inventario}){
-    // const [color, setColor] = React.useState(blue);
-    useEffect(()=>{
-
-    },[inventario])
-    return inventario.map((ubicacion, i) => (
+    return !inventario ? null : inventario.map((ubicacion, i) => (
         <Grid item xs={12} key={i}>
             <Card>
                 <CardHeader 

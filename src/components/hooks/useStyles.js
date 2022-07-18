@@ -381,6 +381,15 @@ const useStyles = makeStyles(theme => ({
         height: 48,
         padding: '0 30px',
     },
+    botonAzuloso: {
+        background: 'linear-gradient(45deg, #0094c6 30%, #8CA3E3 90%)',
+        border: 0,
+        borderRadius: 3,
+        boxShadow: '0 1px 5px 2px rgba(255, 105, 135, .3)',
+        color: 'white',
+        height: 48,
+        padding: '0 30px',
+    },
     botonsoteGenerico: {
         background: 'linear-gradient(45deg, #ffd369 50%, #ffdf91 90%)',
         border: 0,
