@@ -82,9 +82,9 @@ const Venta = ({open, close, venta, cancel}) => {
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            {/* <Typography align="center">{ventaLocal.venta.ubicacion.nombre } | {ventaLocal.venta.fecha || null}</Typography> */}
+                            <Typography align="center">{ventaLocal.ubicacion.nombre } | {ventaLocal.fecha || null}</Typography>
                             <Typography>{ventaLocal.tipoPago} </Typography>
-                            <Typography variant="h6">#{ventaLocal.id} | {ventaLocal.cliente.nombre}</Typography>
+                            <Typography variant="h6">#{ventaLocal.folio} | {ventaLocal.cliente.nombre}</Typography>
                         </Grid>                                
                         {ventaLocal.items.length === 0 ? null :
                             <Grid item xs={12}>
