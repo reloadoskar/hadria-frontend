@@ -123,9 +123,7 @@ export default function Router() {
                             </Route>
                             <Route exact path={`${path}/pos`}>
                                 <VentaContextProvider>
-                                    <Pos
-                                        user={auth.user}
-                                    />
+                                    <Pos />
                                 </VentaContextProvider>
                             </Route>
                             <Route exact path={`${path}/configuracion`}>

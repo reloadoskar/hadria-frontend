@@ -1,10 +1,14 @@
-import React from 'react'
+import React, {useContext} from 'react'
+import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, Typography, CircularProgress, } from '@material-ui/core';
 import moment from 'moment'
 import 'moment/locale/es-mx';
 import useStyles from '../hooks/useStyles'
-import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, Typography, CircularProgress, } from '@material-ui/core';
-
-export default function Acceso({ accesando, ubicacions = [], ubicacion, fecha, access, handleChange, invUbic, user }) {
+import { UbicacionContext } from  '../ubicaciones/UbicacionContext'
+import { useAuth } from "../auth/use_auth"
+export default function Acceso({ accesando, ubicacion, fecha, access, handleChange, invUbic }) {
+	const auth = useAuth()
+	const user = auth.user
+	const {ubicacions} = useContext(UbicacionContext)
 	const classes = useStyles();
 	const handleSubmit = (e) => {
 		e.preventDefault()

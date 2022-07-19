@@ -7,18 +7,18 @@ import useCortes from '../cortes/useCortes'
 import moment from 'moment'
 import DialogPos from './DialogPos'
 import { InventarioContext } from '../inventario/InventarioContext';
-import { IngresoContext } from '../ingresos/IngresoContext'
-import { UbicacionContext } from  '../ubicaciones/UbicacionContext'
-import { ClienteContext } from '../clientes/ClienteContext'
+import { useAuth } from "../auth/use_auth"
+
 import PesadasContextProvider from '../inventario/PesadasContext'
-export default function Pos({user}){
+export default function Pos(){
+    const auth = useAuth()
+    const user = auth.user
     const now = moment()
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
-    const {ubicacions} = useContext(UbicacionContext)
+    
     const {loadInventarioUbicacion} = useContext(InventarioContext)
-    const {cxcPdv,  addPagoCxc} = useContext(IngresoContext)
-    const {clientes} = useContext(ClienteContext)
+    
     const cortes = useCortes()
     
     const [accesando, setAccesando] = useState(false)
@@ -75,8 +75,6 @@ export default function Pos({user}){
             :
                 <Acceso 
                     accesando={accesando}
-                    user={user}
-                    ubicacions = {ubicacions}
                     ubicacion={ubicacion} 
                     fecha={fecha} 
                     handleChange={handleChange}
@@ -84,16 +82,10 @@ export default function Pos({user}){
                 />
             }
             <DialogPos 
-                user={user}
                 open={dialogPos}
                 close={closeDialogPos}
-                showMessage={showMessage}
-                fecha={fecha}
                 ubicacion={ubicacion}
-                ubicacions={ubicacions}
-                clientes={clientes}
-                cxcPdv={cxcPdv}
-                addPagoCxc={addPagoCxc}
+                fecha={fecha}                
             />
         </Container>
         </PesadasContextProvider>

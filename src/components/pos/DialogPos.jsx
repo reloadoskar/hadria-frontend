@@ -69,7 +69,9 @@ export default function DialogPos({ open, close, clientes, ubicacion, fecha, sho
 			fullScreen
 		>
 			<DialogContent>
-				<Grid container spacing={2}>
+				<Grid container spacing={2} alignItems="flex-start">
+
+					{/* CABECERA */}
 					<Grid item xs={12} container justifyContent="center">
 						<Grid item xs={6} sm={4}>
 							<Typography variant="h6" align="center">{ubicacion ? ubicacion.nombre : "ups!"}</Typography>
@@ -79,8 +81,10 @@ export default function DialogPos({ open, close, clientes, ubicacion, fecha, sho
 						</Grid>
 						<Grid item xs={12} sm={4}><Reloj /></Grid>
 					</Grid>
+					{/* TERMINA CABECERA */}
 
-					<Grid item xs={3} container spacing={1}>
+					{/* BOTONES MENU */}
+					<Grid item xs={3} container spacing={1} >
 						<Grid item xs={12}>
 							<Button
 								fullWidth
@@ -232,6 +236,7 @@ export default function DialogPos({ open, close, clientes, ubicacion, fecha, sho
 							</Button>
 						</Grid>
 					</Grid>
+					{/* TERMINAN BOTONES */}
 
 					<Grid item xs={9} container>
 						<CrearVenta
