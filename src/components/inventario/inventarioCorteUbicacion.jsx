@@ -4,7 +4,7 @@ import InventarioCompraItem from './InventarioCompraItem'
 import useStyles from '../hooks/useStyles'
 import { formatNumber, sumEmpStock, sumStock } from '../Tools'
 
-export default function InventarioCorteUbicacion({inventario, pov}){
+export default function InventarioCorteUbicacion({inventario=null, pov}){
     const classes = useStyles()
     return !inventario ? null :
         <Grid container spacing={2} >
