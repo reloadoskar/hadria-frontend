@@ -61,11 +61,14 @@ const Venta = ({open, close, venta, cancel}) => {
                 else {                    
                     cancelVenta(venta._id).then(res =>{
                         if(res.status === "error"){
-                            showMessage(res.message, res.status)
+                            showMessage("error", "error")
                         }
                         else{
                             close()
-                            showMessage(res.message, res.status)
+                            setConfirm(false)
+                            res.mensajes.forEach(el => {
+                                showMessage(el, "info")
+                            });
                         }
                     })
                 }
@@ -144,13 +147,76 @@ const Venta = ({open, close, venta, cancel}) => {
                                     </Grid>
                                 </Grid>
                             </Grid>                        
-                        }                        
+                        }                    
+
+                        {ventaLocal.itemsCancelados.length>0?
+                            <Grid item xs={12}>
+                            <Grid container >
+                                <Grid item xs={6}>
+                                    <Typography className={classes.textoMiniFacheron}>producto</Typography>
+                                </Grid>
+                                <Grid item xs={1}>
+                                    <Typography className={classes.textoMiniFacheron} align="right">empaques</Typography>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Typography className={classes.textoMiniFacheron} align="right">cantidad</Typography>
+                                </Grid>
+                                <Grid item xs={1}>
+                                    <Typography className={classes.textoMiniFacheron} align="right">precio</Typography>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Typography className={classes.textoMiniFacheron} align="right">importe</Typography>
+                                </Grid>
+                            </Grid>
+                            {ventaLocal.itemsCancelados.map((item, index) => (
+                                <Grid container key={index}>
+                                    <Grid item xs={6}>
+                                        <Typography color="error">
+                                            {item.producto}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        <Typography align="right" color="error">
+                                            {item.empaques}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Typography align="right" color="error">
+                                            {item.cantidad}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        <Typography color="error" align="right" children={formatNumber(item.precio,2)} />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Typography color="error" align="right" children={formatNumber(item.importe,2)} />
+                                    </Grid>
+                                    <Divider />
+                                </Grid>
+                            ))}
+                            <Divider />
+                            <Grid container>
+                                <Grid item xs={6}></Grid>
+                                <Grid item xs={1}>
+                                    <Typography align="right">{formatNumber(ventaLocal.empaques,1)}</Typography>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Typography align="right">{formatNumber(ventaLocal.cantidad,2)}</Typography>
+                                </Grid>
+                                <Grid item xs={1}>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Typography align="right">${formatNumber(ventaLocal.importe,2)}</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid> 
+                        : null}    
 
                     </Grid>
                 {/* 
                         {ventaLocal.acuenta > 0 ?
                             <Grid item xs={12}>
-                                <Typography className={classes.textoMiniFacheron} align="right">Deja a cuenta:</Typography>
+                                <Typography className={classes.textoMiniFacheron} align="right">Dejó a cuenta:</Typography>
                                 <Typography align="right">{formatNumber(ventaLocal.acuenta,2)}</Typography>
                             </Grid>
                             :
