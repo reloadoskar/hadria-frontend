@@ -35,7 +35,7 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 	const [corte, setCorte] = useState(null)
 	const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 	useEffect(() => {
-		console.log(corte)
+		// console.log(corte)
 		if (corte) {
 			let cuenta = 0
 			corte.ventaItems.map((el) => {
@@ -238,7 +238,7 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 					</Grid>
 						{auth.user.level>2?null:
 							<Grid container value={tabSelected} role="tabpanel" hidden={tabSelected !== 2} className={classes.paperPaginaConSalto}>
-								<InventarioCorteUbicacion inventario={ubicacionInventario} pov/>
+								<InventarioCorteUbicacion inventario={ubicacionInventario} pov={pov}/>
 							</Grid>
 						}
 
