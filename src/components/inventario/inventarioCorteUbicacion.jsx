@@ -17,11 +17,11 @@ export default function InventarioCorteUbicacion({inventario=null, pov}){
                         </Grid>
                         <Grid item xs={4}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Empaques:</Typography>
-                            <Typography align="right" className={classes.textoMirame}>{formatNumber(sumEmpStock(inventario),2)}</Typography>
+                            <Typography align="right" className={classes.textoMirame}>{formatNumber(sumEmpStock(inventario) || 0,2)}</Typography>
                         </Grid>
                         <Grid item xs={4}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Unidades:</Typography>
-                            <Typography align="right" className={classes.textoMirame}>{formatNumber(sumStock(inventario),2)}</Typography>
+                            <Typography align="right" className={classes.textoMirame}>{formatNumber(sumStock(inventario) || 0,2)}</Typography>
                         </Grid>
                     </Grid>
                     {inventario.map((item,i)=>(
