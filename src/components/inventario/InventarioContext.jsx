@@ -13,7 +13,7 @@ const InventarioContextProvider = (props) => {
     const [inventario, setInventario] = useState([])
     const [movimientos, setMovimientos] = useState([])
     const [inventarioUbicacion, setInventarioUbicacion] = useState([])
-    const [ubicacionInventario, setUbicacionInventario] = useState([])
+    const [ubicacionInventario, setUbicacionInventario] = useState(null)
     
     const loadInventarioGeneral = async () => {
         setInventario([])
@@ -65,9 +65,11 @@ const InventarioContextProvider = (props) => {
     }
 
     const selectInventarioUbicacion = (ubicacionid)=>{
-        if(inventarioUbicacion.length>0 && ubicacionInventario === []){
+        if(inventarioUbicacion.length>0){
             let invsel = inventarioUbicacion.filter(ub=>ub._id === ubicacionid)
             setUbicacionInventario(invsel[0])
+        }else{
+            console.log("no se selecciono nada")
         }
     }
 

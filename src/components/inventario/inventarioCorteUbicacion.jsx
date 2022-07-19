@@ -6,7 +6,7 @@ import { formatNumber, sumEmpStock, sumStock } from '../Tools'
 
 export default function InventarioCorteUbicacion({inventario, pov}){
     const classes = useStyles()
-    return inventario === [] ? null :
+    return !inventario ? null :
         <Grid container spacing={2} >
             {pov?
                 <React.Fragment>
