@@ -25,6 +25,8 @@ const InventarioContextProvider = (props) => {
     }
 
     const loadInventarioUbicacion = async (ubicacion) => {
+        setInventario([])
+        setInventarioUbicacion([])
         let res = await getInventarioBy(ubicacion)
         setUbicacionInventario(res.inventario)
         return res
