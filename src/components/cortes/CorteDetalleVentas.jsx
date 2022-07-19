@@ -117,21 +117,7 @@ export default function CorteDetalleVentas({corte}) {
 								<Link onClick={()=>handleVerVenta(vta)}>#{vta.folio} </Link> {moment(vta.createdAt).format("HH:mm")}</Grid>
 							<Grid xs={6}>{vta.cliente.nombre}</Grid>
 							<Grid xs={2}>{vta.tipoPago}</Grid>
-							<Grid xs={2}><Typography align="right" variant="body2">$ {formatNumber(vta.importe,2)}</Typography></Grid>
-							{vta.items.forEach(el => {
-								let elit = corte.ventaItems.filter(vta=>vta._id === el)
-								console.log(
-								elit.map((itm,j)=>{
-									return (<React.Fragment key={j}>
-										<Grid xs={2}></Grid>
-										<Grid xs={4}>{itm.producto.descripcion}</Grid>
-										<Grid xs={2}>{itm.cantidad}</Grid>
-										<Grid xs={2}></Grid>
-										<Grid xs={2}></Grid>
-									</React.Fragment>)
-							}))
-							})}
-							
+							<Grid xs={2}><Typography align="right" variant="body2">$ {formatNumber(vta.importe,2)}</Typography></Grid>							
 						</React.Fragment>
 					))
 					: null
