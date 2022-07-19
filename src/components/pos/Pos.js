@@ -17,7 +17,7 @@ export default function Pos({user}){
     const { enqueueSnackbar } = useSnackbar()
     const {ubicacions} = useContext(UbicacionContext)
     const {loadInventarioUbicacion} = useContext(InventarioContext)
-    const {addVenta, cxcPdv,  addPagoCxc} = useContext(IngresoContext)
+    const {cxcPdv,  addPagoCxc} = useContext(IngresoContext)
     const {clientes} = useContext(ClienteContext)
     const cortes = useCortes()
     
@@ -49,10 +49,12 @@ export default function Pos({user}){
         setAccesando(true)
         cortes.existeCorte(ubicacion._id, fecha)
             .then(res => {
-                setAccesando(false)
                 if(res.corte.length === 0){
                     loadInventarioUbicacion(ubicacion._id)
-                    setDialogPos(true)
+                    .then(()=>{
+                        setAccesando(false)
+                        setDialogPos(true)
+                    })
                 }else{
                     showMessage('Fecha cerrada, para esta ubicación', 'error')                    
                 }
@@ -90,7 +92,6 @@ export default function Pos({user}){
                 ubicacion={ubicacion}
                 ubicacions={ubicacions}
                 clientes={clientes}
-                addVenta={addVenta}
                 cxcPdv={cxcPdv}
                 addPagoCxc={addPagoCxc}
             />

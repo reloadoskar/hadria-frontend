@@ -17,7 +17,7 @@ export default function CompraItem(props) {
     return (
         <React.Fragment>
             { item === null ? null :
-                <Grid container justifyContent="center" className={classes.paperSingle}>
+                <Grid container className={classes.paperSingle}>
                     <Grid item xs={12} sm={12}>
                         <MenuItem onClick={() => selectItem(item)} >
                             <Grid container spacing={2} alignItems="flex-end">

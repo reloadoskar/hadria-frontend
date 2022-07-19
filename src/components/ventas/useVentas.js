@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import useRangoFechas from './useRangoFechas'
 import { getVentas, cancelVenta, getVenta, getVentasSemana } from '../api'
 
@@ -9,33 +9,24 @@ const formatearFecha = (fecha) => {
 
 const useVentas = () => {
 	const [ventas, setVentas] = useState([])
-	const [ventasSemana, setVentasSemana] = useState(null)
+	const [ventasPorSemana, setVentasPorSemana] = useState(null)
     const {rango, setRango} = useRangoFechas()
-	useEffect(() => {
-		async function loadVentas() {
-			const res = await getVentas()
-			setVentas(res.ventas);
-		}
-		loadVentas()
-		return () => setVentas([])
-	}, [])
 	
-	useEffect(() => {
-		async function loadVxs() {
-            if(rango != null){
-                const res = await getVentasSemana(rango.f1, rango.f2)
-                let nvoArray = []
-                res.ventas.forEach(e => {
-                    nvoArray.push({x: formatearFecha(e._id),  y: e.totalVenta})
-                });
-                setVentasSemana(nvoArray)
-                
-            }
+	async function loadVentas(month, year) {
+		const res = await getVentas(month, year)
+		setVentas(res.ventas);
+	}
+	
+	async function loadVentasPorSemana(rango) {
+		if(rango != null){
+			const res = await getVentasSemana(rango.f1, rango.f2)
+			let nvoArray = []
+			res.ventas.forEach(e => {
+				nvoArray.push({x: formatearFecha(e._id),  y: e.totalVenta})
+			});
+			setVentasPorSemana(nvoArray)
 		}
-        loadVxs()
-        
-        return () => setVentasSemana(null)
-    }, [rango])
+	}
     
     const addVenta = (venta) => {
 
@@ -53,11 +44,13 @@ const useVentas = () => {
 
 	return {
 		ventas,
+		loadVentas,
+		loadVentasPorSemana,
 		delVenta,
 		addVenta,
 		verVenta,
 
-		ventasSemana,
+		ventasSemana: ventasPorSemana,
         rango,
         setRango
 	}

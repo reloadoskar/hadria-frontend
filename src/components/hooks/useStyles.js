@@ -390,6 +390,15 @@ const useStyles = makeStyles(theme => ({
         height: 48,
         padding: '0 30px',
     },
+    botonNegroso: {
+        background: 'linear-gradient(45deg, #524948 30%, #A39BA8 90%)',
+        border: 0,
+        borderRadius: 3,
+        boxShadow: '0 1px 5px 2px rgba(255, 105, 135, .3)',
+        color: 'white',
+        height: 48,
+        padding: '0 30px',
+    },
     botonsoteGenerico: {
         background: 'linear-gradient(45deg, #ffd369 50%, #ffdf91 90%)',
         border: 0,

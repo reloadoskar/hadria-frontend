@@ -23,6 +23,7 @@ import { EmpresaContext } from './components/empresa/EmpresaContext';
 import { UbicacionContext } from './components/ubicaciones/UbicacionContext';
 import { ClienteContext } from './components/clientes/ClienteContext';
 import { ProductorContext } from './components/productors/ProductorContext';
+import VentaContextProvider from './components/ventas/VentaContext';
 
 export default function Router() {
     const auth = useAuth()
@@ -101,10 +102,18 @@ export default function Router() {
                                 </Route>
                             }
                             {auth.user.level > 2 ? null :
-                                <Route exact path={`${path}/conceptos`} component={ConceptosTabs}></Route>
+                                <Route exact path={`${path}/conceptos`} 
+                                    component={ConceptosTabs}></Route>
                             }
                             {auth.user.level > 2 ? null :
-                                <Route exact path={`${path}/ventas`} component={Ventas}></Route>
+                                <Route 
+                                    exact 
+                                    path={`${path}/ventas`} 
+                                    >
+                                    <VentaContextProvider>
+                                        <Ventas />
+                                    </VentaContextProvider>
+                                </Route>
                             }
                             {auth.user.level > 2 ? null :
                                 <Route exact path={`${path}/empleados`} component={Empleados}></Route>
@@ -113,9 +122,11 @@ export default function Router() {
                                 <Inventario />
                             </Route>
                             <Route exact path={`${path}/pos`}>
-                                <Pos
-                                    user={auth.user}
-                                />
+                                <VentaContextProvider>
+                                    <Pos
+                                        user={auth.user}
+                                    />
+                                </VentaContextProvider>
                             </Route>
                             <Route exact path={`${path}/configuracion`}>
                                 <Empresa />

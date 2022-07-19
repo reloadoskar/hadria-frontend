@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Grid, Button, Dialog, Typography } from '@material-ui/core'
+import { Container, Grid, Button, Dialog, Typography, DialogContent, Collapse } from '@material-ui/core'
 import CrearVenta from '../ventas/CrearVenta'
 import Reloj from '../herramientas/reloj'
 import Corte from '../cortes/Corte'
@@ -10,191 +10,238 @@ import PagarDialog from './PagarDialog'
 import IngresoCreate from '../ingresos/IngresoCreate'
 import { EgresoContext } from '../egresos/EgresoContext'
 import { IngresoContext } from '../ingresos/IngresoContext'
-export default function DialogPos(props) {
-    const { open, close, clientes,
-        ubicacion,
-        fecha,
-        showMessage,
-        cxcPdv, addPagoCxc } = props
-    const { resetEgresos, loadCuentasPorPagar } = useContext(EgresoContext)
-    const { resetIngresos, loadCuentasPorCobrarPdv } = useContext(IngresoContext)
-    const classes = useStyles()
-    const [corteDialog, setCorteDialog] = useState(false)
-    const [crearVenta, setCrearVenta] = useState(false)
-    const [cxcDialog, setCxcDialog] = useState(false)
-    const [egresoDialog, setEgresoDialog] = useState(false)
-    const [pagoDialog, setPagoDialog] = useState(false)
+import { InventarioContext } from '../inventario/InventarioContext'
+import moment from 'moment'
+export default function DialogPos({ open, close, clientes, ubicacion, fecha, showMessage, cxcPdv, addPagoCxc }) {
+	const [ configuracion ] = useState({ ingreso: false, cobrar: false, pagar: false, gasto: false })
+	const { resetEgresos, loadCuentasPorPagar } = useContext(EgresoContext)
+	const { resetIngresos, loadCuentasPorCobrarPdv } = useContext(IngresoContext)
+	const { ubicacionInventario } = useContext(InventarioContext)
+	const classes = useStyles()
+	const [corteDialog, setCorteDialog] = useState(false)
+	const [cxcDialog, setCxcDialog] = useState(false)
+	const [egresoDialog, setEgresoDialog] = useState(false)
+	const [pagoDialog, setPagoDialog] = useState(false)
+	const [selectClasificacion, openSelectClass] = useState(false)
 
-    const [verCrearIngreso, setVerCrearIngreso] = useState(false)
+	const [verCrearIngreso, setVerCrearIngreso] = useState(false)
+	const [clasificacionSelected, setClasSel] = useState("")
+	const [inventarioCLasificacion, setInventarioc] = useState([])
 
-    useEffect(() => {
-        const loadAll = async () =>{
-            const res = await Promise.all([                
-                resetEgresos(),
-                resetIngresos(),
-                loadCuentasPorPagar(),
-                loadCuentasPorCobrarPdv()
-            ])
-            return res
-        }
-        loadAll().then(()=>{
+	useEffect(() => {
+		if (ubicacionInventario) {
+			setInventarioc(ubicacionInventario.filter(itm => itm.clasificacion === clasificacionSelected))
+		}
+	}, [clasificacionSelected, ubicacionInventario])
 
-        })
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+	useEffect(() => {
+		const loadAll = async () => {
+			const res = await Promise.all([
+				resetEgresos(),
+				resetIngresos(),
+				loadCuentasPorPagar(),
+				loadCuentasPorCobrarPdv()
+			])
+			return res
+		}
+		loadAll().then(() => {
 
-    const toggleCxcDialog = () => {
-        setCxcDialog(!cxcDialog)
-    }
-    const togglePagoDialog = () => {
-        setPagoDialog(!cxcDialog)
-    }
-    const toggleEgesoDialog = () => {
-        setEgresoDialog(!egresoDialog)
-    }
+		})
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const openCrearVenta = () => {
-        setCrearVenta(true)
-    }
-    const closeCrearVenta = () => {
-        setCrearVenta(false)
-    }
+	const toggleCxcDialog = () => {
+		setCxcDialog(!cxcDialog)
+	}
+	const togglePagoDialog = () => {
+		setPagoDialog(!cxcDialog)
+	}
+	const toggleEgesoDialog = () => {
+		setEgresoDialog(!egresoDialog)
+	}
 
-    const showCorte = () => setCorteDialog(true)
-    const closeDialogCorte = () => setCorteDialog(false)
-    const closeDialogPago = () => setPagoDialog(false)
-    return (
-        <Dialog
-            open={open}
-            onClose={() => { close() }}
-            fullScreen
-        >
-            <Grid container spacing={2} justifyContent="center">
-                <Grid item xs={8} container>
-                    <Grid item xs={6} sm={4}>
-                        <Typography variant="h6" align="center">{ubicacion ? ubicacion.nombre : "ups!"}</Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={4}>
-                        <Typography variant="h6" align="center">{fecha}</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={4}><Reloj /></Grid>
-                </Grid>
+	const showCorte = () => setCorteDialog(true)
+	const closeDialogCorte = () => setCorteDialog(false)
+	const closeDialogPago = () => setPagoDialog(false)
+	return (
+		<Dialog
+			open={open}
+			onClose={() => { close() }}
+			fullScreen
+		>
+			<DialogContent>
+				<Grid container spacing={2}>
+					<Grid item xs={12} container justifyContent="center">
+						<Grid item xs={6} sm={4}>
+							<Typography variant="h6" align="center">{ubicacion ? ubicacion.nombre : "ups!"}</Typography>
+						</Grid>
+						<Grid item xs={6} sm={4}>
+							<Typography variant="h6" align="center">{moment(fecha).format("dddd MMMM D, YYYY")}</Typography>
+						</Grid>
+						<Grid item xs={12} sm={4}><Reloj /></Grid>
+					</Grid>
 
-                <Grid item xs={8}>
-                    <Button
-                        fullWidth
-                        onClick={() => openCrearVenta()}
-                        className={classes.botonCosmico}
-                    >
-                        Nueva venta +
-                    </Button>
-                    <CrearVenta
-                        open={crearVenta}
-                        close={closeCrearVenta}
-                        clientes={clientes}
-                        // elinventario={inventario.inventario}
-                        laubicacion={ubicacion}
-                        lafecha={fecha}
-                        showMessage={showMessage}
-                        addVenta={props.addVenta}
-                    />
-                </Grid>
+					<Grid item xs={3} container spacing={1}>
+						<Grid item xs={12}>
+							<Button
+								fullWidth
+								onClick={() => openSelectClass(!selectClasificacion)}
+								className={classes.botonGenerico}
+							>
+								Nueva venta +
+							</Button>
+							<Container>
+								<Collapse in={selectClasificacion}>
+									<Grid container spacing={1}>
+										<Grid item xs={12}>
+											<Button
+												fullWidth
+												className={classes.botonAzuloso}
+												onClick={() => setClasSel('LINEA')}>
+												LINEA
+											</Button>
+										</Grid>
+										<Grid item xs={12}>
+											<Button fullWidth
+												className={classes.botonCosmico}
+												onClick={() => setClasSel('MAYOREO')}>
+												MAYOREO
+											</Button>
+										</Grid>
+										<Grid item xs={12}>
+											<Button
+												fullWidth
+												className={classes.botonMagico}
+												onClick={() => setClasSel('MENUDEO')}>
+												MENUDEO
+											</Button>
+										</Grid>
+										<Grid item xs={12}>
+											<Button
+												fullWidth
+												className={classes.botonNegroso}
+												onClick={() => setClasSel('CASCADO')}>
+												CASCADO
+											</Button>
+										</Grid>
+									</Grid>
+								</Collapse>
+							</Container>
 
-                <Grid item xs={8}>
-                    <Button
-                        fullWidth
-                        onClick={() => setVerCrearIngreso(true)}
-                        className={classes.botonCosmico}
-                    >
-                        Nuevo ingreso +
-                    </Button>
-                    <IngresoCreate
-                        open={verCrearIngreso}
-                        close={() => setVerCrearIngreso(false)}
-                        ubicacion={ubicacion}
-                        fecha={fecha}
-                    />
-                </Grid>
+						</Grid>
+						{!configuracion.ingreso? null :
+							<Grid item xs={12}>
+								<Button
+									fullWidth
+									onClick={() => setVerCrearIngreso(true)}
+									className={classes.botonGenerico}
+								>
+									Nuevo ingreso +
+								</Button>
+								<IngresoCreate
+									open={verCrearIngreso}
+									close={() => setVerCrearIngreso(false)}
+									ubicacion={ubicacion}
+									fecha={fecha}
+								/>
+							</Grid>
+						}
 
-                <Grid item xs={8}>
-                    <Button
-                        fullWidth
-                        onClick={() => toggleCxcDialog()}
-                        className={classes.botonGenerico}
-                    >
-                        Cobrar +
-                    </Button>
-                    <CobroDialog
-                        open={cxcDialog}
-                        fecha={fecha}
-                        cuentas={cxcPdv}
-                        cobrar={addPagoCxc}
-                        ubicacion={ubicacion}
-                        close={toggleCxcDialog}
-                        showMessage={showMessage}
-                    />
-                </Grid>
+						{!configuracion.cobrar? null :
+							<Grid item xs={12}>
+								<Button
+									fullWidth
+									onClick={() => toggleCxcDialog()}
+									className={classes.botonGenerico}
+								>
+									Cobrar +
+								</Button>
+								<CobroDialog
+									open={cxcDialog}
+									fecha={fecha}
+									cuentas={cxcPdv}
+									cobrar={addPagoCxc}
+									ubicacion={ubicacion}
+									close={toggleCxcDialog}
+									showMessage={showMessage}
+								/>
+							</Grid>
+						}
 
-                <Grid item xs={8}>
-                    <Button
-                        fullWidth
-                        onClick={() => togglePagoDialog()}
-                        className={classes.botonGenerico}
-                    >
-                        Pagar -
-                    </Button>
-                    <PagarDialog
-                        fecha={fecha}
-                        ubicacion={ubicacion}
-                        open={pagoDialog}
-                        close={closeDialogPago}
-                    />
-                </Grid>
+						{!configuracion.pagar? null :
+							<Grid item xs={12}>
+								<Button
+									fullWidth
+									onClick={() => togglePagoDialog()}
+									className={classes.botonGenerico}
+								>
+									Pagar -
+								</Button>
+								<PagarDialog
+									fecha={fecha}
+									ubicacion={ubicacion}
+									open={pagoDialog}
+									close={closeDialogPago}
+								/>
+							</Grid>
+						}
 
-                <Grid item xs={8}>
-                    <Button
-                        fullWidth
-                        onClick={() => toggleEgesoDialog()}
-                        className={classes.botonGenerico}
-                    >
-                        Nuevo gasto -
-                    </Button>
-                    <EgresoDialog
-                        fecha={fecha}
-                        ubicacion={ubicacion}
-                        open={egresoDialog}
-                        close={toggleEgesoDialog}
-                        showMessage={showMessage}
-                    />
-                </Grid>
+						{!configuracion.gasto? null :
+							<Grid item xs={12}>
+								<Button
+									fullWidth
+									onClick={() => toggleEgesoDialog()}
+									className={classes.botonGenerico}
+								>
+									Nuevo gasto -
+								</Button>
+								<EgresoDialog
+									fecha={fecha}
+									ubicacion={ubicacion}
+									open={egresoDialog}
+									close={toggleEgesoDialog}
+									showMessage={showMessage}
+								/>
+							</Grid>
+						}
+						<Grid item xs={12}>
+							<Button
+								fullWidth
+								onClick={() => showCorte()}
+								className={classes.botonCosmico}
+							>
+								Revisar Corte
+							</Button>
+							{corteDialog ?
+								<Corte
+									open={corteDialog}
+									close={closeDialogCorte}
+									ubicacion={ubicacion}
+									fecha={fecha}
+									pov
+								/>
+								: null
+							}
+						</Grid>
+						<Grid item xs={12}>
+							<Button
+								fullWidth
+								onClick={() => close()}
+								className={classes.botonSimplon}
+							>
+								Salir
+							</Button>
+						</Grid>
+					</Grid>
 
-                <Grid item xs={8}>
-                    <Button
-                        fullWidth
-                        onClick={() => showCorte()}
-                        className={classes.botonGenerico}
-                    >
-                        Revisar Corte
-                    </Button>
-                    {corteDialog ?
-                        <Corte 
-                            open={corteDialog}
-                            close={closeDialogCorte}
-                            ubicacion={ubicacion}
-                            fecha={fecha}
-                        />
-                        : null
-                    }
-                </Grid>
-                <Grid item xs={8}>
-                    <Button
-                        fullWidth
-                        onClick={() => close()}
-                        className={classes.botonSimplon}
-                    >
-                        Salir
-                    </Button>
-                </Grid>
-            </Grid>
-        </Dialog>
-    )
+					<Grid item xs={9} container>
+						<CrearVenta
+							laubicacion={ubicacion}
+							lafecha={fecha}
+							inventario={inventarioCLasificacion}
+						/>
+					</Grid>
+				</Grid>
+			</DialogContent>
+		</Dialog>
+	)
 }
