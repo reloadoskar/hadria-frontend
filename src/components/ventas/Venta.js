@@ -256,12 +256,12 @@ const Venta = ({open, close, venta, cancel}) => {
                 </DialogContent>
                 <DialogActions>
                     <Typography component="div" align="right">
-                        {ventaLocal.pesadas.length>0?
+                        {/* {ventaLocal.pesadas.length>0?
                             <IconButton onClick={()=>null}>
                                 <PollIcon />
                             </IconButton>
                             : null
-                        }
+                        } */}
                         <IconButton onClick={()=>rePrint(ventaLocal)}>
                             <ReceiptIcon />
                         </IconButton>
