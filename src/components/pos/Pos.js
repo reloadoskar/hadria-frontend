@@ -18,7 +18,7 @@ export default function Pos(){
     const { enqueueSnackbar } = useSnackbar()
     
     const {loadInventarioUbicacion, resetInventario} = useContext(InventarioContext)
-    
+    resetInventario()
     const cortes = useCortes()
     
     const [accesando, setAccesando] = useState(false)
@@ -47,7 +47,7 @@ export default function Pos(){
     }
     const access = () => {
         setAccesando(true)
-        resetInventario()
+        
         cortes.existeCorte(ubicacion._id, fecha)
             .then(res => {
                 if(res.corte.length === 0){
