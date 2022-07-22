@@ -4,7 +4,6 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import PrintIcon from '@material-ui/icons/Print';
 import useStyles from '../hooks/useStyles'
 import { useReactToPrint } from 'react-to-print';
-import { formatNumber } from '../Tools';
 import { PesadasContext } from './PesadasContext';
 import { useContext } from 'react';
 const Pesada = ({data, index, deleteElement, noDelete=false}) =>{
@@ -53,10 +52,10 @@ export function ListaPesadas({open, close, noDelete, item={}}){
                     ))}                            
                 </Grid>
                 <Grid item xs={12}>                    
-                    <Typography align="right" className={classes.textoMirame}>Bruto: {formatNumber(bruto,2)+item.producto.unidad.abr}</Typography>
+                    <Typography align="right" className={classes.textoMirame}>Bruto: {Math.ceil(bruto*100)/100+item.producto.unidad.abr}</Typography>
                     <Typography align="right" className={classes.textoMirame}>Destare: {tara + " x " + lista.length }</Typography>
                     <Typography align="right" className={classes.textoMirame}>Tara: {ttara}</Typography>
-                    <Typography align="right" className={classes.textoMirame}>Neto: {formatNumber(neto,2)}</Typography>
+                    <Typography align="right" className={classes.textoMirame}>Neto: {Math.ceil(neto*100)/100}</Typography>
                 </Grid>
             </DialogContent>
             <DialogActions>
