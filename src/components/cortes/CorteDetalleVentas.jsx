@@ -27,8 +27,8 @@ export default function CorteDetalleVentas({corte}) {
 						onChange={handleChangeTab}
 						centered
 					>
-						<Tab label="Items" value={1} />
-						<Tab label="Tickets" value={2} />
+						<Tab label="Detalle de venta" value={1} />
+						<Tab label="Ventas por folio" value={2} />
 					</Tabs>
 				</Grid>
 			</Box>

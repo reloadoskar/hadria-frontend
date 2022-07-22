@@ -60,7 +60,7 @@ export default function Pesadas({item}){
                                 Disponible
                             </Typography>
                             <Typography className={classes.textoMirame}>
-                                {item.empaquesStock}{item.producto.empaque.abr} - {item.stock}{item.producto.unidad.abr}                                
+                                {item.empaquesStock}{item.producto.empaque.abr} - {Math.ceil(item.stock*100)/100}{item.producto.unidad.abr}                                
                             </Typography>
                         </Grid>
                     </Grid>

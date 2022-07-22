@@ -24,6 +24,7 @@ import { UbicacionContext } from './components/ubicaciones/UbicacionContext';
 import { ClienteContext } from './components/clientes/ClienteContext';
 import { ProductorContext } from './components/productors/ProductorContext';
 import VentaContextProvider from './components/ventas/VentaContext';
+import InventarioContextProvider from './components/inventario/InventarioContext';
 
 export default function Router() {
     const auth = useAuth()
@@ -71,7 +72,9 @@ export default function Router() {
                                     path={path}
                                     render={
                                         () => (
-                                            <Dashboard />
+                                            <InventarioContextProvider>
+                                                <Dashboard />
+                                            </InventarioContextProvider>
                                         )
                                     }
                                 />
@@ -119,12 +122,16 @@ export default function Router() {
                                 <Route exact path={`${path}/empleados`} component={Empleados}></Route>
                             }
                             <Route exact path={`${path}/inventario`}>
-                                <Inventario />
+                                <InventarioContextProvider>
+                                    <Inventario />
+                                </InventarioContextProvider>
                             </Route>
                             <Route exact path={`${path}/pos`}>
-                                <VentaContextProvider>
-                                    <Pos />
-                                </VentaContextProvider>
+                                <InventarioContextProvider>
+                                    <VentaContextProvider>
+                                        <Pos />
+                                    </VentaContextProvider>
+                                </InventarioContextProvider>
                             </Route>
                             <Route exact path={`${path}/configuracion`}>
                                 <Empresa />

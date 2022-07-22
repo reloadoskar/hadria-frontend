@@ -24,9 +24,7 @@ const InventarioContextProvider = (props) => {
         return res
     }
 
-    const loadInventarioUbicacion = async (ubicacion) => {
-        setInventario([])
-        setInventarioUbicacion([])
+    const loadInventarioUbicacion = async (ubicacion) => {        
         let res = await getInventarioBy(ubicacion)
         setUbicacionInventario(res.inventario)
         return res
@@ -75,6 +73,13 @@ const InventarioContextProvider = (props) => {
         }
     }
 
+    const resetInventario = ()=>{
+        setInventario([])
+        setMovimientos([])
+        setInventarioUbicacion([])
+        setUbicacionInventario(null)
+    }
+
     // useEffect(()=>{
     //     if(inventario.length>0){
     //         setInventarioUbicacion(agruparPorObjeto(inventario, "ubicacion"))
@@ -92,7 +97,8 @@ const InventarioContextProvider = (props) => {
             loadInventarioUbicacion,
             loadMovimientos,
             limpiarInventario,
-            selectInventarioUbicacion
+            selectInventarioUbicacion,
+            resetInventario
         }} >
             {props.children}
         </InventarioContext.Provider>

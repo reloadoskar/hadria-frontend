@@ -12,7 +12,7 @@ import { EgresoContext } from '../egresos/EgresoContext'
 import { IngresoContext } from '../ingresos/IngresoContext'
 import { InventarioContext } from '../inventario/InventarioContext'
 import moment from 'moment'
-export default function DialogPos({ open, close, clientes, ubicacion, fecha, showMessage, cxcPdv, addPagoCxc }) {
+export default function DialogPos({ open, close, ubicacion, fecha, showMessage, cxcPdv, addPagoCxc }) {
 	const [ configuracion ] = useState({ ingreso: false, cobrar: false, pagar: false, gasto: false })
 	const { resetEgresos, loadCuentasPorPagar } = useContext(EgresoContext)
 	const { resetIngresos, loadCuentasPorCobrarPdv } = useContext(IngresoContext)
