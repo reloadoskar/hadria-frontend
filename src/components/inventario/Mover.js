@@ -36,7 +36,7 @@ export default function Mover({ open, close, inventario }) {
 
     useEffect(()=>{
         setMovimiento({...movimiento,
-            itemselcantidad: formatNumber(neto,2),
+            itemselcantidad: Math.ceil(neto*100)/100,
             itemselempaques: lista.length
         })
     },[lista, neto]) // eslint-disable-line react-hooks/exhaustive-deps

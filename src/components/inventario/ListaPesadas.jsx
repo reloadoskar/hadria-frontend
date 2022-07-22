@@ -40,7 +40,7 @@ export function ListaPesadas({open, close, noDelete, item={}}){
       return lista === undefined ? null :
         <Dialog open={open} onClose={()=>close(false)} maxWidth="xs" fullWidth >
             <DialogContent ref={componentRef}>
-                <Grid container className={classes.pesadasList}
+                <Grid container 
                     // direction="column"
                     justifyContent="flex-start"
                     alignItems="flex-start"                                  

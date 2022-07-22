@@ -41,7 +41,7 @@ const InventarioContextProvider = (props) => {
     const moverInventario = async (movimiento) => {
         // console.log(movimiento.itemsel)
 		let mov = await moveInventario(movimiento)
-            setMovimientos([...movimientos, mov.movimiento])
+            setMovimientos([mov.movimiento , ...movimientos])
         let itm = inventario.filter(it=>it._id=== movimiento.itemsel._id)
         // console.log(itm[0])
         if(mov){

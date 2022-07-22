@@ -45,13 +45,33 @@ export default function Pesadas({item}){
         <React.Fragment>
             <Button fullWidth className={classes.botonGenerico} onClick={openPesadas}>Agrega Pesadas</Button>
             <Dialog maxWidth="sm" fullWidth open={dialog} onClose={closePesadas}>
-                <DialogTitle>Agregar Pesadas</DialogTitle>
+                <DialogTitle disableTypography>
+                    <Grid container>
+                        <Grid item xs={8}>
+                            <Typography className={classes.textoMiniFacheron}>
+                                Agregar Pesadas
+                            </Typography>
+                            <Typography className={classes.textoMirame}>
+                               {item.compra.folio} - {item.producto.descripcion} {item.clasificacion}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography className={classes.textoMiniFacheron}>
+                                Disponible
+                            </Typography>
+                            <Typography className={classes.textoMirame}>
+                                {item.empaquesStock}{item.producto.empaque.abr} - {item.stock}{item.producto.unidad.abr}                                
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </DialogTitle>
                     <form onSubmit={handleSubmit}>
                 <DialogContent>
                     <Grid container spacing={2} alignItems="center">
                         <Grid item xs={12} md={8}>
                             <TextField
                                 id="pesada"
+                                disabled={neto <= item.stock && lista.length <= item.empaquesStock ? false : true}
                                 required
                                 type="number"
                                 inputProps={{step: "any"}}
