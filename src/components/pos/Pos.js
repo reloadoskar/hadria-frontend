@@ -18,7 +18,7 @@ export default function Pos(){
     const { enqueueSnackbar } = useSnackbar()
     
     const {loadInventarioUbicacion, resetInventario} = useContext(InventarioContext)
-    resetInventario()
+    
     const cortes = useCortes()
     
     const [accesando, setAccesando] = useState(false)
@@ -30,6 +30,7 @@ export default function Pos(){
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
     useEffect(()=>{
+        resetInventario()
         setUbicacion(user.ubicacion)
     },[user]) //
     const handleChange = (type, value) => { 

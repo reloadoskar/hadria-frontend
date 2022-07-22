@@ -30,7 +30,11 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 
 	useEffect(() => {
 		if (ubicacionInventario) {
-			setInventarioc(ubicacionInventario.filter(itm => itm.clasificacion === clasificacionSelected))
+			try {
+				setInventarioc(ubicacionInventario.filter(itm => itm.clasificacion === clasificacionSelected))
+			} catch (error) {
+				console.log(error)
+			}
 		}
 	}, [clasificacionSelected, ubicacionInventario])
 
