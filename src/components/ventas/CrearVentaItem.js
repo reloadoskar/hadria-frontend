@@ -120,117 +120,117 @@ export default function CrearVentaItem({ open, close, elitem, add }) {
 			<DialogTitle disableTypography>
 				<Grid container >
 					<Grid item xs={8}>
-						<Typography>
+						<Typography className={classes.textoMirame}>
 							{item.compra.folio} - {item.producto.descripcion} {item.clasificacion} 
 						</Typography>
 					</Grid>
 					<Grid item xs={4}>
-						<Typography align="right">
-							{item.empaquesStock}/{formatNumber(item.stock, 2)}
+						<Typography align="right" className={classes.textoMirame}>
+							{item.empaquesStock}{item.producto.empaque.abr} | {formatNumber(item.stock, 2)}{item.producto.unidad.abr}
 						</Typography>
 					</Grid>
 				</Grid>
 			</DialogTitle>
-				<DialogContent>
-					<Grid container spacing={2}>
-						{guardando === true ?
+			<DialogContent>
+				<Grid container spacing={2}>
+					{guardando === true ?
+						<Grid item xs={12}>
+							<Zoom in={guardando}>
+								<Typography variant="h6" align="center">Agregando al carrito...</Typography>
+							</Zoom>
+						</Grid>
+						:
+						<React.Fragment>
 							<Grid item xs={12}>
-								<Zoom in={guardando}>
-									<Typography variant="h6" align="center">Agregando al carrito...</Typography>
-								</Zoom>
+								{item.clasificacion!=="LINEA" || item.clasificacion!=="CASCADO" ?null:
+									<Pesadas
+										item={elitem}
+									/>
+								}
 							</Grid>
-							:
-							<React.Fragment>
-								<Grid item xs={12}>
-									{item.clasificacion!=="LINEA"?null:
-										<Pesadas
-											item={elitem}
-										/>
-									}
-								</Grid>
 
-								<Grid item xs={12}>
-									<Slide direction="up" in={!guardando}>
-										<form onSubmit={handleSubmit}>
-											<Grid container spacing={2} alignItems="center">
-												<Grid item xs={12} md={3}>
-													<TextField
-														disabled={elitem.clasificacion === "LINEA" ? false : true}
-														id="empaques"
-														label="Cajas"
-														variant="outlined"
-														autoFocus
-														onFocus={handleFocus}
-														fullWidth
-														type="number"
-														value={empaques}
-														onChange={(e) => handleChange('empaques', e.target.value)}
-													/>
-												</Grid>
-												<Grid item xs={12} md={3}>
-													<Grid container alignItems="center" spacing={2}>
-														<Grid item xs={12}>
-															<TextField
-																id="cantidad"
-																// type="number"
-																label="Kilos"
-																variant="outlined"
-																required
-																fullWidth
-																InputProps={{ step: '1' }}
-																value={cantidad}
-																onChange={(e) => handleChange('cantidad', e.target.value)}
-															/>
-														</Grid>
-													</Grid>
-												</Grid>
-												<Grid item xs={12} md={3}>
-													<TextField
-														id="precio"
-														label="Precio"
-														variant="outlined"
-														required
-														fullWidth
-														type="number"
-														value={precio}
-														onChange={(e) => handleChange('precio', e.target.value)}
-													/>
-												</Grid>
-												<Grid item xs={12} md={3}>
-													<TextField
-														id="importe"
-														label="Importe"
-														variant="outlined"
-														required
-														fullWidth
-														readOnly
-														type="number"
-														value={importe}
-														onChange={(e) => handleChange('importe', e.target.value)}
-														InputProps={{
-															readOnly: true,
-														}}
-													/>
-												</Grid>
-												<Grid item xs={12} container spacing={2} direction="row-reverse">
-													<Grid item>
-														<Button
-															disabled={guardando === true ? true : false}
-															type="submit" className={classes.botonGenerico}>
-																Agregar
-														</Button>							
-													</Grid>
-													<Grid item>
-														<Button onClick={handleClose}>Cancelar</Button>
+							<Grid item xs={12}>
+								<Slide direction="up" in={!guardando}>
+									<form onSubmit={handleSubmit}>
+										<Grid container spacing={2} alignItems="center">
+											<Grid item xs={12} md={3}>
+												<TextField
+													disabled={elitem.clasificacion === "LINEA" || elitem.clasificacion==="CASCADO" ? false : true}
+													id="empaques"
+													label="Cajas"
+													variant="outlined"
+													autoFocus
+													onFocus={handleFocus}
+													fullWidth
+													type="number"
+													value={empaques}
+													onChange={(e) => handleChange('empaques', e.target.value)}
+												/>
+											</Grid>
+											<Grid item xs={12} md={3}>
+												<Grid container alignItems="center" spacing={2}>
+													<Grid item xs={12}>
+														<TextField
+															id="cantidad"
+															// type="number"
+															label="Kilos"
+															variant="outlined"
+															required
+															fullWidth
+															InputProps={{ step: '1' }}
+															value={cantidad}
+															onChange={(e) => handleChange('cantidad', e.target.value)}
+														/>
 													</Grid>
 												</Grid>
 											</Grid>
-										</form>
-									</Slide>
-								</Grid>								
-							</React.Fragment>
-						}
-					</Grid>
+											<Grid item xs={12} md={3}>
+												<TextField
+													id="precio"
+													label="Precio"
+													variant="outlined"
+													required
+													fullWidth
+													type="number"
+													value={precio}
+													onChange={(e) => handleChange('precio', e.target.value)}
+												/>
+											</Grid>
+											<Grid item xs={12} md={3}>
+												<TextField
+													id="importe"
+													label="Importe"
+													variant="outlined"
+													required
+													fullWidth
+													readOnly
+													type="number"
+													value={importe}
+													onChange={(e) => handleChange('importe', e.target.value)}
+													InputProps={{
+														readOnly: true,
+													}}
+												/>
+											</Grid>
+											<Grid item xs={12} container spacing={2} direction="row-reverse">
+												<Grid item>
+													<Button
+														disabled={guardando === true ? true : false}
+														type="submit" className={classes.botonGenerico}>
+															Agregar
+													</Button>							
+												</Grid>
+												<Grid item>
+													<Button onClick={handleClose}>Cancelar</Button>
+												</Grid>
+											</Grid>
+										</Grid>
+									</form>
+								</Slide>
+							</Grid>								
+						</React.Fragment>
+					}
+				</Grid>
 			</DialogContent>
 		</Dialog>
 }
