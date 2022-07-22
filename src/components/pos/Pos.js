@@ -30,7 +30,6 @@ export default function Pos(){
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
     useEffect(()=>{
-        resetInventario()
         setUbicacion(user.ubicacion)
     },[user]) //
     const handleChange = (type, value) => { 
@@ -48,7 +47,7 @@ export default function Pos(){
     }
     const access = () => {
         setAccesando(true)
-        
+        resetInventario()
         cortes.existeCorte(ubicacion._id, fecha)
             .then(res => {
                 if(res.corte.length === 0){
