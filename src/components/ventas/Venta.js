@@ -54,16 +54,16 @@ const Venta = ({open, close, venta, cancel}) => {
         setConfirm(false)
     }
     function cancelarVenta(){
-        if(ventaLocal.venta.pagos.length > 0 ){
+        if(ventaLocal.pagos.length > 0 ){
             showMessage('No se puede eliminar la venta, hay PAGOS registrados.', 'error')
         }else{
             showMessage("Cancelando...", "info")
-            existCorte(ventaLocal.venta.ubicacion._id, ventaLocal.venta.fecha).then(res => {
+            existCorte(ventaLocal.ubicacion._id, ventaLocal.fecha).then(res => {
                 if (res.corte.length > 0) {
                     showMessage('No se puede eliminar la venta, el corte de caja esta CERRADO', 'error')
                 }
                 else {                    
-                    cancelVenta(venta.venta._id).then(res =>{
+                    cancelVenta(venta._id).then(res =>{
                         if(res.status === "error"){
                             showMessage(res.message, res.status)
                         }
@@ -83,9 +83,9 @@ const Venta = ({open, close, venta, cancel}) => {
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            {/* <Typography align="center">{ventaLocal.venta.ubicacion.nombre } | {ventaLocal.venta.fecha || null}</Typography> */}
-                            <Typography>{ventaLocal.venta.tipoPago} </Typography>
-                            <Typography variant="h6">#{ventaLocal.id} | {ventaLocal.venta.cliente.nombre}</Typography>
+                            <Typography align="center">{ventaLocal.ubicacion.nombre } | {ventaLocal.fecha || null}</Typography>
+                            <Typography>{ventaLocal.tipoPago} </Typography>
+                            <Typography variant="h6">#{ventaLocal.folio} | {ventaLocal.cliente.nombre}</Typography>
                         </Grid>                                
                         {ventaLocal.items.length === 0 ? null :
                             <Grid item xs={12}>
@@ -109,7 +109,7 @@ const Venta = ({open, close, venta, cancel}) => {
                                 {ventaLocal.items.map((item, index) => (
                                     <Grid container key={index}>
                                         <Grid item xs={6}>
-                                            <Typography>#{item.compra.folio} - {item.producto.descripcion} {item.compraItem.clasificacion}</Typography>
+                                            <Typography>#{item.compra.folio} - {item.compraItem.producto.descripcion} {item.compraItem.clasificacion}</Typography>
                                         </Grid>
                                         <Grid item xs={1}>
                                             <Typography align="right">
@@ -192,12 +192,7 @@ const Venta = ({open, close, venta, cancel}) => {
                 </DialogContent>
                 <DialogActions>
                     <Typography component="div" align="right">
-                        {ventaLocal.venta.pesadas.length>0?
-                            <IconButton onClick={()=>null}>
-                                <PollIcon />
-                            </IconButton>
-                            : null
-                        }
+
                         <IconButton onClick={()=>rePrint(ventaLocal)}>
                             <ReceiptIcon />
                         </IconButton>
