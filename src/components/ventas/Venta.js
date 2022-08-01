@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import BlockIcon from '@material-ui/icons/Block';
 import CloseIcon from '@material-ui/icons/Close';
-// import PollIcon from '@material-ui/icons/Poll';
+import PollIcon from '@material-ui/icons/Poll';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import useStyles from '../hooks/useStyles'
 import ConfirmDialog from '../compras/ConfirmDialog';
@@ -25,8 +25,12 @@ import {
 import {formatNumber, 
     // sumImporte
 } from '../Tools'
+import { useAuth } from '../auth/use_auth';
+
 const Venta = ({open, close, venta, cancel}) => {
     const classes = useStyles()
+    const auth = useAuth()
+    const user = auth.user
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     const [confirm, setConfirm] = useState(false)
@@ -50,25 +54,22 @@ const Venta = ({open, close, venta, cancel}) => {
         setConfirm(false)
     }
     function cancelarVenta(){
-        if(ventaLocal.pagos.length > 0 ){
+        if(ventaLocal.venta.pagos.length > 0 ){
             showMessage('No se puede eliminar la venta, hay PAGOS registrados.', 'error')
         }else{
             showMessage("Cancelando...", "info")
-            existCorte(ventaLocal.ubicacion._id, ventaLocal.fecha).then(res => {
+            existCorte(ventaLocal.venta.ubicacion._id, ventaLocal.venta.fecha).then(res => {
                 if (res.corte.length > 0) {
                     showMessage('No se puede eliminar la venta, el corte de caja esta CERRADO', 'error')
                 }
                 else {                    
-                    cancelVenta(venta._id).then(res =>{
+                    cancelVenta(venta.venta._id).then(res =>{
                         if(res.status === "error"){
-                            showMessage("error", "error")
+                            showMessage(res.message, res.status)
                         }
                         else{
                             close()
-                            setConfirm(false)
-                            res.mensajes.forEach(el => {
-                                showMessage(el, "info")
-                            });
+                            showMessage(res.message, res.status)
                         }
                     })
                 }
@@ -82,9 +83,9 @@ const Venta = ({open, close, venta, cancel}) => {
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography align="center">{ventaLocal.ubicacion.nombre } | {ventaLocal.fecha || null}</Typography>
-                            <Typography>{ventaLocal.tipoPago} </Typography>
-                            <Typography variant="h6">#{ventaLocal.folio} | {ventaLocal.cliente.nombre}</Typography>
+                            {/* <Typography align="center">{ventaLocal.venta.ubicacion.nombre } | {ventaLocal.venta.fecha || null}</Typography> */}
+                            <Typography>{ventaLocal.venta.tipoPago} </Typography>
+                            <Typography variant="h6">#{ventaLocal.id} | {ventaLocal.venta.cliente.nombre}</Typography>
                         </Grid>                                
                         {ventaLocal.items.length === 0 ? null :
                             <Grid item xs={12}>
@@ -108,9 +109,7 @@ const Venta = ({open, close, venta, cancel}) => {
                                 {ventaLocal.items.map((item, index) => (
                                     <Grid container key={index}>
                                         <Grid item xs={6}>
-                                            <Typography>
-                                                {/* #{item.compra.folio} -  */}
-                                                {item.producto.descripcion} {item.compraItem.clasificacion}</Typography>
+                                            <Typography>#{item.compra.folio} - {item.producto.descripcion} {item.compraItem.clasificacion}</Typography>
                                         </Grid>
                                         <Grid item xs={1}>
                                             <Typography align="right">
@@ -147,76 +146,13 @@ const Venta = ({open, close, venta, cancel}) => {
                                     </Grid>
                                 </Grid>
                             </Grid>                        
-                        }                    
-
-                        {ventaLocal.itemsCancelados.length>0?
-                            <Grid item xs={12}>
-                            <Grid container >
-                                <Grid item xs={6}>
-                                    <Typography className={classes.textoMiniFacheron}>producto</Typography>
-                                </Grid>
-                                <Grid item xs={1}>
-                                    <Typography className={classes.textoMiniFacheron} align="right">empaques</Typography>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Typography className={classes.textoMiniFacheron} align="right">cantidad</Typography>
-                                </Grid>
-                                <Grid item xs={1}>
-                                    <Typography className={classes.textoMiniFacheron} align="right">precio</Typography>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Typography className={classes.textoMiniFacheron} align="right">importe</Typography>
-                                </Grid>
-                            </Grid>
-                            {ventaLocal.itemsCancelados.map((item, index) => (
-                                <Grid container key={index}>
-                                    <Grid item xs={6}>
-                                        <Typography color="error">
-                                            {item.producto}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={1}>
-                                        <Typography align="right" color="error">
-                                            {item.empaques}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Typography align="right" color="error">
-                                            {item.cantidad}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={1}>
-                                        <Typography color="error" align="right" children={formatNumber(item.precio,2)} />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Typography color="error" align="right" children={formatNumber(item.importe,2)} />
-                                    </Grid>
-                                    <Divider />
-                                </Grid>
-                            ))}
-                            <Divider />
-                            <Grid container>
-                                <Grid item xs={6}></Grid>
-                                <Grid item xs={1}>
-                                    <Typography align="right">{formatNumber(ventaLocal.empaques,1)}</Typography>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Typography align="right">{formatNumber(ventaLocal.cantidad,2)}</Typography>
-                                </Grid>
-                                <Grid item xs={1}>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Typography align="right">${formatNumber(ventaLocal.importe,2)}</Typography>
-                                </Grid>
-                            </Grid>
-                        </Grid> 
-                        : null}    
+                        }                        
 
                     </Grid>
                 {/* 
                         {ventaLocal.acuenta > 0 ?
                             <Grid item xs={12}>
-                                <Typography className={classes.textoMiniFacheron} align="right">Dejó a cuenta:</Typography>
+                                <Typography className={classes.textoMiniFacheron} align="right">Deja a cuenta:</Typography>
                                 <Typography align="right">{formatNumber(ventaLocal.acuenta,2)}</Typography>
                             </Grid>
                             :
@@ -256,19 +192,20 @@ const Venta = ({open, close, venta, cancel}) => {
                 </DialogContent>
                 <DialogActions>
                     <Typography component="div" align="right">
-                        {/* {ventaLocal.pesadas.length>0?
+                        {ventaLocal.venta.pesadas.length>0?
                             <IconButton onClick={()=>null}>
                                 <PollIcon />
                             </IconButton>
                             : null
-                        } */}
+                        }
                         <IconButton onClick={()=>rePrint(ventaLocal)}>
                             <ReceiptIcon />
                         </IconButton>
-                        {ventaLocal.tipoPago === "CANCELADO" ? null :
-                            <IconButton onClick={()=>openConfirm()}>
-                                <BlockIcon />
-                            </IconButton>
+                        {user.level > 2 ? null :
+                            ventaLocal.tipoPago === "CANCELADO" ? null :
+                                <IconButton onClick={()=>openConfirm()}>
+                                    <BlockIcon />
+                                </IconButton>
                         }
                         <IconButton onClick={close}>
                             <CloseIcon />
