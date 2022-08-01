@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import BlockIcon from '@material-ui/icons/Block';
 import CloseIcon from '@material-ui/icons/Close';
-import PollIcon from '@material-ui/icons/Poll';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import useStyles from '../hooks/useStyles'
 import ConfirmDialog from '../compras/ConfirmDialog';
