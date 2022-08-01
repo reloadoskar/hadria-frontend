@@ -5,9 +5,8 @@ import moment from 'moment'
 import { formatNumber } from '../Tools'
 import Venta from '../ventas/Venta'
 import CoolProgressWtLabel from '../tools/CoolProgressWtLabel'
-import { useAuth } from '../auth/use_auth'
+
 export default function CorteDetalleVentas({corte}) {
-	const auth = useAuth()
 	const classes = useStyles()
 		const [ventaSelected, setVentaSel] = useState(null)
 		const [verVenta, setVerVenta] = useState(null)
@@ -114,10 +113,8 @@ export default function CorteDetalleVentas({corte}) {
 				{corte.ventas.length > 0 ?
 					corte.ventas.sort((a,b)=>a.folio - b.folio).map((vta, i) => (
 						<React.Fragment key={i}>
-							<Grid xs={2}>#
-							{auth.user.level > 2 ? vta.folio :
-								<Link onClick={()=>handleVerVenta(vta)}>{vta.folio} </Link>
-							} {moment(vta.createdAt).format("HH:mm")}</Grid>
+							<Grid xs={2}>
+								<Link onClick={()=>handleVerVenta(vta)}>#{vta.folio} </Link> {moment(vta.createdAt).format("HH:mm")}</Grid>
 							<Grid xs={6}>{vta.cliente.nombre}</Grid>
 							<Grid xs={2}>{vta.tipoPago}</Grid>
 							<Grid xs={2}><Typography align="right" variant="body2">$ {formatNumber(vta.importe,2)}</Typography></Grid>							
