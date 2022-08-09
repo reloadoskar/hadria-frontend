@@ -9,7 +9,7 @@ import CoolProgressWtLabel from '../tools/CoolProgressWtLabel'
 export default function CorteDetalleVentas({corte}) {
 	const classes = useStyles()
 		const [ventaSelected, setVentaSel] = useState(null)
-		const [verVenta, setVerVenta] = useState(null)
+		const [verVenta, setVerVenta] = useState(false)
 	const [tabSelected, setTab] = useState(1)
 	const handleChangeTab = (event, value) => {
 		setTab(value)
@@ -113,11 +113,11 @@ export default function CorteDetalleVentas({corte}) {
 				{corte.ventas.length > 0 ?
 					corte.ventas.sort((a,b)=>a.folio - b.folio).map((vta, i) => (
 						<React.Fragment key={i}>
-							<Grid xs={2}>
+							<Grid item xs={2}>
 								<Link onClick={()=>handleVerVenta(vta)}>#{vta.folio} </Link> {moment(vta.createdAt).format("HH:mm")}</Grid>
-							<Grid xs={6}>{vta.cliente.nombre}</Grid>
-							<Grid xs={2}>{vta.tipoPago}</Grid>
-							<Grid xs={2}><Typography align="right" variant="body2">$ {formatNumber(vta.importe,2)}</Typography></Grid>							
+							<Grid item xs={6}>{vta.cliente.nombre}</Grid>
+							<Grid item xs={2}>{vta.tipoPago}</Grid>
+							<Grid item xs={2}><Typography align="right" variant="body2">$ {formatNumber(vta.importe,2)}</Typography></Grid>							
 						</React.Fragment>
 					))
 					: null

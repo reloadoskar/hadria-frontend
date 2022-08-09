@@ -32,11 +32,9 @@ export const danger = {
 '--box-shadow': 'rgba(255, 105, 135, .3)',
 };
 const useStyles = makeStyles(theme => ({ 
-    
     root: {
         display: 'flex',
     },
-
     sobreTexto: {
         fontSize: '11px',
         color: '#3d3d3d'
@@ -222,15 +220,10 @@ const useStyles = makeStyles(theme => ({
     menuButton: {
         marginRight: 36,
     },
-
-
-
-
     posBar: {
         position: 'relative',
         backgroundColor: '#e6b566'
     },
-    
     compraBar: {
         position: 'relative',
         backgroundColor: '#660F50'
@@ -252,25 +245,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#FF715B',
         height: 72,
     },
-    
-    
-    
     hide: {
         display: 'none',
     },
-    // // drawer: {
-    // //     width: drawerWidth,
-    // //     flexShrink: 0,
-    // //     whiteSpace: 'nowrap',
-    // // },
-    
-    
-    
-    // // content: {
-    // //     flexGrow: 1,
-    // //     padding: theme.spacing(3),
-    // // },
-    
     nested: {
         paddingLeft: theme.spacing(4),
     },
@@ -302,28 +279,16 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: "#EFAC4F"
         // backgroundColor: "#EC9A29"
     },
-    
     blurred: {
-        
-            webkitFilter: 'blur(4px)',
-            mozFilter: 'blur(4px)',
-            oFilter: 'blur(4px)',
-            msFilter: 'blur(4px)',
-            filter: 'blur(4px)',
-            width: '500px',
-            height: '50px',
-            backgroundColor: '#fff'
-          
-        
+        webkitFilter: 'blur(4px)',
+        mozFilter: 'blur(4px)',
+        oFilter: 'blur(4px)',
+        msFilter: 'blur(4px)',
+        filter: 'blur(4px)',
+        width: '500px',
+        height: '50px',
+        backgroundColor: '#fff'
     },
-        
-    // },
-    // table: {
-    //     minWidth: 420,
-    // },
-
-    
-
     basic: {
         backgroundColor: "#FFE873"
     },
@@ -340,7 +305,6 @@ const useStyles = makeStyles(theme => ({
     colored: {
         backgroundColor: 'linear-gradient(214deg, #1aa27f, #4381e0)',
     },
-    
     botonSimplon: {
         border: 0,
         height: 48
@@ -390,15 +354,6 @@ const useStyles = makeStyles(theme => ({
         height: 48,
         padding: '0 30px',
     },
-    botonNegroso: {
-        background: 'linear-gradient(45deg, #524948 30%, #A39BA8 90%)',
-        border: 0,
-        borderRadius: 3,
-        boxShadow: '0 1px 5px 2px rgba(255, 105, 135, .3)',
-        color: 'white',
-        height: 48,
-        padding: '0 30px',
-    },
     botonsoteGenerico: {
         background: 'linear-gradient(45deg, #ffd369 50%, #ffdf91 90%)',
         border: 0,
@@ -411,21 +366,17 @@ const useStyles = makeStyles(theme => ({
     media: {
         height: 190,
     },
-
     pesadasList: {
         height: 400,
     },
-
     cajaBonita: {
         height: 300,
         width: 350,
     },
-
     cardScrollable: {
         maxHeight: 350,
         overflow: 'auto'
     },
-
     error404: {
         marginTop: "25%",
         display: 'flex',
@@ -433,61 +384,52 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
     paperPaginaConSalto:{
         pageBreakAfter:"always"
     },
-
     paperBasico: {
         padding:15,
         width: '100%',
         boxShadow: 'rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px'
     },
-
     paperSingle: {
-        padding: 15,
+        // padding: 15,
+        padding: theme.spacing(2, 4, 3),
         width: '100%',
         boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'
     },
-
     paperSutil: {
         margin: 6,
         padding:15,
         width: '100%',
         boxShadow: 'rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px'
     },
-
     paperContorno: {
         margin: 6,
         padding:15,
         width: '100%',
         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px'
     },
-    
     paperPlanes: {
         margin: -6,
         padding: -5,
         width: '100%',
         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px'
     },
-
     paperAmarillo: {
         margin: 6,
         padding: 15,
         background : '#ffd369',
         width: '100%',
     },
-
     paperVerde: {
         background : '#68B68A',
         width: '100%',
     },
-
     paperGris: {
         background : '#BABABA',
         width: '100%',      
     },
-
     paperAlerta: {
         position: 'absolute',
         width: 400,
@@ -496,18 +438,15 @@ const useStyles = makeStyles(theme => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
-
     borderInferior: {
         border: 1,
         borderRadius: 3,
         color: 'black',
     },
-
     rootPagination: {
         flexShrink: 0,
         marginLeft: theme.spacing(2.5),
     },
-
     textoIniciales: {
         color: "#111", 
         fontFamily: "'Open Sans Condensed', sans-serif",
@@ -519,7 +458,6 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
         textTransform: "uppercase" 
     },
-
     elegantshadow: {
         textAlign: "center",
         color: "#FFF",
@@ -556,7 +494,6 @@ const useStyles = makeStyles(theme => ({
           "-28px 56px 1px #e4e3e2"
         ]
       },
-
       textoTresDe: {
         marginTop: "20px",        
         textShadow:  [
@@ -565,26 +502,22 @@ const useStyles = makeStyles(theme => ({
             "0 2px 1px #F7BC05"
         ]
       },
-
       boxGris: {
         width: "100%",
         marginBottom: "50px",
         color: "#FFF",
         backgroundColor: "#2C363F" 
       },
-
-      blue: {
-        '--background-start': '#2196F3',
-        '--background-end': '#21CBF3',
-        '--box-shadow': 'rgba(33, 203, 243, .3)',
-      },
-      
+    blue: {
+    '--background-start': '#2196F3',
+    '--background-end': '#21CBF3',
+    '--box-shadow': 'rgba(33, 203, 243, .3)',
+    },
     danger: {
         '--background-start': '#9A031E',
         '--background-end': '#FF8E53',
         '--box-shadow': 'rgba(255, 105, 135, .3)',
     }
-
 }));
 
 export default useStyles

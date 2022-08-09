@@ -43,7 +43,7 @@ export default function Dashboard() {
     const { ingresos, addIngreso, addPagoCxc, loadIngresosMonthYear, loadCuentasPorCobrarPdv, cxcPdv } = useContext(IngresoContext)
     const {egresos, loadEgresosMonthYear, loadCuentasPorPagar, addEgreso} = useContext(EgresoContext)
     const {ubicacions} = useContext(UbicacionContext)
-    const {inventario, loadInventarioGeneral, resetInventario} = useContext(InventarioContext)
+    const {inventario, loadInventarioGeneral} = useContext(InventarioContext)
     const [inventarioPorUbicacion, setIpu] = useState([])
     const [verPlanStatus, setVerPlanStatus] = useState(false)
     const [bodyPlanStatus, setBody] = useState(null)
@@ -62,7 +62,6 @@ export default function Dashboard() {
     },[inventario])
     useEffect(()=>{
         setLoading(true)
-        resetInventario()
         const loadAll = async () =>{
             const res = await Promise.all([
                 loadCuentasPorPagar(),
