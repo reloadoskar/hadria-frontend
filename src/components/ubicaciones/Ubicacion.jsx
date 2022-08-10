@@ -28,13 +28,15 @@ export default function Ubicacion({ ubicacion }) {
         }
     }
     const updUbic = (ubic) => {
+        setWorking(true)
         editUbicacion(ubic).then(res => {
             setEditMode(false)
+            setWorking(false)
         })
     }
     return laUbic ?
             !working ?
-        <Grid container spacing={2} className={classes.paperSingle}>
+        <Grid item xs={12} container spacing={2} className={classes.paperContorno}>
             <Grid item xs={12} sm={5}>
                 {editMode ?
                     <React.Fragment>
