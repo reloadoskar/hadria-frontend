@@ -1,40 +1,42 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Grid, Typography, IconButton, TextField, MenuItem } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
 import EditIcon from '@material-ui/icons/Edit'
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import { UbicacionContext } from './UbicacionContext'
 
-export default function Ubicacion({ubicacion, update}){
+export default function Ubicacion({ ubicacion }) {
+    const { editUbicacion } = useContext(UbicacionContext)
     const [editMode, setEditMode] = useState(false)
     const [laUbic, setLaubic] = useState(false)
     const tipos = ["SUCURSAL", "ADMINISTRACIÓN", "BANCO", "BODEGA/ALMACÉN"]
     const classes = useStyles()
+    const [working, setWorking] = useState(false)
 
-    useEffect(()=>{
-        if(ubicacion){
+    useEffect(() => {
+        if (ubicacion) {
             setLaubic(ubicacion)
         }
         return () => setLaubic(false)
-    },[ubicacion])
-
+    }, [ubicacion])
     const handleChange = (type, value) => {
         switch (type) {
             default:
-                setLaubic({...laUbic, [type]: value})
+                setLaubic({ ...laUbic, [type]: value })
                 break;
         }
     }
-
     const updUbic = (ubic) => {
-        update(ubic).then(res=>{
+        editUbicacion(ubic).then(res => {
             setEditMode(false)
         })
     }
     return laUbic ?
-        <Grid item xs={12} container>
+            !working ?
+        <Grid container spacing={2} className={classes.paperSingle}>
             <Grid item xs={12} sm={5}>
-                {editMode ? 
+                {editMode ?
                     <React.Fragment>
                         <TextField
                             fullWidth
@@ -45,7 +47,7 @@ export default function Ubicacion({ubicacion, update}){
                                 shrink: true,
                             }}
                             value={laUbic.nombre}
-                            onChange={(e) => handleChange('nombre',e.target.value)}
+                            onChange={(e) => handleChange('nombre', e.target.value)}
                         />
                         <TextField
                             fullWidth
@@ -53,30 +55,28 @@ export default function Ubicacion({ubicacion, update}){
                             id="tipo"
                             label="Tipo de ubicaci&oacute;"
                             value={laUbic.tipo}
-                            onChange={(e) => handleChange('tipo',e.target.value)}
+                            onChange={(e) => handleChange('tipo', e.target.value)}
                         >
-                            {tipos.map((tipo,i) =>(
+                            {tipos.map((tipo, i) => (
                                 <MenuItem key={i} value={tipo} >
                                     {tipo}
                                 </MenuItem>
                             ))}
                         </TextField>
                     </React.Fragment>
-                :
-                <React.Fragment>
-                    <Typography className={classes.textoMiniFacheron}>
-                        {laUbic.tipo}
-                    </Typography>
-                    <Typography >
-                        {laUbic.nombre}
-                    </Typography>
-                </React.Fragment>
-            }
+                    :
+                    <React.Fragment>
+                        <Typography className={classes.textoMiniFacheron}>
+                            {laUbic.tipo}
+                        </Typography>
+                        <Typography >
+                            {laUbic.nombre}
+                        </Typography>
+                    </React.Fragment>
+                }
             </Grid>
-        
-
             <Grid item xs={12} sm={5}>
-                {editMode ? 
+                {editMode ?
                     <React.Fragment>
                         <TextField
                             fullWidth
@@ -87,7 +87,7 @@ export default function Ubicacion({ubicacion, update}){
                                 shrink: true,
                             }}
                             value={laUbic.direccion}
-                            onChange={(e) => handleChange('direccion',e.target.value)}
+                            onChange={(e) => handleChange('direccion', e.target.value)}
                         />
                         <TextField
                             fullWidth
@@ -98,51 +98,51 @@ export default function Ubicacion({ubicacion, update}){
                                 shrink: true,
                             }}
                             value={laUbic.telefono}
-                            onChange={(e) => handleChange('telefono',e.target.value)}
+                            onChange={(e) => handleChange('telefono', e.target.value)}
                         />
                     </React.Fragment>
-                :
-                <React.Fragment>
-                    <Typography className={classes.textoMiniFacheron} align="right" >
-                        Direcci&oacute;n:
-                    </Typography> 
-                    <Typography align="right" >
-                        {laUbic.direccion}
-                    </Typography>
-                    <Typography className={classes.textoMiniFacheron} align="right" >
-                        Tel&eacute;fono:
-                    </Typography>
-                    <Typography align="right" >
-                        {laUbic.telefono}
-                    </Typography>
-                </React.Fragment>
-            }  
+                    :
+                    <React.Fragment>
+                        <Typography className={classes.textoMiniFacheron} align="right" >
+                            Direcci&oacute;n:
+                        </Typography>
+                        <Typography align="right" >
+                            {laUbic.direccion}
+                        </Typography>
+                        <Typography className={classes.textoMiniFacheron} align="right" >
+                            Tel&eacute;fono:
+                        </Typography>
+                        <Typography align="right" >
+                            {laUbic.telefono}
+                        </Typography>
+                    </React.Fragment>
+                }
             </Grid>
-        <Grid item xs={12} sm={2}>
-            {editMode ?
-                <Typography component="div" align="center">
-                    <IconButton onClick={()=>updUbic(laUbic)}>
-                        <CheckIcon />
-                    </IconButton>
-                    <IconButton onClick={()=>setEditMode(false)} >
-                        <CloseIcon />
-                    </IconButton>
+            <Grid item xs={12} sm={2}>
+                {editMode ?
+                    <Typography component="div" align="center">
+                        <IconButton onClick={() => updUbic(laUbic)}>
+                            <CheckIcon />
+                        </IconButton>
+                        <IconButton onClick={() => setEditMode(false)} >
+                            <CloseIcon />
+                        </IconButton>
 
-                </Typography>
-                :
-                <Typography component="div" align="center">
-                    <IconButton
-                        size="small"
-                        onClick={() => setEditMode(true)}
+                    </Typography>
+                    :
+                    <Typography component="div" align="center">
+                        <IconButton
+                            size="small"
+                            onClick={() => setEditMode(true)}
                         >
-                        <EditIcon />
-                    </IconButton>
-                </Typography>
-            }
-        </Grid>
-        </Grid>
+                            <EditIcon />
+                        </IconButton>
+                    </Typography>
+                }
+            </Grid>
+        </Grid> : <Typography>Guardando...</Typography>
 
-    :
+        :
         null
-        
+
 }

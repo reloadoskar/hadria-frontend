@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createContext } from 'react';
-import { getUbicacions, saveUbicacion } from '../api';
+import { getUbicacions, saveUbicacion, updateUbicacion } from '../api';
 
 export const UbicacionContext = createContext()
 
@@ -21,13 +21,19 @@ const UbicacionContextProvider = (props) => {
     const selectUbicacion = (ubicacion) =>{
         setUbicacion(ubicacion)
     }
+
+    const editUbicacion = async (ubicacion) => {
+		const res = await updateUbicacion(ubicacion)
+        return res
+	}
     return(
         <UbicacionContext.Provider value={{
             ubicacions, 
             ubicacion,
             selectUbicacion,
             addUbicacion, 
-            loadUbicacions}} >
+            loadUbicacions,
+            editUbicacion}} >
             {props.children}
         </UbicacionContext.Provider>
     )

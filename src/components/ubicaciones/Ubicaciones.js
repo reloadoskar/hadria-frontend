@@ -31,9 +31,7 @@ function Ubicaciones() {
                     </Grid>
                 :
                     ubicacions.map((row, index) => (
-                        <Paper className={classes.paperBasico} key={index}>
-                            <Ubicacion ubicacion={row}  update={ubicacions.editUbic} />
-                        </Paper>
+                        <Ubicacion ubicacion={row}  update={ubicacions.editUbic} key={index}/>
                     ))
                 }
             </Grid>
