@@ -1,16 +1,20 @@
 import React, {useState} from 'react'
-import { Grid, Typography, Box, Tabs, Tab, Link } from '@material-ui/core'
+import { Grid, Typography, Box, Tabs, Tab, Link, TextField, MenuItem } from '@material-ui/core'
+import FilterListIcon from '@material-ui/icons/FilterList'
 import useStyles, { blue, danger }from '../hooks/useStyles'
 import moment from 'moment'
 import { formatNumber } from '../Tools'
 import Venta from '../ventas/Venta'
 import CoolProgressWtLabel from '../tools/CoolProgressWtLabel'
+import { useEffect } from 'react'
 
 export default function CorteDetalleVentas({corte}) {
 	const classes = useStyles()
-		const [ventaSelected, setVentaSel] = useState(null)
-		const [verVenta, setVerVenta] = useState(false)
+	const [ventaSelected, setVentaSel] = useState(null)
+	const [verVenta, setVerVenta] = useState(false)
 	const [tabSelected, setTab] = useState(1)
+	const [filtro, setFiltro] = useState("TODO")
+	const [vntasConFiltro, setVcf] = useState([])
 	const handleChangeTab = (event, value) => {
 		setTab(value)
 	}
@@ -18,6 +22,13 @@ export default function CorteDetalleVentas({corte}) {
 		setVentaSel(vta)
 		setVerVenta(true)
 	}
+	useEffect(()=>{
+		if(filtro==="TODO"){
+			setVcf(corte.ventaPorCompraItem)
+		}else{
+			setVcf(corte.ventaPorCompraItem.filter(itm=>itm.compraItem.clasificacion === filtro))
+		}
+	},[filtro, corte])
 	return (		
 		<Grid item xs={12} className={classes.paperContorno}>
 			<Box displayPrint="none" display="block">
@@ -34,8 +45,25 @@ export default function CorteDetalleVentas({corte}) {
 			</Box>
 
 			<Grid container value={tabSelected} role="tabpanel" hidden={tabSelected !== 1}>
-				{corte.ventaPorCompraItem.sort((a, b) => a.compra.folio - b.compra.folio).map((el, i) => (
-					<Grid container key={i} className={classes.paperSutil}>
+				<Grid item xs={12} container justifyContent='center'>
+					<Grid item>
+						<FilterListIcon />
+						<TextField 
+							id="filtro"						
+							select
+							value={filtro}
+							onChange={(e)=>setFiltro(e.target.value)}
+						>
+							<MenuItem value="TODO">TODO</MenuItem>
+							<MenuItem value="LINEA">LINEA</MenuItem>
+							<MenuItem value="MAYOREO">MAYOREO</MenuItem>
+							<MenuItem value="MENUDEO">MENUDEO</MenuItem>
+							<MenuItem value="CASCADO">CASCADO</MenuItem>
+						</TextField>
+					</Grid>
+				</Grid>
+				{vntasConFiltro.sort((a, b) => a.compra.folio - b.compra.folio).map((el, i) => (
+					<Grid container key={i} className={classes.paperSutil}>						
 						<Grid item xs={6}>
 							<Typography className={classes.textoMirame}>
 								#{el.compra.folio} | {moment(el.compraItem.createdAt).format("DD/MM")} {el.compraItem.producto.descripcion} {el.compraItem.clasificacion}
