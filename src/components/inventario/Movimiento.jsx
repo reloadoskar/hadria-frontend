@@ -60,7 +60,7 @@ export default function Movimiento({mov}){
                 </Grid>
                 <Grid item xs={12} sm={3}>
                     <Typography className={classes.textoMiniFacheron}>Producto:</Typography>
-                    <Typography>{mov.item.compra.folio}-{mov.item.producto.descripcion }</Typography>
+                    <Typography>{mov.item.compra.folio}-{mov.item.producto.descripcion } {mov.item.clasificacion}</Typography>
                 </Grid>
                 <Grid item xs={6} sm={1}>
                     <Typography>
@@ -73,7 +73,7 @@ export default function Movimiento({mov}){
                 </Grid>
             </Grid>
 
-            <Grid xs={12}>
+            <Grid item xs={12}>
                 <Typography className={classes.textoMiniFacheron}>Comentario:</Typography>
                 <Typography>{mov.comentario}</Typography>
             </Grid>

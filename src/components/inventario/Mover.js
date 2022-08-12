@@ -36,7 +36,7 @@ export default function Mover({ open, close, inventario }) {
 
     useEffect(()=>{
         setMovimiento({...movimiento,
-            itemselcantidad: Math.ceil(neto*100)/100,
+            itemselcantidad: formatNumber(neto,2),
             itemselempaques: lista.length
         })
     },[lista, neto]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -201,7 +201,7 @@ export default function Mover({ open, close, inventario }) {
                                                 <MenuItem key={i} value={itm}>
                                                     <Grid container >
                                                         <Grid item xs={12} sm={6}>
-                                                            #{itm.compra.folio} - {itm.producto.descripcion}
+                                                            #{itm.compra.folio} - {itm.producto.descripcion} {itm.clasificacion}
                                                         </Grid>
                                                         <Grid item xs={12} sm={3}>
                                                             <Typography variant="body2" align="right">
