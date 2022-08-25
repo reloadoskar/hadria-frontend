@@ -7,8 +7,10 @@ import { UbicacionContext } from '../ubicaciones/UbicacionContext'
 import { InventarioContext } from './InventarioContext'
 import { PesadasContext } from './PesadasContext'
 import { useSnackbar } from 'notistack'
+import moment from 'moment'
 const init = {
     origen: '',
+    fecha: moment().format('YYYY-MM-DD'),
     origensel: '',
     destino: '',
     clasificacion: "LINEA",
@@ -67,35 +69,7 @@ export default function Mover({ open, close, inventario }) {
                 break;
         }
     }
-    // const handleAdd = (pesada) => {
-    //     addPesada(pesada)
-    //     var emps = lista.length
-    //     var cant = parseFloat(movimiento.itemselcantidad) + parseFloat(pesada)
-    //     setMovimiento({ ...movimiento, 
-    //         itemselcantidad: formatNumber(cant,1), 
-    //         itemselempaques: formatNumber(emps,1)
-    //     })
-    // }
-
-    // const handleDestare = (tara) =>{        
-    //     let neto = movimiento.itemselcantidad-tara
-    //     setMovimiento({...movimiento,
-    //     itemselcantidad: neto})
-    // }
-
-    // const handleDel = (index) => {
-    //     delPesada(index)
-    //     let cant = lista.reduce((acc,el)=> acc+= parseFloat(el), 0)
-    //     let emps = lista.length
-    //     setMovimiento({...movimiento,
-    //     itemselcantidad: cant,
-    //     itemselempaques: emps})
-    // }
-
-    // const handleClear = () => {
-    //     clearLista()
-    //     setMovimiento({...movimiento, itemselcantidad:0, itemselempaques:0})
-    // }
+    
     const handleReset = () => {
         setMovimiento(init)
         clearLista()
@@ -197,7 +171,7 @@ export default function Mover({ open, close, inventario }) {
                                             value={movimiento.itemsel}
                                             onChange={(e) => handleChange('itemsel', e.target.value)}
                                         >
-                                            {movimiento.origensel.items.filter(i => i.stock >= 1 && i.empaquesStock >= 1).map((itm, i) => (
+                                            {movimiento.origensel.items.filter(i => i.stock >= 1 && i.empaquesStock >= 0.5).map((itm, i) => (
                                                 <MenuItem key={i} value={itm}>
                                                     <Grid container >
                                                         <Grid item xs={12} sm={6}>

@@ -1,20 +1,25 @@
 import React, {useState} from 'react'
 import { Grid, Typography, IconButton } from '@material-ui/core'
-import VisibilityIcon from '@material-ui/icons/Visibility';
-// import PrintIcon from '@material-ui/icons/Print';
+import VisibilityIcon from '@material-ui/icons/Visibility'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import CancelIcon from '@material-ui/icons/Cancel';
+import PrintIcon from '@material-ui/icons/Print'
 import useStyles from '../hooks/useStyles'
 import moment from 'moment'
 import TicketPesadas from './TicketPesadas'
 import { formatNumber } from '../Tools'
-// import { ticketMovimiento } from '../api';
+import { ticketMovimiento } from '../api'
+
 export default function Movimiento({mov}){
     const classes = useStyles()
     const [verPesadas, setVerPesadas] = useState(false)
-    // const handlePrint = () =>{
-    //     ticketMovimiento(mov).then(res=>{
-    //         console.log(res)
-    //     })
-    // }
+
+    const handlePrint = () =>{
+        ticketMovimiento(mov).then(res=>{
+            console.log(res)
+        })
+    }
+
     return mov?
         <Grid 
             item 
@@ -32,27 +37,32 @@ export default function Movimiento({mov}){
                             <IconButton onClick={()=>setVerPesadas(true)}>
                                 <VisibilityIcon />
                             </IconButton>
-                            {/* <IconButton onClick={handlePrint}>
-                                <PrintIcon />
-                            </IconButton> */}
                             <TicketPesadas 
                                 open={verPesadas} 
                                 close={()=>setVerPesadas(false)} 
                                 data={mov}
-                            />
+                                />
                         </React.Fragment>
                         : null
                     }
+                        <IconButton onClick={handlePrint}>
+                            <PrintIcon />
+                        </IconButton>
+                        <IconButton>
+                            <CancelIcon />
+                        </IconButton>
                     </Typography>
+
                 </Grid>
                 <Grid item xs={12} sm={2} >
-                    <Typography className={classes.textoMiniFacheron}>Fecha:</Typography>
-                    <Typography>{moment(mov.createdAt).format("dddd DD-MM-YYYY") }</Typography>
+                    <Typography className={classes.textoMiniFacheron}>{ mov.folio ? "Folio: " + mov.folio : null }</Typography>
+                    <Typography className={classes.textoMiniFacheron}>Fecha: {moment(mov.createdAt).format("DD-MM-YYYY") }</Typography>
+                    <Typography className={classes.textoMiniFacheron}>{moment(mov.createdAt).format("dddd HH:mm") }</Typography>
                 </Grid>
                 
                 <Grid item xs={6} sm={2}>
                     <Typography className={classes.textoMiniFacheron}>Origen:</Typography>
-                    <Typography>{mov.origen.ubicacion ? mov.origen.ubicacion.nombre : null }</Typography>
+                    <Typography>{mov.origen.ubicacion ? mov.origen.ubicacion.nombre : null } <ArrowForwardIcon /></Typography>
                 </Grid>
                 <Grid item xs={6} sm={2}>
                     <Typography className={classes.textoMiniFacheron}>Destino:</Typography>
