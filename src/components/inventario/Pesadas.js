@@ -105,7 +105,7 @@ export default function Pesadas({item}){
                                         <Chip
                                             color="primary"
                                             clickable
-                                            label={ lista.length + "|" + Math.ceil(neto*100)/100 + " Ver lista"}
+                                            label={ lista.length + "|" + formatNumber(neto,2) + " Ver lista"}
                                             onClick={verLista}
                                         />
                                         
