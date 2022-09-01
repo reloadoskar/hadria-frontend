@@ -7,13 +7,10 @@ import GraficaInventario from './GraficaInventario'
 import { InventarioContext } from './InventarioContext'
 import InventarioPorUbicacion from './InventarioPorUbicacion'
 import Movimientos from './Movimientos'
-import moment from 'moment'
 import PesadasContextProvider from './PesadasContext'
 export default function Inventario(){
     const classes = useStyles()
-    let now = moment()
-    const [month] = useState(now.format("MM"))
-    const {inventarioUbicacion, movimientos, loadMovimientos, loadInventarioGeneral, resetInventario} = useContext(InventarioContext)
+    const {inventarioUbicacion, loadInventarioGeneral, resetInventario} = useContext(InventarioContext)
     const [moverDialog, setMoverDialog] = useState(false)
     const [tabSelected, setTab] = useState(1)
     const selectTab = (event, selected) => {
@@ -24,7 +21,6 @@ export default function Inventario(){
         const loadAll = async () =>{
             const res = await Promise.all([
                 loadInventarioGeneral(),
-                loadMovimientos(month)            
             ])
             return res
         }
@@ -74,7 +70,7 @@ export default function Inventario(){
                         </Grid>              
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
-                        <Movimientos movimientos={movimientos} />
+                        <Movimientos />
                     </div>
                 </Grid>  
             </Grid>

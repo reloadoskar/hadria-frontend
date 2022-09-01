@@ -30,8 +30,9 @@ const InventarioContextProvider = (props) => {
         return res
     }
 
-    const loadMovimientos = async (month) =>{
-        let res = await getMovimientos(month)
+    const loadMovimientos = async (fecha) =>{
+        setMovimientos([])
+        let res = await getMovimientos(fecha)
         setMovimientos(res.movimientos)
         return res
     }
