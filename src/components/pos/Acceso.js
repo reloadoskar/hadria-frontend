@@ -32,7 +32,7 @@ export default function Acceso({ accesando, ubicacions = [], ubicacion="", fecha
 							</React.Fragment>
 							:
 							<form onSubmit={(e) => handleSubmit(e)}>
-								{user.level < 3 ?
+								{user.level < 8 ?
 									<React.Fragment>
 										<TextField
 											id="ubicacion"
