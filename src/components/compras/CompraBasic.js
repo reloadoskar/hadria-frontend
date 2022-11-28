@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Badge, Divider, Grid, IconButton, Typography } from '@material-ui/core'
 import VisibilityIcon from '@material-ui/icons/Visibility';
-// import EditIcon from '@material-ui/icons/Edit'
+import EditIcon from '@material-ui/icons/Edit'
 import { useSnackbar } from 'notistack';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Confirm from '../dialogs/Confirm';
@@ -11,6 +11,7 @@ import {ComprasContext} from '../compras/CompraContext'
 export default function CompraBasic(props){
     const {compra, 
         verCompra, 
+        editCompra,
         // recuperarVentas, 
         // recuperarGastos
     } = props
@@ -104,13 +105,13 @@ export default function CompraBasic(props){
                             <VisibilityIcon />
                         </IconButton>
                         </Badge>
-                        {/* <IconButton
+                        <IconButton
                             size="small"
                             disabled={compraStatus === "CANCELADO" ? true : false}
                             onClick={() => editCompra(compra)}
                             >
                             <EditIcon />
-                        </IconButton> */}
+                        </IconButton>
                         <IconButton
                             size="small"
                             disabled={compraStatus !== "ACTIVO" ? true : false}

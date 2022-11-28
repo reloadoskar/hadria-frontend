@@ -13,7 +13,9 @@ import { updateCompra, updateCompraItem, addCompraItem, ticketNuevoItem } from '
 import useStyles from '../hooks/useStyles';
 import moment from 'moment'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext';
+import { useAuth } from '../auth/use_auth';
 export default function DetalleCompra({ compra, open, close, showMessage, products, provedors }){
+    const {user} = useAuth()
     const classes = useStyles()
     const {ubicacions} = useContext(UbicacionContext)
 
@@ -35,7 +37,7 @@ export default function DetalleCompra({ compra, open, close, showMessage, produc
 
     const saveNewItem = (item) => {
         item.compra = compra
-        addCompraItem(item).then(res => {
+        addCompraItem(user, item).then(res => {
             if(res.status !== "success" ){
                 showMessage("Ups, ocurrió un error: "+res.message, 'error')
             }else{
@@ -78,7 +80,7 @@ export default function DetalleCompra({ compra, open, close, showMessage, produc
     }
 
     const updateAndSaveCompra = (compra) => {
-        updateCompra(compra).then(res => {
+        updateCompra(user, compra).then(res => {
             if(res.status !== "success" ){
                 showMessage("Ups, ocurrió un error: "+res.message, 'error')
             }else{
@@ -134,7 +136,7 @@ export default function DetalleCompra({ compra, open, close, showMessage, produc
             importe: edit.importe,
         }
 
-        updateCompraItem(newItem).then( res => {
+        updateCompraItem(user, newItem).then( res => {
             if(res.status !== "success" ){
                 showMessage("Ups, ocurrió un error: "+res.message, 'error')
             }else{
