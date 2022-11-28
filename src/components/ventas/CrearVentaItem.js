@@ -16,6 +16,15 @@ export default function CrearVentaItem({open, close, elitem, add}){
     const [importe, setImporte] = useState('')
     const [guardando, setGuardando] = useState(false)
     const handleFocus = (event) => event.target.select();
+
+    useEffect(() => {
+		if (item) {
+			if (item.clasificacion !== "LINEA") {
+				console.info("NO ES LINEA")
+				setEmpaques(0)
+			}
+		}
+	}, [item])
     
     useEffect(()=>{
         if(lista.length>0){
@@ -121,6 +130,7 @@ export default function CrearVentaItem({open, close, elitem, add}){
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid item xs={12} md={3}>
                                         <TextField 
+                                            disabled={elitem.clasificacion === "LINEA" ? false : true}
                                             id="empaques"
                                             label="Cajas"
                                             variant="outlined"
