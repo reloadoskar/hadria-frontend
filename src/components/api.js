@@ -446,7 +446,7 @@ export const updateCompraItem = (user,data) => {
     try {
 
         return axios
-            .put(url + '/compra/item/', {user, data})
+            .post(url + 'compra/item/update', {user, data})
             .then(res => {
                 return res.data
             })
@@ -1663,7 +1663,7 @@ export const updtInversion = async (inversion) => {
     try {
 
         const res = await axios
-            .put(url + '/inversion/update/', inversion);
+            .post(url + 'inversion/update/', inversion);
         return res.data;
     } catch (err) {
         console.log(err)

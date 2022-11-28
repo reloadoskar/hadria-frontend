@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 
-import { IconButton, MenuItem, Grid, Button, Typography, Table, TableHead, TableRow, TableCell, TableBody, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Box, } from '@material-ui/core';
+import { IconButton, MenuItem, Grid, Button, Typography, Table, TableHead, TableRow, TableCell, TableBody, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Box, CircularProgress, } from '@material-ui/core';
 
 import ClearIcon from '@material-ui/icons/Clear';
 import EditIcon from '@material-ui/icons/Edit';
@@ -18,7 +18,7 @@ export default function DetalleCompra({ compra, open, close, showMessage, produc
     const {user} = useAuth()
     const classes = useStyles()
     const {ubicacions} = useContext(UbicacionContext)
-
+    const [working, setWorking] = useState(false)
     const [addItem, setAdditem] = useState(false)
     const [edit, setEdit] = useState({
         item: null,
@@ -38,16 +38,14 @@ export default function DetalleCompra({ compra, open, close, showMessage, produc
     const saveNewItem = (item) => {
         item.compra = compra
         addCompraItem(user, item).then(res => {
-            if(res.status !== "success" ){
-                showMessage("Ups, ocurrió un error: "+res.message, 'error')
-            }else{
-                closeAddItem()
-                showMessage(res.message, res.status)
-                addNewItemToList(res.item)
-                calculaNuevoImporte()
-                updateAndSaveCompra(compra)
-                ticketNuevoItem(item)
-            }
+            closeAddItem()
+            showMessage(res.message, res.status)
+            addNewItemToList(res.item)
+            calculaNuevoImporte()
+            updateAndSaveCompra(compra)
+            ticketNuevoItem(item)
+        }).catch(err=>{
+            showMessage(err.message, 'error')
         })
     }
 
@@ -81,12 +79,13 @@ export default function DetalleCompra({ compra, open, close, showMessage, produc
 
     const updateAndSaveCompra = (compra) => {
         updateCompra(user, compra).then(res => {
-            if(res.status !== "success" ){
-                showMessage("Ups, ocurrió un error: "+res.message, 'error')
-            }else{
-                showMessage(res.message, res.status)
-                cancelEdit()
-            }
+            showMessage(res.message, res.status)
+            cancelEdit()
+            setWorking(false)
+        })
+        .catch(err=>{
+            showMessage(err.message,'error')
+            setWorking(false)
         })
     }
 
@@ -135,17 +134,16 @@ export default function DetalleCompra({ compra, open, close, showMessage, produc
             costo: edit.costo,
             importe: edit.importe,
         }
-
+        setWorking(true)
         updateCompraItem(user, newItem).then( res => {
-            if(res.status !== "success" ){
-                showMessage("Ups, ocurrió un error: "+res.message, 'error')
-            }else{
-                showMessage(res.message, res.status)
-                updateLocalItem(newItem)
-                calculaNuevoImporte()
-                updateAndSaveCompra(compra)
-            }
-        }) 
+            showMessage(res.message, res.status)
+            updateLocalItem(newItem)
+            calculaNuevoImporte()
+            updateAndSaveCompra(compra)
+        }).catch(err=>{
+            setWorking(false)
+            showMessage(err.message, 'error')
+        })
     }
 
     const calculaNuevoImporte = () => {
@@ -343,7 +341,10 @@ export default function DetalleCompra({ compra, open, close, showMessage, produc
                                                                                         <IconButton
                                                                                             onClick={() => saveItemChanges(edit)}
                                                                                         >
-                                                                                            <CheckIcon fontSize="small" />
+                                                                                            {!working ? 
+                                                                                                <CheckIcon fontSize="small" /> :
+                                                                                                <CircularProgress size={20} />
+                                                                                            }
                                                                                         </IconButton>
                                                                                         <IconButton
                                                                                             onClick={() => cancelEdit()}
