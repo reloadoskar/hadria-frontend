@@ -105,7 +105,7 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 										<Grid item xs={12}>
 											<Button
 												fullWidth
-												className={classes.botonAzuloso}
+												className={classes.botonGris}
 												onClick={() => setClasSel('S/C')}>
 												S/C
 											</Button>
