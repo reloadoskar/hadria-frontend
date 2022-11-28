@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Badge, Divider, Grid, IconButton, Typography } from '@material-ui/core'
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import EditIcon from '@material-ui/icons/Edit'
+// import EditIcon from '@material-ui/icons/Edit'
 import { useSnackbar } from 'notistack';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Confirm from '../dialogs/Confirm';
@@ -10,7 +10,6 @@ import useStyles from '../hooks/useStyles';
 import {ComprasContext} from '../compras/CompraContext'
 export default function CompraBasic(props){
     const {compra, 
-        editCompra, 
         verCompra, 
         // recuperarVentas, 
         // recuperarGastos
@@ -105,13 +104,13 @@ export default function CompraBasic(props){
                             <VisibilityIcon />
                         </IconButton>
                         </Badge>
-                        <IconButton
+                        {/* <IconButton
                             size="small"
                             disabled={compraStatus === "CANCELADO" ? true : false}
                             onClick={() => editCompra(compra)}
                             >
                             <EditIcon />
-                        </IconButton>
+                        </IconButton> */}
                         <IconButton
                             size="small"
                             disabled={compraStatus !== "ACTIVO" ? true : false}
@@ -134,7 +133,7 @@ export default function CompraBasic(props){
                 </Grid>
                 <Grid item xs={9} sm={3}>
                     <Typography className={classes.textoMiniFacheron}>{compraLocal.clave} | {compraLocal.tipoCompra.tipo} </Typography>
-                    <Typography>{compraLocal.provedor.nombre}</Typography>
+                    <Typography>{compraLocal.provedor ? compraLocal.provedor.nombre:""}</Typography>
                 </Grid>
                 {compraLocal.tipoCompra.tipo === "COMPRAS" || compraLocal.tipoCompra.tipo === "COMPRA"  ?
                     <React.Fragment>

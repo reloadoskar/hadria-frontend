@@ -1,34 +1,36 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Container, Grid, Button, Dialog, Typography, DialogContent, Collapse } from '@material-ui/core'
-import CrearVenta from '../ventas/CrearVenta'
+import { Dialog, DialogContent, Grid, Typography, Button, Container, Collapse } from '@material-ui/core'
 import Reloj from '../herramientas/reloj'
-import Corte from '../cortes/Corte'
+import moment from 'moment'
 import useStyles from '../hooks/useStyles'
-import CobroDialog from './CobroDialog'
-import EgresoDialog from './EgresoDialog'
-import PagarDialog from './PagarDialog'
 import IngresoCreate from '../ingresos/IngresoCreate'
+import CobroDialog from './CobroDialog'
+import PagarDialog from './PagarDialog'
+import EgresoDialog from './EgresoDialog'
+import Corte from '../cortes/Corte'
 import { EgresoContext } from '../egresos/EgresoContext'
 import { IngresoContext } from '../ingresos/IngresoContext'
 import { InventarioContext } from '../inventario/InventarioContext'
-import moment from 'moment'
+import ClienteSelector from './ClienteSelector'
+import InventarioSelector from './InventarioSelector'
 import { useAuth } from '../auth/use_auth'
-export default function DialogPos({ open, close, ubicacion, fecha, showMessage, cxcPdv, addPagoCxc }) {
+
+export default function PosContainer({ open, close, ubicacion, fecha }) {
 	const {user} = useAuth()
-	const [ configuracion ] = useState({ ingreso: false, cobrar: false, pagar: false, gasto: false })
 	const { resetEgresos, loadCuentasPorPagar } = useContext(EgresoContext)
 	const { resetIngresos, loadCuentasPorCobrarPdv } = useContext(IngresoContext)
 	const { ubicacionInventario } = useContext(InventarioContext)
 	const classes = useStyles()
-	const [corteDialog, setCorteDialog] = useState(false)
-	const [cxcDialog, setCxcDialog] = useState(false)
-	const [egresoDialog, setEgresoDialog] = useState(false)
-	const [pagoDialog, setPagoDialog] = useState(false)
+	const [configuracion] = useState({ ingreso: false, cobrar: false, pagar: false, gasto: false })
 	const [selectClasificacion, openSelectClass] = useState(false)
-
-	const [verCrearIngreso, setVerCrearIngreso] = useState(false)
 	const [clasificacionSelected, setClasSel] = useState("")
-	const [inventarioCLasificacion, setInventarioc] = useState([])
+	const [verCrearIngreso, setVerCrearIngreso] = useState(false)
+	const [cxcDialog, setCxcDialog] = useState(false)
+	const [pagoDialog, setPagoDialog] = useState(false)
+	const [egresoDialog, setEgresoDialog] = useState(false)
+	const [corteDialog, setCorteDialog] = useState(false)
+
+	const [inventarioClasificacion, setInventarioc] = useState([])
 
 	useEffect(() => {
 		if (ubicacionInventario) {
@@ -64,10 +66,7 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 	const toggleEgesoDialog = () => {
 		setEgresoDialog(!egresoDialog)
 	}
-
 	const showCorte = () => setCorteDialog(true)
-	const closeDialogCorte = () => setCorteDialog(false)
-	const closeDialogPago = () => setPagoDialog(false)
 	return (
 		<Dialog
 			open={open}
@@ -75,9 +74,8 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 			fullScreen
 		>
 			<DialogContent>
-				<Grid container spacing={2} alignItems="flex-start">
-
-					{/* CABECERA */}
+				{/* CABECERA */}
+				<Grid container>
 					<Grid item xs={12} container justifyContent="center">
 						<Grid item xs={6} sm={4}>
 							<Typography variant="h6" align="center">{ubicacion ? ubicacion.nombre : "ups!"}</Typography>
@@ -87,8 +85,10 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 						</Grid>
 						<Grid item xs={12} sm={4}><Reloj /></Grid>
 					</Grid>
-					{/* TERMINA CABECERA */}
+				</Grid>
+				{/* TERMINA CABECERA */}
 
+				<Grid container spacing={2}>
 					{/* BOTONES MENU */}
 					<Grid item xs={3} container spacing={1} >
 						<Grid item xs={12}>
@@ -102,14 +102,6 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 							<Container>
 								<Collapse in={selectClasificacion}>
 									<Grid container spacing={1}>
-										<Grid item xs={12}>
-											<Button
-												fullWidth
-												className={classes.botonAzuloso}
-												onClick={() => setClasSel('S/C')}>
-												S/C
-											</Button>
-										</Grid>
 										<Grid item xs={12}>
 											<Button
 												fullWidth
@@ -146,7 +138,7 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 							</Container>
 
 						</Grid>
-						{!configuracion.ingreso? null :
+						{!configuracion.ingreso ? null :
 							<Grid item xs={12}>
 								<Button
 									fullWidth
@@ -164,7 +156,7 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 							</Grid>
 						}
 
-						{!configuracion.cobrar? null :
+						{!configuracion.cobrar ? null :
 							<Grid item xs={12}>
 								<Button
 									fullWidth
@@ -176,16 +168,13 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 								<CobroDialog
 									open={cxcDialog}
 									fecha={fecha}
-									cuentas={cxcPdv}
-									cobrar={addPagoCxc}
 									ubicacion={ubicacion}
 									close={toggleCxcDialog}
-									showMessage={showMessage}
 								/>
 							</Grid>
 						}
 
-						{!configuracion.pagar? null :
+						{!configuracion.pagar ? null :
 							<Grid item xs={12}>
 								<Button
 									fullWidth
@@ -198,12 +187,12 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 									fecha={fecha}
 									ubicacion={ubicacion}
 									open={pagoDialog}
-									close={closeDialogPago}
+									close={() => setPagoDialog(false)}
 								/>
 							</Grid>
 						}
 
-						{!configuracion.gasto? null :
+						{!configuracion.gasto ? null :
 							<Grid item xs={12}>
 								<Button
 									fullWidth
@@ -217,7 +206,6 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 									ubicacion={ubicacion}
 									open={egresoDialog}
 									close={toggleEgesoDialog}
-									showMessage={showMessage}
 								/>
 							</Grid>
 						}
@@ -232,10 +220,10 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 							{corteDialog ?
 								<Corte
 									open={corteDialog}
-									close={closeDialogCorte}
+									close={() => setCorteDialog(false)}
 									ubicacion={ubicacion}
 									fecha={fecha}
-									pov= {true}
+									pov={true}
 								/>
 								: null
 							}
@@ -252,14 +240,17 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 					</Grid>
 					{/* TERMINAN BOTONES */}
 
-					<Grid item xs={9} container>
-						<CrearVenta
-							laubicacion={ubicacion}
-							lafecha={fecha}
-							inventario={inventarioCLasificacion}
-						/>
+					<Grid item xs={9} container spacing={2}>
+						
+							<ClienteSelector ubicacion={ubicacion} />
+						
+
+						
+							<InventarioSelector inventario={inventarioClasificacion} />
+						
 					</Grid>
 				</Grid>
+
 			</DialogContent>
 		</Dialog>
 	)

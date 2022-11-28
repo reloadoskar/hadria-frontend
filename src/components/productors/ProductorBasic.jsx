@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Grid, Typography, IconButton, TextField, MenuItem } from '@material-ui/core';
+import { Grid, Typography, IconButton, TextField, MenuItem, CircularProgress } from '@material-ui/core';
 import avatarh from '../../img/avatarH2.png'
 import avatarm from '../../img/avatarM3.png'
 import avataro from '../../img/avatarM1.png'
@@ -14,21 +14,32 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { ProductorContext } from './ProductorContext'
 import Confirm from '../dialogs/Confirm';
 import useStyles from '../hooks/useStyles'
+import { useAuth } from '../auth/use_auth';
+import { useSnackbar } from 'notistack';
 export default function ProductorBasic({ data }) {
+  const {user} = useAuth()
+  const { enqueueSnackbar } = useSnackbar()
+  const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
   const classes = useStyles()
   const [productor, setProductor] = useState(null)
   const { removeProductor, editProductor } = useContext(ProductorContext)
   const [confirm, setConfirm] = useState(false)
   const [editMode, setEditMode] = useState(false)
+  const [working, setWorking] = useState(false)
 
   useEffect(()=>{
     setProductor(data)
   },[data])
 
   const onConfirm = () => {
-    removeProductor(productor._id)
-      .then(() => {
-
+    setWorking(true)
+    removeProductor(user, productor._id)
+      .then(res => {
+        setWorking(false)
+        showMessage(res.message, res.status)
+      }).catch(err=>{
+        setWorking(false)
+        showMessage(err.message, "error")
       })
   }
 
@@ -47,8 +58,13 @@ export default function ProductorBasic({ data }) {
   }
 
   const actualizarProductor = () => {
-    editProductor(productor).then(()=>{
+    setWorking(true)
+    editProductor(user, productor).then(res=>{
       setEditMode(false)
+      setWorking(false)
+    }).catch(err=>{
+      setWorking(false)
+      showMessage(err.message, "error")
     })
   }
   return !productor ? null :
@@ -101,7 +117,7 @@ export default function ProductorBasic({ data }) {
         <Grid item xs={12} sm={1}>
           <Typography align="right">
             <IconButton size="small" onClick={() => actualizarProductor()}>
-              <CheckIcon />
+              {!working ? <CheckIcon /> : <CircularProgress size={20}/>}
             </IconButton>
             <IconButton size="small" onClick={() => setEditMode(false)}>
               <CloseIcon />
@@ -111,12 +127,12 @@ export default function ProductorBasic({ data }) {
       </Grid>
     :
     <Grid container className={classes.paperContorno}>
-      <Grid item xs={12} sm={2}>
+      <Grid item xs={12} sm={4}>
         <Typography align="center">
           <img src={productor.sexo === "H" ? avatarh : productor.sexo === "M" ? avatarm : avataro} width="150" alt="productor img"/>
         </Typography>
       </Grid>
-      <Grid item xs={12} sm={9}>
+      <Grid item xs={12} sm={7}>
         <Typography variant="h6">
           {productor.clave} - {productor.nombre}
         </Typography>
@@ -133,15 +149,13 @@ export default function ProductorBasic({ data }) {
           <IconButton size="small" onClick={()=>setEditMode(true)}>
             <EditIcon />
           </IconButton>
-          {/* <Badge variant="dot" color="secondary">
-            <IconButton size="small">
-              <VisibilityIcon />
-            </IconButton>
-          </Badge> */}
           <IconButton size="small" onClick={() => setConfirm(true)} >
-            <CancelIcon />
+            {!working ? <CancelIcon /> : <CircularProgress size={20} />}
           </IconButton>
-          <Confirm open={confirm} close={() => setConfirm(false)} onConfirm={onConfirm} />
+          <Confirm 
+            open={confirm} 
+            texto="¿Seguro que desea ELIMINAR al Productor?"
+            close={() => setConfirm(false)} onConfirm={onConfirm} />
         </Typography>
       </Grid>
     </Grid>

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react'
-// import { useMediaQuery } from '@material-ui/core';
+import { useMediaQuery } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Button, Grid, Typography, Menu, MenuItem } from '@material-ui/core'
+import { Button, Grid, Typography, Menu, MenuItem, Backdrop } from '@material-ui/core'
 import CompraItems from '../compras/CompraItems'
 import CrearVentaItem from './CrearVentaItem'
 import CobrarDialog from '../pos/CobrarDialog'
@@ -11,23 +11,23 @@ import VentaItems from './VentaItems'
 import useStyles from '../hooks/useStyles'
 import { ticketVenta, ticketSalida } from '../api'
 import { formatNumber, sumImporte } from '../Tools'
-// import Ticket from './Ticket'
+import Ticket from './Ticket'
 import { IngresoContext } from '../ingresos/IngresoContext'
 import { PesadasContext } from '../inventario/PesadasContext';
 import { ClienteContext } from '../clientes/ClienteContext';
-import { VentaContext } from './VentaContext';
+import { useAuth } from '../auth/use_auth';
 export default function CrearVenta({ laubicacion, lafecha, inventario }) {
+	const {user} = useAuth()
 	const { addVenta } = useContext(IngresoContext)
-	const {venta, setVenta} = useContext(VentaContext)
 	const { clearLista } = useContext(PesadasContext)
 	const { clientes } = useContext(ClienteContext)
 	const { enqueueSnackbar } = useSnackbar()
 	const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 	const classes = useStyles()
-	// const isMobile = useMediaQuery('(max-width: 720px)')
+	const isMobile = useMediaQuery('(max-width: 720px)')
 
-	// const [ticket, setTicket] = useState(null)
-	// const [imprimir, setImprimir] = useState(false)
+	const [ticket, setTicket] = useState(null)
+	const [imprimir, setImprimir] = useState(false)
 
 	const [itemSelected, setItemSelected] = useState(null)
 	const [anchorEl, setAnchorEl] = useState(null)
@@ -75,7 +75,6 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 
 	const seleccionaCliente = (cliente) => {
 		setCliente(cliente)
-		setVenta({...venta, cliente: cliente})
 	}
 
 	function addItem(item) {
@@ -116,26 +115,28 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 		venta.total = sumImporte(items)
 		venta.importe = sumImporte(items)
 		try {
-			addVenta(venta).then(res => {
-				if (res.status === "error") {
-					showMessage(res.message, res.status)
-					setGuardando(false)
-					toggleCobrarDialog()
-					handleClose()
+			addVenta(user, venta)
+			.then(res => {
+				setGuardando(false)
+				venta.folio = res.venta.folio
+				if (isMobile) {
+					setTicket(venta)
+					setImprimir(true)
 				} else {
-					setGuardando(false)
-					venta.folio = res.venta.folio
 					ticketVenta(venta).then(resb => {
 						if (resb.status === 'warning') {
 							showMessage(resb.message, resb.status)
 						} else {
 							ticketSalida(res.venta)
 						}
-					})					
-					showMessage(res.message, res.status)
-					toggleCobrarDialog()
-					handleClose()
+					})
 				}
+				showMessage(res.message, res.status)
+				toggleCobrarDialog()
+				handleClose()
+			}).catch(err=>{
+					showMessage(err.message, 'error')
+					setGuardando(false)
 			})
 		} catch (err) {
 			console.log(err)
@@ -150,19 +151,22 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 		setCliente(clientes[0])
 	}
 
-	// const noPrint = () => {
-	// 	setImprimir(false)
-	// 	setTicket(null)
-	// }
+	const noPrint = () => {
+		setImprimir(false)
+		setTicket(null)
+	}
 	return (
 		<Grid container spacing ={2} onKeyPress={(e) => handleKeyPress(e)}>
-			{/* <Backdrop className={classes.backdrop} open={imprimir} onClick={noPrint}>
+			<Grid item xs={12}>
+				
+			</Grid>
+			<Backdrop className={classes.backdrop} open={imprimir} onClick={noPrint}>
 				<Ticket data={ticket} noPrint={noPrint} />
-			</Backdrop> */}
+			</Backdrop>
 
 			{inventario === null || fecha === null || ubicacion === null ? null :
-				<Grid item container spacing={2}>
-					<Grid item xs={12}>
+				<Grid container spacing={2} justifyContent="center">
+					<Grid item xs={12} sm={4}>
 						<Typography align="center" className={classes.textoMiniFacheron}>Cliente</Typography>
 						<Button
 							onClick={(e) => setAnchorEl(e.currentTarget)}
@@ -177,9 +181,9 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 							open={Boolean(anchorEl)}
 							onClose={closeSelect}
 						>
-						{clientes !== undefined ?
+						{clientes.length > 0 ?
 							<React.Fragment>
-								{clientes.filter(clnt => clnt.ubicacion === undefined).map(cliente => (
+								{clientes.filter(clnt => clnt.ubicacion === "").map(cliente => (
 									<MenuItem
 										key={cliente._id}
 										onClick={() => {
@@ -191,7 +195,7 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 									</MenuItem>
 								))}
 								{clientes.filter(clnt => clnt.ubicacion !== undefined)
-									.filter(cl => cl.ubicacion === ubicacion._id)
+									.filter(cl => cl.ubicacion._id === ubicacion._id)
 									.map(cliente => (
 										<MenuItem
 											key={cliente._id}
@@ -210,7 +214,10 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 						</Menu>
 					</Grid>
 
-					<Grid item xs={12}>					
+					<Grid item xs={12}>
+						<Typography align="center" className={classes.textoMiniFacheron}>
+							Productos disponibles
+						</Typography>
 						<CompraItems inventario={inventario} selectItem={selectItem} />
 						<CrearVentaItem
 							open={ventaItemDialog}
@@ -226,31 +233,21 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 
 				</Grid>
 }		
-			{items.length > 0 ?
-			<Grid item xs={12} container spacing={2} direction="row-reverse" >
-				<Grid item>
+			<Grid item xs={12}>
+				{items.length > 0 ?
 					<Button
-							disabled={items.length > 0 ? false : true}
-							className={sumImporte(items) === 0 ? classes.botonGenerico : classes.botonCosmico}
-							onClick={() => toggleCobrarDialog()}
-							variant="contained"
-							startIcon={<MonetizationOnIcon />}
-						>
-							Cobrar ${formatNumber(sumImporte(items))} (x)
-						</Button>
-				</Grid>
-				<Grid item>
-					<Button 
-						className={sumImporte(items) === 0 ? classes.botonGenerico : classes.botonMagico}
-						onClick={()=>null}
+						size="large"
+						fullWidth
+						disabled={items.length > 0 ? false : true}
+						className={sumImporte(items) === 0 ? classes.botonGenerico : classes.botonCosmico}
+						onClick={() => toggleCobrarDialog()}
 						variant="contained"
+						startIcon={<MonetizationOnIcon />}
 					>
-						Cancelar (C)
-						</Button>
-				</Grid>
-			</Grid>
-			: null
-			}
+						Cobrar ${formatNumber(sumImporte(items))} (x)
+					</Button>
+					: null
+				}
 				<CobrarDialog
 					open={cobrarDialog}
 					close={toggleCobrarDialog}
@@ -260,6 +257,7 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 					guardarVenta={guardarVenta}
 					guardando={guardando}
 				/>
+			</Grid>
 		</Grid>
 	)
 }

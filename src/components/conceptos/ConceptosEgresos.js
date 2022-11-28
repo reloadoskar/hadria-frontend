@@ -1,15 +1,19 @@
 import React, { useState } from 'react'
 import { useSnackbar } from 'notistack';
-import useConceptos from '../hooks/useConceptos'
-import { Card, CardHeader, Grid, TextField, CardContent, CardActions, Button, Typography, IconButton } from '@material-ui/core';
+import {useConceptos} from '../hooks/useConceptos'
+import { Card, CardHeader, Grid, TextField, CardContent, CardActions, Button, Typography, IconButton, CircularProgress } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import useStyles from '../hooks/useStyles'
+import { useAuth } from '../auth/use_auth';
+
 const ConceptosEgresos = () => {
+    const {user} = useAuth()
     const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
     const {conceptos, add, del} = useConceptos()
     const [concepto, setConcepto] = useState('')
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
+    const [trabajando, setTrabajando] = useState(false)
 
     const handleChange = (value) => {
         setConcepto(value.toUpperCase())
@@ -19,16 +23,26 @@ const ConceptosEgresos = () => {
         var obj = {
             concepto: concepto
         }
-        add(obj).then( res  => {
+        add(user, obj).then( res  => {
             showMessage(res.message, res.status)
+            setTrabajando(false)
             setConcepto('')
+        }).catch(err=>{
+            showMessage(err.message,'error')
+            setTrabajando(false)
         })
     }
 
     const delConcepto = (id, index) => {
-        del(id, index).then( res => {
-            showMessage(res.message, res.status)
-        })
+        setTrabajando(true)
+        del(user, id, index)
+            .then( res => {
+                setTrabajando(false)
+                showMessage(res.message, res.status)
+            }).catch(err=>{
+                setTrabajando(false)
+                showMessage(err.message, 'error')
+            })
     }
     return (
         <Grid container spacing={2}>
@@ -51,7 +65,7 @@ const ConceptosEgresos = () => {
                     <CardActions>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Button className={classes.botonGenerico} onClick={() => addConcepto(concepto)} disabled={concepto === '' ? true : false}>Agregar</Button>
+                                {!trabajando ? <Button className={classes.botonGenerico} onClick={() => addConcepto(concepto)} disabled={concepto === '' ? true : false}>Agregar</Button> : <CircularProgress size={30} /> }
                             </Grid>
                         </Grid>
                     </CardActions>
@@ -72,7 +86,10 @@ const ConceptosEgresos = () => {
                                                 <Typography children={el.concepto} />
                                             </Grid>
                                             <Grid item xs={6}>
-                                                <IconButton align="right" children={<DeleteIcon />} onClick={() => delConcepto(el._id, index)} />
+                                                {!trabajando ?
+                                                    <IconButton align="right" children={<DeleteIcon />} onClick={() => delConcepto(el._id, index)} />
+                                                    : <CircularProgress size={30} />
+                                                }
                                             </Grid>
                                         </Grid>
                                     ))}

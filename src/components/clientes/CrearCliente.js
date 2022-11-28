@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField } from '@material-ui/core'
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField } from '@material-ui/core'
 import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import useStyles from '../hooks/useStyles'
 import {ClienteContext} from './ClienteContext'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
 import { useSnackbar } from 'notistack'
+import {useAuth} from '../auth/use_auth'
 const ncliente = {
     nombre: "",
     rfc: "",
@@ -20,18 +21,25 @@ const ncliente = {
 }
 
 const CrearCliente = ({open, close}) =>{
+    const {user} = useAuth()
     const {addCliente} = useContext(ClienteContext)
     const {ubicacions} = useContext(UbicacionContext)
     const classes = useStyles()
     const [cliente, setCliente] = useState(ncliente)
+    const [working, setWorking] = useState(false)
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     
     const handleSubmit = (e) =>{
         e.preventDefault()
-        addCliente(cliente).then(res=>{
+        setWorking(true)
+        addCliente(user, cliente).then(res=>{
+            setWorking(false)
             showMessage(res.message, res.status)
             handleClose()
+        }).catch(err=>{
+            setWorking(false)
+            showMessage(err.message, 'error')
         })
     }
 
@@ -194,7 +202,7 @@ const CrearCliente = ({open, close}) =>{
                 </DialogContent>
                 <DialogActions>
                     <Button className={classes.botonSimplon} onClick={close}>Cancelar</Button>
-                    <Button type="submit" className={classes.botonGenerico}>Registrar</Button>
+                    {!working ? <Button type="submit" className={classes.botonGenerico}>Registrar</Button> : <CircularProgress size={30} /> }
                 </DialogActions>
             </form>
         </Dialog>

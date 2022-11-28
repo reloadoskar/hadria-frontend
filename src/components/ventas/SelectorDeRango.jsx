@@ -3,34 +3,19 @@ import { Grid, Typography, TextField, Button } from "@material-ui/core";
 import moment from 'moment'
 import { VentaContext } from './VentaContext';
 import useStyles from "../hooks/useStyles";
+import { useAuth } from "../auth/use_auth";
 export default function SelectorDeRango(){
+    const {user} = useAuth()
     const { rango, setRango, loadVentasPorPeriodo} = useContext(VentaContext)
     var now = moment()
     const classes = useStyles()
     const [f2,setF2] = useState(now.format('YYYY-MM-DD'))
     const [f1,setF1] = useState(now.subtract(7, 'days').format('YYYY-MM-DD'))
-    // const handleChange = (field, value) => {
-	// 	let momento = moment(value)
-	// 	switch (field) {
-	// 		case "f1":
-	// 			if (momento.isBefore(rango.f2)) {
-	// 				return setRango({ ...rango, [field]: momento.format("YYYY-MM-DD") })
-	// 			}
-	// 			break
-	// 		case "f2":
-	// 			if (momento.isAfter(rango.f1)) {
-	// 				return setRango({ ...rango, [field]: momento.format("YYYY-MM-DD") })
-	// 			}
-	// 			break
-	// 		default:
-	// 			return null
-	// 	}
-	// }
     const handleSubmit = () =>{
         setRango({f1: moment(f1).format("YYYY-MM-DD"), f2: moment(f2).format("YYYY-MM-DD")})
     }
     useEffect(()=>{
-        loadVentasPorPeriodo(rango)
+        loadVentasPorPeriodo(user, rango)
     },[rango])// eslint-disable-line react-hooks/exhaustive-deps
     return rango === null ? <Typography >Esperando datos...</Typography> :
         <Grid container spacing={2} alignItems="center">

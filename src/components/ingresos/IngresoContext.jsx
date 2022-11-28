@@ -1,4 +1,5 @@
 import React, {createContext, useState} from 'react'
+import { useContext } from 'react'
 import { getIngresos, 
     getIngresosMonthYear,
     saveIngreso, 
@@ -10,6 +11,9 @@ import { getIngresos,
     saveVenta 
 } from '../api'
 export const IngresoContext = createContext()
+export const useIngresos = () =>{
+    return useContext(IngresoContext)
+}
 const IngresoContextProvider = (props) => {
     const [ingresos, setIngresos] = useState(null)
     const [cuentasxCobrar, setCuentasxCobrar] = useState(null)
@@ -19,52 +23,52 @@ const IngresoContextProvider = (props) => {
         setIngresos([])
     }
 
-    const loadIngresosxFecha = async (fecha) =>{
-        const res = await getIngresos(fecha)
+    const loadIngresosxFecha = async (user, fecha) =>{
+        const res = await getIngresos(user, fecha)
         setIngresos(res.ingresos)
     }
 
-    const loadIngresosMonthYear = async (month, year) => {
-        const res = await getIngresosMonthYear(month, year)
+    const loadIngresosMonthYear = async (user, month, year) => {
+        const res = await getIngresosMonthYear(user, month, year)
         setIngresos(res.ingresos)
     }
 
-    const loadCuentasPorCobrar = async () => {
-        let res = await getCuentasPorCobrar()
+    const loadCuentasPorCobrar = async (user) => {
+        let res = await getCuentasPorCobrar(user)
         setCuentasxCobrar(res.cuentas)
 		return res
     }
 
-    const loadCuentasPorCobrarPdv = async () => {
-        let res = await getCxcPdv()
+    const loadCuentasPorCobrarPdv = async (user) => {
+        let res = await getCxcPdv(user)
             setCxcPdv(res.cuentas)
     }
 
-    const addIngreso = async (ingreso) => {
-        const res = await saveIngreso(ingreso)
+    const addIngreso = async (user, ingreso) => {
+        const res = await saveIngreso(user, ingreso)
         setIngresos([...ingresos, res.ingreso])
         return res
     }
 
-    const removeIngreso = async (id) => {
-        const res = await delIngreso(id)
+    const removeIngreso = async (user, id) => {
+        const res = await delIngreso(user, id)
         setIngresos(ingresos.filter(ingreso=>ingreso._id !== id))
         return res
     }
 
-    const addPagoCxc = async (pago) => {
-		const res = await savePagoACuentaPorCobrar(pago)
+    const addPagoCxc = async (user, pago) => {
+		const res = await savePagoACuentaPorCobrar(user, pago)
         setIngresos([...ingresos, res.ingreso])
         return res        
     }
 
-    const addVenta = async (venta) =>{
-		let res = await saveVenta(venta)
+    const addVenta = async (user, venta) =>{
+		let res = await saveVenta(user, venta)
         return res
 	}
 
-    const editIngreso = async (data) =>{
-        let res = await updateIngreso(data)
+    const editIngreso = async (user, data) =>{
+        let res = await updateIngreso(user,data)
         return res
     }
 

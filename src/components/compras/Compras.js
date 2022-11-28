@@ -8,12 +8,11 @@ import {
     Menu, MenuItem, TextField, Typography,
 } from '@material-ui/core';
 import { ComprasContext } from './CompraContext'
-import { ProductosContext } from '../productos/ProductosContext'
-import { ProductorContext } from '../productors/ProductorContext';
+import { useProductors } from '../productors/ProductorContext';
 import { useSnackbar } from 'notistack'
 
 import AddIcon from '@material-ui/icons/Add'
-import useTipoCompras from '../hooks/useTipoCompras';
+import {useTipoCompras} from '../hooks/useTipoCompras';
 
 import useStyles from '../hooks/useStyles'
 
@@ -24,14 +23,19 @@ import ListaCompras from './ListaCompras';
 import DetalleCompra from './DetalleCompra'
 import { Meses } from '../tools/Meses'
 import moment from 'moment'
+import { useAuth } from '../auth/use_auth';
+import { useProductos } from '../productos/ProductosContext';
+import { useEmpresa } from '../empresa/EmpresaContext';
 // import CompraCreate from './CompraCreate';
 
 function Compras(){
-    const {compras, loadCompras, addCompra, clearCompras } = useContext(ComprasContext)
+    const {user} = useAuth()
+    const {loadEmpresa} = useEmpresa()
+    const {compras, loadCompras, clearCompras } = useContext(ComprasContext)
     
-    const {productos, loadProductos, addProducto} = useContext(ProductosContext)
-    const {productors, addProductor} = useContext(ProductorContext)
-    const {tipoCompras, addTipoCompra} = useTipoCompras();
+    const {loadProductos, productos, addProducto}  = useProductos()
+    const {productors} = useProductors()
+    const {loadTipoCompras} = useTipoCompras();
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
@@ -51,8 +55,10 @@ function Compras(){
         setIsLoading(true)
         const loadAll = async () => {
             const res = await Promise.all([
-                loadProductos(),
-                loadCompras(month, year)                
+                loadCompras(user, month, year),
+                loadTipoCompras(user),
+                loadProductos(user),
+                loadEmpresa(user)
             ])
             return res
         }
@@ -61,12 +67,14 @@ function Compras(){
         })
     },[month, year]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const crear = (compra) => {
-        return addCompra(compra).then(res => {
-            closeDialog()
-            return res
-        })
-    }
+    // const crear = (compra) => {
+    //     return addCompra(user, compra).then(res => {
+    //         closeDialog()
+    //         return res
+    //     }).catch(err=>{
+    //         showMessage(err.message, 'error')
+    //     })
+    // }
     const openDialog = () => {
         setShowDialog(true)
     }
@@ -189,13 +197,9 @@ function Compras(){
                         openP={openDialogP}
                         closeP={closeDialogP}
                         showMessage={showMessage}
-                        crear={crear}
                         products={productos}
                         addProduct={addProducto}
                         provedors={productors}
-                        tipoCompras={tipoCompras}
-                        addTipoCompra={addTipoCompra}
-                        addProvedor={addProductor}
                     />
                 </Grid> 
                 {compras.length > 0 ?

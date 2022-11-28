@@ -8,22 +8,23 @@ const UbicacionContextProvider = (props) => {
     const [ubicacions, setUbicacions] = useState([])
     const [ubicacion, setUbicacion] = useState(null)
 
-    const loadUbicacions = async () => {
-        const res = await getUbicacions()
+    const loadUbicacions = async (user) => {
+        const res = await getUbicacions(user)
         setUbicacions(res.ubicacions)
     }
 
-    const addUbicacion = async (ubic) => {
-        const res = await saveUbicacion(ubic)
-        setUbicacions([...ubicacions, res.ubicacion])
+    const addUbicacion = async (user, data) => {
+        const res = await saveUbicacion(user, data)
+        setUbicacions([res.ubicacion, ...ubicacions])
+        return res
     }
 
     const selectUbicacion = (ubicacion) =>{
         setUbicacion(ubicacion)
     }
 
-    const editUbicacion = async (ubicacion) => {
-		const res = await updateUbicacion(ubicacion)
+    const editUbicacion = async (user, ubicacion) => {
+		const res = await updateUbicacion(user, ubicacion)
         return res
 	}
     return(

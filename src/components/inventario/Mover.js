@@ -4,10 +4,11 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, Typo
 import useStyles from '../hooks/useStyles'
 import { formatNumber } from '../Tools'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
-import { InventarioContext } from './InventarioContext'
+import { useInventario } from './InventarioContext'
 import { PesadasContext } from './PesadasContext'
 import { useSnackbar } from 'notistack'
 import moment from 'moment'
+import { useAuth } from '../auth/use_auth'
 const init = {
     origen: '',
     fecha: moment().format('YYYY-MM-DD'),
@@ -20,6 +21,7 @@ const init = {
     comentario: ''
 }
 export default function Mover({ open, close, inventario }) {
+    const {user} = useAuth()
     const classes = useStyles()
     const { lista, tara, ttara, bruto, neto, clearLista} = useContext(PesadasContext)
     const { enqueueSnackbar } = useSnackbar()
@@ -27,7 +29,7 @@ export default function Mover({ open, close, inventario }) {
     const [movimiento, setMovimiento] = useState(init)
     // const [pesadas, setPesadas] = useState([])
     const { ubicacions } = useContext(UbicacionContext)
-    const { moverInventario} = useContext(InventarioContext)
+    const { moverInventario} = useInventario()
     const [guardando, setGuardando] = useState(false)
     const [clasificacions] = useState([
         "LINEA",
@@ -96,16 +98,16 @@ export default function Mover({ open, close, inventario }) {
         movimiento.bruto=bruto
         movimiento.neto=neto
         if (validar(movimiento)) {
-            moverInventario(movimiento).then(res => {
+            moverInventario(user, movimiento)
+            .then(res => {
                 showMessage(res.message,res.status)
-                if(res.status === "success"){
-                    handleClose()
-                    setGuardando(false)
-                    clearLista()
-                }else{
-                    setGuardando(false)
-                    
-                }
+                setGuardando(false)
+                clearLista()                
+                handleClose()
+            })
+            .catch(err=>{
+                showMessage(err.message, 'error')
+                setGuardando(false)
             })
         } else {
             setGuardando(false)

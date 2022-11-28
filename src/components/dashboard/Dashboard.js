@@ -37,8 +37,10 @@ import SelectorMes from '../tools/SelectorMes';
 import SelectorAnio from '../tools/SelectorAnio';
 
 import { agruparPorObjeto } from '../Tools'
+import { useAuth } from '../auth/use_auth';
 
 export default function Dashboard() {
+    const {user} = useAuth()
     const {empresa } = useContext(EmpresaContext)
     const { ingresos, addIngreso, addPagoCxc, loadIngresosMonthYear, loadCuentasPorCobrarPdv, cxcPdv } = useContext(IngresoContext)
     const {egresos, loadEgresosMonthYear, loadCuentasPorPagar, addEgreso} = useContext(EgresoContext)
@@ -64,9 +66,9 @@ export default function Dashboard() {
         setLoading(true)
         const loadAll = async () =>{
             const res = await Promise.all([
-                loadCuentasPorPagar(),
-                loadCuentasPorCobrarPdv(),
-                loadInventarioGeneral()
+                loadCuentasPorPagar(user),
+                loadCuentasPorCobrarPdv(user),
+                loadInventarioGeneral(user)
             ])
             return res
         }
@@ -78,15 +80,15 @@ export default function Dashboard() {
         setLoading(true)
         const loadData = async () =>{
             const res = await Promise.all([
-                loadEgresosMonthYear(month,year),
-                loadIngresosMonthYear(month,year)
+                loadEgresosMonthYear(user, month, year),
+                loadIngresosMonthYear(user, month, year)
             ])
             return res
         }
         loadData().then(()=>{
             setLoading(false)
         })
-    }, [year,month]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [user, year,month]) // eslint-disable-line react-hooks/exhaustive-deps
    
 
     useEffect(()=>{

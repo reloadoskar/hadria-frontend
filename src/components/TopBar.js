@@ -2,7 +2,7 @@ import React from 'react'
 import UserFunctions from './UserFunctions'
 
 import clsx from 'clsx';
-import { Grid, IconButton, Typography, Box, Badge } from '@material-ui/core';
+import { Grid, IconButton, Typography, Box } from '@material-ui/core';
 
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -30,9 +30,9 @@ export default function TopBar(props) {
                                     className={clsx(classes.menuButton, {
                                         [classes.hide]: open,
                                     })}>
-                                        <Badge variant="dot" color="secondary">
+                                        
                                             <MenuIcon />
-                                        </Badge>
+                                        
                                 </IconButton>
                             </Grid>
                         {/* } */}

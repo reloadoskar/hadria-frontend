@@ -1,67 +1,69 @@
-import { useState } from 'react';
+import React, { useState, useContext, createContext, useEffect } from 'react';
 import { 
     // saveCorte, 
     getDataFrom, saveCorte, existCorte, openCorte } from '../api'
-import {sumImporte, 
-    sumAcuenta,
-    // calcTotal, 
-    // formatNumber
-} from '../Tools'
-const useCortes = () => {
-    const [corte, setCorte] = useState([])
+export const CortesContext = createContext()
 
-    async function getCorte(ubicacion, fecha){
-        const crte = await getDataFrom(ubicacion, fecha)
-        .then(res=>{
-            if(res.status==="info"){
-                setCorte(res.corte)
-                return res.corte
-            }else{
-                    let elcorte = res.corte
-                    var tven = sumImporte(elcorte.ventaItems)
-                    var ting = sumImporte(res.corte.ingresos)
-                    var tcre = sumImporte(res.corte.creditos)
-                    var tacu = sumAcuenta(res.corte.creditos)
-                    var tegr = sumImporte(res.corte.egresos)
-                    var total = (tven + ting + tacu - tcre - tegr)
-        
-                    elcorte.tventas = tven
-                    elcorte.tingresos = ting
-                    elcorte.tcreditos = tcre
-                    elcorte.tacuenta = tacu
-                    elcorte.tegresos = tegr
-                    elcorte.total = total
-            
-                    setCorte(elcorte)
-                    return elcorte
-                }
-            })
-            return crte
-    }
+export const useCortes = () =>{
+    return useContext(CortesContext)
+}
 
-    async function existeCorte(ubicacion, fecha){
-        const res = await existCorte(ubicacion, fecha)
-            setCorte(res)
-            return res
-    }
+const CortesContextProvider = ({children}) => {
+    const [corte, setCorte] = useState(null)
+    const [mediasCajasCount, setMediasCajasCount] = useState(0)
+    const [totalCorte, setTotalCorte] = useState(0)
 
-    async function guardarCorte(corte){
-        const res = await saveCorte(corte)
-            return res
-    }
+    useEffect(()=>{
+		if (corte) {
+			let cuenta = 0
+            setTotalCorte(corte.ventaItems.reduce((acc,itm)=>acc+=itm.importe,0))
+			corte.ventaItems.map((el) => {
+				if (!Number.isInteger(el.empaques)) {
+					return cuenta++
+				}
+				return false
+			})
+			setMediasCajasCount(cuenta)
+		} else {
+			return () => setMediasCajasCount(0)
+		}
+	}, [corte])
 
-    async function reOpen(ubicacion, fecha){
-        const res = await openCorte(ubicacion, fecha)
+    async function getCorte(user, ubicacion, fecha){
+        setCorte(null)
+        const res = await getDataFrom(user, ubicacion, fecha)
+            setCorte(res.corte)
         return res
     }
 
-    return {
-        corte,
-        getCorte,
-        guardarCorte, 
-        existeCorte,
-        reOpen
+    async function existeCorte(user, ubicacion, fecha){
+        const res = await existCorte(user, ubicacion, fecha)
+            return res
     }
+
+    async function guardarCorte(user, corte){
+        const res = await saveCorte(user, corte)
+            return res
+    }
+
+    async function reOpen(user, ubicacion, fecha){
+        const res = await openCorte(user, ubicacion, fecha)
+        return res
+    }
+
+    return (
+        <CortesContext.Provider value={{
+            corte,
+            totalCorte,
+            mediasCajasCount,
+            getCorte,
+            guardarCorte, 
+            existeCorte,
+            reOpen
+        }} >
+            {children}
+        </CortesContext.Provider>
+    )
 }
 
-export default useCortes
+export default CortesContextProvider

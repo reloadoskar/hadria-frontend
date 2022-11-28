@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import { useSnackbar } from 'notistack';
 import { Card, CardHeader, CardContent, Grid, CardActions, TextField, Button, Typography, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import useEmpaques from '../hooks/useEmpaques'
+import {useEmpaques} from '../hooks/useEmpaques'
 import useStyles from '../hooks/useStyles'
+import { useAuth } from '../auth/use_auth';
 const Empaques = () => {
+    const {user} = useAuth()
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
     const { empaques, add, del } = useEmpaques()
@@ -15,15 +17,20 @@ const Empaques = () => {
     }
 
     const addEmpaque = (empaque) => {
-        add(empaque).then( res  => {
+        add(user, empaque).then( res  => {
             showMessage(res.message, res.status)
             setValues({empaque: '', abr: ''})
+        })
+        .catch(err=>{
+            showMessage(err.message, 'error')
         })
     }
 
     const delEmpaque = (id, index) => {
-        del(id, index).then( res => {
+        del(user, id, index).then( res => {
             showMessage(res.message, res.status)
+        }).catch(err=>{
+            showMessage(err.message, 'error')
         })
     }
 

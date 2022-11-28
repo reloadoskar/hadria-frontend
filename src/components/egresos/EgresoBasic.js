@@ -10,7 +10,9 @@ import { EgresoContext } from "../egresos/EgresoContext"
 import { UbicacionContext } from '../ubicaciones/UbicacionContext';
 import Confirm from '../dialogs/Confirm';
 import { useSnackbar } from 'notistack';
+import { useAuth } from '../auth/use_auth';
 export default function EgresoBasic({ data }) {
+  const {user} = useAuth()
   const { removeEgreso, editEgreso } = useContext(EgresoContext)
   const {ubicacions} = useContext(UbicacionContext)
 
@@ -34,9 +36,11 @@ export default function EgresoBasic({ data }) {
     // if(egreso.concepto==="PAGO"){
     //   editEgreso({_id: egreso.cuenta })
     // }
-    removeEgreso(egreso._id).then(res=>{
+    removeEgreso(user, egreso._id).then(res=>{
       showMessage(res.message, res.status)
       setEgreso(null)
+    }).catch(err=>{
+      showMessage(err.message,'error')
     })
   }
 
@@ -49,7 +53,7 @@ export default function EgresoBasic({ data }) {
   }
 
   const updateEgreso = () => {
-    editEgreso(egreso).then(res=>{
+    editEgreso(user, egreso).then(res=>{
       showMessage(res.message, res.status)
       setEditMode(false)
     })
@@ -141,7 +145,11 @@ export default function EgresoBasic({ data }) {
                 <IconButton size="small" onClick={() => setConfirm(true)}>
                   <CancelIcon />
                 </IconButton>
-                <Confirm open={confirm} close={() => setConfirm(false)} onConfirm={onConfirm} />
+                <Confirm 
+                  texto="Seguro desea eliminar?"
+                  open={confirm} 
+                  close={() => setConfirm(false)} 
+                  onConfirm={onConfirm} />
               </Typography>
             </Grid>
           </Grid>

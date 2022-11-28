@@ -20,8 +20,11 @@ export default function Login(){
     useEffect(()=> {
         if(auth.autenticado){
             if(auth.user !== null){
-                if(auth.user.level <=2){
+                if(auth.user.level <2){
                     history.replace(from)
+                }
+                if(auth.user.level === 2){
+                    history.push('/app/ventas')
                 }
                 if(auth.user.level === 3){
                     history.push('/app/inventario')

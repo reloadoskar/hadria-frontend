@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, TextField, Button, MenuItem } from '@material-ui/core';
+import React, { useState } from 'react'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, TextField, Button, MenuItem, CircularProgress } from '@material-ui/core';
 import useStyles from '../hooks/useStyles'
 import { useSnackbar } from 'notistack'
-import { ProductoContext } from './ProductoContext'
+import { useProductos } from './ProductosContext';
+import {useAuth} from '../auth/use_auth'
 const initProducto = {
     clave: '',
     descripcion: '',
@@ -16,11 +17,12 @@ const initProducto = {
     existeClave: false,
 }
 export default function ProductoCreate({ open, close, unemp }) {
+    const {user} = useAuth()
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
-    const { addProducto } = useContext(ProductoContext)
+    const { addProducto } = useProductos()
     const [producto, setProducto] = useState(initProducto)
     const [guardando, setGuardando] = useState(false)
 
@@ -45,11 +47,14 @@ export default function ProductoCreate({ open, close, unemp }) {
     const handleSubmit = (e) => {
         e.preventDefault()
         setGuardando(true)
-        addProducto(producto).then(res => {
+        addProducto(user, producto).then(res => {
             showMessage(res.message, res.status)
             setGuardando(false)
             close()
             setProducto(initProducto)
+        }).catch(err=>{
+            setGuardando(false)
+            showMessage(err.message, 'error')
         })
     }
     return (
@@ -168,10 +173,17 @@ export default function ProductoCreate({ open, close, unemp }) {
                 </DialogContent>
 
                 <DialogActions>
-                    <Button className={classes.botonSimplon} onClick={close}>cancelar</Button>
-                    <Button
-                        disabled={guardando ? true : false}
-                        className={classes.botonGenerico} onClick={(e) => handleSubmit(e)}>Guardar</Button>
+                    {!guardando ?
+                    <React.Fragment>
+                        <Button className={classes.botonSimplon} onClick={close}>cancelar</Button>
+                        <Button
+                            disabled={guardando ? true : false}
+                            className={classes.botonGenerico} onClick={(e) => handleSubmit(e)}>
+                                Guardar
+                        </Button>
+                        </React.Fragment>
+                        : <CircularProgress size={30} />
+                    }
                 </DialogActions>
             </form>
         </Dialog>

@@ -1,9 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField } from '@material-ui/core'
+import React, { useState, useContext } from 'react'
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField } from '@material-ui/core'
 import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import useStyles from '../hooks/useStyles'
-import {UbicacionContext} from '../ubicaciones/UbicacionContext'
+import { UbicacionContext } from '../ubicaciones/UbicacionContext';
+import { EmpleadoContext } from './EmpleadoContext';
+import { useAuth } from '../auth/use_auth';
+import { useSnackbar } from 'notistack'
 const nempleado = {
     nombre: '',
     area: "",
@@ -31,21 +34,33 @@ const periodos = [
     "QUINCENAL",
     "MENSUAL",
 ]
-const CrearEmpleado = (props) =>{
-    const {open, close, crear} = props
+const CrearEmpleado = ({open, close}) =>{
+    const {user} = useAuth()
+    const {empleados, addEmpleado} = useContext(EmpleadoContext)
+    const { enqueueSnackbar } = useSnackbar()
+  const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     const classes = useStyles()
-    const {ubicacions, loadUbicacions} = useContext(UbicacionContext)
+    const {ubicacions} = useContext(UbicacionContext)
     const [empleado, setEmpleado] = useState(nempleado)
-    
-    useEffect(()=>{
-        loadUbicacions()
-    },[]) // eslint-disable-line react-hooks/exhaustive-deps
+    const [working, setWorking] = useState(false)
     
     const handleSubmit = (e) =>{
         e.preventDefault()
-        crear(empleado)
-        setEmpleado(nempleado)
-        close()
+        setWorking(true)
+        if(empleados.length <30){
+            addEmpleado(user, empleado).then(res => {
+                setEmpleado(nempleado)
+                showMessage(res.message, res.status)
+                close()      
+                setWorking(false)          
+            })
+            .catch(err=>{
+                showMessage(err.message, 'error')
+                setWorking(false)
+            })
+        }else{
+            showMessage('M&aacute;ximo de empleados alcanzado', 'error')
+        }
     }
 
     const handleChange = (field, value) => {
@@ -263,7 +278,7 @@ const CrearEmpleado = (props) =>{
                 </DialogContent>
                 <DialogActions>
                     <Button className={classes.botonSimplon} onClick={close}>Cancelar</Button>
-                    <Button type="submit" className={classes.botonGenerico}>Registrar</Button>
+                    {!working ? <Button type="submit" className={classes.botonGenerico}>Registrar</Button> : <CircularProgress size={25} /> }
                 </DialogActions>
             </form>
         </Dialog>

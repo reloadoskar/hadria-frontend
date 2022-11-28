@@ -1,18 +1,22 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Grid, Typography, IconButton, TextField, MenuItem } from '@material-ui/core'
+import { Grid, Typography, IconButton, TextField, MenuItem, CircularProgress } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
 import EditIcon from '@material-ui/icons/Edit'
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import { UbicacionContext } from './UbicacionContext'
-
+import { useAuth } from '../auth/use_auth';
+import { useSnackbar } from 'notistack';
 export default function Ubicacion({ ubicacion }) {
+    const {user} = useAuth()
     const { editUbicacion } = useContext(UbicacionContext)
     const [editMode, setEditMode] = useState(false)
     const [laUbic, setLaubic] = useState(false)
     const tipos = ["SUCURSAL", "ADMINISTRACIÓN", "BANCO", "BODEGA/ALMACÉN"]
     const classes = useStyles()
     const [working, setWorking] = useState(false)
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
     useEffect(() => {
         if (ubicacion) {
@@ -29,13 +33,16 @@ export default function Ubicacion({ ubicacion }) {
     }
     const updUbic = (ubic) => {
         setWorking(true)
-        editUbicacion(ubic).then(res => {
+        editUbicacion(user, ubic).then(res => {
             setEditMode(false)
             setWorking(false)
+            showMessage(res.message, res.status)
+        }).catch(err=>{
+            setWorking(false)
+            showMessage(err.message, 'error')
         })
     }
-    return laUbic ?
-            !working ?
+    return !laUbic ? null :
         <Grid item xs={12} container spacing={2} className={classes.paperContorno}>
             <Grid item xs={12} sm={5}>
                 {editMode ?
@@ -124,7 +131,7 @@ export default function Ubicacion({ ubicacion }) {
                 {editMode ?
                     <Typography component="div" align="center">
                         <IconButton onClick={() => updUbic(laUbic)}>
-                            <CheckIcon />
+                            {!working ? <CheckIcon /> : <CircularProgress size={20} /> }
                         </IconButton>
                         <IconButton onClick={() => setEditMode(false)} >
                             <CloseIcon />
@@ -142,9 +149,5 @@ export default function Ubicacion({ ubicacion }) {
                     </Typography>
                 }
             </Grid>
-        </Grid> : <Typography>Guardando...</Typography>
-
-        :
-        null
-
+        </Grid>
 }

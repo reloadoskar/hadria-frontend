@@ -17,13 +17,16 @@ import TipoCompra from '../creators/TipoCompra'
 import {formatNumber, sumImporte} from '../Tools'
 import { ticketCompra } from '../api'
 import AgregarItem from './AgregarItem';
+import { useCompras } from './CompraContext';
+import { useAuth } from '../auth/use_auth';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CrearCompra(props){
-    const { open, crear, showMessage, close, provedors, addProvedor, tipoCompras, addTipoCompra } = props
+export default function CrearCompra({ open, showMessage, close, provedors}){
+    const {user} = useAuth()
+    const {addCompra} = useCompras()
     const {ubicacions} = useContext(UbicacionContext)
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState(0)
@@ -140,9 +143,7 @@ export default function CrearCompra(props){
                 return (
                     <DatosGenerales 
                         provedor={provedor}
-                        provedors={provedors}
                         tipoCompra={tipoCompra}
-                        tipoCompras={tipoCompras}
                         remision={remision}
                         fecha={fecha}
                         ubicacion={ubicacion}
@@ -153,7 +154,7 @@ export default function CrearCompra(props){
                 )
             case 1:
                 return (
-                    <AgregarItem items={items} crearItem={crearItem} eliminar={eliminarItem} {...props}/>
+                    <AgregarItem items={items} crearItem={crearItem} eliminar={eliminarItem}/>
                 );
             case 2:
                 return (
@@ -208,20 +209,19 @@ export default function CrearCompra(props){
             importeItems: totalItems,
             importe: total,
         }
-        crear(nCompra).then( (res) => {
-            if(res.status === "error"){
+        addCompra(user, nCompra).then( (res) => {
+            setActiveStep(0)
+            clearAll()
+            showMessage(res.message, res.status)      
+            close()        
+            ticketCompra(res.compra).then(res =>{
+                if(res.status === 'error'){
                     showMessage(res.message, res.status)
-                }else{
-                    setActiveStep(0)
-                    clearAll()
-                    showMessage(res.message, res.status)              
-                    ticketCompra(res.compra).then(res =>{
-                        if(res.status === 'error'){
-                            showMessage(res.message, res.status)
-                        }
-                    })
                 }
-            })
+            })    
+        }).catch(err=>{
+            showMessage(err.message,'error')
+        })
         
     }
     return (
@@ -275,13 +275,11 @@ export default function CrearCompra(props){
             <ProvedorLite 
                 open={provedorFastDialog}
                 close={closeProvedorFastDialog}
-                addProvedor={addProvedor}
             />
 
             <TipoCompra
                 open={tipoCompraDialog}
                 close={closeTipoCompraDialog}
-                creator={addTipoCompra}
                 report={showMessage}
             />            
         </Dialog>

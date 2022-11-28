@@ -20,7 +20,7 @@ import { Container, } from '@material-ui/core'
 import reducer from './PosReducer'
 import useIngresos from '../ingresos/useIngresos'
 import useCuentasxPagar from '../cxp/useCuentasxPagar'
-import useCortes from '../cortes/useCortes'
+import {useCortes} from '../cortes/useCortes'
 import useInventario from '../hooks/useInventario'
 // import useCuentasxCobrar from '../cxc/useCuentasxCobrar'
 import 'moment/locale/es-mx';

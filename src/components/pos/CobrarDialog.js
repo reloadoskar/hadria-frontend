@@ -1,7 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import { Dialog, DialogContent, DialogTitle, Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
 import useStyles from '../hooks/useStyles';
-import {formatNumber} from '../Tools'
+
 function ReprintDialog(props) {
     const { open, cancel, ok } = props
 
@@ -87,9 +90,6 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                     let cambio = calculaCambio(value, total)
                     setCambio(cambio)
                 }
-                if(value < total){
-                    setCambio(0)
-                }
                 setEfectivo(value)
                 break
                 
@@ -140,21 +140,23 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
         <Dialog 
             fullWidth
             maxWidth="sm"
-            open={open} onClose={() => handleClose('cobrarDialog')}>
+            open={open} onClose={() => handleClose('cobrarDialog')} aria-labelledby="form-dialog-title">
 
             <React.Fragment>
             <form onSubmit={handleSubmit}>
-                <DialogTitle disableTypography>
+                <DialogTitle id="form-dialog-title">
+                
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
-                            <Typography  >Cobrar</Typography>
+                            <Typography variant="h6" >Cobrar</Typography>
                         </Grid>
                         <Grid item xs >
                             <Grid container justifyContent="flex-end">
-                                <Typography  >$ {formatNumber(total,2)}</Typography>
+                                <Typography variant="h6"  >$ {total}</Typography>
                             </Grid>
                         </Grid>
                     </Grid>
+
                 </DialogTitle>
                 {
                     guardando === true ?
@@ -195,9 +197,6 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                                             fullWidth
                                             autoFocus
                                             type="number"
-                                            inputProps={{
-                                                maxlength:8
-                                            }}
                                             value={efectivo}
                                             onChange={(e) => handleChange('efectivo', e.target.value)}
                                             />
@@ -211,9 +210,8 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                                             type="number"
                                             fullWidth
                                             value={cambio}
-                                            inputProps={{
+                                            InputProps={{
                                                 readOnly: true,
-                                                maxlength:8
                                             }}
                                             onChange={(e) => handleChange('cambio', e.target.value)}
                                             />
@@ -243,7 +241,7 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                                             type="number"
                                             fullWidth
                                             value={saldo}
-                                            inputProps={{
+                                            InputProps={{
                                                 readOnly: true,
                                             }}
                                             onChange={(e) => handleChange('saldo', e.target.value)}
@@ -262,7 +260,7 @@ export default function CobrarDialog({ open, total, close, guardarVenta, cliente
                     <Button 
                         type="submit" 
                         className={ guardando ? classes.botonGenerico : classes.botonCosmico} 
-                        disabled={guardando || efectivo<total ? true : false}>
+                        disabled={guardando ? true : false}>
                         { guardando ? "Espere..." : "Registrar"}
                     </Button>
                 </DialogActions>

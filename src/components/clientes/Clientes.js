@@ -4,16 +4,17 @@ import useStyles from '../hooks/useStyles'
 import CrearCliente from './CrearCliente'
 import Cliente from './Cliente'
 import {ClienteContext} from './ClienteContext'
+import { useAuth } from '../auth/use_auth'
 export default function Clientes(){
-    const {clientes, loadClientes, findCliente, loadCuentasxCliente, cuentasxCliente} = useContext(ClienteContext)
+    const {user} = useAuth()
+    const {clientes, findCliente, loadCuentasxCliente, cuentasxCliente} = useContext(ClienteContext)
     const classes = useStyles()
     const [resultadoBusqueda, setResultado] = useState([])
     const [dialogOpen, setDialogOpen] = useState(false)
     const [searchField, setSearchField] = useState('')
 
     useEffect(()=> {
-        loadClientes()
-        loadCuentasxCliente()
+        loadCuentasxCliente(user)
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
     const closeDialog = () =>{
         setDialogOpen(false)

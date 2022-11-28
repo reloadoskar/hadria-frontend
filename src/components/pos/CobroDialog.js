@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 
 import {ticketCobranza} from '../api'
 
 import { Dialog, DialogTitle, Grid, Typography, DialogContent, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
 import useStyles from '../hooks/useStyles';
 import {formatNumber} from '../Tools'
+import { IngresoContext } from '../ingresos/IngresoContext';
 const initialData = {
     // cliente: '',
     cuenta: '',
@@ -12,12 +13,8 @@ const initialData = {
     referencia: '',
     tipoPago: 'EFECTIVO'
 }
-export default function CobroDialog(props) {
-    const { ubicacion, open, close, showMessage, fecha, cobrar } = props
-    const [cuentas, setCuentas] = useState(null)
-    useEffect(()=>{
-        setCuentas(props.cuentas)
-    }, [props.cuentas])
+export default function CobroDialog({ ubicacion, open, close, showMessage, fecha }) {
+    const {cxcPdv,  addPagoCxc} = useContext(IngresoContext)
     const classes = useStyles()
     const tipos = ['EFECTIVO', 'DEPÓSITO', 'TRANSFERENCIA', 'CODI']
     const [values, setValues] = useState(initialData)
@@ -56,7 +53,7 @@ export default function CobroDialog(props) {
             referencia: values.referencia,
             fecha: fecha
         }
-        cobrar(pago).then(res =>{
+        addPagoCxc(pago).then(res =>{
             setGuardando(false)
             showMessage(res.message, res.status)
             setValues(initialData)
@@ -77,7 +74,7 @@ export default function CobroDialog(props) {
             maxWidth="sm"
             open={open}
             onClose={() => handleClose('cobroDialog')} >
-                {cuentas === null ? null :
+                {cxcPdv === null ? null :
                     <React.Fragment>
                         <DialogTitle>
                             <Grid container spacing={2}>
@@ -112,7 +109,7 @@ export default function CobroDialog(props) {
                                             value={values.cuenta}
                                             onChange={(e) => handleChange('cuenta', e.target.value)}
                                             >
-                                            {cuentas.filter(cta=>cta.saldo>1).sort((a,b)=>a.cliente - b.cliente).map((cta, i) => (
+                                            {cxcPdv.filter(cta=>cta.saldo>1).sort((a,b)=>a.cliente - b.cliente).map((cta, i) => (
                                                 <MenuItem key={i} value={cta}>
                                                     <Grid container >
                                                         <Grid item xs={4}>

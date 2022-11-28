@@ -2,19 +2,26 @@ import React, {useState} from 'react'
 import { Grid, Typography, IconButton } from '@material-ui/core'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
-// import CancelIcon from '@material-ui/icons/Cancel';
+import CancelIcon from '@material-ui/icons/Cancel';
 import PrintIcon from '@material-ui/icons/Print'
 import useStyles from '../hooks/useStyles'
 import moment from 'moment'
 import TicketPesadas from './TicketPesadas'
 import { formatNumber } from '../Tools'
 import { ticketMovimiento } from '../api'
-// import Confirm from '../dialogs/Confirm'
-
+import Confirm from '../dialogs/Confirm'
+import { useInventario } from './InventarioContext';
+import Collapse from '@material-ui/core/Collapse';
+import { useAuth } from '../auth/use_auth';
+import { useSnackbar } from 'notistack'
 export default function Movimiento({mov}){
+    const {user} = useAuth()
     const classes = useStyles()
+    const {deleteMovimiento} = useInventario()
     const [verPesadas, setVerPesadas] = useState(false)
-    // const [opnConfirm, setOpenConf] = useState(false)
+    const [opnConfirm, setOpenConf] = useState(false)
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
     const handlePrint = () =>{
         ticketMovimiento(mov).then(res=>{
@@ -22,15 +29,24 @@ export default function Movimiento({mov}){
         })
     }
 
-    // const confirmar = () =>{
-    //     setOpenConf(true)
-    // }
+    const confirmar = () =>{
+        setOpenConf(true)
+    }
 
-    // const deleteMovimiento = () =>{
-    //     setOpenConf(false)
-    // }
+    const noconfirmar = ()=>{
+        setOpenConf(false)
+    }
+
+    const eliminarMovimiento = () =>{
+        deleteMovimiento(user, mov).then(res=>{
+            showMessage(res.message, res.status)
+        }).catch(err=>{
+            showMessage(err.message, 'error')
+        })
+    }
 
     return mov?
+    <Collapse in={mov?true:false}>
         <Grid 
             item 
             container 
@@ -58,11 +74,17 @@ export default function Movimiento({mov}){
                         <IconButton onClick={handlePrint}>
                             <PrintIcon />
                         </IconButton>
-                        {/* <IconButton onClick={confirmar}>
-                            <CancelIcon />
-                            <Confirm open={opnConfirm} close={()=>setOpenConf(false)} onConfirm={deleteMovimiento} />
-                        </IconButton> */}
+                        {mov.status === "CANCELADO" ? null :
+                            <IconButton onClick={confirmar}>
+                                <CancelIcon />
+                            </IconButton>
+                        }
                     </Typography>
+                    <Confirm 
+                        open={opnConfirm} 
+                        close={noconfirmar} 
+                        onConfirm={()=>eliminarMovimiento()}
+                        texto={"¿Seguro quieres CANCELAR el MOVIMIENTO: " + mov.folio + "?"} />
 
                 </Grid>
                 <Grid item xs={12} sm={2} >
@@ -73,7 +95,7 @@ export default function Movimiento({mov}){
                 
                 <Grid item xs={6} sm={2}>
                     <Typography className={classes.textoMiniFacheron}>Origen:</Typography>
-                    <Typography>{mov.origen.ubicacion ? mov.origen.ubicacion.nombre : null } <ArrowForwardIcon /></Typography>
+                    <Typography>{mov.origen ? mov.origen.nombre : null } <ArrowForwardIcon /></Typography>
                 </Grid>
                 <Grid item xs={6} sm={2}>
                     <Typography className={classes.textoMiniFacheron}>Destino:</Typography>
@@ -99,5 +121,6 @@ export default function Movimiento({mov}){
                 <Typography>{mov.comentario}</Typography>
             </Grid>
         </Grid>
+        </Collapse>
         : null
 }

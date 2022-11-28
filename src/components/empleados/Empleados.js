@@ -5,29 +5,20 @@ import {EmpleadoContext} from './EmpleadoContext'
 import CrearEmpleado from './CrearEmpleado'
 import Empleado from './Empleado'
 import { sumSueldo, formatNumber } from '../Tools'
+import { useAuth } from '../auth/use_auth'
 export default function Empleados(){
+    const {user} = useAuth()
     const classes = useStyles()
-    const {empleados, loadEmpleados, addEmpleado} = useContext(EmpleadoContext)
+    const {empleados, loadEmpleados} = useContext(EmpleadoContext)
     const [dialogOpen, setDialogOpen] = useState(false)
     
     useEffect(()=>{
-        loadEmpleados()
+        loadEmpleados(user)
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const closeDialog = () =>{
         setDialogOpen(false)
     }
-
-    const crear = (empleado) =>{
-        if(empleados.length <30){
-            addEmpleado(empleado).then(res => {
-                // console.log(res)
-            })
-        }else{
-            alert('M&aacute;ximo de empleados alcanzado')
-        }
-    }
-
 
     return empleados.length > 0 ?
         <Container>
@@ -36,7 +27,7 @@ export default function Empleados(){
                     <Button className={classes.botonGenerico} onClick={() => setDialogOpen(true)}>
                         + Nuevo Empleado
                     </Button>
-                    <CrearEmpleado open={dialogOpen} close={()=>closeDialog()} crear={crear}/>
+                    <CrearEmpleado open={dialogOpen} close={()=>closeDialog()} />
                 </Grid>
                 <Grid item xs={12} >
                     <Typography align="right" className={classes.textoMiniFacheron}>Empleados en nómina</Typography>

@@ -4,6 +4,7 @@ import useStyles from "../hooks/useStyles"
 import { useSnackbar } from 'notistack'
 import {ProductorContext} from './ProductorContext'
 import {generadorDeClaves} from '../Tools'
+import { useAuth } from '../auth/use_auth';
 const initProductor = {
   nombre: '',
   sexo: "H",
@@ -19,6 +20,7 @@ const initProductor = {
 }
 
 export default function ProductorCreate({ open, close }) {
+	const {user} = useAuth()
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
   const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
@@ -31,12 +33,16 @@ export default function ProductorCreate({ open, close }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     setGuardando(true)
-    addProductor(productor).then( res=>{
+    addProductor(user, productor).then( res=>{
       showMessage(res.message, res.status)
       setGuardando(false)
       close()
       setProductor(initProductor)
     })
+	.catch(err=>{
+		showMessage(err.message, "error")
+		setGuardando(false)
+	})
   }
   return (
     <Dialog fullWidth open={open} onClose={close} maxWidth="md">
@@ -81,7 +87,7 @@ export default function ProductorCreate({ open, close }) {
           				label="Referencia"
           				fullWidth
           				variant="outlined"
-          				value={productor.ref.substring(0,4)}
+          				value={productor.ref}
           				onChange={(e) => handleChange('ref',e.target.value)}
           				/>
           		</Grid>

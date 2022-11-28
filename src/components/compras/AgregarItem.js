@@ -6,13 +6,18 @@ import {
     MenuItem, 
 } from '@material-ui/core';
 // import SaveIcon from '@material-ui/icons/Save';
+import { useSnackbar } from 'notistack'
 import CrearProducto from '../productos/CrearProducto'
 import ListaItems from './ListaItems'
 import {objectIsNull} from '../Tools'
 import useStyles from '../hooks/useStyles'
+import { useProductos } from '../productos/ProductosContext';
 export default function AgregarItem(props){
-    const { crearItem, showMessage, products, openP, items } = props 
+    const { crearItem, openP, items } = props 
+    const {productos} = useProductos()
     const classes = useStyles();
+    const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
     const [producto, setProducto] = useState("")
     
@@ -91,7 +96,7 @@ export default function AgregarItem(props){
                                 variant="outlined"
                             >
                             {
-                                products.map((option, index) => (
+                                productos.map((option, index) => (
                                     <MenuItem key={index} value={option}>
                                         {option.clave} - {option.descripcion}
                                     </MenuItem>

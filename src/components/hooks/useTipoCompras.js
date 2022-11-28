@@ -1,34 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useState, createContext, useContext } from 'react';
 import { getTipoCompras, createTipoCompra } from '../api'
-const useTipoCompras = () => {
+
+export const TipoComprasContext = createContext()
+
+export const useTipoCompras = () =>{
+	return useContext(TipoComprasContext)
+}
+export const TipoComprasProvider = ({children}) => {
     const [tipoCompras, setTipoCompras] = useState([])
-    const [updating, setUpdating] = useState(false)
-    
-    useEffect(() => {
-        async function loadData() {
-            const res = await getTipoCompras()
-            setTipoCompras(res.tipoCompras);
-        }
-		loadData()
-		return () => setTipoCompras([])
-	}, [updating])
+        
+	async function loadTipoCompras(user) {
+		const res = await getTipoCompras(user)
+		setTipoCompras(res.tipoCompras);
+	}
 	
-	function addTipoCompra(tipoCompra) {
-		setUpdating(true)
-		return createTipoCompra(tipoCompra).then(res => {
+	function addTipoCompra(user, tipoCompra) {
+		return createTipoCompra(user, tipoCompra).then(res => {
 			if (res.status === 'success') {
 				const newTipoCompras = [...tipoCompras, res.tipocompra];  
 				setTipoCompras(newTipoCompras)
-				setUpdating(false)
 				return res
 			}
 		})
 	}
 
-  return {
-	tipoCompras,
-	addTipoCompra
-  }
+  return (
+	<TipoComprasContext.Provider value={{
+		tipoCompras,
+		addTipoCompra,
+		loadTipoCompras
+	}}>
+		{children}
+	</TipoComprasContext.Provider>
+  )
 };
-
-export default useTipoCompras;

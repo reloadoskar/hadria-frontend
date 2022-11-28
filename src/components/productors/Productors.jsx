@@ -4,13 +4,15 @@ import {ProductorContext} from './ProductorContext'
 import ProductorBasic from './ProductorBasic';
 import useStyles from '../hooks/useStyles';
 import ProductorCreate from './ProductorCreate';
+import { useAuth } from '../auth/use_auth';
 export default function Productors(){
+    const {user} = useAuth()
     const classes = useStyles()
     const [openCreate, setOpenCreate] = useState(false)
     const {productors, loadProductors} = useContext(ProductorContext)
     
     useEffect(()=>{
-        loadProductors()
+        loadProductors(user)
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
     
     const crearProductor = () => {

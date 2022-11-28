@@ -41,7 +41,7 @@ export default function Pesadas({item}){
         setPeso('')
     }
     
-    return (
+    return !item ? null :
         <React.Fragment>
             <Button fullWidth className={classes.botonGenerico} onClick={openPesadas}>Agrega Pesadas</Button>
             <Dialog maxWidth="sm" fullWidth open={dialog} onClose={closePesadas}>
@@ -129,5 +129,4 @@ export default function Pesadas({item}){
                     </form>
             </Dialog>
         </React.Fragment>
-    )
 }

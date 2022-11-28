@@ -8,16 +8,6 @@ import VentasReporter from './VentasReporter';
 
 const Ventas = () => {
 	const {rango, ventasPorSemana, trabajando} = useContext(VentaContext)
-	// const month = moment().format('MM')
-	// const year = moment().format('YYYY')
-
-	// useEffect(()=>{
-
-	// },[month, year])
-
-	// useEffect(()=>{
-
-	// },[])
 	return (
 		<Container>
 			<Grid container spacing={2} alignItems="center">
@@ -37,9 +27,6 @@ const Ventas = () => {
 							<VentasReporter data={ventasPorSemana} rango={rango} />
 						: null 
 					}
-					
-					
-
 				</Grid>				
 			</Grid>
 		</Container>

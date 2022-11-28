@@ -8,6 +8,8 @@ import reducer from '../reducers/ProvedorsReducer';
 import useStyles from '../hooks/useStyles';
 
 import {generadorDeClaves} from '../Tools'
+import { useAuth } from '../auth/use_auth';
+import { useProductors } from '../productors/ProductorContext';
 const initialState = {
 	nombre: '',
 	sexo: 'H',
@@ -27,13 +29,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ProvedorLite({ addProvedor, open, close }) {
-
+export default function ProvedorLite({ open, close }) {
+	const {user} = useAuth()
+	const {addProductor} = useProductors()
 	const [values, dispatch] = useReducer(reducer, initialState)
 	const classes = useStyles()
     const handleSubmit = (event) => {
         event.preventDefault()
-		addProvedor(values)
+		addProductor(user, values)
         dispatch({type: 'reset'})
         close()
     }

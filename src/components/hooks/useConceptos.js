@@ -1,16 +1,18 @@
-import { useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { getConceptos, addConcepto, delConcepto } from '../api'
-const useConceptos = () => {
+
+export const ConceptosContext = createContext()
+
+export const useConceptos= () =>{
+	return useContext(ConceptosContext)
+}
+export const ConceptosProvider = ({children}) => {
 	const [conceptos, setConceptos] = useState([])
-	useEffect(() => {
-		async function loadConceptos() {
-			const res = await getConceptos()
-			setConceptos(res.conceptos);
-		}
-		loadConceptos()
-		return () => setConceptos([])
-    }, [])
-    
+	async function loadConceptos(user) {
+		const res = await getConceptos(user)
+		setConceptos(res.conceptos);
+	}
+	
     const addItem = (item) => {
         const newItem = [item, ...conceptos]
         setConceptos(newItem)
@@ -22,24 +24,28 @@ const useConceptos = () => {
         setConceptos(newConceptos);
     }
  
-	const add = (concepto) => {
-        return addConcepto(concepto).then(res => {
+	const add = (user, concepto) => {
+        return addConcepto(user, concepto).then(res => {
             addItem(res.concepto)
             return res
         })
 	}
 	
 
-	const del = (id, index) =>{
+	const del = (user, id, index) =>{
         delItem(index)
-		return delConcepto(id)
+		// setConceptos(productos.filter(producto =>producto._id !== id))
+		return delConcepto(user, id)
 	}
 
-	return {
-		conceptos,
-		add,
-		del,
-	}
+	return (
+		<ConceptosContext.Provider value={{
+			conceptos,
+			loadConceptos,
+			add,
+			del,
+		}}>
+			{children}
+		</ConceptosContext.Provider>
+	)
 };
-
-export default useConceptos;

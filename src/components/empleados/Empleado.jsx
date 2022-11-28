@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link } from "react-router-dom";
-import { Grid, Typography, IconButton, TextField, MenuItem } from '@material-ui/core'
+import { Grid, Typography, IconButton, TextField, MenuItem, CircularProgress } from '@material-ui/core'
 import avatarh from '../../img/avatarH1.png'
 import avatarm from '../../img/avatarM2.png'
 import avataro from '../../img/avatarM1.png'
@@ -16,15 +16,21 @@ import MailIcon from '@material-ui/icons/Mail';
 import { EmpleadoContext } from './EmpleadoContext'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
 import Confirm from '../dialogs/Confirm';
+import { useAuth } from '../auth/use_auth';
+import { useSnackbar } from 'notistack'
 export default function Empleado({ data }) {
+  const {user} = useAuth()
   const { removeEmpleado, editEmpleado } = useContext(EmpleadoContext)
-  const { ubicacions, loadUbicacions } = useContext(UbicacionContext)
+  const { ubicacions } = useContext(UbicacionContext)
   const [empleado, setEmpleado] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const classes = useStyles()
   const [confirm, setConfirm] = useState(false)
   const areas = ["GOD", "SUPERVISOR DEL SISTEMA", "ADMINISTRADOR", "ALMACEN", "CAJAS", "GENERAL"]
-
+  const { enqueueSnackbar } = useSnackbar()
+  const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+  const [working, setWorking] = useState(false)
+  
   useEffect(() => {
     setEmpleado(data)
   }, [data])
@@ -37,22 +43,34 @@ export default function Empleado({ data }) {
     }
   }
   const actualizaEmpleado = () => {
-    editEmpleado(empleado).then(() => {
-      setEditMode(false)
-    })
+    setWorking(true)
+    editEmpleado(user, empleado)
+      .then(res => {
+        setEditMode(false)
+        showMessage(res.message, res.status)
+        setWorking(false)
+      })
+      .catch(err=>{
+        setWorking(false)
+        showMessage(err.message, 'error')
+      })
   }
 
   const onConfirm = () => {
-    removeEmpleado(empleado._id).then(
-      res => {
+    setWorking(true)
+    removeEmpleado(user, empleado._id).then(res => {
+        setWorking(false)
         setEditMode(false)
-      }
-    )
+        showMessage(res.message, res.status)
+    })
+    .catch(err=>{
+      setWorking(false)
+      showMessage(err.message, 'error')
+    })
   }
 
   const handleEdit = () => {
     setEditMode(true)
-    loadUbicacions()
   }
   return !empleado ? null :
     !editMode ?
@@ -94,7 +112,7 @@ export default function Empleado({ data }) {
             <EditIcon />
           </IconButton>
           <IconButton size="small" onClick={() => setConfirm(true)} >
-            <CancelIcon />
+            {!working ? <CancelIcon /> : <CircularProgress size={20} /> }
           </IconButton>
           <Confirm open={confirm} close={() => setConfirm(false)} onConfirm={onConfirm} />
         </Typography>
@@ -220,7 +238,7 @@ export default function Empleado({ data }) {
         <Grid item xs={1}>
           <Typography align="right">
             <IconButton size="small" onClick={() => actualizaEmpleado()}>
-              <CheckIcon />
+              {!working ? <CheckIcon /> : <CircularProgress size={20} /> }
             </IconButton>
             <IconButton size="small" onClick={() => setEditMode(false)}>
               <CloseIcon />

@@ -20,16 +20,16 @@ const VentaContextProvider = (props) => {
         // f1: now.subtract(7, 'days').format('YYYY-MM-DD'),
     })
 
-    async function loadVentas(month, year) {
-		const res = await getVentas(month, year)
+    async function loadVentas(user, month, year) {
+		const res = await getVentas(user, month, year)
 		setVentas(res.ventas);
 	}
 
-    async function loadVentasPorPeriodo(rango) {
+    async function loadVentasPorPeriodo(user, rango) {
         setVentasPorSemana([])
 		if(rango.f1 !== ""){
         setTrabajando(true)
-			const res = await getVentasSemana(rango.f1, rango.f2)
+			const res = await getVentasSemana(user, rango.f1, rango.f2)
 			// let nvoArray = []
 			// res.ventas.forEach(e => {
                 // 	nvoArray.push({x: formatearFecha(e._id),  y: e.totalVenta})
@@ -44,14 +44,14 @@ const VentaContextProvider = (props) => {
         setVenta(vta)
     }
 
-    const verVenta = async (folio) => {
-		let res = await getVenta(folio)		
+    const verVenta = async (user, folio) => {
+		let res = await getVenta(user, folio)		
         setVenta(res.venta)
 		return res
 	}
 
-    const delVenta = (id) => {
-		return cancelVenta(id)
+    const delVenta = (user, id) => {
+		return cancelVenta(user, id)
 	}
 
     return (

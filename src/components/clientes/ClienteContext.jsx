@@ -6,8 +6,8 @@ const ClienteContextProvider = (props) => {
     const [clientes, setClientes] = useState([])
     const [cuentasxCliente, setCuentas] = useState([])
 
-    const loadClientes = async () => {
-        const res = await getClientes()
+    const loadClientes = async (user) => {
+        const res = await getClientes(user)
         setClientes(res.clientes)
         return res
     }
@@ -16,26 +16,26 @@ const ClienteContextProvider = (props) => {
         return clientes.filter(cliente=>cliente.nombre.indexOf(search) !== -1)
     }
 
-    const loadCuentasxCliente = async () => {
-        const res = await getCuentasxCliente()
+    const loadCuentasxCliente = async (user) => {
+        const res = await getCuentasxCliente(user)
         setCuentas(res.cuentas)
         return res
     }
 
-    const addCliente = async (cliente) => {
-        const res = await saveCliente(cliente)
-        setClientes([...clientes, res.cliente])
+    const addCliente = async (user, cliente) => {
+        const res = await saveCliente(user, cliente)
+        setClientes([res.cliente, ...clientes])
         return res
     }
 
-    const removeCliente = async (id) => {
-        const res = await deleteCliente(id)
+    const removeCliente = async (user, id) => {
+        const res = await deleteCliente(user, id)
         setClientes(clientes.filter(cliente => cliente._id !== id))
         return res
     }
 
-    const editCliente = async (cliente) => {
-        const res = await updateCliente(cliente)
+    const editCliente = async (user, cliente) => {
+        const res = await updateCliente(user, cliente)
         return res
     }
     return (

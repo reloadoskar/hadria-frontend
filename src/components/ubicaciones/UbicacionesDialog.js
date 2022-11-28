@@ -1,17 +1,12 @@
-import React, {useReducer}from 'react';
-
-// Material UI
+import React, {useReducer, useContext, useState}from 'react';
 import useStyles from '../hooks/useStyles'
 import { 
 	MenuItem, 	
-	TextField, Grid, Button, Dialog, Slide, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
-
-//HOOKS
-
-//REDUCER
+	TextField, Grid, Button, Dialog, Slide, DialogTitle, DialogContent, DialogActions, CircularProgress } from '@material-ui/core';
 import reducer from '../reducers/UbicacionesReducer';
-
-
+import { UbicacionContext } from './UbicacionContext';
+import { useAuth } from '../auth/use_auth';
+import { useSnackbar } from 'notistack';
 const initialState = {
 	nombre: '',
 	tipo: 'SUCURSAL'
@@ -21,14 +16,31 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function UbicacionesDialog({ addUbicacion, isShowing, open, close }) {
+export default function UbicacionesDialog({ isShowing, open, close }) {
+	const {user} = useAuth()
+	const {ubicacions, addUbicacion} = useContext(UbicacionContext)
     const classes = useStyles();
 	const [values, dispatch] = useReducer(reducer, initialState)
 	const tipos = ["SUCURSAL", "ADMINISTRACIÓN", "BANCO", "BODEGA/ALMACÉN"]
+	const { enqueueSnackbar } = useSnackbar()
+    const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
+	const [trabajando, setTrabajando] = useState(false)
     const handleSubmit = (event) => {
         event.preventDefault()
-		addUbicacion(values)
-		dispatch({type: 'reset'})
+		if(ubicacions.length<20){
+			setTrabajando(true)
+			addUbicacion(user, values).then(res=>{
+				showMessage(res.message, res.status)
+				dispatch({type: 'reset'})
+				setTrabajando(false)
+				close()
+			}).catch(err=>{
+				setTrabajando(false)
+				showMessage(err.message, 'error')
+			})
+		}else{
+			showMessage('Limite de ubicaciones alcanzado, actualice su servicio', 'error')
+		}
     }
 
     return (
@@ -82,7 +94,7 @@ export default function UbicacionesDialog({ addUbicacion, isShowing, open, close
 					</DialogContent>
 					<DialogActions>
 						<Button className={classes.botonSimplon} onClick={close} >Cancelar</Button>
-						<Button className={classes.botonGenerico} type="submit">Guardar</Button>
+						{!trabajando ? <Button className={classes.botonGenerico} type="submit">Guardar</Button> : <CircularProgress size={30} /> }
 					</DialogActions>
 					</form>
 				</Dialog>

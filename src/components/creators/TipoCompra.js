@@ -3,6 +3,8 @@ import React, {useState}from 'react';
 // Material UI
 import { TextField, Grid, Button, Dialog, Slide, DialogContent, DialogTitle, DialogActions } from '@material-ui/core';
 import useStyles from '../hooks/useStyles';
+import { useTipoCompras } from '../hooks/useTipoCompras';
+import { useAuth } from '../auth/use_auth';
 
 //HOOKS
 
@@ -12,17 +14,20 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function TipoCompra({ creator, open, close, report }) {
-
+export default function TipoCompra({ open, close, report }) {
+    const {user} = useAuth()
+    const {addTipoCompra} = useTipoCompras()
 	const [tipoCompra, setTipoCompra] = useState({tipo: ""})
     const classes = useStyles()
     const handleSubmit = (event) => {
         event.preventDefault()
         close()
-        creator(tipoCompra)
+        addTipoCompra(user,tipoCompra)
             .then( res => {
                 setTipoCompra({tipo: ''})
                 report(res.message, res.status)
+            }).catch(err=>{
+                report(err.message, 'error')
             })
     }
 

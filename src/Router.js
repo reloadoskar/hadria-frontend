@@ -24,7 +24,11 @@ import { UbicacionContext } from './components/ubicaciones/UbicacionContext';
 import { ClienteContext } from './components/clientes/ClienteContext';
 import { ProductorContext } from './components/productors/ProductorContext';
 import VentaContextProvider from './components/ventas/VentaContext';
-import InventarioContextProvider from './components/inventario/InventarioContext';
+import { UnidadesProvider } from './components/hooks/useUnidades';
+import { ConceptosProvider } from './components/hooks/useConceptos';
+import { EmpaquesProvider } from './components/hooks/useEmpaques';
+import { TipoComprasProvider } from './components/hooks/useTipoCompras';
+import CortesContextProvider from './components/cortes/useCortes';
 
 export default function Router() {
     const auth = useAuth()
@@ -40,10 +44,10 @@ export default function Router() {
     useEffect(() => {
         const loadAll = async () => {
             const res = await Promise.all([
-                loadEmpresa(),
-                loadUbicacions(),
-                loadClientes(),
-                loadProductors()
+                loadEmpresa(auth.user),
+                loadUbicacions(auth.user),
+                loadClientes(auth.user),
+                loadProductors(auth.user)
             ])
             return res
         }
@@ -72,15 +76,21 @@ export default function Router() {
                                     path={path}
                                     render={
                                         () => (
-                                            <InventarioContextProvider>
+                                            <CortesContextProvider>
                                                 <Dashboard />
-                                            </InventarioContextProvider>
+                                            </CortesContextProvider>
                                         )
                                     }
                                 />
                             }
                             {auth.user.level > 2 ? null :
-                                <Route exact path={`${path}/productos`} component={Productos}></Route>
+                                <Route exact path={`${path}/productos`} >
+                                    <EmpaquesProvider>
+                                        <UnidadesProvider>
+                                            <Productos />
+                                        </UnidadesProvider>
+                                    </EmpaquesProvider>
+                                </Route>
                             }
                             {auth.user.level > 2 ? null :
                                 <Route exact path={`${path}/produccions`} component={Produccions}></Route>
@@ -101,12 +111,25 @@ export default function Router() {
                             }
                             {auth.user.level > 2 ? null :
                                 <Route exact path={`${path}/compras`}>
-                                    <Compras />
+                                    <TipoComprasProvider>
+                                        <UnidadesProvider>
+                                            <EmpaquesProvider>
+                                                <Compras />
+                                            </EmpaquesProvider>
+                                        </UnidadesProvider>
+                                    </TipoComprasProvider>
                                 </Route>
                             }
                             {auth.user.level > 2 ? null :
-                                <Route exact path={`${path}/conceptos`} 
-                                    component={ConceptosTabs}></Route>
+                                <Route exact path={`${path}/conceptos`}>
+                                    <ConceptosProvider>
+                                        <EmpaquesProvider>
+                                            <UnidadesProvider>
+                                                <ConceptosTabs />
+                                            </UnidadesProvider>
+                                        </EmpaquesProvider>
+                                    </ConceptosProvider>
+                                </Route>
                             }
                             {auth.user.level > 2 ? null :
                                 <Route 
@@ -122,16 +145,12 @@ export default function Router() {
                                 <Route exact path={`${path}/empleados`} component={Empleados}></Route>
                             }
                             <Route exact path={`${path}/inventario`}>
-                                <InventarioContextProvider>
-                                    <Inventario />
-                                </InventarioContextProvider>
+                                <Inventario />
                             </Route>
                             <Route exact path={`${path}/pos`}>
-                                <InventarioContextProvider>
-                                    <VentaContextProvider>
-                                        <Pos />
-                                    </VentaContextProvider>
-                                </InventarioContextProvider>
+                                <CortesContextProvider>
+                                    <Pos />
+                                </CortesContextProvider>
                             </Route>
                             <Route exact path={`${path}/configuracion`}>
                                 <Empresa />

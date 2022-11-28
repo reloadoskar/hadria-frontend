@@ -16,11 +16,10 @@ import UbicacionContextProvider from './components/ubicaciones/UbicacionContext'
 import ComprasContextProvider from './components/compras/CompraContext';
 import ProductosContextProvider from './components/productos/ProductosContext';
 import EmpleadoContextProvider from './components/empleados/EmpleadoContext';
-import ProductoContextProvider from './components/productos/ProductoContext'
 import ClienteContextProvider from './components/clientes/ClienteContext'
 import EmpresaContextProvider from './components/empresa/EmpresaContext'
 import IngresoContextProvider from './components/ingresos/IngresoContext'
-// import InventarioContextProvider from './components/inventario/InventarioContext';
+import InventarioContextProvider from './components/inventario/InventarioContext';
 import CuentasPorPagarContextProvider from './components/cxp/CuentasPorPagarContext';
 function App() {
 
@@ -43,16 +42,14 @@ function App() {
                                             <EgresoContextProvider>
                                                 <ComprasContextProvider>
                                                     <ProductosContextProvider>
-                                                        <EmpleadoContextProvider>
-                                                            <ProductoContextProvider>
-                                                                <ClienteContextProvider>
-                                                                    {/* <InventarioContextProvider> */}
-                                                                        <CuentasPorPagarContextProvider>
-                                                                            <Router />
-                                                                        </CuentasPorPagarContextProvider>
-                                                                    {/* </InventarioContextProvider> */}
-                                                                </ClienteContextProvider>
-                                                            </ProductoContextProvider>
+                                                        <EmpleadoContextProvider>                                                            
+                                                            <ClienteContextProvider>
+                                                                <InventarioContextProvider>
+                                                                    <CuentasPorPagarContextProvider>
+                                                                        <Router />
+                                                                    </CuentasPorPagarContextProvider>
+                                                                </InventarioContextProvider>
+                                                            </ClienteContextProvider>                                                            
                                                         </EmpleadoContextProvider>
                                                     </ProductosContextProvider>
                                                 </ComprasContextProvider>

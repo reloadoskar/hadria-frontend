@@ -1,15 +1,20 @@
-import { useState, useEffect } from 'react';
+import { createContext, useState, useContext } from 'react';
 import { getUnidades, addUnidad, delUnidad } from '../api'
-const useUnidades = () => {
+
+export const UnidadesContext = createContext()
+
+export const useUnidades = () => {
+	return useContext(UnidadesContext);
+};
+
+export const UnidadesProvider = ({children}) => {
 	const [unidades, setUnidades] = useState([])
-	useEffect(() => {
-		async function loadUnidades() {
-			const res = await getUnidades()
-			setUnidades(res.unidads);
-		}
-		loadUnidades()
-		return () => setUnidades([])
-    }, [])
+
+	async function loadUnidades(user) {
+		const res = await getUnidades(user)
+		setUnidades(res.unidads);
+		return res
+	}
     
     const addItem = (item) => {
         const newItem = [item, ...unidades]
@@ -22,24 +27,27 @@ const useUnidades = () => {
         setUnidades(newUnidades);
     }
  
-	const add = (unidad) => {
-        return addUnidad(unidad).then(res => {
+	const add = (user, unidad) => {
+        return addUnidad(user, unidad).then(res => {
             addItem(res.unidad)
             return res
         })
 	}
 	
 
-	const del = (id, index) =>{
+	const del = (user, id, index) =>{
         delItem(index)
-		return delUnidad(id)
+		return delUnidad(user, id)
 	}
 
-	return {
-		unidades,
-		add,
-		del,
-	}
+	return (
+		<UnidadesContext.Provider value={{
+			unidades,
+			add,
+			del,
+			loadUnidades
+		}}>
+			{children}
+		</UnidadesContext.Provider>
+	)
 };
-
-export default useUnidades;

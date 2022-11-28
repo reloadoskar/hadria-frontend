@@ -19,37 +19,37 @@ const EgresoContextProvider = (props) => {
     setEgresos([])
   }
   
-  const addEgreso = async (egreso) => {
-    const res = await saveEgreso(egreso)
+  const addEgreso = async (user, data) => {
+    const res = await saveEgreso(user, data)
     setEgresos([...egresos, res.egreso])
     return res
   }
 
-  const addPagoCxp = async (pago) => {
-		let res = await savePagoACuentaPorPagar(pago)
+  const addPagoCxp = async (user, pago) => {
+		let res = await savePagoACuentaPorPagar(user, pago)
     return res
 	}
 
-  const removeEgreso = async (id) => {
-		const res = await deleteEgreso(id)
+  const removeEgreso = async (user, id) => {
+		const res = await deleteEgreso(user, id)
     setEgresos(egresos.filter(egreso => egreso._id !== id))
     return res
 	}
 
-  const loadEgresos = async (fecha) => {
-		const res = await getEgresos(fecha)
+  const loadEgresos = async (user, fecha) => {
+		const res = await getEgresos(user, fecha)
 		setEgresos(res.egresos)		
 		return res
   }
 
-  const loadEgresosMonthYear = async (month, year) =>{
-    const res = await getEgresosMonthYear(month, year)
+  const loadEgresosMonthYear = async (user, month, year) =>{
+    const res = await getEgresosMonthYear(user, month, year)
     setEgresos(res.egresos)
     return res
   }
 
-  const loadCuentasPorPagar = async () =>{
-		const res = await getCuentasPorPagar()
+  const loadCuentasPorPagar = async (user) =>{
+		const res = await getCuentasPorPagar(user)
     setCuentasPorPagar(res.cuentas)
     return res		
 	}
@@ -58,13 +58,13 @@ const EgresoContextProvider = (props) => {
     setEgresos(egresos)
   }
 
-  const editEgreso = async (egreso) => {
-    let res = await updateEgreso(egreso)
+  const editEgreso = async (user, data) => {
+    let res = await updateEgreso(user, data)
     return res
   }
 
-  const editCuentaPorPagar = async (cxp) => {
-    let cuentaActualizada = await updateEgreso(cxp)
+  const editCuentaPorPagar = async (user, cxp) => {
+    let cuentaActualizada = await updateEgreso(user, cxp)
     let copiaCuentas = cuentasPorPagar
     let index = copiaCuentas.findIndex(el => el._id === cxp._id)
     copiaCuentas[index] = cxp

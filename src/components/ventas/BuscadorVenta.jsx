@@ -4,7 +4,9 @@ import { useSnackbar } from 'notistack';
 import {VentaContext} from './VentaContext'
 import useStyles from '../hooks/useStyles';
 import Venta from './Venta';
+import { useAuth } from '../auth/use_auth';
 export default function BuscadorVenta() {
+	const {user} = useAuth()
 	const { enqueueSnackbar } = useSnackbar()
 	const classes = useStyles()
 	const {venta, verVenta} = useContext(VentaContext)
@@ -28,14 +30,13 @@ export default function BuscadorVenta() {
 		e.preventDefault()
 		if(folio.length > 0){
 			setBuscando(true)
-			verVenta(folio).then(res => {
-				if (res.status === 'success') {
-					setDialog(true)
-				} else {
-					setBuscando(false)
-					showMessage(res.message, res.status)
-				}
+			verVenta(user, folio).then(res => {
+				showMessage(res.message, res.status)
+				setDialog(true)
 				setBuscando(false)
+			}).catch(err=>{
+				setBuscando(false)
+				showMessage(err.message, 'error')
 			})
 		}
 	}

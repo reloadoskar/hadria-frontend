@@ -3,23 +3,24 @@ import { useSnackbar } from 'notistack';
 import { Container, Backdrop, Typography } from '@material-ui/core'
 import Acceso from './Acceso'
 import useStyles from '../hooks/useStyles'
-import useCortes from '../cortes/useCortes'
+import {useCortes} from '../cortes/useCortes'
 import moment from 'moment'
 import DialogPos from './DialogPos'
 import { InventarioContext } from '../inventario/InventarioContext';
-import { useAuth } from "../auth/use_auth"
-
+import { UbicacionContext } from  '../ubicaciones/UbicacionContext'
 import PesadasContextProvider from '../inventario/PesadasContext'
+// import PosContainer from './PosContainer';
+import { useAuth } from '../auth/use_auth';
+
 export default function Pos(){
-    const auth = useAuth()
-    const user = auth.user
+    const {user} = useAuth()
     const now = moment()
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
+    const {ubicacions} = useContext(UbicacionContext)
+    const {loadInventarioUbicacion} = useContext(InventarioContext)
     
-    const {loadInventarioUbicacion, resetInventario} = useContext(InventarioContext)
-    
-    const cortes = useCortes()
+    const {existeCorte} = useCortes()
     
     const [accesando, setAccesando] = useState(false)
     const [ubicacion, setUbicacion] = useState(null)
@@ -47,18 +48,21 @@ export default function Pos(){
     }
     const access = () => {
         setAccesando(true)
-        resetInventario()
-        cortes.existeCorte(ubicacion._id, fecha)
+        existeCorte(user, ubicacion._id, fecha)
             .then(res => {
                 if(res.corte.length === 0){
-                    loadInventarioUbicacion(ubicacion._id)
+                    loadInventarioUbicacion(user, ubicacion._id)
                     .then(()=>{
                         setAccesando(false)
                         setDialogPos(true)
                     })
                 }else{
+                    setAccesando(false)
                     showMessage('Fecha cerrada, para esta ubicación', 'error')                    
                 }
+            }).catch(err=>{
+                setAccesando(false)
+                showMessage(err.message, 'error')
             })
     }
     
@@ -76,18 +80,26 @@ export default function Pos(){
             :
                 <Acceso 
                     accesando={accesando}
+                    user={user}
+                    ubicacions = {ubicacions}
                     ubicacion={ubicacion} 
                     fecha={fecha} 
                     handleChange={handleChange}
                     access={access}
                 />
             }
-            <DialogPos 
+            <DialogPos
                 open={dialogPos}
                 close={closeDialogPos}
                 ubicacion={ubicacion}
                 fecha={fecha}                
             />
+            {/* <PosContainer
+                open={dialogPos}
+                close={closeDialogPos}
+                fecha={fecha}
+                ubicacion={ubicacion}
+            /> */}
         </Container>
         </PesadasContextProvider>
     )

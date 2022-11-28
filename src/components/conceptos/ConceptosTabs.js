@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Tabs, Tab, Box, Container } from '@material-ui/core/';
 
 import ConceptosEgresos from './ConceptosEgresos'
 import Unidades from './Unidades'
 import Empaques from './Empaques'
+import {useConceptos} from '../hooks/useConceptos';
+import {useUnidades} from '../hooks/useUnidades';
+import { useEmpaques } from '../hooks/useEmpaques';
+import { useAuth } from '../auth/use_auth';
 
 const useStyles = makeStyles({
 	root: {
@@ -31,8 +35,18 @@ function TabPanel(props) {
 }
 
 export default function ConceptosTabs() {
+	const {user} = useAuth()
+	const {loadConceptos} = useConceptos()
+    const {loadUnidades} = useUnidades()
+	const {loadEmpaques} = useEmpaques()
 	const classes = useStyles();
 	const [value, setValue] = React.useState(0);
+
+	useEffect(()=>{
+        loadUnidades(user)
+        loadConceptos(user)
+		loadEmpaques(user)
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);

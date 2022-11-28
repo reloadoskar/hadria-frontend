@@ -3,7 +3,7 @@ import {saveEgreso, ticketEgreso} from '../api'
 import { Dialog, DialogContent, DialogTitle, Typography, Grid, DialogActions, Button, TextField, MenuItem, Zoom } from '@material-ui/core';
 
 import useCompras from '../compras/useCompras'
-import useConceptos from '../hooks/useConceptos'
+import {useConceptos} from '../hooks/useConceptos'
 import useStyles from '../hooks/useStyles';
 export default function EgresoDialog({ubicacion, fecha, open, close, showMessage}) {
     const initialData ={

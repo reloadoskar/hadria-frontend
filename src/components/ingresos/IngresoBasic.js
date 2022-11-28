@@ -12,7 +12,7 @@ import { formatNumber } from '../Tools'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext';
 import useStyles from '../hooks/useStyles';
 export default function IngresoBasic({data}){
-    const auth = useAuth()
+    const {user} = useAuth()
     const classes = useStyles()
     const {ubicacions} = useContext(UbicacionContext)
     const {removeIngreso, editIngreso} = useContext(IngresoContext)
@@ -32,9 +32,12 @@ export default function IngresoBasic({data}){
     }, [data])
 
     const onConfirm = () => {
-        removeIngreso(ingreso._id).then(res=>{
+        removeIngreso(user, ingreso._id).then(res=>{
             showMessage(res.message, res.status)
             setIngreso(null)
+            setConfirm(false)
+        }).catch(err=>{
+          showMessage(err.message, 'err')
         })
     }
 
@@ -49,10 +52,12 @@ export default function IngresoBasic({data}){
 
     const updateIngreso = () => {
         setWorking(true)
-        editIngreso(ingreso).then(res=>{
+        editIngreso(user, ingreso).then(res=>{
             setWorking(false)
           showMessage(res.message, res.status)
           setEditMode(false)
+        }).catch(err=>{
+          showMessage(err.message,'error')
         })
     }
     return ingreso === null ? null :
@@ -137,13 +142,17 @@ export default function IngresoBasic({data}){
                     <IconButton size="small" onClick={() => handleEdit()}>
                         <EditIcon />
                     </IconButton>
-                    {auth.user.level > 2 ? null :
+                    {user.level > 2 ? null :
                         <IconButton 
                             size="small"
                             onClick={()=>setConfirm(true)}
                         >
                             <CancelIcon />
-                            <Confirm open={confirm} close={() => setConfirm(false)} onConfirm={onConfirm} />
+                            <Confirm 
+                              texto="Se va a ELIMINAR el INGRESO"
+                              open={confirm} 
+                              close={() => setConfirm(false)} 
+                              onConfirm={onConfirm} />
                         </IconButton>
                     }
                 </Typography>

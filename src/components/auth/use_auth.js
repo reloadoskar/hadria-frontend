@@ -26,7 +26,7 @@ function useProvideAuth() {
         }
         return () => setToken(null)
     }, []);
-
+    
     const login = async (data) => {
         try{
 

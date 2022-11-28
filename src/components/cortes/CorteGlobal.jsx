@@ -11,10 +11,14 @@ import { formatNumber, sumImporte } from "../Tools"
 import primero from '../../img/primero.png'
 import segundo from '../../img/segundo.png'
 import tercero from '../../img/tercero.png'
+import { useInventario } from "../inventario/InventarioContext"
+import { useAuth } from "../auth/use_auth"
 export default function CorteGlobal({ingresos, egresos}){
+    const {user} = useAuth()
     let now = moment()
     const classes = useStyles()
     const [fecha, setFecha] = useState(now.format("YYYY-MM-DD"))
+    const {loadInventarioUbicacion}= useInventario()
     const {ubicacions, ubicacion, selectUbicacion} = useContext(UbicacionContext)
 
     const [ingresosFecha, setIngFech] = useState([])
@@ -61,6 +65,7 @@ export default function CorteGlobal({ingresos, egresos}){
 
     const handleVerCorte = (ub) =>{
         selectUbicacion(ub)
+        loadInventarioUbicacion(user, ub._id)
         setVercorte(true)
     }
     return ingresos && egresos ?
@@ -141,7 +146,11 @@ export default function CorteGlobal({ingresos, egresos}){
             <Grid item xs={12}>
                 {verCorte ?
                     // <Corte open={verCorte} close={()=>setVercorte(false)} ubicacion={ubicacion} fecha={fecha} />
-                    <Corte open={verCorte} close={()=>setVercorte(false)} ubicacion={ubicacion} fecha={fecha} />
+                    <Corte 
+                        open={verCorte} 
+                        close={()=>setVercorte(false)} 
+                        ubicacion={ubicacion} 
+                        fecha={fecha} />
                     : null
                 }
             </Grid>

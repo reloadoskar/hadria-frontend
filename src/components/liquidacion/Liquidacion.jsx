@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Grid, Typography, CircularProgress, Divider, Paper, TextField, Box, IconButton } from '@material-ui/core'
 import { useMediaQuery } from '@material-ui/core';
 import { useReactToPrint } from 'react-to-print';
@@ -13,9 +13,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ItemEditable from './ItemEditable'
 import GastoEditable from './GastoEditable'
-import { EmpresaContext } from '../empresa/EmpresaContext'
+import {useEmpresa} from '../empresa/EmpresaContext'
 export default function Liquidacion({ open, close, items, ventas, compra }) {
-  const { empresa } = useContext(EmpresaContext)
+  const { empresa } = useEmpresa()
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,

@@ -1,16 +1,18 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Container, Grid, Typography, Button, Tabs, Tab } from '@material-ui/core'
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows'
 import useStyles from '../hooks/useStyles'
 import Mover from './Mover'
 import GraficaInventario from './GraficaInventario'
-import { InventarioContext } from './InventarioContext'
+import { useInventario } from './InventarioContext'
 import InventarioPorUbicacion from './InventarioPorUbicacion'
 import Movimientos from './Movimientos'
 import PesadasContextProvider from './PesadasContext'
+import { useAuth } from '../auth/use_auth'
 export default function Inventario(){
+    const {user} = useAuth()
     const classes = useStyles()
-    const {inventarioUbicacion, loadInventarioGeneral, resetInventario} = useContext(InventarioContext)
+    const {inventarioUbicacion, loadInventarioGeneral, resetInventario} = useInventario()
     const [moverDialog, setMoverDialog] = useState(false)
     const [tabSelected, setTab] = useState(1)
     const selectTab = (event, selected) => {
@@ -20,7 +22,7 @@ export default function Inventario(){
         resetInventario()
         const loadAll = async () =>{
             const res = await Promise.all([
-                loadInventarioGeneral(),
+                loadInventarioGeneral(user),
             ])
             return res
         }

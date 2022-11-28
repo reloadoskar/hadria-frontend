@@ -6,26 +6,26 @@ export const EmpleadoContext = createContext()
 const EmpleadoContextProvider = (props) => {
     const [empleados, setEmpleados] = useState([])
 
-    const loadEmpleados = async () => {
-        const res = await getEmpleados()
+    const loadEmpleados = async (user) => {
+        const res = await getEmpleados(user)
         setEmpleados(res.empleados)
         return res
     }
 
-    const addEmpleado = async (empleado) => {
-        const res = await saveEmpleado(empleado)
-        setEmpleados([...empleados, res.empleado])
+    const addEmpleado = async (user, empleado) => {
+        const res = await saveEmpleado(user, empleado)
+        setEmpleados([res.empleado, ...empleados ])
         return res
     }
 
-    const removeEmpleado = async (id) => {
-        const res = await delEmpleado(id)
+    const removeEmpleado = async (user, id) => {
+        const res = await delEmpleado(user, id)
         setEmpleados(empleados.filter(empleado => empleado._id !== id))
         return res
     }
 
-    const editEmpleado = async (empleado) => {
-        const res = await updateEmpleado(empleado)
+    const editEmpleado = async (user, empleado) => {
+        const res = await updateEmpleado(user, empleado)
         return res
     }
 

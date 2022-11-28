@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import { TextField, Grid, MenuItem, Typography, IconButton } from '@material-ui/core'
+import { TextField, Grid, MenuItem, Typography, IconButton, CircularProgress } from '@material-ui/core'
 import avatarh from '../../img/avatarH1.png'
 import avatarm from '../../img/avatarM2.png'
 import avataro from '../../img/avatarM1.png'
@@ -18,13 +18,16 @@ import {UbicacionContext} from '../ubicaciones/UbicacionContext'
 import Confirm from '../dialogs/Confirm';
 import { useSnackbar } from 'notistack'
 import {formatNumber} from '../Tools'
+import { useAuth } from '../auth/use_auth'
 export default function Cliente({data, cuenta}){
+    const {user} = useAuth()
     const {removeCliente, editCliente} = useContext(ClienteContext)
     const {ubicacions}= useContext(UbicacionContext)
     const classes = useStyles()
     const [editMode, setEditMode] = useState(false)
     const [elCliente, setElCliente] = useState(false)
     const [confirm, setConfirm] = useState(false)
+    const [working, setWorking] = useState(false)
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     useEffect(()=>{
@@ -32,9 +35,15 @@ export default function Cliente({data, cuenta}){
     },[data])
 
     const onConfirm = () => {
-        removeCliente(elCliente._id)
-          .then(res => {
+        setWorking(true)
+        removeCliente(user, elCliente._id)
+        .then(res => {
+            setWorking(false)
             showMessage(res.message, res.status)
+        })
+        .catch(err=>{
+            setWorking(false)
+            showMessage(err.message, 'error')
           })
       }
     const handleChange = (type, value) => {
@@ -48,20 +57,25 @@ export default function Cliente({data, cuenta}){
         }
     }
     const actualizarCliente = () => {
-        editCliente(elCliente).then(res=>{
+        setWorking(true)
+        editCliente(user, elCliente).then(res=>{
+            setWorking(false)
             showMessage(res.message, res.status)
             setEditMode(false)
+        }).catch(err=>{
+            showMessage(err.message, 'error')
+            setWorking(false)
         })
     }
     return !elCliente ? null : 
         !editMode ?
             <Grid container className={classes.paperContorno}>
-                <Grid item xs={12} sm={2}>
+                <Grid item xs={12} sm={4}>
                     <Typography align="center">
                     <img src={elCliente.sexo === "H" ? avatarh : elCliente.sexo === "M" ? avatarm : avataro} width="150" alt="cliente img"/>
                     </Typography>
                 </Grid>
-                <Grid item xs={12} sm={9}>
+                <Grid item xs={12} sm={7}>
                     <Typography variant="h6" >
                         {elCliente.nombre}
                     </Typography>
@@ -97,9 +111,14 @@ export default function Cliente({data, cuenta}){
                             <EditIcon />
                         </IconButton>
                         <IconButton size="small" onClick={() => setConfirm(true)} >
-                            <CancelIcon />
+                            {!working ? <CancelIcon /> : <CircularProgress size={20} /> }
                         </IconButton>
-                        <Confirm open={confirm} close={() => setConfirm(false)} onConfirm={onConfirm} />
+                        <Confirm 
+                            open={confirm} 
+                            texto="¿Está seguro de ELIMINAR al CLIENTE?"
+                            close={() => setConfirm(false)} 
+                            onConfirm={onConfirm} 
+                        />
                         </Typography>
                 </Grid>
             </Grid>                        
@@ -243,10 +262,10 @@ export default function Cliente({data, cuenta}){
                 <Grid item xs={12} sm={1}>
                     <Typography align="right">
                         <IconButton size="small" onClick={() => actualizarCliente()}>
-                        <CheckIcon />
+                            {!working ? <CheckIcon /> : <CircularProgress size={20} /> }
                         </IconButton>
                         <IconButton size="small" onClick={() => setEditMode(false)}>
-                        <CloseIcon />
+                            <CloseIcon />
                         </IconButton>
                     </Typography>
                 </Grid>

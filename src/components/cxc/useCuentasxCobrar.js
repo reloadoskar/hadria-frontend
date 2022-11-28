@@ -7,8 +7,8 @@ export default function useCuentasxCobrar(){
     const [cuentasxcCliente , setCuentasxcCliente] = useState(null)
     const [updating, setUpdating] = useState(false)
     useEffect(() => {
-		async function loadCuentas() {
-            const res = await getCuentasPorCobrar()
+		async function loadCuentas(user) {
+            const res = await getCuentasPorCobrar(user)
             setCuentasxCobrar(res.clientes);
             // setTotalCxc(sumSaldo(res.cuentas))
 		}
@@ -26,8 +26,8 @@ export default function useCuentasxCobrar(){
         }
     },[cuentasxCobrar])
     
-    const CxcCliente = (id) => {
-        getCxcCliente(id).then(res => {
+    const CxcCliente = (user, id) => {
+        return getCxcCliente(user, id).then(res => {
             setCuentasxcCliente(res.cuentas)
         })
     } 
@@ -36,11 +36,10 @@ export default function useCuentasxCobrar(){
         
     // }
 
-    const addPagoCxc = (pago) => {
+    const addPagoCxc = async (user, pago) => {
         setUpdating(true)
-        return savePagoACuentaPorCobrar(pago).then(res=>{
-            return res
-        })
+        let res  = await savePagoACuentaPorCobrar(user, pago).then(()=>setUpdating(false)})
+        return res
     }
 
     return {

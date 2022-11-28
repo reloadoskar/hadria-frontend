@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { NavLink } from 'react-router-dom';
 
-import { Badge, IconButton, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Collapse } from '@material-ui/core';
+import { IconButton, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Collapse } from '@material-ui/core';
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -187,9 +187,9 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                         <ListItem button onClick={toggle}>
 
                             <ListItemIcon>
-                                <Badge variant="dot" color="secondary">
+
                                     <StoreIcon />
-                                </Badge>
+
                             </ListItemIcon>
                             <ListItemText primary="Compras" />
                         </ListItem>                        
@@ -217,9 +217,7 @@ export default function DefaultDrawer({ toggle, open, url, user }) {
                     >
                         <ListItem button onClick={toggle}>
                             <ListItemIcon>
-                                <Badge variant="dot" color="secondary">
-                                    <MonetizationOnIcon />
-                                </Badge>
+                                <MonetizationOnIcon />
                             </ListItemIcon>
                             <ListItemText primary="Inversiones" />
                         </ListItem>

@@ -10,7 +10,9 @@ import { Grid, Typography, Divider, TextField, MenuItem } from '@material-ui/cor
 import useStyles from '../hooks/useStyles';
 import {formatNumber} from '../Tools'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext';
+import { useAuth } from '../auth/use_auth';
 export default function ConfirmaDialog(props) {
+    const {user} = useAuth()
     const {ubicacions} = useContext(UbicacionContext)
     const classess = useStyles()    
     const { 
@@ -33,7 +35,7 @@ export default function ConfirmaDialog(props) {
     
     const handleOk = () => {
         data.enviarA = enviarCorteA
-        cierraCorte(data)
+        cierraCorte(user, data)
         close('confirm');
     };
 
@@ -52,7 +54,9 @@ export default function ConfirmaDialog(props) {
                         <Typography align="left" variant="body1">Ventas</Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography align="right" variant="body1">$ {formatNumber(data.tventas,2)}</Typography>
+                        <Typography align="right" variant="body1">$ {formatNumber( 
+                            data.ventaItems.reduce((acc,itm)=>acc+=itm.importe,0),2
+                        )}</Typography>
                     </Grid>
                 </Grid>
                 <Grid container>
@@ -60,7 +64,9 @@ export default function ConfirmaDialog(props) {
                             <Typography align="left" variant="body1">Ingresos</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography align="right" variant="body1">+$ {formatNumber(data.tingresos,2)}</Typography>
+                            <Typography align="right" variant="body1">+$ {formatNumber(
+                                data.ingresos.reduce((acc,itm)=>acc+=itm.importe,0),2
+                            )}</Typography>
                         </Grid>
                 </Grid>
                 <Grid container>
@@ -68,7 +74,9 @@ export default function ConfirmaDialog(props) {
                             <Typography align="left" variant="body1">Créditos</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography align="right" variant="body1" color="secondary">-$ {formatNumber(data.tcreditos,2)}</Typography>
+                            <Typography align="right" variant="body1" color="secondary">-$ {formatNumber(
+                                data.creditos.reduce((acc,itm)=>acc+=itm.importe,0),2
+                            )}</Typography>
                         </Grid>
                 </Grid>
                 <Grid container>
@@ -76,7 +84,9 @@ export default function ConfirmaDialog(props) {
                             <Typography align="left" variant="body1">A cuenta</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography align="right" variant="body1">+$ {formatNumber(data.tacuenta,2)}</Typography>
+                            <Typography align="right" variant="body1">+$ {formatNumber(
+                                data.creditos.reduce((acc,itm)=>acc+=itm.acuenta,0),2
+                            )}</Typography>
                         </Grid>
                 </Grid>
                 <Grid container>
@@ -84,12 +94,23 @@ export default function ConfirmaDialog(props) {
                             <Typography align="left" variant="body1">Egresos</Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography align="right" variant="body1" color="secondary">-$ {formatNumber(data.tegresos,2)}</Typography>
+                            <Typography align="right" variant="body1" color="secondary">-$ {formatNumber(
+                                data.egresos.reduce((acc,itm)=>acc+=itm.importe,0),2
+                            )}</Typography>
                         </Grid>
                 </Grid>
                 <Divider />
                 <Grid container justifyContent="flex-end">
-                    <Typography align="right" variant="h6">$ {formatNumber(data.total,2)}</Typography>
+                    <Typography align="right" variant="h6">$ {formatNumber(
+                        
+                        data.ventaItems.reduce((acc,itm)=>acc+=itm.importe,0) +
+                        data.ingresos.reduce((acc,itm)=>acc+=itm.importe,0) -
+                        data.creditos.reduce((acc,itm)=>acc+=itm.importe,0) +
+                        data.creditos.reduce((acc,itm)=>acc+=itm.acuenta,0) -
+                        data.egresos.reduce((acc,itm)=>acc+=itm.importe,0) , 2
+
+
+                    )}</Typography>
                 </Grid>
                 <Grid container >
 
@@ -104,7 +125,7 @@ export default function ConfirmaDialog(props) {
                         onChange={(e) => setEnviarCorteA(e.target.value)}
                     >
                         {ubicacions.map((ubicacion, i) => {
-                            if(ubicacion.tipo === 'ADMINISTRACION' || ubicacion.tipo === 'BANCO'){
+                            if(ubicacion.tipo === 'ADMINISTRACIÓN' || ubicacion.tipo === 'BANCO'){
                                 return (
                                     <MenuItem key={i} value={ubicacion}>
                                         {ubicacion.nombre}

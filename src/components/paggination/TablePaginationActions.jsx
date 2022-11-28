@@ -31,24 +31,24 @@ export default function TablePaginationActions(props){
             <IconButton
                 onClick={handleFirstPageButtonClick}
                 disabled={page === 0}
-                aria-label="first page"
+                aria-label="primera p&aacute;gina"
             >
                 {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
             </IconButton>
-            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="p&aacute;gina anterior">
                 {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
             </IconButton>
             <IconButton
                 onClick={handleNextButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="next page"
+                aria-label="siguiente p&aacute;gina"
             >
                 {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
             </IconButton>
             <IconButton
                 onClick={handleLastPageButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="last page"
+                aria-label="&uacute;ltima p&aacute;gina"
             >
                 {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
             </IconButton>

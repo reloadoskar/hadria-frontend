@@ -14,51 +14,35 @@ import { useReactToPrint } from 'react-to-print';
 import { useSnackbar } from 'notistack';
 import IngresosList from '../ingresos/IngresosList';
 import { useAuth } from '../auth/use_auth'
-import useCortes from './useCortes';
+import {useCortes} from './useCortes';
 import CorteResumenVentas from "./CorteResumenVentas";
 import CorteDetalleVentas from "./CorteDetalleVentas";
 import { InventarioContext } from "../inventario/InventarioContext";
 import InventarioCorteUbicacion from "../inventario/inventarioCorteUbicacion";
 
-export default function Corte({ open, close, fecha, guardar, ubicacion, pov=false}) {
-	const { getCorte, guardarCorte, reOpen } = useCortes()
-	const {selectInventarioUbicacion, ubicacionInventario} = useContext(InventarioContext)
+export default function Corte({ open, close, fecha, ubicacion}) {
+	const {user} = useAuth()
+	const { corte, getCorte, guardarCorte, reOpen, mediasCajasCount } = useCortes()
+	const {selectInventarioUbicacion} = useContext(InventarioContext)
 	const auth = useAuth()
 	const classes = useStyles()
 	const { enqueueSnackbar } = useSnackbar()
 	const [lafecha, setLafecha] = useState(fecha)
-	const [mediasCajasCount, setMediasCajasCount] = useState(0)
 	const componentRef = useRef();
 	const [confirm, setConfirm] = useState(false)
 	const [working, setWorking] = useState(false)
 	const [tabSelected, setTab] = useState(1)
-	const [corte, setCorte] = useState(null)
 	const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
-	useEffect(() => {
-		// console.log(corte)
-		if (corte) {
-			let cuenta = 0
-			corte.ventaItems.map((el) => {
-				if (!Number.isInteger(el.empaques)) {
-					return cuenta++
-				}
-				return false
-			})
-			setMediasCajasCount(cuenta)
-		} else {
-
-			return () => setMediasCajasCount(0)
-		}
-	}, [corte])
 
 	useEffect(() => {
 		if (ubicacion && lafecha) {
-			getCorte(ubicacion, lafecha).then(res => {
-				// console.log(res)
-				setCorte(res)
+			getCorte(user, ubicacion._id, lafecha).then(res => {
 				selectInventarioUbicacion(ubicacion._id)
+				return res
+				
+			}).catch(err=>{
+				showMessage(err.message, 'error')
 			})
-
 		}
 	}, [ubicacion, lafecha]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -75,7 +59,7 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 
 	const handleReabrir = (id, fecha) => {
 		setWorking(true)
-		reOpen(id, fecha)
+		reOpen(user, id, fecha)
 			.then(res => {
 				setWorking(false)
 				showMessage(res.message, res.status)
@@ -95,27 +79,25 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 		setWorking(true)
 		let mcorte = corte
 		mcorte.status = "CERRADO"
-		guardarCorte(mcorte)
-			.then(res => {
-				showMessage(res.message, res.status)
-				setWorking(false)
-				close()
-			})
-			.catch(err => {
-				showMessage("No se pudo cerrar. 🕷️" + err, "error")
-				setWorking(false)
-			})
+		guardarCorte(user, mcorte)
+		.then(res => {
+			showMessage(res.message, res.status)
+			setWorking(false)
+			close()
+		})
+		.catch(err => {
+			showMessage("No se pudo cerrar. 🕷️" + err, "error")
+			setWorking(false)
+		})
 	}
 
 	function fechaSig() {
-		setCorte(null)
 		let sig = moment(lafecha)
 		sig.add(1, "days")
 		handleChange(sig.format("YYYY-MM-DD"))
 	}
 
 	function fechaAnt() {
-		setCorte(null)
 		let ant = moment(lafecha)
 		ant.subtract(1, "days")
 		handleChange(ant.format("YYYY-MM-DD"))
@@ -166,7 +148,13 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 							<IconButton onClick={handlePrint} >
 								<PrintIcon />
 							</IconButton>
-							Total: ${formatNumber(corte.total, 2)}
+							Total: ${formatNumber(
+								corte.ventaItems.reduce((acc,itm)=>acc+=itm.importe,0) +
+								corte.ingresos.reduce((acc,itm)=>acc+=itm.importe,0) -
+								corte.creditos.reduce((acc,itm)=>acc+=itm.importe,0) +
+								corte.creditos.reduce((acc,itm)=>acc+=itm.acuenta,0) -
+								corte.egresos.reduce((acc,itm)=>acc+=itm.importe,0) , 2
+								)}
 						</Typography>
 					</Grid>
 				</Grid>
@@ -189,7 +177,7 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 
 					<Grid container value={tabSelected} role="tabpanel" hidden={tabSelected !== 1}>
 
-						{corte.ventaPorCompraItem.length === 0 ? null :
+						{!corte.ventaPorCompraItem ? null : corte.ventaPorCompraItem.length === 0 ? null :
 							<React.Fragment>
 								<CorteResumenVentas corte={corte} mediasCajasCount={mediasCajasCount} />
 								<CorteDetalleVentas corte={corte} />
@@ -207,7 +195,9 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 									<EgresoBasic data={egreso} key={i} />
 								))}
 								<Divider />
-								<Typography className={classes.textoMirame} color="secondary" align="right">-${formatNumber(corte.tegresos, 2)}</Typography>
+								<Typography className={classes.textoMirame} color="secondary" align="right">-${formatNumber(
+									corte.egresos.reduce((acc,itm)=>acc+=itm.importe,0), 2
+								)}</Typography>
 							</Grid>
 						}
 
@@ -220,11 +210,15 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 								<Divider />
 								<Typography
 									className={classes.textoMirame}
-									align="right" color="secondary">- ${formatNumber(corte.tcreditos, 2)}
+									align="right" color="secondary">- ${formatNumber(
+										corte.creditos.reduce((acc,itm)=>acc+=itm.importe,0), 2
+									)}
 								</Typography>
 								<Typography
 									className={classes.textoMirame}
-									align="right" color="primary">+ ${formatNumber(corte.tacuenta, 2)}
+									align="right" color="primary">+ ${formatNumber(
+										corte.creditos.reduce((acc,itm)=>acc+=itm.acuenta,0), 2
+									)}
 								</Typography>
 							</Grid>
 						}
@@ -232,13 +226,21 @@ export default function Corte({ open, close, fecha, guardar, ubicacion, pov=fals
 						<Grid item xs={12} >
 							<Divider />
 							<Typography className={classes.textoMiniFacheron} align="right">Total Corte:</Typography>
-							<Typography className={classes.textoMirame} variant="h6" align="right">${formatNumber(corte.total, 2)}</Typography>
+							<Typography className={classes.textoMirame} variant="h6" align="right">$
+								{formatNumber(
+									corte.ventaItems.reduce((acc,itm)=>acc+=itm.importe,0) +
+									corte.ingresos.reduce((acc,itm)=>acc+=itm.importe,0) -
+									corte.creditos.reduce((acc,itm)=>acc+=itm.importe,0) +
+									corte.creditos.reduce((acc,itm)=>acc+=itm.acuenta,0) -
+									corte.egresos.reduce((acc,itm)=>acc+=itm.importe,0) , 2
+								)}							
+							</Typography>
 						</Grid>
 
 					</Grid>
 						{auth.user.level>2?null:
 							<Grid container value={tabSelected} role="tabpanel" hidden={tabSelected !== 2} className={classes.paperPaginaConSalto}>
-								<InventarioCorteUbicacion inventario={ubicacionInventario} pov={pov}/>
+								<InventarioCorteUbicacion />
 							</Grid>
 						}
 

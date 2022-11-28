@@ -3,28 +3,32 @@ import { Grid, Typography } from '@material-ui/core'
 import InventarioCompraItem from './InventarioCompraItem'
 import useStyles from '../hooks/useStyles'
 import { formatNumber, sumEmpStock, sumStock } from '../Tools'
+import { useInventario } from './InventarioContext'
+import { useAuth } from '../auth/use_auth'
 
-export default function InventarioCorteUbicacion({inventario=null, pov}){
+export default function InventarioCorteUbicacion(){
+    const {user} = useAuth()
+    const {ubicacionInventario} = useInventario()
     const classes = useStyles()
-    return !inventario ? null :
+    return !ubicacionInventario ? null :  !ubicacionInventario.items ? null :
         <Grid container spacing={2} >
-            {pov?
+            {user.level<2?
                 <React.Fragment>
                     <Grid item container className={classes.paperBasico}>
                         <Grid item xs={4}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Folios Activos:</Typography>
-                            <Typography align="right" className={classes.textoMirame}>{inventario.length}</Typography>
+                            <Typography align="right" className={classes.textoMirame}>{ubicacionInventario.items.length}</Typography>
                         </Grid>
                         <Grid item xs={4}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Empaques:</Typography>
-                            <Typography align="right" className={classes.textoMirame}>{formatNumber(sumEmpStock(inventario) || 0,2)}</Typography>
+                            <Typography align="right" className={classes.textoMirame}>{formatNumber(sumEmpStock(ubicacionInventario.items) || 0,2)}</Typography>
                         </Grid>
                         <Grid item xs={4}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Unidades:</Typography>
-                            <Typography align="right" className={classes.textoMirame}>{formatNumber(sumStock(inventario) || 0,2)}</Typography>
+                            <Typography align="right" className={classes.textoMirame}>{formatNumber(sumStock(ubicacionInventario.items) || 0,2)}</Typography>
                         </Grid>
                     </Grid>
-                    {inventario.map((item,i)=>(
+                    {ubicacionInventario.items.map((item,i)=>(
                         <InventarioCompraItem item={item} key={i} />
                     ))}
                 </React.Fragment>
@@ -33,18 +37,18 @@ export default function InventarioCorteUbicacion({inventario=null, pov}){
                     <Grid item container className={classes.paperBasico}>
                         <Grid item xs={4}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Folios Activos:</Typography>
-                            <Typography align="right" className={classes.textoMirame}>{inventario.items.length}</Typography>
+                            <Typography align="right" className={classes.textoMirame}>{ubicacionInventario.items.length}</Typography>
                         </Grid>
                         <Grid item xs={4}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Empaques:</Typography>
-                            <Typography align="right" className={classes.textoMirame}>{formatNumber(inventario.empaquesStockGlobal,2)}</Typography>
+                            <Typography align="right" className={classes.textoMirame}>{formatNumber(ubicacionInventario.empaquesStockGlobal,2)}</Typography>
                         </Grid>
                         <Grid item xs={4}>
                             <Typography align="right" className={classes.textoMiniFacheron}>Unidades:</Typography>
-                            <Typography align="right" className={classes.textoMirame}>{formatNumber(inventario.stockGlobal,2)}</Typography>
+                            <Typography align="right" className={classes.textoMirame}>{formatNumber(ubicacionInventario.stockGlobal,2)}</Typography>
                         </Grid>
                     </Grid>
-                    {inventario.items.map((item,i)=>(
+                    {ubicacionInventario.items.map((item,i)=>(
                         <InventarioCompraItem item={item} key={i} />
                     ))}
                 </React.Fragment>

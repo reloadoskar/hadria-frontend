@@ -1,13 +1,18 @@
-import React, {createContext, useState} from 'react'
+import React, {createContext, useState, useContext} from 'react'
 import { 
     getInventario, 
     getInventarioBy, 
     // getInventarioxUbicacion,
     moveInventario,
-    getMovimientos
+    getMovimientos,
+    eliminarMovimiento
 } from '../api'
 import { agruparPorObjeto } from '../Tools'
 export const InventarioContext = createContext()
+
+export const useInventario = () =>{
+    return useContext(InventarioContext)
+}
 
 const InventarioContextProvider = (props) => {
     const [inventario, setInventario] = useState([])
@@ -15,31 +20,31 @@ const InventarioContextProvider = (props) => {
     const [inventarioUbicacion, setInventarioUbicacion] = useState([])
     const [ubicacionInventario, setUbicacionInventario] = useState(null)
     
-    const loadInventarioGeneral = async () => {
+    const loadInventarioGeneral = async (user) => {
         setInventario([])
-        let res = await getInventario()
+        let res = await getInventario(user)
         setInventario(res.inventario)
         let ipu = agruparPorObjeto(res.inventario, 'ubicacion')
         setInventarioUbicacion(ipu)
         return res
     }
 
-    const loadInventarioUbicacion = async (ubicacion) => {        
-        let res = await getInventarioBy(ubicacion)
+    const loadInventarioUbicacion = async (user, ubicacion) => {        
+        let res = await getInventarioBy(user, ubicacion)
         setUbicacionInventario(res.inventario)
         return res
     }
 
-    const loadMovimientos = async (fecha) =>{
+    const loadMovimientos = async (user, fecha) =>{
         setMovimientos([])
-        let res = await getMovimientos(fecha)
+        let res = await getMovimientos(user, fecha)
         setMovimientos(res.movimientos)
         return res
     }
 
-    const moverInventario = async (movimiento) => {
+    const moverInventario = async (user, movimiento) => {
         // console.log(movimiento.itemsel)
-		let mov = await moveInventario(movimiento)
+		let mov = await moveInventario(user, movimiento)
             setMovimientos([mov.movimiento , ...movimientos])
         let itm = inventario.filter(it=>it._id=== movimiento.itemsel._id)
         // console.log(itm[0])
@@ -81,11 +86,13 @@ const InventarioContextProvider = (props) => {
         setUbicacionInventario(null)
     }
 
-    // useEffect(()=>{
-    //     if(inventario.length>0){
-    //         setInventarioUbicacion(agruparPorObjeto(inventario, "ubicacion"))
-    //     }
-    // },[inventario])
+    const deleteMovimiento = async (user, mov)=>{
+        const res = await eliminarMovimiento(user, mov)
+            if(res){
+                setMovimientos([res.movimiento , ...movimientos])
+            }
+            return res
+    }
 
     return (
         <InventarioContext.Provider value={{
@@ -99,7 +106,8 @@ const InventarioContextProvider = (props) => {
             loadMovimientos,
             limpiarInventario,
             selectInventarioUbicacion,
-            resetInventario
+            resetInventario,
+            deleteMovimiento
         }} >
             {props.children}
         </InventarioContext.Provider>

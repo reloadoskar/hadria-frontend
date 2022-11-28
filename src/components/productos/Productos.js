@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 // COMPONENTES DE INTERFAZ // MATERIAL-UI
 import { 
     MenuItem, 
@@ -8,29 +8,33 @@ import {
     } from '@material-ui/core';
 
 // HOOKS
-import { ProductoContext } from '../productos/ProductoContext'
+import { useProductos } from '../productos/ProductosContext'
 import useStyles from '../hooks/useStyles';
-import useUnidades from '../hooks/useUnidades'
-import useEmpaques from '../hooks/useEmpaques'
+import {useUnidades} from '../hooks/useUnidades'
+import {useEmpaques} from '../hooks/useEmpaques'
 
 // COMPONENTES EXTERNOS
 import ProductoCreate from './ProductoCreate';
 import Producto from './Producto';
+import { useAuth } from '../auth/use_auth';
 
 //COMPONENTE 
 function Productos() {
-    const { productos, loadProductos, findProductoBy } = useContext(ProductoContext)
+    const {user} = useAuth()
+    const { productos, loadProductos, findProductoBy } = useProductos()
     const [resultadoBusqueda, setResultado] = useState([])
     const classes = useStyles()
-    const {unidades} = useUnidades()
-    const {empaques} = useEmpaques()
+    const {unidades, loadUnidades} = useUnidades()
+    const {empaques, loadEmpaques} = useEmpaques()
     const [openCreate, setOpenCreate] = useState(false)
     const fields = ["clave", "descripcion"]
     const [fieldSelected, setFieldSelected] = useState('descripcion')
     const [searchField, setSearchField] = useState('')
 
     useEffect(()=>{
-        loadProductos()
+        loadProductos(user)
+        loadUnidades(user)
+        loadEmpaques(user)
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const crearProducto = () => {

@@ -1,32 +1,30 @@
 import React from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@material-ui/core'
+import { Dialog, DialogContent, DialogActions, Button, Typography } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
-export default function Confirm(props){
+export default function Confirm({ open, close, onConfirm, texto }){
     const classes = useStyles()
-    const { open, close, onConfirm } = props
 
     function handleConfirm(){
         onConfirm()
         close()
     }
 
-    function handleClose(){
+    const handleClose = () =>{
         close()
     }
     return (
         <Dialog
-            maxWidth="sm"
+            maxWidth="xs"
             fullWidth
             open={open}
             onClose={handleClose}
-            classes={{paper: classes.suspended}}                
+            classes={{paper: classes.confirm}}                
         >
-            <DialogTitle>CANCELAR</DialogTitle>
-                <DialogContent dividers>
-                    <Typography variant="h6" align="center" children="¿Seguro quieres CANCELAR?" />
-                </DialogContent>
+            <DialogContent>
+                <Typography variant="h6" align="center" children={texto} />
+            </DialogContent>
             <DialogActions>
-                <Button className={classes.botonSimplon} autoFocus onClick={handleClose}>
+                <Button className={classes.botonSimplon} autoFocus onClick={handleClose} color="inherit">
                     No, espera.
                 </Button>
                 <Button className={classes.botonCosmico} variant="contained" onClick={() => handleConfirm()}>

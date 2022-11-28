@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Paper, TableContainer, Table, TableBody, TableRow, TableCell, TableFooter, TablePagination, TableHead } from '@material-ui/core'
 import TablePaginationActions from './TablePaginationActions'
-import { formatNumber, sumCantidad, sumEmpaques, sumImporte } from '../Tools'
+import { formatNumber } from '../Tools'
 
 export default function PaginationTable({data}){
     const [page, setPage] = useState(0);
     const [rows, setRows] = useState([])
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(20);
 
     useEffect(()=>{
         if(data){
@@ -57,7 +57,7 @@ export default function PaginationTable({data}){
                 {row.fecha}
               </TableCell>
               <TableCell >
-                {row.producto.descripcion}
+                {row.producto.descripcion} {row.compraItem.clasificacion}
               </TableCell>
               <TableCell style={{ width: 50 }} align="right">
                 {row.cantidad}
@@ -83,7 +83,7 @@ export default function PaginationTable({data}){
         <TableFooter>
           <TableRow>
             <TablePagination
-              rowsPerPageOptions={[10, 20, 50, { label: 'Todo', value: -1 }]}
+              rowsPerPageOptions={[10, 20, 50, 100, 150, { label: 'Todo', value: -1 }]}
               colSpan={8}
               count={rows.length}
               rowsPerPage={rowsPerPage}
@@ -96,13 +96,6 @@ export default function PaginationTable({data}){
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
             />
-          </TableRow>
-          <TableRow>
-              <TableCell colSpan={4} align="right">Totales</TableCell>
-              <TableCell align="right">{formatNumber(sumCantidad(rows.filter(vta=>vta.venta.tipoPago==="CONTADO")),2)}</TableCell>
-              <TableCell align="right">{formatNumber(sumEmpaques(rows.filter(vta=>vta.venta.tipoPago==="CONTADO")),2)}</TableCell>
-              <TableCell align="right">-</TableCell>
-              <TableCell align="right">${formatNumber(sumImporte(rows.filter(vta=>vta.venta.tipoPago==="CONTADO")),2)}</TableCell>
           </TableRow>
         </TableFooter>
       </Table>

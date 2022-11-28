@@ -12,6 +12,7 @@ import CuentaPorPagar from '../cxp/CuentaPorPagar';
 import {EgresoContext} from '../egresos/EgresoContext'
 import { ProductorContext } from '../productors/ProductorContext'
 import { UbicacionContext } from '../ubicaciones/UbicacionContext'
+import { useAuth } from '../auth/use_auth';
 const init = {
   fecha: moment().format("YYYY-MM-DD"),
   ubicacion: '',
@@ -22,6 +23,7 @@ const init = {
   cuentasSeleccionadas: []
 }
 export default function Pagar({ open, close }) {
+  const {user} = useAuth()
   const {cuentasPorPagar, addEgreso, editCuentaPorPagar} = useContext(EgresoContext)
   const [cuentasProductor, cargarCuentas] = useState([])
   const {productors} = useContext(ProductorContext)
@@ -81,6 +83,7 @@ export default function Pagar({ open, close }) {
     setPagando(true)
     let i = 0
     let cuentas = cuentasProductor
+    console.log(cuentas)
     let importeDePago = pago.importe
 
     while(importeDePago > 0){
@@ -99,16 +102,22 @@ export default function Pagar({ open, close }) {
           cuentas: cuentas[i],
           saldo: 0,
         }
-        addEgreso(data)
+
+        addEgreso(user, data)
         .then(res=>{
           showMessage(res.message, res.status)
           ticketPago(data).then(res => {
             showMessage(res.message, res.status)
           })
         })
+        .catch(err=>{
+          showMessage(err.message, 'error')
+        })
         cuentas[i].saldo-=importeDePago
-        editCuentaPorPagar(cuentas[i]).then(res=>{
+        editCuentaPorPagar(user, cuentas[i]).then(res=>{
           showMessage(res.message, 'info')
+        }).catch(err=>{
+          showMessage(err.message,'error')
         })
         importeDePago=0; 
       }else{
@@ -126,13 +135,13 @@ export default function Pagar({ open, close }) {
           cuentas: cuentas[i],
           saldo: 0,
         }
-        addEgreso(data).then(res=>{
+        addEgreso(user, data).then(res=>{
           showMessage(res.message, res.status)
           ticketPago(data).then(res => {
             showMessage(res.message, res.status)
           })
         })
-        editCuentaPorPagar(cuentas[i]).then(res=>{
+        editCuentaPorPagar(user, cuentas[i]).then(res=>{
           showMessage(res.message, 'info')
         })
 
