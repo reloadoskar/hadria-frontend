@@ -8,6 +8,7 @@ import {
 	Divider,
 	DialogActions,
 	IconButton,
+	CircularProgress,
 	// IconButton, 
 } from '@material-ui/core';
 import BlockIcon from '@material-ui/icons/Block';
@@ -27,7 +28,7 @@ import {
 } from '../Tools'
 import { useAuth } from '../auth/use_auth';
 
-const Venta = ({ open, close, venta, cancel }) => {
+const Venta = ({ open, close, venta }) => {
 	const classes = useStyles()
 	const auth = useAuth()
 	const user = auth.user
@@ -35,6 +36,7 @@ const Venta = ({ open, close, venta, cancel }) => {
 	const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 	const [confirm, setConfirm] = useState(false)
 	const [ventaLocal, setVentaLocal] = useState(null)
+	const [working, setWorking] = useState(false)
 	useEffect(() => {
 		setVentaLocal(venta)
 		return () => {
@@ -54,25 +56,31 @@ const Venta = ({ open, close, venta, cancel }) => {
 		setConfirm(false)
 	}
 	function cancelarVenta() {
+
 		if (ventaLocal.pagos.length > 0) {
 			showMessage('No se puede eliminar la venta, hay PAGOS registrados.', 'error')
 		} else {
+			setWorking(true)
 			showMessage("Cancelando...", "info")
-			existCorte(ventaLocal.ubicacion._id, ventaLocal.fecha).then(res => {
+			existCorte(user, ventaLocal.ubicacion._id, ventaLocal.fecha)
+			.then(res => {
 				if (res.corte.length > 0) {
+					setWorking(false)
 					showMessage('No se puede eliminar la venta, el corte de caja esta CERRADO', 'error')
 				}
 				else {
-					cancelVenta(venta._id).then(res => {
-						if (res.status === "error") {
-							showMessage(res.message, res.status)
-						}
-						else {
-							close()
-							showMessage(res.message, res.status)
-						}
+					cancelVenta(user, venta._id).then(res => {
+						setWorking(false)
+						close()
+						showMessage(res.message, res.status)
+					}).catch(err=>{
+						setWorking(false)
+						showMessage(err.message,'error')
 					})
 				}
+			}).catch(err=>{
+				setWorking(false)
+				showMessage(err.messag, 'error')
 			})
 		}
 	}
@@ -251,7 +259,12 @@ const Venta = ({ open, close, venta, cancel }) => {
                         }
                     </Grid>
                 */}
-						<ConfirmDialog open={confirm} close={closeConfirm} onConfirm={cancelarVenta} />
+						<ConfirmDialog 
+							texto="Seguro quieres CANCELAR la venta?"
+							open={confirm} 
+							close={closeConfirm} 
+							onConfirm={cancelarVenta} 
+						/>
 					</DialogContent>
 					<DialogActions>
 						<Typography component="div" align="right">
@@ -262,7 +275,7 @@ const Venta = ({ open, close, venta, cancel }) => {
 							{user.level > 2 ? null :
 								ventaLocal.tipoPago === "CANCELADO" ? null :
 									<IconButton onClick={() => openConfirm()}>
-										<BlockIcon />
+										{!working ? <BlockIcon /> : <CircularProgress size={30} /> }
 									</IconButton>
 							}
 							<IconButton onClick={close}>
