@@ -130,7 +130,7 @@ export default function CrearVentaItem({open, close, elitem, add}){
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid item xs={12} md={3}>
                                         <TextField 
-                                            disabled={elitem.clasificacion === "LINEA" ? false : true}
+                                            disabled={elitem.clasificacion === "LINEA" || elitem.clasificacion === "S/C" ? false : true}
                                             id="empaques"
                                             label="Cajas"
                                             variant="outlined"
