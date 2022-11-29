@@ -1,6 +1,11 @@
 import React, {createContext, useState} from 'react'
+import { useContext } from 'react'
 import { getClientes, saveCliente, deleteCliente, updateCliente, getCuentasxCliente } from '../api'
 export const ClienteContext = createContext()
+
+export const useClientes = () =>{
+    return useContext(ClienteContext)
+}
 
 const ClienteContextProvider = (props) => {
     const [clientes, setClientes] = useState([])

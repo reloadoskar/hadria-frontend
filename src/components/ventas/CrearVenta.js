@@ -183,7 +183,7 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 						>
 						{clientes.length > 0 ?
 							<React.Fragment>
-								{clientes.filter(clnt => clnt.ubicacion === "").map(cliente => (
+								{clientes.filter(clnt => clnt.ubicacion === undefined).map(cliente => (
 									<MenuItem
 										key={cliente._id}
 										onClick={() => {
