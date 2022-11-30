@@ -62,7 +62,7 @@ export default function CorteDetalleVentas({corte}) {
 						</TextField>
 					</Grid>
 				</Grid>
-				{vntasConFiltro.sort((a, b) => a.compra.folio - b.compra.folio).map((el, i) => (
+				{vntasConFiltro.length === 0 ? null : vntasConFiltro.sort((a, b) => a.compra.folio - b.compra.folio).map((el, i) => (
 					<Grid container key={i} className={classes.paperSutil}>						
 						<Grid item xs={6}>
 							<Typography className={classes.textoMirame}>
@@ -110,7 +110,7 @@ export default function CorteDetalleVentas({corte}) {
 										</Typography>
 									</Grid>
 									<Grid item xs={4}>
-										<Typography variant="body2" >{vta.venta.cliente.nombre}</Typography>
+										<Typography variant="body2" >{!vta.venta ? null : vta.venta.cliente.nombre }</Typography>
 									</Grid>
 									<Grid item xs={1}>
 										<Typography variant="body2" align="right">{vta.empaques}</Typography>
