@@ -18,6 +18,7 @@ import { formatNumber } from '../Tools'
 import { planes } from '../empresa/Planes'
 import moment from 'moment'
 import { useAuth } from '../auth/use_auth'
+import Plan from './Plan'
 export default function Empresa() {
   const { user } = useAuth()
   const { empresa, editEmpresa, crearEmpresa } = useContext(EmpresaContext)
@@ -131,43 +132,7 @@ export default function Empresa() {
 
         <Grid container justifyContent="center" spacing={3}>
           {planes.map((plan, i) => (
-            <Grid item container xs={4} key={i} >
-              <Paper classes={{ root: classes.paperContorno }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    {empresa.plan === plan.nombre ?
-                      <Typography className={classes.textoMiniFacheron} align="center">Plan Actual</Typography>
-                      : null
-                    }
-                    <Typography
-                      // className={classes.textoMirame} 
-                      className={
-                        empresa.plan === plan.nombre ? classes.textoSubrayado : classes.textoMirame
-                      }
-                      align="center" variant="h6">
-                      {plan.nombre}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography align="center" > $ {formatNumber(plan.precio, 2)} equivalente a</Typography>
-                    <Typography align="center" variant="h6" className={classes.textoMirame}>$ {formatNumber((plan.precio / 12), 1)} MXN / mes*</Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <List>
-                      {plan.caracteristicas.map((el, i) => (
-                        <ListItem key={i}>
-                          <ListItemIcon>
-                            <ArrowRightIcon />
-                          </ListItemIcon>
-                          <ListItemText primary={el}></ListItemText>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Grid>
-                </Grid>
-              </Paper>
-
-            </Grid>
+            <Plan plan={plan} empresa={empresa} key={i} />
           ))}
         </Grid>
       </Grid>
