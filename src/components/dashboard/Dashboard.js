@@ -97,8 +97,8 @@ export default function Dashboard() {
             let vence = moment().to(moment(empresa.fechaFinal))
             let descuento = 0
             if(dias>1){ descuento = 10}
-            if(dias>5){ descuento = 30}
-            if(dias>8){ descuento = 40}
+            if(dias>15){ descuento = 20}
+            if(dias>30){ descuento = 30}
             if(dias>31){
                 setBody(null)
             }else{
