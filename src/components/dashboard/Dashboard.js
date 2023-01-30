@@ -108,7 +108,7 @@ export default function Dashboard() {
                         <Typography align="center">Tu Plan vence:</Typography>
                         <Typography variant="h6" align="center">{vence}</Typography>
                         <Typography align="center">Renueva ahora y obten hasta un {descuento} % de descuento</Typography>
-                        <NavLink exact to="/configuracion" 
+                        <NavLink exact to="app/configuracion" 
                             className={classes.link} 
                             >
                             <Typography align="center">ver planes</Typography>
