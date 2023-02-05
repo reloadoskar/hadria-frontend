@@ -96,7 +96,7 @@ export default function Empresa() {
           </Grid>
           <Grid item xs={3}>
             <Typography variant="h6" className={classes.textoMirame}>{empresa.plan}</Typography>
-            <Typography>Duraci&oacute;n: {empresa.duracion} años</Typography>
+            <Typography>Duraci&oacute;n: {empresa.duracion} mes</Typography>
           </Grid>
           <Grid item xs={3}>
             <Typography>Inici&oacute;</Typography>

@@ -95,11 +95,11 @@ export default function Dashboard() {
         if(empresa){
             let dias = moment(empresa.fechaFinal).diff(moment(), 'days')
             let vence = moment().to(moment(empresa.fechaFinal))
-            let descuento = 0
-            if(dias>1){ descuento = 10}
-            if(dias>15){ descuento = 20}
-            if(dias>30){ descuento = 30}
-            if(dias>31){
+            // let descuento = 0
+            // if(dias>10){ descuento = 0}
+            // if(dias>15){ descuento = 0}
+            // if(dias>30){ descuento = 0}
+            if(dias>15){
                 setBody(null)
             }else{
                 setVerPlanStatus(true)
@@ -107,7 +107,6 @@ export default function Dashboard() {
                     <React.Fragment>
                         <Typography align="center">Tu Plan vence:</Typography>
                         <Typography variant="h6" align="center">{vence}</Typography>
-                        <Typography align="center">Renueva ahora y obten hasta un {descuento} % de descuento</Typography>
                         <NavLink exact to="app/configuracion" 
                             className={classes.link} 
                             >
