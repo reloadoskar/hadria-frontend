@@ -2,10 +2,13 @@ import React, {createContext, useState, useContext} from 'react'
 import { 
     getInventario, 
     getInventarioBy, 
-    // getInventarioxUbicacion,
+    getCambiosUbicacion,
+    getCambios,
+    createSolicitudCambio,
     moveInventario,
     getMovimientos,
-    eliminarMovimiento
+    eliminarMovimiento,
+    stockUpCambio, acceptCambio
 } from '../api'
 import { agruparPorObjeto } from '../Tools'
 export const InventarioContext = createContext()
@@ -17,6 +20,7 @@ export const useInventario = () =>{
 const InventarioContextProvider = (props) => {
     const [inventario, setInventario] = useState([])
     const [movimientos, setMovimientos] = useState([])
+    const [cambios, setCambios] = useState([])
     const [inventarioUbicacion, setInventarioUbicacion] = useState([])
     const [ubicacionInventario, setUbicacionInventario] = useState(null)
     
@@ -26,12 +30,15 @@ const InventarioContextProvider = (props) => {
         setInventario(res.inventario)
         let ipu = agruparPorObjeto(res.inventario, 'ubicacion')
         setInventarioUbicacion(ipu)
+        localStorage.setItem('inventario', JSON.stringify(res.inventario))
+        localStorage.setItem('inventarioUbicacion', JSON.stringify(ipu))
         return res
     }
 
     const loadInventarioUbicacion = async (user, ubicacion) => {        
         let res = await getInventarioBy(user, ubicacion)
         setUbicacionInventario(res.inventario)
+        localStorage.setItem('ubicacionInventario', JSON.stringify(res.inventario))
         return res
     }
 
@@ -39,6 +46,15 @@ const InventarioContextProvider = (props) => {
         setMovimientos([])
         let res = await getMovimientos(user, fecha)
         setMovimientos(res.movimientos)
+        localStorage.setItem('movimientos', JSON.stringify(res.movimientos))
+        return res
+    }
+
+    const loadCambios = async (user) =>{
+        setCambios([])
+        let res = await getCambios(user)
+        setCambios(res.cambios)
+        localStorage.setItem('cambios', JSON.stringify(res.cambios))
         return res
     }
 
@@ -82,6 +98,7 @@ const InventarioContextProvider = (props) => {
     const resetInventario = ()=>{
         setInventario([])
         setMovimientos([])
+        setCambios([])
         setInventarioUbicacion([])
         setUbicacionInventario(null)
     }
@@ -94,20 +111,45 @@ const InventarioContextProvider = (props) => {
             return res
     }
 
+    const loadCambiosUbicacion = async (user, ubicacion, fecha) => {
+        const res = await getCambiosUbicacion(user, ubicacion, fecha)
+        setCambios(res.cambios)
+        return res
+    }
+
+    const crearSolicitudCambio = async (user, solicitud) => {
+        const res = await createSolicitudCambio(user, solicitud)
+        return res
+    }
+
+    const surtirCambio = async (user, respuesta) => {
+        const res = await stockUpCambio(user, respuesta)
+        return res
+    }
+
+    const aceptarCambio = async (user, firma) => {
+        const res = await acceptCambio(user, firma)
+        return res
+    }
+
     return (
         <InventarioContext.Provider value={{
             inventario,
             inventarioUbicacion,
             ubicacionInventario,
             movimientos,
+            cambios,
+            crearSolicitudCambio,
             moverInventario,
+            loadCambiosUbicacion,
             loadInventarioGeneral,
             loadInventarioUbicacion,
             loadMovimientos,
+            loadCambios,
             limpiarInventario,
             selectInventarioUbicacion,
             resetInventario,
-            deleteMovimiento
+            deleteMovimiento, setInventario, setCambios, setInventarioUbicacion, surtirCambio, aceptarCambio
         }} >
             {props.children}
         </InventarioContext.Provider>

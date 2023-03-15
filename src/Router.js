@@ -149,7 +149,9 @@ export default function Router() {
                             </Route>
                             <Route exact path={`${path}/pos`}>
                                 <CortesContextProvider>
-                                    <Pos />
+                                    <ConceptosProvider>
+                                        <Pos />
+                                    </ConceptosProvider>
                                 </CortesContextProvider>
                             </Route>
                             <Route exact path={`${path}/configuracion`}>

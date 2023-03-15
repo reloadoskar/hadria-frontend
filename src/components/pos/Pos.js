@@ -17,13 +17,13 @@ export default function Pos(){
     const now = moment()
     const classes = useStyles()
     const { enqueueSnackbar } = useSnackbar()
-    const {ubicacions} = useContext(UbicacionContext)
+    const {ubicacion,ubicacions,selectUbicacion} = useContext(UbicacionContext)
     const {loadInventarioUbicacion} = useContext(InventarioContext)
     
     const {existeCorte} = useCortes()
     
     const [accesando, setAccesando] = useState(false)
-    const [ubicacion, setUbicacion] = useState(null)
+    // const [ubicacion, setUbicacion] = useState(null)
     const [fecha, setFecha] = useState(moment().format("YYYY-MM-DD"))
     
     const [dialogPos, setDialogPos] = useState(false)
@@ -31,11 +31,11 @@ export default function Pos(){
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
     useEffect(()=>{
-        setUbicacion(user.ubicacion)
-    },[user]) //
+        selectUbicacion(user.ubicacion)
+    },[user]) // eslint-disable-line react-hooks/exhaustive-deps
     const handleChange = (type, value) => { 
         if(type === 'ubicacion'){            
-            return setUbicacion(value)
+            return selectUbicacion(value)
         }
         if(type === 'fecha'){
             if(moment(value) > now){

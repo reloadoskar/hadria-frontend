@@ -181,20 +181,8 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 							open={Boolean(anchorEl)}
 							onClose={closeSelect}
 						>
-						{clientes.length > 0 ?
-							<React.Fragment>
-								{clientes.filter(clnt => clnt.ubicacion === undefined).map(cliente => (
-									<MenuItem
-										key={cliente._id}
-										onClick={() => {
-											seleccionaCliente(cliente)
-											closeSelect()
-										}}
-									>
-										{cliente.nombre}
-									</MenuItem>
-								))}
-								{clientes.filter(clnt => clnt.ubicacion !== undefined)
+						{clientes.length > 0 ?							
+								clientes.filter(clnt => clnt.ubicacion !== undefined)
 									.filter(cl => cl.ubicacion._id === ubicacion._id)
 									.map(cliente => (
 										<MenuItem
@@ -206,10 +194,8 @@ export default function CrearVenta({ laubicacion, lafecha, inventario }) {
 										>
 											{cliente.nombre}
 										</MenuItem>
-									))}
-							</React.Fragment>
-							:
-							null
+									))
+								: null						
 						}
 						</Menu>
 					</Grid>

@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Container, Grid, Button, Dialog, Typography, DialogContent, Collapse } from '@material-ui/core'
+import { Container, Grid, Button, Dialog, Typography, DialogContent, Collapse, IconButton, Badge } from '@material-ui/core'
+import SettingsIcon from '@material-ui/icons/Settings';
+import AirportShuttleIcon from '@material-ui/icons/AirportShuttle';
 import CrearVenta from '../ventas/CrearVenta'
 import Reloj from '../herramientas/reloj'
 import Corte from '../cortes/Corte'
@@ -11,20 +13,26 @@ import IngresoCreate from '../ingresos/IngresoCreate'
 import { EgresoContext } from '../egresos/EgresoContext'
 import { IngresoContext } from '../ingresos/IngresoContext'
 import { InventarioContext } from '../inventario/InventarioContext'
+import SettingsDrawer from './SettingsDrawer';
+import CambiosDrawer from './CambiosDrawer';
+import Cambios from './Cambios'
 import moment from 'moment'
 import { useAuth } from '../auth/use_auth'
-export default function DialogPos({ open, close, ubicacion, fecha, showMessage, cxcPdv, addPagoCxc }) {
+export default function DialogPos({ open, close, ubicacion, fecha, cxcPdv, addPagoCxc }) {
 	const {user} = useAuth()
-	const [ configuracion ] = useState({ ingreso: false, cobrar: false, pagar: false, gasto: false })
+	const [ configuracion, setConfiguracion ] = useState({ ingreso: false, cobrar: false, pagar: false, gasto: false })
 	const { resetEgresos, loadCuentasPorPagar } = useContext(EgresoContext)
 	const { resetIngresos, loadCuentasPorCobrarPdv } = useContext(IngresoContext)
-	const { ubicacionInventario } = useContext(InventarioContext)
+	const { ubicacionInventario, loadCambios, cambios } = useContext(InventarioContext)
 	const classes = useStyles()
 	const [corteDialog, setCorteDialog] = useState(false)
 	const [cxcDialog, setCxcDialog] = useState(false)
 	const [egresoDialog, setEgresoDialog] = useState(false)
 	const [pagoDialog, setPagoDialog] = useState(false)
 	const [selectClasificacion, openSelectClass] = useState(false)
+	const [openCambios, setOc] = useState(false)
+	const [openCambDrwr, setOpncmb] = useState(false)
+	const [openConfig, setOpcnfg] = useState(false)
 
 	const [verCrearIngreso, setVerCrearIngreso] = useState(false)
 	const [clasificacionSelected, setClasSel] = useState("")
@@ -46,13 +54,12 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 				resetEgresos(),
 				resetIngresos(),
 				loadCuentasPorPagar(user),
-				loadCuentasPorCobrarPdv(user)
+				loadCuentasPorCobrarPdv(user),
+				loadCambios(user)
 			])
 			return res
 		}
-		loadAll().then(() => {
-
-		})
+		loadAll()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	const toggleCxcDialog = () => {
@@ -79,13 +86,39 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 
 					{/* CABECERA */}
 					<Grid item xs={12} container justifyContent="center">
+						<CambiosDrawer
+							open={openCambDrwr} 
+							close={()=>setOpncmb(!openCambDrwr)}
+							ubicacion={ubicacion}
+							// configuracion={configuracion}
+							// setConfiguracion={setConfiguracion}
+						/>
 						<Grid item xs={6} sm={4}>
 							<Typography variant="h6" align="center">{ubicacion ? ubicacion.nombre : "ups!"}</Typography>
 						</Grid>
 						<Grid item xs={6} sm={4}>
 							<Typography variant="h6" align="center">{moment(fecha).format("dddd MMMM D, YYYY")}</Typography>
 						</Grid>
-						<Grid item xs={12} sm={4}><Reloj /></Grid>
+						<Grid item xs={12} sm={2}><Reloj /></Grid>
+						<Grid item xs={12} sm={2}>
+							<IconButton onClick={()=>setOpncmb(true)}>
+								{!ubicacion? null :
+									<Badge badgeContent={cambios.filter(cambio=>cambio.ubicacion._id===ubicacion._id).length} color="error">
+										<AirportShuttleIcon />
+									</Badge>
+								}
+								
+							</IconButton>
+							<IconButton onClick={()=>setOpcnfg(true)}>
+								<SettingsIcon />
+								<SettingsDrawer 
+									open={openConfig} 
+									close={()=>setOpcnfg(false)}
+									configuracion={configuracion}
+									setConfiguracion={setConfiguracion}
+								/>
+							</IconButton>
+						</Grid>
 					</Grid>
 					{/* TERMINA CABECERA */}
 
@@ -180,7 +213,6 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 									cobrar={addPagoCxc}
 									ubicacion={ubicacion}
 									close={toggleCxcDialog}
-									showMessage={showMessage}
 								/>
 							</Grid>
 						}
@@ -217,10 +249,25 @@ export default function DialogPos({ open, close, ubicacion, fecha, showMessage, 
 									ubicacion={ubicacion}
 									open={egresoDialog}
 									close={toggleEgesoDialog}
-									showMessage={showMessage}
 								/>
 							</Grid>
 						}
+
+						<Grid item xs={12}>
+							<Button
+								fullWidth
+								onClick={() => setOc(true)}
+								className={classes.botonAzuloso}
+							>
+								Solicitar cambios
+							</Button>
+							<Cambios
+								open={openCambios}
+								close={()=> setOc(false)}
+								inventario={ubicacionInventario}
+							/>
+						</Grid>
+
 						<Grid item xs={12}>
 							<Button
 								fullWidth

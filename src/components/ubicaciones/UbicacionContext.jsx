@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { createContext } from 'react';
 import { getUbicacions, saveUbicacion, updateUbicacion } from '../api';
 
 export const UbicacionContext = createContext()
+
+export const useUbicacion = () =>{
+    return useContext(UbicacionContext)
+}
 
 const UbicacionContextProvider = (props) => {
     const [ubicacions, setUbicacions] = useState([])

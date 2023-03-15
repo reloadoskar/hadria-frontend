@@ -1,7 +1,11 @@
-import React, {createContext, useState} from 'react'
+import React, {createContext, useState, useContext} from 'react'
 import {getEmpleados, saveEmpleado, delEmpleado, updateEmpleado} from '../api'
 
 export const EmpleadoContext = createContext()
+
+export const useEmpleados = () =>{
+    return useContext(EmpleadoContext)
+}
 
 const EmpleadoContextProvider = (props) => {
     const [empleados, setEmpleados] = useState([])
@@ -9,6 +13,7 @@ const EmpleadoContextProvider = (props) => {
     const loadEmpleados = async (user) => {
         const res = await getEmpleados(user)
         setEmpleados(res.empleados)
+        localStorage.setItem('empleados', JSON.stringify(res.empleados))
         return res
     }
 
@@ -35,7 +40,7 @@ const EmpleadoContextProvider = (props) => {
             loadEmpleados,
             addEmpleado,
             removeEmpleado,
-            editEmpleado
+            editEmpleado, setEmpleados
         }}>
             {props.children}
         </EmpleadoContext.Provider>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = process.env.REACT_APP_API_RAILWAY
+const url = process.env.REACT_APP_API_TEST
 
 // USUARIOS
 
@@ -521,6 +521,64 @@ export const getInventarioxUbicacion = (user) => {
     }
 }
 
+export const getCambiosUbicacion = (user, ubicacion, fecha) => {
+    try {
+        return axios
+            .post(url + `cambios/ubicacion`,  {user, ubicacion, fecha})
+            .then(res => {
+                return res.data
+            })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const getCambios = (user) => {
+    try {
+        return axios
+            .post(url + `cambios`,  {user})
+            .then(res => {
+                return res.data
+            })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+export const createSolicitudCambio = (user, solicitud) => {
+    try {
+        return axios.post(url + 'cambios/solicitud', {user,solicitud})
+            .then(res =>{
+                return res.data
+            })
+    } catch (err) {
+        console.log(err)
+    }
+}
+export const stockUpCambio = (user, respuesta) => {
+    try {
+        return axios.post(url + 'cambios/stockup', {user,respuesta})
+            .then(res =>{
+                return res.data
+            })
+    } catch (err) {
+        console.log(err)
+    }
+}
+export const acceptCambio = (user, firma) => {
+    try {
+        return axios.post(url + 'cambios/aceptar', {user,firma})
+            .then(res =>{
+                return res.data
+            })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+
 export const moveInventario = (user, data) => {
     try {
 
@@ -600,17 +658,11 @@ export const saveVenta = (user, data) => {
             .then(res => {
                 return res.data
             })
-            .catch(error => {
-                return {
-                    status: "error",
-                    message: "Red ocupada, intentelo de nuevo más tarde. " + error
-                }
-            })
     } catch (err) {
         console.log(err)
         return {
             status: "error",
-            message: "Ocurrio un error."
+            message: err.message
         }
     }
 }

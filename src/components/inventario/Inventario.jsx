@@ -4,17 +4,20 @@ import CompareArrowsIcon from '@material-ui/icons/CompareArrows'
 import useStyles from '../hooks/useStyles'
 import Mover from './Mover'
 import GraficaInventario from './GraficaInventario'
-import { useInventario } from './InventarioContext'
 import InventarioPorUbicacion from './InventarioPorUbicacion'
 import Movimientos from './Movimientos'
-import PesadasContextProvider from './PesadasContext'
+import Cambios from './Cambios'
 import { useAuth } from '../auth/use_auth'
+import PesadasContextProvider from './PesadasContext'
+import { useInventario } from './InventarioContext'
+import {useEmpleados} from '../empleados/EmpleadoContext'
 export default function Inventario(){
     const {user} = useAuth()
     const classes = useStyles()
-    const {inventarioUbicacion, loadInventarioGeneral, resetInventario} = useInventario()
+    const {inventarioUbicacion, loadInventarioGeneral, resetInventario, loadCambios, cambios} = useInventario()
+    const {loadEmpleados} = useEmpleados()
     const [moverDialog, setMoverDialog] = useState(false)
-    const [tabSelected, setTab] = useState(1)
+    const [tabSelected, setTab] = useState(3)
     const selectTab = (event, selected) => {
         setTab(selected)
     }
@@ -23,10 +26,20 @@ export default function Inventario(){
         const loadAll = async () =>{
             const res = await Promise.all([
                 loadInventarioGeneral(user),
+                loadCambios(user),
+                loadEmpleados(user)
             ])
             return res
         }
-        loadAll()
+        // if(!localStorage.inventario || !localStorage.cambios || !localStorage.empleados || !localStorage.inventarioUbicacion){
+            loadAll()
+        // }else{
+        //     setInventario(JSON.parse(localStorage.inventario))
+        //     setInventarioUbicacion(JSON.parse(localStorage.inventarioUbicacion))
+        //     setCambios(JSON.parse(localStorage.cambios))
+        //     setEmpleados(JSON.parse(localStorage.empleados))
+        // }
+
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const openMoverDialog = () => {
@@ -62,8 +75,10 @@ export default function Inventario(){
                         value={tabSelected}
                         onChange={selectTab}
                         centered>
+                        <Tab label="Cambios" value={3}/>
                         <Tab label="Ver por Ubicaci&oacute;n" value={1}/>
                         <Tab label="Ver Movimientos" value={2}/>
+
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
                             <GraficaInventario inventario={inventarioUbicacion}/>
@@ -73,6 +88,9 @@ export default function Inventario(){
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
                         <Movimientos />
+                    </div>
+                    <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 3}>
+                        <Cambios cambios={cambios} inventario={inventarioUbicacion}/>
                     </div>
                 </Grid>  
             </Grid>

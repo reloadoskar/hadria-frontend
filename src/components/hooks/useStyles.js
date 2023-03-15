@@ -39,6 +39,19 @@ const useStyles = makeStyles(theme => ({
         fontSize: '11px',
         color: '#3d3d3d'
     },
+    textField1: {
+        border: "none",
+        '& input:invalid':{
+            color: 'red',
+            fontWeight: 'bold'
+        }
+    },
+
+    coolRow: {
+        '& #row:nth-child(odd)':{
+            background: "#f2f5ff"
+        }
+    },
     textoGroovie: {
         color: '#00af91',
     },
@@ -309,6 +322,19 @@ const useStyles = makeStyles(theme => ({
     colored: {
         backgroundColor: 'linear-gradient(214deg, #1aa27f, #4381e0)',
     },
+    
+    fondoAmarillo:{
+        background: 'linear-gradient(78deg, #f4edcd, #FCE6C5)',
+        color:"#000000"
+    },
+    fondoAzul:{
+        background: 'linear-gradient(214deg, #b5cfe3, #c3e0fe)',
+        color:"#000000"
+    },
+    fondoVerde:{
+        background: 'linear-gradient(214deg, #9FF9DE, #B0E8D3)',
+        color:"#000000"
+    },
     botonSimplon: {
         border: 0,
         height: 48
@@ -321,6 +347,29 @@ const useStyles = makeStyles(theme => ({
         color: 'black',
         height: 48,
         padding: '0 30px',
+    },
+    sketchy: {
+        padding: '1rem 1.2rem',
+        display: 'inline-block',
+        border: '3px solid #333333',
+        fontSize: '2.5rem',
+        borderRadius: '2% 6% 5% 4% / 1% 1% 2% 4%',
+        textTransform: 'uppercase',
+        letterSpacing: '0.3ch',
+        background: '#ffffff',
+        position: 'relative',
+        "&:before": {
+            content: '',
+            border: '2px solid #353535',
+            display: 'block',
+            width: '100%',
+            height: "100%",
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: "translate3d(-50%, -50%, 0) scale(1.015) rotate(0.5deg)",
+            borderRadius: '1% 1% 2% 4% / 2% 6% 5% 4%'
+        }
     },
     botonGris: {
         background: 'linear-gradient(45deg, #636364 50%, #636388 90%)',
@@ -431,7 +480,7 @@ const useStyles = makeStyles(theme => ({
     },
     paperAmarillo: {
         margin: 6,
-        padding: 15,
+        padding: 16,
         background : '#ffd369',
         width: '100%',
     },
@@ -530,7 +579,38 @@ const useStyles = makeStyles(theme => ({
         '--background-start': '#9A031E',
         '--background-end': '#FF8E53',
         '--box-shadow': 'rgba(255, 105, 135, .3)',
-    }
+    },
+    rainbow: {
+        width :  '100%',
+        height:  '100%',
+        animation: "o-rotate-360 linear 8s infinite",
+      
+        span: {
+          display: 'block',
+          width: '100%', height: '100%',
+          position: 'relative',
+          transform: 'translate(-50%, -50%)',
+      
+        '&:after': {
+            display: 'block',
+            content: "",
+            width: '100%', height: '100%',
+            position: 'absolute',
+            left: '100%'
+        },
+      
+        '&:firstChild': {
+            background: '#65587f',
+            after: { background: '#f18867' }
+        },
+                  
+        '&:lastChild': {
+            background: '#e85f99',
+            after: { background: '#50bda1' }
+        }
+        }
+      }
+      
 }));
 
 export default useStyles
