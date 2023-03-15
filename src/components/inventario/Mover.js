@@ -40,7 +40,8 @@ export default function Mover({ open, close, inventario }) {
 
     useEffect(()=>{
         setMovimiento({...movimiento,
-            itemselcantidad: formatNumber(neto,2),
+            itemselcantidad: neto.toFixed(2),
+            // itemselcantidad: formatNumber(neto,2),
             itemselempaques: lista.length
         })
     },[lista, neto]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -51,7 +52,7 @@ export default function Mover({ open, close, inventario }) {
                 break;
             case "itemselcantidad":
                 if (parseFloat(value) > movimiento.itemsel.stock) {
-                    setMovimiento({ ...movimiento, itemselcantidad: '' })
+                    setMovimiento({ ...movimiento, itemselcantidad: 0 })
                 } else {
                     setMovimiento({ ...movimiento, itemselcantidad: value })
                 }
