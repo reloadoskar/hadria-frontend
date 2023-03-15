@@ -119,6 +119,7 @@ const InventarioContextProvider = (props) => {
 
     const crearSolicitudCambio = async (user, solicitud) => {
         const res = await createSolicitudCambio(user, solicitud)
+        setCambios([...cambios, res.respuesta])
         return res
     }
 
