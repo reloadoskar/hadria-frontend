@@ -35,7 +35,8 @@ export default function CambiosDrawer({open, close, ubicacion}){
                     </Grid>
                 </Grid>
                 {!cambios ? null : cambios
-                    .filter(cambio=>cambio.ubicacion._id===ubicacion._id)
+                    .filter(cambio=>cambio.ubicacion._id===ubicacion._id).length === 0 ? <Typography variant='h6'>No hay solicitudes</Typography> :
+                    cambios.filter(cambio=>cambio.ubicacion._id===ubicacion._id)
                     .filter(cambio=>cambio.status!=="TERMINADO")
                     .map((el,i)=>(
                     <Grid container spacing={2} key={i}>

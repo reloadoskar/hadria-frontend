@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogActions, DialogContent, Grid, TextField, Button, MenuItem, Typography } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, Grid, TextField, Button, MenuItem, Typography, FormControlLabel, Switch } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
 import moment from 'moment'
 import { useInventario } from '../inventario/InventarioContext'
@@ -19,6 +19,7 @@ export default function Cambios({open, close, inventario}){
     const [tara, setTara] = useState(0)
     const [peson, setPn] = useState(0)
     const [enviando, setEnviando] = useState(false)
+    const [descontarInventario, setDesc] = useState(false)
     const { enqueueSnackbar } = useSnackbar()
 	const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
     const handleClose = () => {
@@ -48,10 +49,14 @@ export default function Cambios({open, close, inventario}){
             piezas: piezas,
             pesob: pesob,
             tara: tara,
-            peson: peson
+            peson: peson,
+            descontarInventario: descontarInventario
         }
         crearSolicitudCambio(user, solicitud )
             .then(res =>{
+                if(solicitud.descontarInventario){
+                    producto.stock-=solicitud.peson
+                }
                 showMessage(res.message, res.status)
                 setEnviando(false)
                 handleClose()
@@ -86,7 +91,13 @@ export default function Cambios({open, close, inventario}){
                                 required
                             >
                                 {!inventario ? null : inventario.map((itm,i)=>(
-                                    <MenuItem value={itm} key={i}>{itm.compra.folio}-{itm.producto.descripcion} {itm.clasificacion}</MenuItem>
+                                    <MenuItem value={itm} key={i}>
+                                        <Grid container>
+                                            <Grid item xs={6}><Typography>{itm.compra.folio}-{itm.producto.descripcion} {itm.clasificacion}</Typography></Grid>
+                                            <Grid item xs={6}><Typography align="right">{itm.empaquesStock}/{itm.stock}</Typography></Grid>
+                                        </Grid>
+                                        
+                                    </MenuItem>
                                 ))}
                             </TextField>                        
                         </Grid>
@@ -138,7 +149,13 @@ export default function Cambios({open, close, inventario}){
                                 variant="outlined"
                             />
                         </Grid>                    
-                    </Grid>
+                        <Grid item xs={12}>
+                            <FormControlLabel
+                                control={<Switch disabled={peson===0?true:false} size="medium" checked={descontarInventario} onChange={()=>setDesc(!descontarInventario)} />}
+                                label="Descontar de inventario."
+                            />
+                        </Grid>
+                    </Grid>                    
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>cancelar</Button>

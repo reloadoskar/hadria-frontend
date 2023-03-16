@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Grid, MenuItem, Switch, TextField, Typography } from '@material-ui/core'
 import { useSnackbar } from 'notistack';
@@ -22,6 +22,12 @@ export default function SurtirCambio({open, close, cambio, inventario}){
     const [descontarInventario, setDesc] = useState(false)
     
     const [surtiendo, setSurtiendo] = useState(false)
+
+    useEffect(()=>{
+        if(pesob>0){
+            setPeson(pesob-tara)
+        }
+    },[pesob, tara])
 
     const handleSubmit = (e) =>{
         e.preventDefault()
@@ -102,7 +108,16 @@ export default function SurtirCambio({open, close, cambio, inventario}){
                                     select
                                     fullWidth>
                                     {ubicacion.items.map((el,i)=>(
-                                        <MenuItem key={i} value={el}>{el.compra.folio} - {el.producto.descripcion} {el.clasificacion}</MenuItem>
+                                        <MenuItem key={i} value={el}>
+                                            <Grid container spacing={1}>
+                                                <Grid item xs={6}>
+                                                    <Typography>{el.compra.folio} - {el.producto.descripcion} {el.clasificacion}</Typography>
+                                                </Grid>
+                                                <Grid item xs={6}>
+                                                    <Typography align="right">{el.empaquesStock} / {el.stock.toFixed(2)}</Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </MenuItem>
                                     ))}
                                 </TextField>
                             </Grid>
@@ -129,10 +144,11 @@ export default function SurtirCambio({open, close, cambio, inventario}){
                                     />
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <TextField 
+                                    <TextField
+
                                         id='neto'
                                         label='Peso Neto'
-                                        inputProps={{ type: "number", min: 0, max: 999, step:"any" }}
+                                        inputProps={{ type: "number", min: 0, max: 999, step:"any", readOnly: true }}
                                         value={peson}
                                         onChange={(e)=>setPeson(e.target.value)}
                                     />
@@ -156,7 +172,7 @@ export default function SurtirCambio({open, close, cambio, inventario}){
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FormControlLabel
-                                        control={<Switch size="medium" checked={descontarInventario} onChange={()=>setDesc(!descontarInventario)} />}
+                                        control={<Switch disabled={peson===0?true:false} size="medium" checked={descontarInventario} onChange={()=>setDesc(!descontarInventario)} />}
                                         label="Descontar de inventario."
                                     />
                                 </Grid>
