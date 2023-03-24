@@ -99,7 +99,7 @@ export default function Dashboard() {
             // if(dias>10){ descuento = 0}
             // if(dias>15){ descuento = 0}
             // if(dias>30){ descuento = 0}
-            if(dias>15){
+            if(dias>3){
                 setBody(null)
             }else{
                 setVerPlanStatus(true)

@@ -6,19 +6,18 @@ import {InventarioContext} from '../inventario/InventarioContext'
 export default function Movimientos(){
     const {movimientos} = useContext(InventarioContext)
     return (
-        <React.Fragment>
+        <div>
             <SelectorFecha />
-            { movimientos.length > 0 ?
                 <Grid container spacing={2}  >
-                    {movimientos.map((mov,i)=>(
+                    { movimientos.length === 0 ? 
+                        <Grid item xs>
+                            <Typography align="center">No hay resultados. 👻</Typography>
+                        </Grid>
+                        :
+                        movimientos.map((mov,i)=>(
                         <Movimiento mov={mov} key={i}  />
                     ))}
                 </Grid>
-                :
-                <Grid item xs>
-                    <Typography align="center">No hay resultados. 👻</Typography>
-                </Grid>
-            }
-        </React.Fragment>
+        </div>
     )
 }
