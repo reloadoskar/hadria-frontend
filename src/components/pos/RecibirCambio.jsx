@@ -8,14 +8,14 @@ export default function RecibirCambio({open, close, cambioSelected}){
     const {user} = useAuth()
     const classes = useStyles()
     const {aceptarCambio} = useInventario()
-    const [firma, setFirma] = useState({aceptado: false, comentario:"", fecha:Date(), })
+    const [firma, setFirma] = useState({aceptado: false, comentario:"", fecha:Date(), user: user.nombre })
     const [enviando, setEnviando] = useState(false)
 
     const handleSubmit = (e) =>{
         e.preventDefault()
         setEnviando(true)
         cambioSelected.firma = firma
-        cambioSelected.status = "TERMINADO"
+        cambioSelected.status = "ENTREGADO"
         aceptarCambio(user, cambioSelected).then(res=>{
             setEnviando(false)
             setFirma({aceptado: false, comentario:"", fecha:Date(), })

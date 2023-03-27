@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogActions, DialogContent, Grid, TextField, Button, MenuItem, Typography, FormControlLabel, Switch } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, Grid, TextField, Button, Typography } from '@material-ui/core'
 import useStyles from '../hooks/useStyles'
 import moment from 'moment'
 import { useInventario } from '../inventario/InventarioContext'
@@ -7,7 +7,7 @@ import { useAuth } from '../auth/use_auth';
 import {useUbicacion} from '../ubicaciones/UbicacionContext'
 import { useSnackbar } from 'notistack';
 
-export default function Cambios({open, close, inventario}){
+export default function Cambios({open, close}){
     const {user} = useAuth()
     const classes = useStyles()
     const fecha = moment().format("YYYY-MM-DD")
@@ -19,7 +19,7 @@ export default function Cambios({open, close, inventario}){
     const [tara, setTara] = useState(0)
     const [peson, setPn] = useState(0)
     const [enviando, setEnviando] = useState(false)
-    const [descontarInventario, setDesc] = useState(false)
+    // const [descontarInventario, setDesc] = useState(false)
     const { enqueueSnackbar } = useSnackbar()
 	const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
     const handleClose = () => {
@@ -50,7 +50,7 @@ export default function Cambios({open, close, inventario}){
             pesob: pesob,
             tara: tara,
             peson: peson,
-            descontarInventario: descontarInventario
+            // descontarInventario: descontarInventario
         }
         crearSolicitudCambio(user, solicitud )
             .then(res =>{
@@ -79,7 +79,7 @@ export default function Cambios({open, close, inventario}){
             <form onSubmit={handleSubmit}>
             <DialogContent>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <TextField
                                 id="producto"
                                 select
@@ -100,7 +100,7 @@ export default function Cambios({open, close, inventario}){
                                     </MenuItem>
                                 ))}
                             </TextField>                        
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={3}>
                             <TextField 
                                 className={classes.textField1}
@@ -120,7 +120,7 @@ export default function Cambios({open, close, inventario}){
                                 label="Peso"
                                 fullWidth
                                 value={pesob}
-                                inputProps={{ type: "number", min: 1, max: 999, step:"any" }}
+                                inputProps={{ type: "number", min: 0, max: 999, step:"any" }}
                                 onChange={(e)=>setPb(e.target.value)}
                                 variant="outlined"
                             />
@@ -149,12 +149,12 @@ export default function Cambios({open, close, inventario}){
                                 variant="outlined"
                             />
                         </Grid>                    
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <FormControlLabel
                                 control={<Switch disabled={peson===0?true:false} size="medium" checked={descontarInventario} onChange={()=>setDesc(!descontarInventario)} />}
                                 label="Descontar de inventario."
                             />
-                        </Grid>
+                        </Grid> */}
                     </Grid>                    
             </DialogContent>
             <DialogActions>

@@ -533,10 +533,10 @@ export const getCambiosUbicacion = (user, ubicacion, fecha) => {
     }
 }
 
-export const getCambios = (user) => {
+export const getCambios = (user, fecha) => {
     try {
         return axios
-            .post(url + `cambios`,  {user})
+            .post(url + `cambios`,  {user, fecha})
             .then(res => {
                 return res.data
             })

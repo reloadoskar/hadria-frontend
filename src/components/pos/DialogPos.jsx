@@ -55,7 +55,7 @@ export default function DialogPos({ open, close, ubicacion, fecha, cxcPdv, addPa
 				resetIngresos(),
 				loadCuentasPorPagar(user),
 				loadCuentasPorCobrarPdv(user),
-				loadCambios(user)
+				loadCambios(user, moment(fecha).format("YYYY-MM"))
 			])
 			return res
 		}
@@ -264,7 +264,6 @@ export default function DialogPos({ open, close, ubicacion, fecha, cxcPdv, addPa
 							<Cambios
 								open={openCambios}
 								close={()=> setOc(false)}
-								inventario={ubicacionInventario}
 							/>
 						</Grid>
 

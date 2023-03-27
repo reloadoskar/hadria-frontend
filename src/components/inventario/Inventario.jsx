@@ -14,7 +14,7 @@ import {useEmpleados} from '../empleados/EmpleadoContext'
 export default function Inventario(){
     const {user} = useAuth()
     const classes = useStyles()
-    const {inventarioUbicacion, loadInventarioGeneral, resetInventario, loadCambios, cambios} = useInventario()
+    const {inventarioUbicacion, loadInventarioGeneral, resetInventario} = useInventario()
     const {loadEmpleados} = useEmpleados()
     const [moverDialog, setMoverDialog] = useState(false)
     const [tabSelected, setTab] = useState(3)
@@ -26,20 +26,11 @@ export default function Inventario(){
         const loadAll = async () =>{
             const res = await Promise.all([
                 loadInventarioGeneral(user),
-                loadCambios(user),
                 loadEmpleados(user)
             ])
             return res
         }
-        // if(!localStorage.inventario || !localStorage.cambios || !localStorage.empleados || !localStorage.inventarioUbicacion){
-            loadAll()
-        // }else{
-        //     setInventario(JSON.parse(localStorage.inventario))
-        //     setInventarioUbicacion(JSON.parse(localStorage.inventarioUbicacion))
-        //     setCambios(JSON.parse(localStorage.cambios))
-        //     setEmpleados(JSON.parse(localStorage.empleados))
-        // }
-
+        loadAll()
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const openMoverDialog = () => {
@@ -90,7 +81,7 @@ export default function Inventario(){
                         <Movimientos />
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 3}>
-                        <Cambios cambios={cambios} inventario={inventarioUbicacion}/>
+                        <Cambios />
                     </div>
                 </Grid>  
             </Grid>

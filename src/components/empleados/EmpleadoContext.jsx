@@ -13,7 +13,7 @@ const EmpleadoContextProvider = (props) => {
     const loadEmpleados = async (user) => {
         const res = await getEmpleados(user)
         setEmpleados(res.empleados)
-        localStorage.setItem('empleados', JSON.stringify(res.empleados))
+        // localStorage.setItem('empleados', JSON.stringify(res.empleados))
         return res
     }
 

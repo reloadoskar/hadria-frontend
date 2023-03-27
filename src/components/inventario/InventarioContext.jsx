@@ -30,15 +30,15 @@ const InventarioContextProvider = (props) => {
         setInventario(res.inventario)
         let ipu = agruparPorObjeto(res.inventario, 'ubicacion')
         setInventarioUbicacion(ipu)
-        localStorage.setItem('inventario', JSON.stringify(res.inventario))
-        localStorage.setItem('inventarioUbicacion', JSON.stringify(ipu))
+        // localStorage.setItem('inventario', JSON.stringify(res.inventario))
+        // localStorage.setItem('inventarioUbicacion', JSON.stringify(ipu))
         return res
     }
 
     const loadInventarioUbicacion = async (user, ubicacion) => {        
         let res = await getInventarioBy(user, ubicacion)
         setUbicacionInventario(res.inventario)
-        localStorage.setItem('ubicacionInventario', JSON.stringify(res.inventario))
+        // localStorage.setItem('ubicacionInventario', JSON.stringify(res.inventario))
         return res
     }
 
@@ -46,15 +46,15 @@ const InventarioContextProvider = (props) => {
         setMovimientos([])
         let res = await getMovimientos(user, fecha)
         setMovimientos(res.movimientos)
-        localStorage.setItem('movimientos', JSON.stringify(res.movimientos))
+        // localStorage.setItem('movimientos', JSON.stringify(res.movimientos))
         return res
     }
 
-    const loadCambios = async (user) =>{
+    const loadCambios = async (user, fecha) =>{
         setCambios([])
-        let res = await getCambios(user)
+        let res = await getCambios(user, fecha)
         setCambios(res.cambios)
-        localStorage.setItem('cambios', JSON.stringify(res.cambios))
+        // localStorage.setItem('cambios', JSON.stringify(res.cambios))
         return res
     }
 

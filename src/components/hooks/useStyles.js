@@ -47,6 +47,13 @@ const useStyles = makeStyles(theme => ({
         }
     },
 
+    gridTabla2c:{
+        '& nth-child(2)':{
+            border:"1px",
+            background: "#f1f1f3"
+        }
+    },
+
     coolRow: {
         '& #row:nth-child(odd)':{
             background: "#f2f5ff"
