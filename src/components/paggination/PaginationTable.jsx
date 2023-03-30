@@ -57,7 +57,7 @@ export default function PaginationTable({data}){
                 {row.fecha}
               </TableCell>
               <TableCell >
-                {row.producto.descripcion} {row.compraItem.clasificacion}
+                {row.compra.folio}-{row.producto.descripcion} {row.compraItem.clasificacion}
               </TableCell>
               <TableCell style={{ width: 50 }} align="right">
                 {row.cantidad}

@@ -12,7 +12,7 @@ export const VentaContext = createContext()
 const VentaContextProvider = (props) => {
     const [ventas, setVentas] = useState([])
     const [venta, setVenta] = useState(null)
-	const [ventasPorSemana, setVentasPorSemana] = useState([])
+	const [ventasPorPeriodo, setVentasPorPeriodo] = useState([])
     const [trabajando, setTrabajando] = useState(false)
     // var now = moment()
     const [rango, setRango] = useState({f1:"",f2:""
@@ -26,7 +26,7 @@ const VentaContextProvider = (props) => {
 	}
 
     async function loadVentasPorPeriodo(user, rango) {
-        setVentasPorSemana([])
+        setVentasPorPeriodo([])
 		if(rango.f1 !== ""){
         setTrabajando(true)
 			const res = await getVentasSemana(user, rango.f1, rango.f2)
@@ -35,7 +35,7 @@ const VentaContextProvider = (props) => {
                 // 	nvoArray.push({x: formatearFecha(e._id),  y: e.totalVenta})
                 // });
                 // setVentasPorSemana(nvoArray)
-            setVentasPorSemana(res.ventas)
+            setVentasPorPeriodo(res.ventas)
             setTrabajando(false)
 		}
 	}
@@ -60,7 +60,7 @@ const VentaContextProvider = (props) => {
             setVenta,
             selectVenta,
             ventas,
-            ventasPorSemana,
+            ventasPorPeriodo,
             loadVentas,
             loadVentasPorPeriodo,
             verVenta,

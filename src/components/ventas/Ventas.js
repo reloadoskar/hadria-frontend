@@ -7,7 +7,7 @@ import SelectorDeRango from './SelectorDeRango';
 import VentasReporter from './VentasReporter';
 
 const Ventas = () => {
-	const {rango, ventasPorSemana, trabajando} = useContext(VentaContext)
+	const {rango, ventasPorPeriodo, trabajando} = useContext(VentaContext)
 	return (
 		<Container>
 			<Grid container spacing={2} alignItems="center">
@@ -23,8 +23,8 @@ const Ventas = () => {
 				{/* LISTA DE VENTAS */}
 				<Grid item xs={12}>
 					{trabajando? <Typography align="center">Buscando...</Typography> :
-						ventasPorSemana.length >0 ?
-							<VentasReporter data={ventasPorSemana} rango={rango} />
+						ventasPorPeriodo.length >0 ?
+							<VentasReporter data={ventasPorPeriodo} rango={rango} />
 						: null 
 					}
 				</Grid>				
