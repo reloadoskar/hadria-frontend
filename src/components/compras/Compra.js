@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import {
   Dialog, DialogContent, Divider, Grid, IconButton, Slide,
-  Typography, Tooltip, Tabs, Tab
+  Typography, Tooltip, Tabs, Tab, Container
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import LockIcon from '@material-ui/icons/Lock';
@@ -14,15 +14,16 @@ import EgresoBasic from '../egresos/EgresoBasic'
 import { sumImporte, formatNumber } from '../Tools'
 import ListaVentas from '../ventas/ListaVentas';
 import Liquidacion from '../liquidacion/Liquidacion';
-import CountUpAnimation from '../tools/CountUpAnimation'
+
 import { useSnackbar } from 'notistack'
 import { ComprasContext } from './CompraContext'
 import VentasReportes from '../ventas/VentasReportes'
-import InventarioPorUbicacion from '../inventario/InventarioPorUbicacion';
+// import InventarioPorUbicacion from '../inventario/InventarioPorUbicacion';
 import useCompras from './useCompras';
 import { useAuth } from '../auth/use_auth';
 import moment from 'moment'
 import LiquidacionContextProvider from '../liquidacion/LiquidacionContext';
+import CompraInventario from './CompraInventario';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -166,19 +167,19 @@ export default function Compra({ open, close, compra }) {
               <Grid item xs={3}>
                 <Typography align="center" className={classes.textoMiniFacheron}>TOTAL VENTAS:</Typography>
                 <Typography className={classes.textoMirame} variant="h5" align="center" >
-                  $ <CountUpAnimation num={totalVenta} temp={1230} />
+                  ${formatNumber(totalVenta,2)}
                 </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography align="center" className={classes.textoMiniFacheron}>COSTO INICIAL:</Typography>
                 <Typography className={classes.textoMirame} variant="h5" align="center" >
-                  $ <CountUpAnimation num={laCompra.importe} temp={920} />
+                  ${formatNumber(laCompra.importe,2)}
                 </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography align="center" className={classes.textoMiniFacheron}>COSTO FINAL:</Typography>
                 <Typography className={classes.textoMirameSangron} variant="h5" align="center" >
-                  $ <CountUpAnimation num={costoFinal} temp={1500} />
+                  ${formatNumber(costoFinal,2)}
                 </Typography>
               </Grid>
               <Grid item xs={3}>
@@ -188,7 +189,7 @@ export default function Compra({ open, close, compra }) {
                   variant="h5"
                   align="center"
                 >
-                  $ <CountUpAnimation num={resultado} temp={720} />
+                  ${formatNumber(resultado,2)}
                 </Typography>
               </Grid>
             </Grid>
@@ -209,70 +210,72 @@ export default function Compra({ open, close, compra }) {
                 <Tab label="Reportes" value={5} />
                 <Tab label="Liquidación" value={6} />
               </Tabs>
-              <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 1}>
-                <InventarioPorUbicacion items={laCompra.items} />
-              </div>
-              <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 2}>
-                <ResumenVentas items={laCompra.items} ventas={laCompra.ventaItems} />
-              </div>
-              <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 3}>
-                {laCompra.gastos.length > 0 ?
-                  <Grid item xs={12} container>
-                    <Grid item xs={12}>
-                      <Typography align="center" className={classes.textoMirame} >Gastos</Typography>
-                      <Divider />
-                      {laCompra.gastos.filter(gasto => gasto.importe > 0).map((gasto, i) => (
-                        <EgresoBasic data={gasto} key={i} />
-                      ))}
-                      <Divider />
+              <Container>
+                <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 1}>
+                  <CompraInventario items={laCompra.items} />
+                </div>
+                <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 2}>
+                  <ResumenVentas items={laCompra.items} ventas={laCompra.ventaItems} />
+                </div>
+                <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 3}>
+                  {laCompra.gastos.length > 0 ?
+                    <Grid item xs={12} container>
+                      <Grid item xs={12}>
+                        <Typography align="center" className={classes.textoMirame} >Gastos</Typography>
+                        <Divider />
+                        {laCompra.gastos.filter(gasto => gasto.importe > 0).map((gasto, i) => (
+                          <EgresoBasic data={gasto} key={i} />
+                        ))}
+                        <Divider />
+                      </Grid>
+                      <Grid item xs={12} >
+                        <Typography align="right" className={classes.textoMiniFacheron} >
+                          TOTAL GASTOS:
+                        </Typography>
+                        <Typography align="right" className={classes.textoSangron} >
+                          ${formatNumber(sumImporte(laCompra.gastos), 2)}
+                        </Typography>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={12} >
-                      <Typography align="right" className={classes.textoMiniFacheron} >
-                        TOTAL GASTOS:
-                      </Typography>
-                      <Typography align="right" className={classes.textoSangron} >
-                        ${formatNumber(sumImporte(laCompra.gastos), 2)}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  : null
-                }
+                    : null
+                  }
 
-                {laCompra.pagos.length > 0 ?
-                  <Grid item xs={12} container>
-                    <Grid item xs={12}>
-                      <Typography align="center" className={classes.textoMirame} >Pagos</Typography>
-                      <Divider />
-                      {laCompra.pagos.filter(gasto => gasto.importe > 0).map((gasto, i) => (
-                        <EgresoBasic data={gasto} key={i} />
-                      ))}
-                      <Divider />
+                  {laCompra.pagos.length > 0 ?
+                    <Grid item xs={12} container>
+                      <Grid item xs={12}>
+                        <Typography align="center" className={classes.textoMirame} >Pagos</Typography>
+                        <Divider />
+                        {laCompra.pagos.filter(gasto => gasto.importe > 0).map((gasto, i) => (
+                          <EgresoBasic data={gasto} key={i} />
+                        ))}
+                        <Divider />
+                      </Grid>
+                      <Grid item xs={12} >
+                        <Typography align="right" className={classes.textoMiniFacheron} >
+                          TOTAL PAGOS:
+                        </Typography>
+                        <Typography align="right" className={classes.textoSangron} >
+                          ${formatNumber(sumImporte(laCompra.pagos, 2))}
+                        </Typography>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={12} >
-                      <Typography align="right" className={classes.textoMiniFacheron} >
-                        TOTAL PAGOS:
-                      </Typography>
-                      <Typography align="right" className={classes.textoSangron} >
-                        ${formatNumber(sumImporte(laCompra.pagos, 2))}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  : null
-                }
-              </div>
+                    : null
+                  }
+                </div>
 
-              <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 4}>
-                <ListaVentas ventas={laCompra.ventaItems} />
-              </div>
+                <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 4}>
+                  <ListaVentas ventas={laCompra.ventaItems} />
+                </div>
 
-              <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 5}>
-                <VentasReportes items={laCompra.items} ventas={laCompra.ventaItems} />
-              </div>
-              <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 6}>
-                <LiquidacionContextProvider>
-                  <Liquidacion compra={laCompra} />
-                </LiquidacionContextProvider>
-              </div>
+                <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 5}>
+                  <VentasReportes items={laCompra.items} ventas={laCompra.ventaItems} />
+                </div>
+                <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 6}>
+                  <LiquidacionContextProvider>
+                    <Liquidacion compra={laCompra} />
+                  </LiquidacionContextProvider>
+                </div>
+              </Container>
             </Grid>
 
 

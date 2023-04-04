@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Badge, Divider, Grid, IconButton, Typography } from '@material-ui/core'
+import { Divider, Grid, IconButton, Typography } from '@material-ui/core'
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit'
 import { useSnackbar } from 'notistack';
@@ -96,7 +96,6 @@ export default function CompraBasic(props){
             <Grid container justifyContent="center" alignItems="baseline" spacing={1} className={classes.paperContorno}>
                 <Grid item xs={12}>
                     <Typography align="right">
-                        <Badge variant="dot" color="secondary">
                         <IconButton
                             size="small"
                             disabled={compraStatus === "CANCELADO" ? true : false}
@@ -104,7 +103,6 @@ export default function CompraBasic(props){
                             >
                             <VisibilityIcon />
                         </IconButton>
-                        </Badge>
                         <IconButton
                             size="small"
                             disabled={compraStatus === "CANCELADO" ? true : false}
