@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 // UI
 import { Grid, 
-    Typography, 
     Container,
     ButtonGroup,
     Button,
@@ -9,8 +8,9 @@ import { Grid,
     Tab,
     Backdrop,
     CircularProgress,
+    TextField,
 } from '@material-ui/core'
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 // componentes
 import Pagar from './Pagar'
 import Traspasar from './Traspasar'
@@ -19,7 +19,6 @@ import Disponible from '../disponible/Disponible'
 import Cobrar from './Cobrar'
 import CrearEgreso from '../egresos/CrearEgreso'
 import GraficaInventario from '../inventario/GraficaInventario'
-import PlanStatus from '../avisos/PlanStatus'
 // HOOKS
 import { useSnackbar } from 'notistack';
 
@@ -33,8 +32,6 @@ import {EgresoContext} from '../egresos/EgresoContext'
 import {IngresoContext} from '../ingresos/IngresoContext'
 import { InventarioContext } from '../inventario/InventarioContext'
 import CorteGlobal from '../cortes/CorteGlobal';
-import SelectorMes from '../tools/SelectorMes';
-import SelectorAnio from '../tools/SelectorAnio';
 
 import { agruparPorObjeto } from '../Tools'
 import { useAuth } from '../auth/use_auth';
@@ -46,17 +43,15 @@ export default function Dashboard() {
     const {egresos, loadEgresosMonthYear, loadCuentasPorPagar, addEgreso} = useContext(EgresoContext)
     const {ubicacions} = useContext(UbicacionContext)
     const {inventario, loadInventarioGeneral} = useContext(InventarioContext)
+    const { enqueueSnackbar } = useSnackbar()
+
     const [inventarioPorUbicacion, setIpu] = useState([])
-    const [verPlanStatus, setVerPlanStatus] = useState(false)
-    const [bodyPlanStatus, setBody] = useState(null)
     const [loadingData, setLoading] = useState(false)
     
     const classes = useStyles()
 
     const now = moment()
-    const [fecha] = useState(now.format("YYYY-MM-DD"))    
-    const [month, setMonth] = useState(now.format("MM"))
-    const [year, setYear] = useState(now.format("YYYY"))
+    const [fecha, setFecha] = useState(now.format("YYYY-MM"))    
     useEffect(()=>{
         if(inventario){
             setIpu(agruparPorObjeto(inventario, 'ubicacion'))
@@ -78,6 +73,8 @@ export default function Dashboard() {
     },[])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         setLoading(true)
+        let month  = moment(fecha).format("MM")
+        let year = moment(fecha).format("YYYY")
         const loadData = async () =>{
             const res = await Promise.all([
                 loadEgresosMonthYear(user, month, year),
@@ -88,40 +85,20 @@ export default function Dashboard() {
         loadData().then(()=>{
             setLoading(false)
         })
-    }, [user, year,month]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [user, fecha]) // eslint-disable-line react-hooks/exhaustive-deps
    
 
     useEffect(()=>{
         if(empresa){
             let dias = moment(empresa.fechaFinal).diff(moment(), 'days')
             let vence = moment().to(moment(empresa.fechaFinal))
-            // let descuento = 0
-            // if(dias>10){ descuento = 0}
-            // if(dias>15){ descuento = 0}
-            // if(dias>30){ descuento = 0}
-            if(dias>3){
-                setBody(null)
-            }else{
-                setVerPlanStatus(true)
-                setBody(
-                    <React.Fragment>
-                        <Typography align="center">Tu Plan vence:</Typography>
-                        <Typography variant="h6" align="center">{vence}</Typography>
-                        <NavLink exact to="app/configuracion" 
-                            className={classes.link} 
-                            >
-                            <Typography align="center">ver planes</Typography>
-                        </NavLink>
-                        <Typography align="center">
-                            <Button className={classes.botonGenerico} onClick={()=>setVerPlanStatus(false)}>entendido</Button>
-                        </Typography>
-    
-                    </React.Fragment>
-                )
+            let texto = "Atención: \n Su plan vence "+vence+", evita perder el acceso a tu información, \n renueva tu plan pronto."
+            if(dias<=3){
+                enqueueSnackbar(texto, {variant: "warning", autoHideDuration: 20000})
             }
         }
     },[empresa]) // eslint-disable-line react-hooks/exhaustive-deps
-    const { enqueueSnackbar } = useSnackbar()
+    
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
     const [gastar, setGastar] = useState(false)
@@ -211,12 +188,20 @@ export default function Dashboard() {
             <Grid container spacing={3}>
                 {/* TOP MENU */}
                 <Grid container justifyContent="center">   
-                    <Grid item xs={6} >                    
-                        <SelectorMes mes={month} cambiar={setMonth} />
+                    <Grid item xs={3} >    
+                        <TextField 
+                            fullWidth
+                            id="fecha"
+                            type="month"
+                            value={fecha}
+                            onChange={(e)=>setFecha(e.target.value)}
+                            variant="outlined"
+                        />                
+                        {/* <SelectorMes mes={month} cambiar={setMonth} /> */}
                     </Grid>                 
-                    <Grid item xs={6} >
+                    {/* <Grid item xs={6} >
                         <SelectorAnio anio={year} cambiar={setYear} />
-                    </Grid>
+                    </Grid> */}
                     
 
                     <Grid item xs={12}>
@@ -311,7 +296,6 @@ export default function Dashboard() {
                     {/* <CuentasxCobrar cuentas={ingresos.cuentasxCobrar} total={ingresos.totalCxc}/> */}
                 </Grid>
             </Grid>     
-            <PlanStatus open={verPlanStatus} close={() => setVerPlanStatus(false)} body={bodyPlanStatus} />
         </Container>
     : <Backdrop className={classes.backdrop} open={true}>
         <CircularProgress color="inherit" />
