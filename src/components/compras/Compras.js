@@ -5,7 +5,7 @@ import {
     CircularProgress,
     Container,
     Grid,
-    Menu, MenuItem, TextField, Typography,
+    TextField, Typography,
 } from '@material-ui/core';
 import { ComprasContext } from './CompraContext'
 import { useProductors } from '../productors/ProductorContext';
@@ -31,7 +31,7 @@ import { useEmpresa } from '../empresa/EmpresaContext';
 function Compras(){
     const {user} = useAuth()
     const {loadEmpresa} = useEmpresa()
-    const {compras, loadCompras, clearCompras } = useContext(ComprasContext)
+    const {compras, loadCompras, selectCompra, compra } = useContext(ComprasContext)
     
     const {loadProductos, productos, addProducto}  = useProductos()
     const {productors} = useProductors()
@@ -40,22 +40,23 @@ function Compras(){
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
     
-    const [anchorEl, setAnchorEl] = React.useState(null);
     const [showDialog, setShowDialog] = useState(false)
     const [showDialogP, setShowDialogP] = useState(false)
     const [detCompra, setDetCompra] = useState(false)
-    const [compra, setCompra] = useState(null)
+    // const [compra, ] = useState(null)
     const [verCompra, setVerCompra] = useState(false)
     const [confirm, setConfirm] = useState(false)
     let now = moment()
-    const [month, setMonth] = useState(now.format("MM"))
-    const [year, setYear] = useState(now.format("YYYY"))
+    const [month] = useState(now.format("MM"))
+    const [year] = useState(now.format("YYYY"))
     const [isLoading, setIsLoading] = useState(true)
+
+    const [mesAnio, setMesAnio] = useState(moment().format("YYYY-MM"))
     useEffect(()=>{
         setIsLoading(true)
         const loadAll = async () => {
             const res = await Promise.all([
-                loadCompras(user, month, year),
+                loadCompras(user, mesAnio),
                 loadTipoCompras(user),
                 loadProductos(user),
                 loadEmpresa(user)
@@ -65,7 +66,7 @@ function Compras(){
         loadAll().then(()=>{
             setIsLoading(false)
         })
-    },[month, year]) // eslint-disable-line react-hooks/exhaustive-deps
+    },[mesAnio]) // eslint-disable-line react-hooks/exhaustive-deps
 
     // const crear = (compra) => {
     //     return addCompra(user, compra).then(res => {
@@ -91,13 +92,13 @@ function Compras(){
     }
 
     const editCompra = (compra) => {
-        setCompra(compra)
+        selectCompra(compra)
         setDetCompra(true)
     }
 
     const closeCompra = () => {
         setDetCompra(false)
-        setCompra(null)
+        selectCompra(null)
     }
 
     function cancelar(){
@@ -114,31 +115,19 @@ function Compras(){
     //     setConfirm(true)
     // }
     function closeConfirm(){
-        setCompra(null)
+        selectCompra(null)
         setConfirm(false)
     }
 
     function closeVerCompra(){
-        setCompra(null)
+        selectCompra(null)
         setVerCompra(!verCompra)
     }
 
     function showVerCompra(compra){
-        setCompra(compra)
+        selectCompra(compra)
         setVerCompra(true)
     }
-
-    const onChangeMonth = (mes) => {
-        clearCompras()
-        setMonth(mes)
-        handleClose()
-    }
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    }
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
     return isLoading ?
         <Backdrop open={isLoading} onClick={()=> setIsLoading(false)}>
@@ -148,42 +137,15 @@ function Compras(){
         <Container maxWidth="xl">
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={3}>
-                    <TextField
-                        id="year"
-                        select
-                        value={year}
-                        fullWidth
-                        onChange={(e) => setYear(e.target.value)}
-                    >
-                        <MenuItem value={2021}>2021</MenuItem>
-                        <MenuItem value={2022}>2022</MenuItem>
-                    </TextField>
-                    <Button
-                        fullWidth
-                        onClick={handleClick}
-                        className={classes.botonsoteGenerico}
-                        children={
-                            Meses.filter(mes=>mes.id === month).map(mes=>mes.nombre)
-                        } />
-                    <Menu
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        getContentAnchorEl={null}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                        }}
-                        onClose={handleClose}
-                    >
-                        {Meses.map((mes, i) => (
-                            <MenuItem onClick={() => onChangeMonth(mes.id)} key={i}>{mes.nombre}</MenuItem>
-                        ))}
-                    </Menu>
+                <TextField
+                    fullWidth
+                    id="periodo"
+                    type="month"
+                    label="Selecciona un periodo"
+                    variant="outlined"
+                    value={mesAnio}
+                    onChange={(e)=>setMesAnio(e.target.value)}
+                    />
                 </Grid>
                 <Grid item xs={12} sm={3}>
                     <Button className={classes.botonGenerico} onClick={() => openDialog('comprasDialog')}>
