@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = process.env.REACT_APP_API_TEST
+const url = process.env.REACT_APP_API_RAILWAY
 
 // USUARIOS
 
