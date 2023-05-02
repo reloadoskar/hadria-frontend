@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = process.env.REACT_APP_API_RAILWAY
+const url = process.env.REACT_APP_API_TEST
 
 // USUARIOS
 
@@ -52,6 +52,16 @@ export const getProfile = () => {
 
 
 // API PRODUCTOS
+
+export const getProduct = (user,id) => {
+    try {
+        axios.post(url + 'producto', {user,id}).then(res => {
+            return res.data
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export const getProducts = (user) => {
     try {
@@ -308,6 +318,18 @@ export const deleteUbicacion = (user, id) => {
 
 // API COMPRAS
 
+export const createMerma = (user, data) =>{
+    try {
+        return axios
+            .post(url + 'compra/addmerma', {user, data})
+            .then(res => {
+                return res.data
+            })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 export const getComprasActivas = (user) => {
 
     try {
@@ -321,11 +343,11 @@ export const getComprasActivas = (user) => {
     }
 }
 
-export const getCompras = (user, mes, year) => {
+export const getCompras = (user, mesAnio) => {
 
     try {
         return axios
-            .post(url + 'compras/', {user, mes, year})
+            .post(url + 'compras/', {user, mesAnio})
             .then(res => {
                 return res.data
             })
@@ -1564,11 +1586,11 @@ export const addStock = (id, cantidad) => {
     }
 }
 
-export const restartApp = () => {
+export const restartApp = (user) => {
     try {
 
         return axios
-            .post(url + '/restartApp')
+            .post(url + 'restartApp', {user})
             .then(res => {
                 return res.data
             })
