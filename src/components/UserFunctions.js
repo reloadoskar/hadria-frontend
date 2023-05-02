@@ -3,7 +3,7 @@ import { Grid, Menu, MenuItem, Divider, Button } from '@material-ui/core'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import { useHistory } from 'react-router-dom'
 import StatusDialog from './StatusDialog'
-import {restartApp} from './api'
+// import {restartApp} from './api'
 import useStyles from './hooks/useStyles'
 import { useAuth } from './auth/use_auth'
 
@@ -15,8 +15,6 @@ const UserFunctions = () => {
     const [statusCheck, setStatusCheck] = useState(false)
     const [status, setStatus] = useState({message:"", type: ""})
     let history = useHistory();
-    // const { enqueueSnackbar } = useSnackbar()
-    // const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
 
     useEffect(()=>{
         if(auth.user){
@@ -52,9 +50,10 @@ const UserFunctions = () => {
         })
     }
     const restart = () => {
-        restartApp().then(res=>{
-            salir()
-        })
+        alert("esto eliminara TODA la información disponible")
+        // restartApp(auth.user).then(res=>{
+        //     salir()
+        // })
     }
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget)
