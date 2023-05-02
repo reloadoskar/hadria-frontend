@@ -29,6 +29,7 @@ import { ConceptosProvider } from './components/hooks/useConceptos';
 import { EmpaquesProvider } from './components/hooks/useEmpaques';
 import { TipoComprasProvider } from './components/hooks/useTipoCompras';
 import CortesContextProvider from './components/cortes/useCortes';
+import PesadasContextProvider from './components/inventario/PesadasContext';
 
 export default function Router() {
     const auth = useAuth()
@@ -111,13 +112,15 @@ export default function Router() {
                             }
                             {auth.user.level > 2 ? null :
                                 <Route exact path={`${path}/compras`}>
-                                    <TipoComprasProvider>
-                                        <UnidadesProvider>
-                                            <EmpaquesProvider>
-                                                <Compras />
-                                            </EmpaquesProvider>
-                                        </UnidadesProvider>
-                                    </TipoComprasProvider>
+                                    <PesadasContextProvider>
+                                        <TipoComprasProvider>
+                                            <UnidadesProvider>
+                                                <EmpaquesProvider>
+                                                    <Compras />
+                                                </EmpaquesProvider>
+                                            </UnidadesProvider>
+                                        </TipoComprasProvider>
+                                    </PesadasContextProvider>
                                 </Route>
                             }
                             {auth.user.level > 2 ? null :
