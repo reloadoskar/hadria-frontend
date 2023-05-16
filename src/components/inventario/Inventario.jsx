@@ -14,7 +14,7 @@ import {useEmpleados} from '../empleados/EmpleadoContext'
 export default function Inventario(){
     const {user} = useAuth()
     const classes = useStyles()
-    const {inventarioUbicacion, loadInventarioGeneral, resetInventario} = useInventario()
+    const {inventarioPorUbicacion, loadInventarioGeneral, resetInventario} = useInventario()
     const {loadEmpleados} = useEmpleados()
     const [moverDialog, setMoverDialog] = useState(false)
     const [tabSelected, setTab] = useState(3)
@@ -58,7 +58,7 @@ export default function Inventario(){
                         <Mover
                             open={moverDialog} 
                             close={closeMoverDialog}
-                            inventario={inventarioUbicacion} 
+                            inventario={inventarioPorUbicacion} 
                         /> 
                     </Grid>
                 <Grid item xs={12}>
@@ -72,9 +72,9 @@ export default function Inventario(){
 
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
-                            <GraficaInventario inventario={inventarioUbicacion}/>
+                            <GraficaInventario inventario={inventarioPorUbicacion}/>
                         <Grid container spacing={2}>
-                            <InventarioPorUbicacion inventario={inventarioUbicacion} />
+                            <InventarioPorUbicacion inventario={inventarioPorUbicacion} />
                         </Grid>              
                     </div>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>

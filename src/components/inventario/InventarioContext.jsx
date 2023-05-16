@@ -1,4 +1,4 @@
-import React, {createContext, useState, useContext} from 'react'
+import React, {createContext, useState, useContext, useEffect} from 'react'
 import { 
     getInventario, 
     getInventarioBy, 
@@ -21,15 +21,23 @@ const InventarioContextProvider = (props) => {
     const [inventario, setInventario] = useState([])
     const [movimientos, setMovimientos] = useState([])
     const [cambios, setCambios] = useState([])
-    const [inventarioUbicacion, setInventarioUbicacion] = useState([])
+    const [inventarioPorUbicacion, setInventarioPorUbicacion] = useState([])
     const [ubicacionInventario, setUbicacionInventario] = useState(null)
+
+    useEffect(()=>{
+        if(inventario){
+            let ipu = agruparPorObjeto(inventario, 'ubicacion')
+            return setInventarioPorUbicacion(ipu)
+        }
+        return setInventarioPorUbicacion([])
+    },[inventario])
     
     const loadInventarioGeneral = async (user) => {
         setInventario([])
         let res = await getInventario(user)
         setInventario(res.inventario)
-        let ipu = agruparPorObjeto(res.inventario, 'ubicacion')
-        setInventarioUbicacion(ipu)
+        // let ipu = agruparPorObjeto(res.inventario, 'ubicacion')
+        // setInventarioPorUbicacion(ipu)
         // localStorage.setItem('inventario', JSON.stringify(res.inventario))
         // localStorage.setItem('inventarioUbicacion', JSON.stringify(ipu))
         return res
@@ -62,22 +70,16 @@ const InventarioContextProvider = (props) => {
         // console.log(movimiento.itemsel)
 		let mov = await moveInventario(user, movimiento)
             setMovimientos([mov.movimiento , ...movimientos])
+            // console.log(inventario) ✅
         let itm = inventario.filter(it=>it._id=== movimiento.itemsel._id)
         // console.log(itm[0])
         if(mov){
-            itm[0].stock-=movimiento.itemselcantidad
-            itm[0].empaquesStock-=movimiento.itemselempaques
-            setInventario([...inventario, {
-                _id: movimiento,
-                ubicacion: movimiento.destino,
-                compra: movimiento.itemsel.compra,
-                producto: movimiento.itemsel.producto,
-                cantidad: movimiento.itemselcantidad,
-                clasificacion: movimiento.clasificacion,
-                stock: movimiento.itemselcantidad,
-                empaques: movimiento.itemselempaques,
-                empaquesStock: movimiento.itemselempaques
-            }])
+            console.log(itm)
+            if(itm){
+                itm[0].stock-=movimiento.itemselcantidad
+                itm[0].empaquesStock-=movimiento.itemselempaques
+                setInventario([...inventario, mov.compraItem])
+            }
         }
 	    return mov
 	}
@@ -87,8 +89,8 @@ const InventarioContextProvider = (props) => {
     }
 
     const selectInventarioUbicacion = (ubicacionid)=>{
-        if(inventarioUbicacion.length>0){
-            let invsel = inventarioUbicacion.filter(ub=>ub._id === ubicacionid)
+        if(inventarioPorUbicacion.length>0){
+            let invsel = inventarioPorUbicacion.filter(ub=>ub._id === ubicacionid)
             setUbicacionInventario(invsel[0])
         }else{
             console.log("no se selecciono nada")
@@ -99,7 +101,7 @@ const InventarioContextProvider = (props) => {
         setInventario([])
         setMovimientos([])
         setCambios([])
-        setInventarioUbicacion([])
+        setInventarioPorUbicacion([])
         setUbicacionInventario(null)
     }
 
@@ -136,7 +138,7 @@ const InventarioContextProvider = (props) => {
     return (
         <InventarioContext.Provider value={{
             inventario,
-            inventarioUbicacion,
+            inventarioPorUbicacion,
             ubicacionInventario,
             movimientos,
             cambios,
@@ -150,7 +152,7 @@ const InventarioContextProvider = (props) => {
             limpiarInventario,
             selectInventarioUbicacion,
             resetInventario,
-            deleteMovimiento, setInventario, setCambios, setInventarioUbicacion, surtirCambio, aceptarCambio
+            deleteMovimiento, setInventario, setCambios, setInventarioPorUbicacion, surtirCambio, aceptarCambio
         }} >
             {props.children}
         </InventarioContext.Provider>
