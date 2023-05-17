@@ -74,7 +74,7 @@ const InventarioContextProvider = (props) => {
         let itm = inventario.filter(it=>it._id=== movimiento.itemsel._id)
         // console.log(itm[0])
         if(mov){
-            console.log(itm)
+            // console.log(itm)
             if(itm){
                 itm[0].stock-=movimiento.itemselcantidad
                 itm[0].empaquesStock-=movimiento.itemselempaques

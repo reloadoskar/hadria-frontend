@@ -33,12 +33,12 @@ export default function InventarioPorUbicacion({inventario}){
                                 </Grid>                       
                                 <Grid item xs={12} sm={3}>
                                     <Typography>
-                                    { formatNumber(item.empaquesStock,1) } de {formatNumber(item.empaques,1)}{item.producto.empaque.abr}
+                                    { formatNumber(item.empaquesStock,1) } de {formatNumber(item.empaques,1)}{item.producto.empaque ? item.producto.empaque.abr: null}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} sm={3}>
                                     <Typography>
-                                    { formatNumber(item.stock,1) } de {formatNumber(item.cantidad,1)}{item.producto.unidad.abr}
+                                    { formatNumber(item.stock,1) } de {formatNumber(item.cantidad,1)}{item.producto.unidad ? item.producto.unidad.abr : null}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} sm={1}>
