@@ -26,7 +26,13 @@ const InventarioContextProvider = (props) => {
 
     useEffect(()=>{
         if(inventario){
+
+            console.log("el inventario cambió:")
+            console.log(inventario)
             let ipu = agruparPorObjeto(inventario, 'ubicacion')
+
+            console.log("y ahora esta asi por ubicación:")
+            console.log(ipu)
             return setInventarioPorUbicacion(ipu)
         }
         return setInventarioPorUbicacion([])

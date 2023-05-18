@@ -17,7 +17,7 @@ export default function Inventario(){
     const {inventarioPorUbicacion, loadInventarioGeneral, resetInventario} = useInventario()
     const {loadEmpleados} = useEmpleados()
     const [moverDialog, setMoverDialog] = useState(false)
-    const [tabSelected, setTab] = useState(3)
+    const [tabSelected, setTab] = useState(1)
     const selectTab = (event, selected) => {
         setTab(selected)
     }
@@ -66,9 +66,9 @@ export default function Inventario(){
                         value={tabSelected}
                         onChange={selectTab}
                         centered>
+                        <Tab label="Inventario por Ubicaci&oacute;n" value={1}/>
                         <Tab label="Cambios" value={3}/>
-                        <Tab label="Ver por Ubicaci&oacute;n" value={1}/>
-                        <Tab label="Ver Movimientos" value={2}/>
+                        <Tab label="Movimientos" value={2}/>
 
                     </Tabs>
                     <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
