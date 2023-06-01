@@ -11,6 +11,8 @@ import {useUnidades} from '../hooks/useUnidades'
 import {useEmpaques} from '../hooks/useEmpaques'
 import useStyles from '../hooks/useStyles'
 import {searchBy as search} from '../Tools'
+import { useProductos } from './ProductosContext';
+import { useAuth } from '../auth/use_auth';
 const initialState = {
 	clave: '',
     descripcion: '',
@@ -29,8 +31,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function CrearProducto({ addProduct, open, close, products }) {
+	const {user} = useAuth()
 	const {unidades} = useUnidades()
 	const {empaques} = useEmpaques()
+	const {addProducto} = useProductos()
     const classes = useStyles();
     const [values, setValues] = useState(initialState)
 	const [isReady, setIsReady] = useState(false)
@@ -129,7 +133,7 @@ export default function CrearProducto({ addProduct, open, close, products }) {
     
     const handleSubmit = (event) => {
         event.preventDefault()
-		addProduct(values)
+		addProducto(user, values)
 		handleClose()
 	}
 	

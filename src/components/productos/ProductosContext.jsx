@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react'
 import { useContext } from 'react'
-import { getProducts, saveProduct, deleteProduct, updateProduct, getProductosMasVendidos} from '../api'
+import { getProducts, getProduct, saveProduct, deleteProduct, updateProduct, getProductosMasVendidos} from '../api'
 
 export const ProductosContext = createContext()
 
@@ -15,6 +15,11 @@ const ProductosContextProvider = (props) => {
 		setProductos(res.products);
 		return res
     }
+    const loadProduct = async (user, id) => {
+        const res = await getProduct(user, id)
+        return res
+    }
+
     const addProducto = async (user, data) => {
         const res = await saveProduct(user,data)
         setProductos([res.producto,...productos])
@@ -48,7 +53,8 @@ const ProductosContextProvider = (props) => {
             editProducto,
             findProductoBy,
             removeProducto,
-            losMasVendidos
+            losMasVendidos,
+            loadProduct
         }}
         >
             {props.children}
