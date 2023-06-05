@@ -93,7 +93,7 @@ export default function Dashboard() {
             let dias = moment(empresa.fechaFinal).diff(moment(), 'days')
             let vence = moment().to(moment(empresa.fechaFinal))
             let texto = "Atención: \n Su plan vence "+vence+", evita perder el acceso a tu información, \n renueva tu plan pronto."
-            if(dias<=3){
+            if(dias<=5){
                 enqueueSnackbar(texto, {variant: "warning", autoHideDuration: 20000})
             }
         }
