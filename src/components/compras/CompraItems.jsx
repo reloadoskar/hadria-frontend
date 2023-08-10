@@ -11,7 +11,9 @@ export default function Items({inventario, selectItem}){
     
     return (
         <Grid item container spacing={2} >
-            {items.filter(item => item.stock > 0.3 ).map( (item, i) => (
+            {items
+            // .filter(item => item.stock > 1 ) se solicito remover este filtro, veremos despues si se vuelve a implementar
+            .map( (item, i) => (
                 <CompraItem elitem={item} key={i} action={selectItem} />
             ))}
         </Grid>

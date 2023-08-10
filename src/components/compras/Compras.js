@@ -26,11 +26,15 @@ import moment from 'moment'
 import { useAuth } from '../auth/use_auth';
 import { useProductos } from '../productos/ProductosContext';
 import { useEmpresa } from '../empresa/EmpresaContext';
+import { useEmpaques } from '../hooks/useEmpaques';
+import { useUnidades } from '../hooks/useUnidades';
 // import CompraCreate from './CompraCreate';
 
 function Compras(){
     const {user} = useAuth()
     const {loadEmpresa} = useEmpresa()
+    const {loadEmpaques} = useEmpaques()
+    const {loadUnidades} = useUnidades()
     const {compras, loadCompras, selectCompra, compra } = useContext(ComprasContext)
     
     const {loadProductos, productos, addProducto}  = useProductos()
@@ -59,7 +63,9 @@ function Compras(){
                 loadCompras(user, mesAnio),
                 loadTipoCompras(user),
                 loadProductos(user),
-                loadEmpresa(user)
+                loadEmpresa(user),
+                loadUnidades(user),
+                loadEmpaques(user),
             ])
             return res
         }

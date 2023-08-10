@@ -91,9 +91,9 @@ export default function Compra({ open, close, compra }) {
   }
 
   const handleClose = () => {
-    close()
     setLaCompra(null)
     setTab(2)
+    close()
   }
 
   const handleSpecial = () => {
@@ -203,7 +203,7 @@ export default function Compra({ open, close, compra }) {
                 indicatorColor="primary"
                 textColor="primary"
                 centered>
-                <Tab label="Resumen de ventas" value={2} />
+                <Tab label="Resumen" value={2} />
                 <Tab label="Ventas" value={4} />
                 <Tab label="Inventario" value={1} />
                 <Tab label="Gastos y Pagos" value={3} />
@@ -215,7 +215,7 @@ export default function Compra({ open, close, compra }) {
                   <CompraInventario items={laCompra.items} />
                 </div>
                 <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 2}>
-                  <ResumenVentas items={laCompra.items} ventas={laCompra.ventaItems} />
+                  <ResumenVentas compra={laCompra} items={laCompra.items} ventas={laCompra.ventaItems} />
                 </div>
                 <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 3}>
                   {laCompra.gastos.length > 0 ?

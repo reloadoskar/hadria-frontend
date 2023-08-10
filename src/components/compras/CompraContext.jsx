@@ -1,6 +1,13 @@
 import React, { createContext, useState } from 'react'
 import { useContext } from 'react'
-import { getCompras, cancelCompra, closeCompra, saveCompra, getCompra, getComprasActivas, updateCompra } from '../api'
+import { getCompras, 
+    cancelCompra, 
+    closeCompra, 
+    saveCompra, 
+    getCompra, 
+    getComprasActivas, 
+    createMerma,
+    updateCompra } from '../api'
 
 export const ComprasContext = createContext()
 
@@ -11,9 +18,10 @@ export const useCompras = () =>{
 const ComprasContextProvider = (props) => {
     const [compras, setCompras] = useState([])
     const [compra, setCompra] = useState(null)
+    const [itemCompra, setItemCompra] = useState(null)
     
-    const loadCompras = async (user, mes, year) => {
-        const res = await getCompras(user, mes, year)
+    const loadCompras = async (user, mesAnio) => {
+        const res = await getCompras(user, mesAnio)
         setCompras(res.compras)
         return res
     }
@@ -58,11 +66,25 @@ const ComprasContextProvider = (props) => {
         return res
     }
 
+    const crearMerma = async (user, data) =>{
+        const res = await createMerma(user, data)
+        return res
+    }
+
+    const selectItemCompra = (itemCompraSelected) => {
+        setItemCompra(itemCompraSelected)
+    }
+
+    const updateItemCompra = (item) => {
+        selectItemCompra(item)
+    }
+
     return (
         <ComprasContext.Provider
             value={{
                 compras, 
                 compra, 
+                itemCompra,
                 loadCompras, 
                 addCompra, 
                 removeCompra, 
@@ -71,7 +93,9 @@ const ComprasContextProvider = (props) => {
                 comprasActivas, 
                 findCompra, 
                 clearCompras,
-                editCompra
+                editCompra,
+                crearMerma,
+                selectItemCompra, updateItemCompra
             }}
         >
             {props.children}

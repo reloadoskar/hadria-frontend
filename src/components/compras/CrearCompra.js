@@ -196,8 +196,8 @@ export default function CrearCompra({ open, showMessage, close, provedors}){
     }
 
     const handleSubmit = (event) => {
-        setGuardando(true)
         event.preventDefault()
+        setGuardando(true)
         var nCompra = {
             provedor: provedor,
             ubicacion: ubicacion,
@@ -214,6 +214,7 @@ export default function CrearCompra({ open, showMessage, close, provedors}){
             clearAll()
             showMessage(res.message, res.status)      
             close()        
+            setGuardando(false)
             ticketCompra(res.compra).then(res =>{
                 if(res.status === 'error'){
                     showMessage(res.message, res.status)
@@ -221,6 +222,7 @@ export default function CrearCompra({ open, showMessage, close, provedors}){
             })    
         }).catch(err=>{
             showMessage(err.message,'error')
+            setGuardando(false)
         })
         
     }

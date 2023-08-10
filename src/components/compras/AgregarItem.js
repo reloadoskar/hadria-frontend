@@ -13,13 +13,14 @@ import {objectIsNull} from '../Tools'
 import useStyles from '../hooks/useStyles'
 import { useProductos } from '../productos/ProductosContext';
 export default function AgregarItem(props){
-    const { crearItem, openP, items } = props 
+    const { crearItem, items } = props 
     const {productos} = useProductos()
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, { variant: type }) }
 
     const [producto, setProducto] = useState("")
+    const [openCrearProducto, setOpenP] = useState(false)
     
     const [values, setValues] = useState({
         // producto: '',
@@ -75,7 +76,7 @@ export default function AgregarItem(props){
     }
 
     const openDialogProducto = () => {
-        openP()
+        setOpenP(true)
     }
     return (
         
@@ -178,7 +179,7 @@ export default function AgregarItem(props){
                         </Grid>                 
                     </Grid>
                     
-                    <CrearProducto {...props} open={props.dialogP} close={props.closeP}  />
+                    <CrearProducto {...props} open={openCrearProducto} close={()=>setOpenP(false)}  />
             </form>
 
     )
