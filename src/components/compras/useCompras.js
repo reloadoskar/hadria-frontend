@@ -47,8 +47,8 @@ const useCompras = () => {
 			})
 	}
 
-	const getCompActivas = async () => {
-		const res = await getComprasActivas();
+	const getCompActivas = async (user) => {
+		const res = await getComprasActivas(user);
 		setCompras(res.compras)
 		return res;
 	}

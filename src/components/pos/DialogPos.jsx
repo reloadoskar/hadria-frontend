@@ -13,6 +13,7 @@ import IngresoCreate from '../ingresos/IngresoCreate'
 import { EgresoContext } from '../egresos/EgresoContext'
 import { IngresoContext } from '../ingresos/IngresoContext'
 import { InventarioContext } from '../inventario/InventarioContext'
+import { useConceptos } from '../hooks/useConceptos';
 import SettingsDrawer from './SettingsDrawer';
 import CambiosDrawer from './CambiosDrawer';
 import Cambios from './Cambios'
@@ -20,6 +21,7 @@ import moment from 'moment'
 import { useAuth } from '../auth/use_auth'
 export default function DialogPos({ open, close, ubicacion, fecha, cxcPdv, addPagoCxc }) {
 	const {user} = useAuth()
+	const {loadConceptos} = useConceptos()
 	const [ configuracion, setConfiguracion ] = useState({ ingreso: false, cobrar: false, pagar: false, gasto: false })
 	const { resetEgresos, loadCuentasPorPagar } = useContext(EgresoContext)
 	const { resetIngresos, loadCuentasPorCobrarPdv } = useContext(IngresoContext)
@@ -55,7 +57,8 @@ export default function DialogPos({ open, close, ubicacion, fecha, cxcPdv, addPa
 				resetIngresos(),
 				loadCuentasPorPagar(user),
 				loadCuentasPorCobrarPdv(user),
-				loadCambios(user, moment(fecha).format("YYYY-MM"))
+				loadCambios(user, moment(fecha).format("YYYY-MM")),
+				loadConceptos(user)
 			])
 			return res
 		}

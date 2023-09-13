@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const url = process.env.REACT_APP_API_RAILWAY
-
+const url = process.env.REACT_APP_API_TEST
 // USUARIOS
 
 export const register = (newClient) => {
@@ -334,7 +333,7 @@ export const getComprasActivas = (user) => {
 
     try {
         return axios
-            .post(url + 'compras/activas', user)
+            .post(url + 'compras/activas', {user})
             .then(res => {
                 return res.data
             })

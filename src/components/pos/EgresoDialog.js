@@ -4,8 +4,11 @@ import { Dialog, DialogContent, DialogTitle, Typography, Grid, DialogActions, Bu
 
 import useCompras from '../compras/useCompras'
 import {useConceptos} from '../hooks/useConceptos'
+import { useAuth } from '../auth/use_auth';
 import useStyles from '../hooks/useStyles';
-export default function EgresoDialog({ubicacion, fecha, open, close, showMessage}) {
+import { useSnackbar } from 'notistack';
+export default function EgresoDialog({ubicacion, fecha, open, close}) {
+    const { enqueueSnackbar } = useSnackbar()
     const initialData ={
         tipo: 'GASTO DE CAJA',
         concepto: '',
@@ -16,12 +19,13 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
     }
     const classes = useStyles()
     const Compra = useCompras() 
+    const {user} = useAuth()
     const [values, setValues] = useState(initialData)
     const {conceptos} = useConceptos()
     const tipos = ["GASTO DE CAJA", "GASTO A COMPRA"] 
     const [guardando, setGuardando] = useState(false)
     useEffect(() => {
-        Compra.getCompActivas()
+        Compra.getCompActivas(user)
     },[]) // eslint-disable-line react-hooks/exhaustive-deps
     function hasNull(target) {
         for (var member in target) {
@@ -60,7 +64,7 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
         setGuardando(true)
         e.preventDefault()
         if( hasNull(values) ) {
-            showMessage("Faltan datos", 'error')
+            enqueueSnackbar("Faltan datos", {variant: 'error'})
             setGuardando(false)
         } 
         else{
@@ -75,14 +79,18 @@ export default function EgresoDialog({ubicacion, fecha, open, close, showMessage
             }
 
             // console.log(egreso)
-            
-            saveEgreso(egreso).then(res => {
+            try {
+                saveEgreso(user, egreso).then(res => {
+                    setGuardando(false)
+                    enqueueSnackbar(res.message, {variant: 'error'})
+                    clearFields() 
+                    ticketEgreso(egreso)
+                    close('egresoDialog')
+                })
+            } catch (error) {
                 setGuardando(false)
-                showMessage(res.message, res.status)
-                clearFields() 
-                ticketEgreso(egreso)
-                close('egresoDialog')
-            })
+                enqueueSnackbar(error.message,{variant: 'error'})
+            }
         }
     }
 
