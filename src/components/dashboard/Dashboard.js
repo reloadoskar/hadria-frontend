@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 // UI
-import { Grid, 
+import {
+    Grid,
     Container,
     ButtonGroup,
     Button,
@@ -14,7 +15,7 @@ import { Grid,
 // componentes
 import Pagar from './Pagar'
 import Traspasar from './Traspasar'
-import {ticketTraspaso} from '../api'
+import { ticketTraspaso } from '../api'
 import Disponible from '../disponible/Disponible'
 import Cobrar from './Cobrar'
 import CrearEgreso from '../egresos/CrearEgreso'
@@ -26,10 +27,10 @@ import moment from 'moment'
 import useStyles from '../hooks/useStyles'
 
 // CONTEXTOS
-import {EmpresaContext} from '../empresa/EmpresaContext'
-import {UbicacionContext} from '../ubicaciones/UbicacionContext'
-import {EgresoContext} from '../egresos/EgresoContext'
-import {IngresoContext} from '../ingresos/IngresoContext'
+import { EmpresaContext } from '../empresa/EmpresaContext'
+import { UbicacionContext } from '../ubicaciones/UbicacionContext'
+import { EgresoContext } from '../egresos/EgresoContext'
+import { IngresoContext } from '../ingresos/IngresoContext'
 import { InventarioContext } from '../inventario/InventarioContext'
 import CorteGlobal from '../cortes/CorteGlobal';
 
@@ -37,29 +38,29 @@ import { agruparPorObjeto } from '../Tools'
 import { useAuth } from '../auth/use_auth';
 
 export default function Dashboard() {
-    const {user} = useAuth()
-    const {empresa } = useContext(EmpresaContext)
+    const { user } = useAuth()
+    const { empresa } = useContext(EmpresaContext)
     const { ingresos, addIngreso, addPagoCxc, loadIngresosMonthYear, loadCuentasPorCobrarPdv, cxcPdv } = useContext(IngresoContext)
-    const {egresos, loadEgresosMonthYear, loadCuentasPorPagar, addEgreso} = useContext(EgresoContext)
-    const {ubicacions} = useContext(UbicacionContext)
-    const {inventario, loadInventarioGeneral} = useContext(InventarioContext)
+    const { egresos, loadEgresosMonthYear, loadCuentasPorPagar, addEgreso } = useContext(EgresoContext)
+    const { ubicacions } = useContext(UbicacionContext)
+    const { inventario, loadInventarioGeneral } = useContext(InventarioContext)
     const { enqueueSnackbar } = useSnackbar()
 
     const [inventarioPorUbicacion, setIpu] = useState([])
     const [loadingData, setLoading] = useState(false)
-    
+
     const classes = useStyles()
 
     const now = moment()
-    const [fecha, setFecha] = useState(now.format("YYYY-MM"))    
-    useEffect(()=>{
-        if(inventario){
+    const [fecha, setFecha] = useState(now.format("YYYY-MM"))
+    useEffect(() => {
+        if (inventario) {
             setIpu(agruparPorObjeto(inventario, 'ubicacion'))
         }
-    },[inventario])
-    useEffect(()=>{
+    }, [inventario])
+    useEffect(() => {
         setLoading(true)
-        const loadAll = async () =>{
+        const loadAll = async () => {
             const res = await Promise.all([
                 loadCuentasPorPagar(user),
                 loadCuentasPorCobrarPdv(user),
@@ -67,38 +68,38 @@ export default function Dashboard() {
             ])
             return res
         }
-        loadAll().then(()=>{
+        loadAll().then(() => {
             setLoading(false)
         })
-    },[])// eslint-disable-line react-hooks/exhaustive-deps
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         setLoading(true)
-        let month  = moment(fecha).format("MM")
+        let month = moment(fecha).format("MM")
         let year = moment(fecha).format("YYYY")
-        const loadData = async () =>{
+        const loadData = async () => {
             const res = await Promise.all([
                 loadEgresosMonthYear(user, month, year),
                 loadIngresosMonthYear(user, month, year)
             ])
             return res
         }
-        loadData().then(()=>{
+        loadData().then(() => {
             setLoading(false)
         })
     }, [user, fecha]) // eslint-disable-line react-hooks/exhaustive-deps
-   
 
-    useEffect(()=>{
-        if(empresa){
+
+    useEffect(() => {
+        if (empresa) {
             let dias = moment(empresa.fechaFinal).diff(moment(), 'days')
             let vence = moment().to(moment(empresa.fechaFinal))
-            let texto = "Atención: \n Su plan vence "+vence+", evita perder el acceso a tu información, \n renueva tu plan pronto."
-            if(dias<=5){
-                enqueueSnackbar(texto, {variant: "warning", autoHideDuration: 20000})
+            let texto = "Atención: \n Su plan vence " + vence + ", evita perder el acceso a tu información, \n renueva tu plan pronto."
+            if (dias <= 5) {
+                enqueueSnackbar(texto, { variant: "warning", autoHideDuration: 30000 })
             }
         }
-    },[empresa]) // eslint-disable-line react-hooks/exhaustive-deps
-    
+    }, [empresa]) // eslint-disable-line react-hooks/exhaustive-deps
+
     const [cobrar, setCobrar] = useState(false)
     const [pagar, setPagar] = useState(false)
     const [gastar, setGastar] = useState(false)
@@ -148,7 +149,7 @@ export default function Dashboard() {
             concepto: "TRASPASO",
             descripcion: traspaso.referencia,
             fecha: traspaso.fecha,
-            importe: traspaso.importe, 
+            importe: traspaso.importe,
         }
 
         let ing = {
@@ -161,58 +162,58 @@ export default function Dashboard() {
         }
 
         addEgreso(eg)
-        .then(() => {
-            
-            addIngreso(ing)
-            .then(()=>{
-                showMessage("Traspaso guardado", "success")
-                ticketTraspaso(traspaso).then(res => {
-                    if(res.status === 'warning'){
-                        showMessage(res.message, res.status)
-                    }
-                })
+            .then(() => {
+
+                addIngreso(ing)
+                    .then(() => {
+                        showMessage("Traspaso guardado", "success")
+                        ticketTraspaso(traspaso).then(res => {
+                            if (res.status === 'warning') {
+                                showMessage(res.message, res.status)
+                            }
+                        })
+                    })
+                    .catch(() => {
+                        showMessage("No se guardo el ingreso.", "error")
+                    })
             })
-            .catch(()=> {
-                showMessage("No se guardo el ingreso.", "error")
+            .catch(() => {
+                showMessage("No se guardo el egreso.", "error")
             })
-        })
-        .catch(()=> {
-            showMessage("No se guardo el egreso.", "error")
-        })
 
     }
-    
 
-    return !loadingData ? 
+
+    return !loadingData ?
         <Container maxWidth="lg">
             <Grid container spacing={3}>
                 {/* TOP MENU */}
-                <Grid container justifyContent="center">   
-                    <Grid item xs={3} >    
-                        <TextField 
+                <Grid container justifyContent="center">
+                    <Grid item xs={3} >
+                        <TextField
                             fullWidth
                             id="fecha"
                             type="month"
                             value={fecha}
-                            onChange={(e)=>setFecha(e.target.value)}
+                            onChange={(e) => setFecha(e.target.value)}
                             variant="outlined"
-                        />                
+                        />
                         {/* <SelectorMes mes={month} cambiar={setMonth} /> */}
-                    </Grid>                 
+                    </Grid>
                     {/* <Grid item xs={6} >
                         <SelectorAnio anio={year} cambiar={setYear} />
                     </Grid> */}
-                    
+
 
                     <Grid item xs={12}>
-                        <ButtonGroup  size="small">
+                        <ButtonGroup size="small">
                             <Button
                                 onClick={() => showPagar()}
-                                >
+                            >
                                 Pagar
                             </Button>
-                            {pagar ? 
-                                <Pagar 
+                            {pagar ?
+                                <Pagar
                                     open={pagar}
                                     close={closePagar}
                                 />
@@ -221,24 +222,24 @@ export default function Dashboard() {
 
                             <Button
                                 onClick={() => showGastar()}>
-                                    Gastar
+                                Gastar
                             </Button>
                             {gastar ?
-                                <CrearEgreso 
+                                <CrearEgreso
                                     ubicacions={ubicacions}
                                     open={gastar}
-                                    close={()=>setGastar(false)}
+                                    close={() => setGastar(false)}
                                     mensaje={showMessage}
                                 />
                                 : null
                             }
-                            
+
                             <Button
                                 onClick={() => showCobrar()}
                             >
                                 Cobrar
                             </Button>
-                            <Cobrar                           
+                            <Cobrar
                                 cuentas={cxcPdv}
                                 open={cobrar}
                                 close={closeCobrar}
@@ -247,13 +248,13 @@ export default function Dashboard() {
                                 ubicacions={ubicacions}
                                 showMessage={showMessage}
                             />
-                            
+
                             <Button
                                 onClick={() => showTraspasar()}
                             >
                                 Traspasar
                             </Button>
-                            <Traspasar                           
+                            <Traspasar
                                 cuentas={cxcPdv}
                                 open={traspasar}
                                 close={closeTraspasar}
@@ -270,22 +271,22 @@ export default function Dashboard() {
                         value={tabSelected}
                         onChange={selectTab}
                         centered>
-                        <Tab label="Reporte Diario" value={1}/>
-                        <Tab label="Reporte Mensual" value={2}/>
-                        <Tab label="Inventario" value={3}/>
+                        <Tab label="Reporte Diario" value={1} />
+                        <Tab label="Reporte Mensual" value={2} />
+                        <Tab label="Inventario" value={3} />
                     </Tabs>
-                    <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 1}>
+                    <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 1}>
                         {tabSelected !== 1 ? null :
                             <CorteGlobal ingresos={ingresos} egresos={egresos} />
                         }
                     </div>
-                    <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 2}>
+                    <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 2}>
                         <Disponible ingresos={ingresos} egresos={egresos} />
                     </div>
-                    <div value={tabSelected} role="tabpanel" hidden={tabSelected!== 3}>
-                    {tabSelected !== 3 ? null :
-                        <GraficaInventario inventario={inventarioPorUbicacion} />
-                    }
+                    <div value={tabSelected} role="tabpanel" hidden={tabSelected !== 3}>
+                        {tabSelected !== 3 ? null :
+                            <GraficaInventario inventario={inventarioPorUbicacion} />
+                        }
                     </div>
                 </Grid>
                 {/* INFO CUENTAS POR COBRAR */}
@@ -295,9 +296,9 @@ export default function Dashboard() {
                 <Grid item xs={12}>
                     {/* <CuentasxCobrar cuentas={ingresos.cuentasxCobrar} total={ingresos.totalCxc}/> */}
                 </Grid>
-            </Grid>     
+            </Grid>
         </Container>
-    : <Backdrop className={classes.backdrop} open={true}>
-        <CircularProgress color="inherit" />
-    </Backdrop>
+        : <Backdrop className={classes.backdrop} open={true}>
+            <CircularProgress color="inherit" />
+        </Backdrop>
 }
