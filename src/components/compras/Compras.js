@@ -35,7 +35,7 @@ function Compras(){
     const {loadEmpresa} = useEmpresa()
     const {loadEmpaques} = useEmpaques()
     const {loadUnidades} = useUnidades()
-    const {compras, loadCompras, selectCompra, compra } = useContext(ComprasContext)
+    const {compras, loadCompras, loadMoreCompras, comprasPagination, comprasTotals, findCompra, selectCompra, compra } = useContext(ComprasContext)
     
     const {loadProductos, productos, addProducto}  = useProductos()
     const {productors} = useProductors()
@@ -54,6 +54,7 @@ function Compras(){
     const [month] = useState(now.format("MM"))
     const [year] = useState(now.format("YYYY"))
     const [isLoading, setIsLoading] = useState(true)
+    const [loadingMore, setLoadingMore] = useState(false)
 
     const [mesAnio, setMesAnio] = useState(moment().format("YYYY-MM"))
     useEffect(()=>{
@@ -97,14 +98,25 @@ function Compras(){
         setShowDialogP(false)
     }
 
-    const editCompra = (compra) => {
-        selectCompra(compra)
-        setDetCompra(true)
+    const editCompra = async (compraResumen) => {
+        setIsLoading(true)
+        try{
+            const selected = await findCompra(user, compraResumen._id)
+            if(selected) setDetCompra(true)
+        }finally{
+            setIsLoading(false)
+        }
     }
 
-    const closeCompra = () => {
+    const closeCompra = async () => {
         setDetCompra(false)
         selectCompra(null)
+        setIsLoading(true)
+        try{
+            await loadCompras(user, mesAnio)
+        }finally{
+            setIsLoading(false)
+        }
     }
 
     function cancelar(){
@@ -130,13 +142,27 @@ function Compras(){
         setVerCompra(!verCompra)
     }
 
-    function showVerCompra(compra){
-        selectCompra(compra)
-        setVerCompra(true)
+    async function showVerCompra(compraResumen){
+        setIsLoading(true)
+        try{
+            const selected = await findCompra(user, compraResumen._id)
+            if(selected) setVerCompra(true)
+        }finally{
+            setIsLoading(false)
+        }
+    }
+
+    const cargarMasCompras = async () => {
+        setLoadingMore(true)
+        try{
+            await loadMoreCompras(user)
+        }finally{
+            setLoadingMore(false)
+        }
     }
 
     return isLoading ?
-        <Backdrop open={isLoading} onClick={()=> setIsLoading(false)}>
+        <Backdrop open={isLoading}>
             <CircularProgress color="inherit" />
         </Backdrop>
         :
@@ -172,15 +198,25 @@ function Compras(){
                 </Grid> 
                 {compras.length > 0 ?
                     <ListaCompras 
-                        compras={compras} 
+                        compras={compras}
+                        totals={comprasTotals}
                         editCompra={editCompra} 
                         verCompra={showVerCompra} 
-                    /> 
+                    />
                     :
                     <Grid item xs={12}>
                         <Typography variant='h6' align="center"> No hay compras registradas en {Meses.filter(mes=>mes.id === month).map(mes=>mes.nombre)} {year}.</Typography>
                     </Grid>
                 }
+                {comprasPagination.hasMore ?
+                    <Grid item xs={12}>
+                        <Typography align="center" component="div">
+                            <Button onClick={cargarMasCompras} disabled={loadingMore}>
+                                {loadingMore ? <CircularProgress size={24} /> : 'Cargar más compras'}
+                            </Button>
+                        </Typography>
+                    </Grid>
+                    : null}
             </Grid>
             <DetalleCompra 
                 compra={compra} 

@@ -12,25 +12,7 @@ export const register = (newClient) => {
 }
 
 export const login = user => {
-    try {
-        return axios
-            .post(url + 'user/login', user)
-            .then(res => {
-                return res
-            })
-            .catch(err => {
-                err.message = "Error de red, no hay conexión con la base de datos";
-                err.status = 'error'
-                return err
-            })
-
-    } catch (err) {
-        console.log(err)
-        return {
-            message: "Error de conexión.",
-            status: "error"
-        }
-    }
+    return axios.post(url + 'user/login', user)
 }
 
 export const logout = () => {
@@ -342,11 +324,11 @@ export const getComprasActivas = (user) => {
     }
 }
 
-export const getCompras = (user, mesAnio) => {
+export const getCompras = (user, mesAnio, pagination = {limit: 50}, includeTotals = true) => {
 
     try {
         return axios
-            .post(url + 'compras/', {user, mesAnio})
+            .post(url + 'compras/', {user, mesAnio, pagination, includeTotals})
             .then(res => {
                 return res.data
             })
@@ -613,11 +595,11 @@ export const moveInventario = (user, data) => {
     }
 }
 
-export const getMovimientos = (user, month) => {
+export const getMovimientos = (user, fecha, pagination = {limit: 50}) => {
     try {
 
         return axios
-            .post(url + `inventario/movimientos`, {user, month})
+            .post(url + `inventario/movimientos`, {user, fecha, pagination})
             .then(res => {
                 return res.data
             })
@@ -1482,11 +1464,11 @@ export const addProduccionItem = (item) => {
 
 // INSUMOS
 
-export const getCompraItems = () => {
+export const getCompraItems = (user, search = '', pagination = {limit: 50}) => {
     try {
 
         return axios
-            .post(url + '/items')
+            .post(url + '/items', {user, search, pagination})
             .then(res => {
                 return res.data
             })

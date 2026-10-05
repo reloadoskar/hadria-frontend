@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react"
 import jwt from 'jsonwebtoken'
 import {login as appLogin}  from '../api'
+import { getLoginErrorMessage } from './loginError'
 
 const authContext = createContext();
 
@@ -57,7 +58,7 @@ function useProvideAuth() {
         }catch(err){
             return {
                 status: 'error',
-                message: "Imposible conectar, revise su conexión a Internet.",
+                message: getLoginErrorMessage(err),
                 err
             }
         }

@@ -8,6 +8,7 @@ import Confirm from '../dialogs/Confirm';
 import { formatNumber, sumImporte, sumStock, sumEmpStock } from '../Tools';
 import useStyles from '../hooks/useStyles';
 import {ComprasContext} from '../compras/CompraContext'
+import { useAuth } from '../auth/use_auth';
 export default function CompraBasic(props){
     const {compra, 
         verCompra, 
@@ -17,6 +18,7 @@ export default function CompraBasic(props){
     } = props
 
     const {removeCompra} = useContext(ComprasContext)
+    const {user} = useAuth()
 
     const { enqueueSnackbar } = useSnackbar()
     const showMessage = (text, type) => { enqueueSnackbar(text, {variant: type} ) }
@@ -40,12 +42,9 @@ export default function CompraBasic(props){
 
     useEffect(() => {
         if(compraLocal){
-            let tv = sumImporte(compraLocal.ventaItems)
-            compraLocal.totalVenta = tv
-            let tg = sumImporte(compraLocal.gastos)
-            compraLocal.totalGastos = tg
-            let tp = sumImporte(compraLocal.pagos)
-            compraLocal.totalPagos = tp
+            let tv = Number.isFinite(Number(compraLocal.totalVenta)) ? Number(compraLocal.totalVenta) : sumImporte(compraLocal.ventaItems)
+            let tg = Number.isFinite(Number(compraLocal.totalGastos)) ? Number(compraLocal.totalGastos) : sumImporte(compraLocal.gastos)
+            let tp = Number.isFinite(Number(compraLocal.totalPagos)) ? Number(compraLocal.totalPagos) : sumImporte(compraLocal.pagos)
             let tc = compraLocal.importe
             setTotalVenta(tv) 
             setTotalGastos(tg)
@@ -60,7 +59,14 @@ export default function CompraBasic(props){
                 compraLocal.resultado = re
             }
             if( compraLocal.status === 'ACTIVO'){
-                if( compraLocal.items.length > 0 && sumEmpStock(compraLocal.items) < 1 && sumStock(compraLocal.items) < 1 ){ setStatus('TERMINADO') } else{ setStatus(compraLocal.status) }
+                const hasItems = Array.isArray(compraLocal.items) ? compraLocal.items.length > 0 : Number(compraLocal.itemCount || 0) > 0
+                const currentStock = Array.isArray(compraLocal.items) ? sumStock(compraLocal.items) : Number(compraLocal.stock || 0)
+                const currentPackageStock = Array.isArray(compraLocal.items) ? sumEmpStock(compraLocal.items) : Number(compraLocal.empaquesStock || 0)
+                if(hasItems && currentPackageStock < 1 && currentStock < 1){
+                    setStatus('TERMINADO')
+                }else{
+                    setStatus(compraLocal.status)
+                }
             }else{
                 setStatus(compraLocal.status)
             }
@@ -73,7 +79,7 @@ export default function CompraBasic(props){
     }
 
     const onConfirm = () => {
-        removeCompra(compra._id).then(res => {
+        removeCompra(user, compra._id).then(res => {
             showMessage(res.message, res.status)
             setConfirm(false)
         })

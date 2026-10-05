@@ -2,14 +2,22 @@ import React, {useState} from 'react'
 import { Dialog, DialogTitle, DialogContent, Typography, TextField, MenuItem, Grid, DialogActions, Button } from '@material-ui/core'
 
 const AddInsumo = ( (props, ref) => {
-    const {agregar, showMessage, items, open, close} = props
+    const {agregar, showMessage, items, open, close, searchItems, loadMoreItems, hasMoreItems, loadingItems} = props
     const [cantidad, setCantidad] = useState(0)
     const [item, setItem] = useState("")
+    const [query, setQuery] = useState('')
 
     const hide = () => {
         setCantidad(0)
         setItem('')
+        setQuery('')
         close()
+    }
+
+    const buscar = () => {
+        setItem('')
+        setCantidad(0)
+        return searchItems(query)
     }
 
     const handleChange = (field, value) => {
@@ -54,6 +62,30 @@ const AddInsumo = ( (props, ref) => {
                     items === null  ?
                         <Typography align="center">No hay productos qué mostrar.</Typography>
                         :
+                <React.Fragment>
+                <Grid container spacing={1}>
+                    <Grid item xs={9}>
+                        <TextField
+                            label="Buscar producto, compra o clasificación"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            onKeyDown={(e) => {
+                                if(e.key === 'Enter'){
+                                    e.preventDefault()
+                                    buscar()
+                                }
+                            }}
+                            fullWidth
+                            variant="outlined"
+                            margin="normal"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Button onClick={buscar} disabled={loadingItems} fullWidth>
+                            {loadingItems ? 'Buscando...' : 'Buscar'}
+                        </Button>
+                    </Grid>
+                </Grid>
                 <Grid container >
                     <Grid item xs={9}>
                         <TextField 
@@ -67,8 +99,8 @@ const AddInsumo = ( (props, ref) => {
                             variant="outlined">
                             {
                                 items != null ? 
-                                items.map( (option, index) => (
-                                    <MenuItem key={index} value={option}>
+                                items.map( (option) => (
+                                    <MenuItem key={option._id} value={option}>
                                             <Grid container >
                                                 <Grid item xs={1}>{option.compra.clave}</Grid>
                                                 <Grid item xs={10}>{option.producto.descripcion}</Grid>
@@ -95,6 +127,14 @@ const AddInsumo = ( (props, ref) => {
                             />
                     </Grid>
                 </Grid>
+                {hasMoreItems ?
+                    <Typography align="center" component="div">
+                        <Button onClick={loadMoreItems} disabled={loadingItems}>
+                            {loadingItems ? 'Cargando...' : 'Cargar más resultados'}
+                        </Button>
+                    </Typography>
+                    : null}
+                </React.Fragment>
                 }
             </DialogContent>
             <DialogActions>

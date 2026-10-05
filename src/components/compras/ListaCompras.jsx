@@ -4,7 +4,7 @@ import CompraBasic from './CompraBasic'
 import { sumImporte } from '../Tools'
 import useStyles from '../hooks/useStyles'
 import CountUpAnimation from '../tools/CountUpAnimation'
-export default function ListaCompras({ compras, editCompra, verCompra }) {
+export default function ListaCompras({ compras, totals, editCompra, verCompra }) {
     const classes = useStyles()
     const [lasCompras, setLasCompras] = useState(null)
 
@@ -23,24 +23,25 @@ export default function ListaCompras({ compras, editCompra, verCompra }) {
 
     useEffect(() => {
         let isLoaded = true
-        if (lasCompras && isLoaded) {
-            let tc = 0
-            tc = sumImporte(lasCompras)
+        if (totals && isLoaded) {
+            setCosto(totals.costo || 0)
+            setVentas(totals.venta || 0)
+            setGastos(totals.gastos || 0)
+            setPagos(totals.pagos || 0)
+            setResultado(totals.resultado || 0)
+        } else if (lasCompras && isLoaded) {
+            const tc = sumImporte(lasCompras)
+            const tv = lasCompras.reduce((total, compra) => total + sumImporte(compra.ventaItems), 0)
+            const tg = lasCompras.reduce((total, compra) => total + sumImporte(compra.gastos), 0)
+            const tp = lasCompras.reduce((total, compra) => total + sumImporte(compra.pagos), 0)
             setCosto(tc)
-            let tv = 0
-            lasCompras.map(compra => tv += sumImporte(compra.ventaItems))
             setVentas(tv)
-            let tg = 0
-            lasCompras.map(compra => tg += sumImporte(compra.gastos))
             setGastos(tg)
-            let tp = 0
-            lasCompras.map(compra => tp += sumImporte(compra.pagos))
             setPagos(tp)
-            let tr = tv - tc - tg
-            setResultado(tr)
+            setResultado(tv - tc - tg)
         }
-        return () => isLoaded = false
-    }, [lasCompras])
+        return () => { isLoaded = false }
+    }, [lasCompras, totals])
 
     // const clearComponent = () => {
     //     setCosto(0)
@@ -53,7 +54,7 @@ export default function ListaCompras({ compras, editCompra, verCompra }) {
     return (
         <Grid item container xs={12} spacing={2} >
             <Grid item xs={12} sm={1}>
-                <Typography variant="h3" align="center">{lasCompras ? <CountUpAnimation num={lasCompras.length} temp={300} /> : null}</Typography>
+                <Typography variant="h3" align="center"><CountUpAnimation num={totals ? totals.operations : (lasCompras ? lasCompras.length : 0)} temp={300} /></Typography>
                 <Typography align="center">Operaciones</Typography>
             </Grid>
             <Grid item xs={12} sm={3}>

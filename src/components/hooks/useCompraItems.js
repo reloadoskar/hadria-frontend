@@ -1,16 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getCompraItems, subtractStock, addStock } from '../api'
+import { useAuth } from '../auth/use_auth'
+import { mergeById } from '../pagination'
+import { createLatestRequest } from '../latestRequest'
 const useCompraItems = () => {
+	const {user} = useAuth()
 	const [updating, setUpdating] = useState(false)
 	const [items, setItems] = useState(null)
-	useEffect(() => {
-		async function loadItems() {
-			const res = await getCompraItems()
-			setItems(res.items);
+	const [search, setSearch] = useState('')
+	const [pagination, setPagination] = useState({hasMore: false, nextCursor: null, limit: 50})
+	const [loading, setLoading] = useState(false)
+	const requests = useRef(createLatestRequest())
+
+	const loadItems = async (value = search, append = false) => {
+		const requestId = requests.current.next()
+		setLoading(true)
+		try{
+			const cursor = append ? pagination.nextCursor : null
+			const res = await getCompraItems(user, value, {limit: 50, cursor})
+			if(requests.current.isCurrent(requestId)){
+				setItems(current => append ? mergeById(current || [], res.items) : res.items)
+				setPagination(res.pagination || {hasMore: false, nextCursor: null, limit: 50})
+				setSearch(value)
+			}
+			return res
+		}finally{
+			if(requests.current.isCurrent(requestId)) setLoading(false)
 		}
-		loadItems()
+	}
+
+	useEffect(() => {
+		if(user) loadItems('', false)
 		return () => setItems(null)
-	}, [updating])
+	}, [updating, user]) // eslint-disable-line react-hooks/exhaustive-deps
+
+	const searchItems = value => loadItems(value, false)
+	const loadMoreItems = () => pagination.hasMore ? loadItems(search, true) : Promise.resolve(null)
 
 	const restaStock = (id, cantidad) => {
 		setUpdating(true)
@@ -52,6 +77,10 @@ const useCompraItems = () => {
 		items,
 		restaStock,
 		sumaStock,
+		searchItems,
+		loadMoreItems,
+		hasMoreItems: pagination.hasMore,
+		loadingItems: loading,
 		// add,
 		// del
 	}

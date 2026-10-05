@@ -22,7 +22,7 @@ export default function Produccion(props) {
     const {produccion, isOpen, handleClose, showMessage} = props
     const {insumos, add, del, restaInsumoStock, sumaInsumoStock} = useInsumos(produccion._id)
     const {produccionItems, addProduccionItem, delProduccionItem} = useProduccionItems(produccion._id)
-    const {items, restaStock, sumaStock} = useCompraItems()
+    const {items, restaStock, sumaStock, searchItems, loadMoreItems, hasMoreItems, loadingItems} = useCompraItems()
     const [showCrearproducto, setShowCrearProducto] = useState(false)
     const [showAddInsumo, setShowAddInsumo] = useState(false)
     const classes = useStyles()
@@ -146,6 +146,10 @@ export default function Produccion(props) {
                                         close={closeAddInsumo}
                                         agregar={agregarInsumo}
                                         items={items}
+                                        searchItems={searchItems}
+                                        loadMoreItems={loadMoreItems}
+                                        hasMoreItems={hasMoreItems}
+                                        loadingItems={loadingItems}
                                         showMessage={showMessage} />
                                     <Button
                                         onClick={()=>openCrearProducto()}

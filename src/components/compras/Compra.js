@@ -58,9 +58,9 @@ export default function Compra({ open, close, compra }) {
   useEffect(() => {
     if (laCompra) {
       let tv = sumImporte(laCompra.ventaItems)
-      // let tg = sumImporte(laCompra.gastos)
-      // let tp = sumImporte(laCompra.pagos)
-      let cf = laCompra.totalGastos + laCompra.totalPagos
+      let tg = sumImporte(laCompra.gastos)
+      let tp = sumImporte(laCompra.pagos)
+      let cf = tg + tp
       setCostoFinal(cf)
       setTotalVenta(tv)
       // setTotalGastos(tg)

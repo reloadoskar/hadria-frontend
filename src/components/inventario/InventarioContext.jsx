@@ -1,4 +1,4 @@
-import React, {createContext, useState, useContext, useEffect} from 'react'
+import React, {createContext, useState, useContext, useEffect, useRef} from 'react'
 import { 
     getInventario, 
     getInventarioBy, 
@@ -11,6 +11,8 @@ import {
     stockUpCambio, acceptCambio
 } from '../api'
 import { agruparPorObjeto } from '../Tools'
+import { mergeById } from '../pagination'
+import { createLatestRequest } from '../latestRequest'
 export const InventarioContext = createContext()
 
 export const useInventario = () =>{
@@ -20,9 +22,12 @@ export const useInventario = () =>{
 const InventarioContextProvider = (props) => {
     const [inventario, setInventario] = useState([])
     const [movimientos, setMovimientos] = useState([])
+    const [movimientosPagination, setMovimientosPagination] = useState({hasMore: false, nextCursor: null, limit: 50})
+    const [movimientosFecha, setMovimientosFecha] = useState(null)
     const [cambios, setCambios] = useState([])
     const [inventarioPorUbicacion, setInventarioPorUbicacion] = useState([])
     const [ubicacionInventario, setUbicacionInventario] = useState(null)
+    const movementRequests = useRef(createLatestRequest())
 
     useEffect(()=>{
         if(inventario){
@@ -56,12 +61,22 @@ const InventarioContextProvider = (props) => {
         return res
     }
 
-    const loadMovimientos = async (user, fecha) =>{
-        setMovimientos([])
-        let res = await getMovimientos(user, fecha)
-        setMovimientos(res.movimientos)
-        // localStorage.setItem('movimientos', JSON.stringify(res.movimientos))
+    const loadMovimientos = async (user, fecha, append = false) =>{
+        const requestId = movementRequests.current.next()
+        if(!append) setMovimientos([])
+        const cursor = append ? movimientosPagination.nextCursor : null
+        const res = await getMovimientos(user, fecha, {limit: 50, cursor})
+        if(movementRequests.current.isCurrent(requestId)){
+            setMovimientos(current => append ? mergeById(current, res.movimientos) : res.movimientos)
+            setMovimientosPagination(res.pagination || {hasMore: false, nextCursor: null, limit: 50})
+            setMovimientosFecha(fecha)
+        }
         return res
+    }
+
+    const loadMoreMovimientos = async (user) => {
+        if(!movimientosFecha || !movimientosPagination.hasMore) return null
+        return loadMovimientos(user, movimientosFecha, true)
     }
 
     const loadCambios = async (user, fecha) =>{
@@ -154,6 +169,8 @@ const InventarioContextProvider = (props) => {
             loadInventarioGeneral,
             loadInventarioUbicacion,
             loadMovimientos,
+            loadMoreMovimientos,
+            movimientosPagination,
             loadCambios,
             limpiarInventario,
             selectInventarioUbicacion,
