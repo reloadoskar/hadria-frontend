@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react"
-import jwt from 'jsonwebtoken'
 import {login as appLogin}  from '../api'
 import { getLoginErrorMessage } from './loginError'
+import { createSessionFromToken } from './sessionToken'
 
 const authContext = createContext();
 
@@ -33,22 +33,19 @@ function useProvideAuth() {
 
             const res = await appLogin(data)
             if( res.data.status === 'success'){
-                localStorage.setItem('usertoken', res.data.token)
-                // setToken(res.data.token)
-                let decoded = verificaToken(res.data.token)
-                
-                if(decoded !== null) {
-                    setAutenticado(true)
-                    setUser({
-                        nombre: decoded.nombre,
-                        apellido: decoded.apellido,
-                        email: decoded.email,
-                        level: decoded.level,
-                        database: decoded.database,
-                        ubicacion: decoded.ubicacion,
-                        licenceEnds: decoded.paidPeriodEnds,
-                    })
+                const session = createSessionFromToken(res.data.token)
+                if (!session) {
+                    localStorage.removeItem('usertoken')
+                    return {
+                        status: 'error',
+                        message: 'La sesión recibida no es válida.'
+                    }
                 }
+
+                localStorage.setItem('usertoken', session.token)
+                setToken(session.token)
+                setAutenticado(true)
+                setUser(session.user)
             }
             return {
                 status: res.data.status,
@@ -64,44 +61,29 @@ function useProvideAuth() {
         }
     }
 
-    const verificaToken = (token) => {
-        let decoded = null
-        try{
-            decoded = jwt.verify(token, "muffintop")
-
-            return decoded
-        }catch(err){
-            return null
-        }
-    }
-
     useEffect(() => {
-        if(token){
-            setMensaje("Verificando la sesión.")
-            let decoded = verificaToken(token)
-            // console.log(decoded)
-            if (decoded !== null){
-                setAutenticado(true)
-                setUser({
-                    nombre: decoded.nombre,
-                    apellido: decoded.apellido,
-                    email: decoded.email,
-                    level: decoded.level,
-                    database: decoded.database,
-                    ubicacion: decoded.ubicacion,
-                    licenceEnds: decoded.paidPeriodEnds,
-                })
-            }else{
-                setAutenticado(false)
-                setUser(null)
-                // console.log("token invalido.")
-            }
-        }
+        if(!token) return undefined
 
-        return ()  => {
+        setMensaje("Verificando la sesión.")
+        const session = createSessionFromToken(token)
+        if (!session) {
+            localStorage.removeItem('usertoken')
             setAutenticado(false)
             setUser(null)
+            setToken(null)
+            return undefined
         }
+
+        setAutenticado(true)
+        setUser(session.user)
+        const timeoutId = setTimeout(() => {
+            localStorage.removeItem('usertoken')
+            setAutenticado(false)
+            setUser(null)
+            setToken(null)
+        }, Math.max(0, session.expiresAt - Date.now()))
+
+        return () => clearTimeout(timeoutId)
     },[token])
     
     const signup = (email, password) => {

@@ -1,4 +1,10 @@
 import axios from 'axios';
+import { withSessionAuthorization } from './auth/sessionAuthorization';
+
+axios.interceptors.request.use(config => withSessionAuthorization(
+    config,
+    localStorage.getItem('usertoken')
+))
 
 const url = process.env.REACT_APP_API_RAILWAY
 // USUARIOS
