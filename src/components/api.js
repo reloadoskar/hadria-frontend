@@ -1,12 +1,15 @@
 import axios from 'axios';
 import { withSessionAuthorization } from './auth/sessionAuthorization';
 
+const url = process.env.REACT_APP_API_RAILWAY
+
 axios.interceptors.request.use(config => withSessionAuthorization(
     config,
-    localStorage.getItem('usertoken')
+    localStorage.getItem('usertoken'),
+    url,
+    window.location.origin
 ))
 
-const url = process.env.REACT_APP_API_RAILWAY
 // USUARIOS
 
 export const register = (newClient) => {
