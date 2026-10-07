@@ -3,6 +3,7 @@ import moment from 'moment'
 import 'moment/locale/es-mx';
 import useStyles from '../hooks/useStyles'
 import { Container, MenuItem, Button, Grid, Card, CardHeader, CardContent, TextField, Typography, CircularProgress, } from '@material-ui/core';
+import { findLocationById, getAvailableLocationId, getLocationId } from './accessSelection'
 
 export default function Acceso({ accesando, ubicacions = [], ubicacion="", fecha="", access, handleChange, user }) {
 	const classes = useStyles();
@@ -43,8 +44,8 @@ export default function Acceso({ accesando, ubicacions = [], ubicacion="", fecha
 											fullWidth
 											margin="normal"
 											variant="outlined"
-											value={ubicacion}
-											onChange={(e) => handleChange('ubicacion', e.target.value)}
+											value={getAvailableLocationId(ubicacions, ubicacion)}
+											onChange={(e) => handleChange('ubicacion', findLocationById(ubicacions, e.target.value))}
 										>
 											{ubicacions === null ?
 												<MenuItem>Cargando...</MenuItem>
@@ -52,7 +53,7 @@ export default function Acceso({ accesando, ubicacions = [], ubicacion="", fecha
 												ubicacions.map((option, index) => {
 													if (option.tipo === 'SUCURSAL') {
 														return (
-															<MenuItem key={index} value={option}>
+															<MenuItem key={index} value={getLocationId(option)}>
 																{option.nombre}
 															</MenuItem>
 														)
@@ -83,7 +84,7 @@ export default function Acceso({ accesando, ubicacions = [], ubicacion="", fecha
 									<Button
 										fullWidth
 										className={classes.botonAzuloso}
-										disabled={ubicacion === "" || fecha === "" ? true : false}
+										disabled={!getAvailableLocationId(ubicacions, ubicacion) || !fecha}
 										type="button"
 										variant="contained"
 										color="primary"
