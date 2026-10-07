@@ -10,6 +10,7 @@ import {
     Backdrop,
     CircularProgress,
     TextField,
+    Typography,
 } from '@material-ui/core'
 // import { NavLink } from 'react-router-dom';
 // componentes
@@ -36,6 +37,7 @@ import CorteGlobal from '../cortes/CorteGlobal';
 
 import { agruparPorObjeto } from '../Tools'
 import { useAuth } from '../auth/use_auth';
+import { getMonthPeriodError, getRequestErrorMessage } from '../requestFeedback';
 
 export default function Dashboard() {
     const { user } = useAuth()
@@ -47,7 +49,11 @@ export default function Dashboard() {
     const { enqueueSnackbar } = useSnackbar()
 
     const [inventarioPorUbicacion, setIpu] = useState([])
-    const [loadingData, setLoading] = useState(false)
+    const [loadingInitialData, setLoadingInitialData] = useState(false)
+    const [loadingPeriodData, setLoadingPeriodData] = useState(false)
+    const [dashboardError, setDashboardError] = useState('')
+    const [periodError, setPeriodError] = useState('')
+    const loadingData = loadingInitialData || loadingPeriodData
 
     const classes = useStyles()
 
@@ -59,7 +65,9 @@ export default function Dashboard() {
         }
     }, [inventario])
     useEffect(() => {
-        setLoading(true)
+        let active = true
+        setLoadingInitialData(true)
+        setDashboardError('')
         const loadAll = async () => {
             const res = await Promise.all([
                 loadCuentasPorPagar(user),
@@ -68,12 +76,29 @@ export default function Dashboard() {
             ])
             return res
         }
-        loadAll().then(() => {
-            setLoading(false)
-        })
+        loadAll()
+            .catch(error => {
+                if(!active) return
+                const message = getRequestErrorMessage(error, 'No fue posible cargar el dashboard.')
+                setDashboardError(message)
+                enqueueSnackbar(message, { variant: 'error' })
+            })
+            .finally(() => {
+                if(active) setLoadingInitialData(false)
+            })
+        return () => { active = false }
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
-        setLoading(true)
+        let active = true
+        const validationMessage = getMonthPeriodError(fecha)
+        if(validationMessage){
+            setPeriodError(validationMessage)
+            setLoadingPeriodData(false)
+            return () => { active = false }
+        }
+
+        setLoadingPeriodData(true)
+        setPeriodError('')
         let month = moment(fecha).format("MM")
         let year = moment(fecha).format("YYYY")
         const loadData = async () => {
@@ -83,9 +108,17 @@ export default function Dashboard() {
             ])
             return res
         }
-        loadData().then(() => {
-            setLoading(false)
-        })
+        loadData()
+            .catch(error => {
+                if(!active) return
+                const message = getRequestErrorMessage(error, 'No fue posible cargar el periodo seleccionado.')
+                setPeriodError(message)
+                enqueueSnackbar(message, { variant: 'error' })
+            })
+            .finally(() => {
+                if(active) setLoadingPeriodData(false)
+            })
+        return () => { active = false }
     }, [user, fecha]) // eslint-disable-line react-hooks/exhaustive-deps
 
 
@@ -187,6 +220,13 @@ export default function Dashboard() {
     return !loadingData ?
         <Container maxWidth="lg">
             <Grid container spacing={3}>
+                {dashboardError ?
+                    <Grid item xs={12}>
+                        <Typography color="error" role="alert" align="center">
+                            {dashboardError}
+                        </Typography>
+                    </Grid>
+                    : null}
                 {/* TOP MENU */}
                 <Grid container justifyContent="center">
                     <Grid item xs={3} >
@@ -195,6 +235,8 @@ export default function Dashboard() {
                             id="fecha"
                             type="month"
                             value={fecha}
+                            error={Boolean(periodError)}
+                            helperText={periodError}
                             onChange={(e) => setFecha(e.target.value)}
                             variant="outlined"
                         />

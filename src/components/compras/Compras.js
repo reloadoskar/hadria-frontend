@@ -28,6 +28,7 @@ import { useProductos } from '../productos/ProductosContext';
 import { useEmpresa } from '../empresa/EmpresaContext';
 import { useEmpaques } from '../hooks/useEmpaques';
 import { useUnidades } from '../hooks/useUnidades';
+import { getMonthPeriodError, getRequestErrorMessage } from '../requestFeedback';
 // import CompraCreate from './CompraCreate';
 
 function Compras(){
@@ -50,15 +51,22 @@ function Compras(){
     // const [compra, ] = useState(null)
     const [verCompra, setVerCompra] = useState(false)
     const [confirm, setConfirm] = useState(false)
-    let now = moment()
-    const [month] = useState(now.format("MM"))
-    const [year] = useState(now.format("YYYY"))
     const [isLoading, setIsLoading] = useState(true)
     const [loadingMore, setLoadingMore] = useState(false)
+    const [loadError, setLoadError] = useState('')
 
     const [mesAnio, setMesAnio] = useState(moment().format("YYYY-MM"))
     useEffect(()=>{
+        let active = true
+        const periodError = getMonthPeriodError(mesAnio)
+        if(periodError){
+            setLoadError(periodError)
+            setIsLoading(false)
+            return () => { active = false }
+        }
+
         setIsLoading(true)
+        setLoadError('')
         const loadAll = async () => {
             const res = await Promise.all([
                 loadCompras(user, mesAnio),
@@ -70,9 +78,17 @@ function Compras(){
             ])
             return res
         }
-        loadAll().then(()=>{
-            setIsLoading(false)
-        })
+        loadAll()
+            .catch(error => {
+                if(!active) return
+                const message = getRequestErrorMessage(error, 'No fue posible cargar las compras.')
+                setLoadError(message)
+                showMessage(message, 'error')
+            })
+            .finally(() => {
+                if(active) setIsLoading(false)
+            })
+        return () => { active = false }
     },[mesAnio]) // eslint-disable-line react-hooks/exhaustive-deps
 
     // const crear = (compra) => {
@@ -122,8 +138,7 @@ function Compras(){
     function cancelar(){
         compras.cancelarCompra(compra._id).then(res => {
             closeConfirm()
-            if (res.status === 'error') {
-            } else {
+            if (res.status !== 'error') {
                 showMessage(res.message, res.status)
             }
         })
@@ -176,6 +191,8 @@ function Compras(){
                     label="Selecciona un periodo"
                     variant="outlined"
                     value={mesAnio}
+                    error={Boolean(loadError)}
+                    helperText={loadError}
                     onChange={(e)=>setMesAnio(e.target.value)}
                     />
                 </Grid>
@@ -196,7 +213,7 @@ function Compras(){
                         provedors={productors}
                     />
                 </Grid> 
-                {compras.length > 0 ?
+                {!loadError && (compras.length > 0 ?
                     <ListaCompras 
                         compras={compras}
                         totals={comprasTotals}
@@ -205,10 +222,10 @@ function Compras(){
                     />
                     :
                     <Grid item xs={12}>
-                        <Typography variant='h6' align="center"> No hay compras registradas en {Meses.filter(mes=>mes.id === month).map(mes=>mes.nombre)} {year}.</Typography>
+                        <Typography variant='h6' align="center"> No hay compras registradas en {Meses.filter(mes=>mes.id === mesAnio.slice(5, 7)).map(mes=>mes.nombre)} {mesAnio.slice(0, 4)}.</Typography>
                     </Grid>
-                }
-                {comprasPagination.hasMore ?
+                )}
+                {!loadError && comprasPagination.hasMore ?
                     <Grid item xs={12}>
                         <Typography align="center" component="div">
                             <Button onClick={cargarMasCompras} disabled={loadingMore}>

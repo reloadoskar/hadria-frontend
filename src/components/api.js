@@ -1132,230 +1132,99 @@ export const delConcepto = (user, id) => {
 
 // TICKET
 
-export const ticketCompra = (data) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/', data)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
-
-                return {
-                    status: 'warning',
-                    message: 'No hay impresora!!😱'
-                }
-            } else {
-                return error
-            }
-        })
+const LOCAL_RESPONSE_VARIANTS = new Set(['success', 'warning', 'error', 'info'])
+const LOCAL_SUCCESS = {
+    status: 'success',
+    message: 'Solicitud de impresión enviada.'
 }
 
-export const ticketNuevoItem = (data) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/nuevoItem.php', data)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
+const normalizeLocalServiceResponse = (response) => {
+    const feedback = response && response.data
 
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
+    if (feedback &&
+        LOCAL_RESPONSE_VARIANTS.has(feedback.status) &&
+        typeof feedback.message === 'string' &&
+        feedback.message.trim() !== '' &&
+        feedback.message.length <= 240) {
+        return {
+            status: feedback.status,
+            message: feedback.message
+        }
+    }
+
+    return LOCAL_SUCCESS
 }
 
-export const ticketVenta = (data) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/venta.php', data)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
+const normalizeLocalServiceError = (error) => ({
+    status: 'warning',
+    message: error && error.response && error.response.status === 404
+        ? 'El servidor local de impresión no está disponible.'
+        : 'No hay conectividad con el servicio local.'
+})
 
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
-}
+const postToLocalService = (endpoint, data) => axios
+    .post(endpoint, data)
+    .then(normalizeLocalServiceResponse)
+    .catch(normalizeLocalServiceError)
 
-export const ticketSalida = (data) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/salida.php', data)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
 
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
-}
+export const ticketCompra = (data) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/',
+    data
+)
 
-export const ticketCobranza = (data) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/cobranza.php', data)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
+export const ticketNuevoItem = (data) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/nuevoItem.php',
+    data
+)
 
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
-}
+export const ticketVenta = (data) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/venta.php',
+    data
+)
 
-export const ticketEgreso = (data) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/egreso.php', data)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
+export const ticketSalida = (data) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/salida.php',
+    data
+)
 
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
-}
+export const ticketCobranza = (data) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/cobranza.php',
+    data
+)
 
-export const ticketPago = (data) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/pago.php', data)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
+export const ticketEgreso = (data) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/egreso.php',
+    data
+)
 
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
-}
+export const ticketPago = (data) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/pago.php',
+    data
+)
 
-export const ticketInventario = (inventario) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/inventario.php', inventario)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
+export const ticketInventario = (inventario) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/inventario.php',
+    inventario
+)
+export const ticketVentasCorte = (ventas) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/ventaCorte.php',
+    ventas
+)
 
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
-}
-export const ticketVentasCorte = (ventas) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/ventaCorte.php', ventas)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
+export const ticketCancelaVenta = (venta) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/cancelaVenta.php',
+    venta
+)
 
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
-}
-
-export const ticketCancelaVenta = (venta) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/cancelaVenta.php', venta)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
-
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
-}
-
-export const ticketTraspaso = (traspaso) => {
-    return axios
-        .post('http://localhost:8080/ticket-hadria/traspaso.php', traspaso)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
-
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
-}
-export const ticketMovimiento = (movimiento) => {
-    return axios
-        .post('http://localhost:8002/pesadas', movimiento)
-        .then(res => {
-            return res
-        })
-        .catch(error => {
-            if (!error.response) {
-                return {
-                    status: 'warning',
-                    message: 'No hay conectividad con la impresora de tickets'
-                }
-            } else {
-                return error
-            }
-        })
-}
+export const ticketTraspaso = (traspaso) => postToLocalService(
+    'http://localhost:8080/ticket-hadria/traspaso.php',
+    traspaso
+)
+export const ticketMovimiento = (movimiento) => postToLocalService(
+    'http://localhost:8002/pesadas',
+    movimiento
+)
 
 // PRODUCCIONES
 
